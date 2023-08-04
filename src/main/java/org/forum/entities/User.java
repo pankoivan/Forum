@@ -3,7 +3,6 @@ package org.forum.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -32,7 +31,7 @@ import java.util.Set;
 })
 @Entity
 @Table(name = "forum_user")
-public class User implements UserDetails {
+public class User implements org.springframework.security.core.userdetails.UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +46,9 @@ public class User implements UserDetails {
 
     @Column(name = "password")
     private String password;
+
+    @OneToOne(mappedBy = "user")
+    private UserDetails userDetails;
 
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
