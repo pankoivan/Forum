@@ -1,16 +1,21 @@
 package org.forum.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.forum.entities.enums.Gender;
 
 import java.time.LocalDate;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(exclude = {
+        "user"
+})
+@ToString(exclude = {
+        "user"
+})
 @Entity
 @Table(name = "forum_user_details")
 public class UserDetails {
