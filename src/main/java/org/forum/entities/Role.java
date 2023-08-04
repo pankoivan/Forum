@@ -4,11 +4,15 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {
+        "users"
+})
 @Entity
 @Table(name = "forum_role")
 public class Role implements GrantedAuthority {
@@ -20,6 +24,9 @@ public class Role implements GrantedAuthority {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "role")
+    private List<AssignedRole> users;
 
     @Override
     public String getAuthority() {

@@ -1,17 +1,13 @@
 package org.forum.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "forum_user_forum_role")
 public class AssignedRole {
@@ -23,5 +19,17 @@ public class AssignedRole {
 
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
+
+    @ManyToOne
+    @JoinColumn(name = "forum_user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "forum_role_id")
+    private Role role;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User userWhoAssigned;
 
 }

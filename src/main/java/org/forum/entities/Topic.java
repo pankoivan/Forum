@@ -1,17 +1,19 @@
 package org.forum.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@EqualsAndHashCode(exclude = {
+        "messages"
+})
+@ToString(exclude = {
+        "messages"
+})
 @Entity
 @Table(name = "topic")
 public class Topic {
@@ -29,5 +31,16 @@ public class Topic {
 
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User userWhoCreated;
+
+    @ManyToOne
+    @JoinColumn(name = "forum_section_id")
+    private Section section;
+
+    @OneToMany(mappedBy = "topic")
+    private List<Message> messages;
 
 }
