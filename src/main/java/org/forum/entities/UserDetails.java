@@ -1,13 +1,19 @@
 package org.forum.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.forum.entities.enums.Gender;
 
 import java.time.LocalDate;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "forum_user_details")
-public class ForumUserDetails {
+public class UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +34,9 @@ public class ForumUserDetails {
 
     @Column(name = "city")
     private String city;
+
+    @OneToOne
+    @JoinColumn(name = "forum_user_id")
+    private User user;
 
 }
