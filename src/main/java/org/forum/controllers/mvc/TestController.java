@@ -28,7 +28,7 @@ public class TestController {
 
     @GetMapping("/")
     public String testReturn() {
-        System.out.println();
+        System.out.println(topicRepository.findById(1));
         return "index";
     }
 
