@@ -6,7 +6,7 @@ import org.forum.entities.User;
 import java.time.LocalDate;
 
 @UtilityClass
-public final class BansUtil {
+public final class BansUtils {
 
     public static boolean isBanned(User user) {
         return user.getBans()

@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static org.forum.utils.BansUtil.isBanned;
+import static org.forum.utils.BansUtils.isBanned;
 
 @NoArgsConstructor
 @AllArgsConstructor
