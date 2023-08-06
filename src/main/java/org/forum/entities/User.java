@@ -53,11 +53,11 @@ public class User implements org.springframework.security.core.userdetails.UserD
     @Column(name = "password")
     private String password;
 
-    @OneToOne(mappedBy = "user")
-    private UserDetails userDetails;
-
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
+
+    @OneToOne(mappedBy = "user")
+    private UserDetails userDetails;
 
     @OneToMany(mappedBy = "userWhoCreated")
     private List<Section> createdSections;
