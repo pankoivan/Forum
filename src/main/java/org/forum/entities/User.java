@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import static org.forum.utils.BansUtil.isBanned;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -19,7 +21,9 @@ import java.util.Set;
         "postedMessages",
         "likedMessages",
         "roles",
-        "assignedRoles"
+        "assignedRoles",
+        "bans",
+        "assignedBans"
 })
 @ToString(exclude = {
         "createdSections",
@@ -27,7 +31,9 @@ import java.util.Set;
         "postedMessages",
         "likedMessages",
         "roles",
-        "assignedRoles"
+        "assignedRoles",
+        "bans",
+        "assignedBans"
 })
 @Entity
 @Table(name = "forum_user")
@@ -71,6 +77,12 @@ public class User implements org.springframework.security.core.userdetails.UserD
     @OneToMany(mappedBy = "userWhoAssigned")
     private List<AssignedRole> assignedRoles;
 
+    @OneToMany(mappedBy = "user")
+    private List<Ban> bans;
+
+    @OneToMany(mappedBy = "userWhoAssigned")
+    private List<Ban> assignedBans;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
@@ -90,22 +102,22 @@ public class User implements org.springframework.security.core.userdetails.UserD
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return isBanned(this);
     }
 
 }
