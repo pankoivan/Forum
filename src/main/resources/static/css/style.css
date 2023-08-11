@@ -1,0 +1,31 @@
+.bg-lightgray {
+    background-color: lightgray;
+}
+
+.text-wheat {
+    color: wheat;
+}
+
+.text-aliceblue {
+    color: aliceblue;
+}
+
+.login {
+    padding: 0.75em;
+}
+
+.login-title {
+    font-size: 20px;
+}
+
+.login-inscriptions {
+    font-size: 16px;
+}
+
+.footer-author-inscriptions {
+    font-size: 14px;
+}
+
+.footer-inscriptions {
+    font-size: 12px;
+}
