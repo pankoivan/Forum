@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Футер: фрагмент</title>
+        <link
+            href="../../static/css/bootstrap.min.css"
+            th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
+        />
+        <link
+            href="../../static/css/style.css"
+            th:href="@{/css/style.css}"
+            rel="stylesheet"
+        />
+    </head>
+
+    <body>
+        <footer
+            class="bg-dark text-center p-3 mt-5 text-aliceblue"
+            th:fragment="footer"
+        >
+            <div class="container">
+                <div class="row">
+                    <div class="col footer-author-inscriptions">
+                        <div>
+                            <img
+                                src="../../static/img/волк.png"
+                                th:src="@{/img/волк.png}"
+                                alt="Byb"
+                                width="32"
+                                class="rounded-circle"
+                            />
+                            <p class="mt-1">Byb</p>
+                        </div>
+                        <p>Санкт-Петербург</p>
+                        <p>
+                            <a
+                                href="https://github.com/pankoivan"
+                                target="_blank"
+                                >GitHub</a
+                            >
+                        </p>
+                    </div>
+                    <div class="col-0 col-md col-lg"></div>
+                    <div class="col footer-inscriptions my-auto">
+                        <p>HTML</p>
+                        <p>CSS</p>
+                        <p>Bootstrap 5</p>
+                        <p>Thymeleaf</p>
+                    </div>
+                    <div class="col footer-inscriptions my-auto">
+                        <p>Java 20</p>
+                        <p>PostgreSQL</p>
+                        <p>Spring Boot 3</p>
+                        <p>Spring Framework</p>
+                    </div>
+                    <div class="col footer-inscriptions my-auto">
+                        <p>Spring Security</p>
+                        <p>Spring Data JPA</p>
+                        <p>Lombok</p>
+                        <p>Jackson</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
