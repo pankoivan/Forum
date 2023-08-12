@@ -18,7 +18,7 @@ import java.time.LocalDate;
 })
 @Entity
 @Table(name = "forum_user_details")
-public class UserDetails {
+public class UserInformation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

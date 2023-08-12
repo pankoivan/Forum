@@ -2,6 +2,7 @@ package org.forum.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.forum.entities.enums.RoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
@@ -11,6 +12,9 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode(exclude = {
+        "users"
+})
+@ToString(exclude = {
         "users"
 })
 @Entity
@@ -23,19 +27,22 @@ public class Role implements GrantedAuthority {
     private Integer id;
 
     @Column(name = "name")
-    private String name;
+    private RoleEnum role;
+
+    @ManyToMany
+    @JoinTable(
+            name = "forum_role_forum_authority",
+            joinColumns = @JoinColumn(name = "forum_role"),
+            inverseJoinColumns = @JoinColumn(name = "forum_authority")
+    )
+    private List<Authority> authorities;
 
     @OneToMany(mappedBy = "role")
-    private List<AssignedRole> users;
+    private List<User> users;
 
     @Override
     public String getAuthority() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
+        return role.name();
     }
 
 }

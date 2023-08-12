@@ -12,7 +12,7 @@ public class TestController {
     private UserRepository userRepository;
 
     @Autowired
-    private UserDetailsRepository userDetailsRepository;
+    private UserInformationRepository userInformationRepository;
 
     @Autowired
     private SectionRepository sectionRepository;
@@ -22,9 +22,6 @@ public class TestController {
 
     @Autowired
     private MessageRepository messageRepository;
-
-    @Autowired
-    private AssignedRoleRepository assignedRoleRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -37,15 +34,13 @@ public class TestController {
         System.out.println();
         System.out.println(userRepository.findById(1));
         System.out.println();
-        System.out.println(userDetailsRepository.findById(1));
+        System.out.println(userInformationRepository.findById(1));
         System.out.println();
         System.out.println(sectionRepository.findById(1));
         System.out.println();
         System.out.println(topicRepository.findById(1));
         System.out.println();
         System.out.println(messageRepository.findById(1L));
-        System.out.println();
-        System.out.println(assignedRoleRepository.findById(1));
         System.out.println();
         System.out.println(roleRepository.findById(1));
         System.out.println();

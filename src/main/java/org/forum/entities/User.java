@@ -3,11 +3,12 @@ package org.forum.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import static org.forum.utils.BansUtils.isBanned;
 
@@ -20,8 +21,6 @@ import static org.forum.utils.BansUtils.isBanned;
         "createdTopics",
         "postedMessages",
         "likedMessages",
-        "roles",
-        "assignedRoles",
         "bans",
         "assignedBans"
 })
@@ -30,14 +29,12 @@ import static org.forum.utils.BansUtils.isBanned;
         "createdTopics",
         "postedMessages",
         "likedMessages",
-        "roles",
-        "assignedRoles",
         "bans",
         "assignedBans"
 })
 @Entity
 @Table(name = "forum_user")
-public class User implements org.springframework.security.core.userdetails.UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,7 +54,7 @@ public class User implements org.springframework.security.core.userdetails.UserD
     private LocalDateTime creationDate;
 
     @OneToOne(mappedBy = "user")
-    private UserDetails userDetails;
+    private UserInformation userInformation;
 
     @OneToMany(mappedBy = "userWhoCreated")
     private List<Section> createdSections;
@@ -72,22 +69,20 @@ public class User implements org.springframework.security.core.userdetails.UserD
     private List<Message> likedMessages;
 
     @OneToMany(mappedBy = "user")
-    private Set<AssignedRole> roles;
-
-    @OneToMany(mappedBy = "userWhoAssigned")
-    private List<AssignedRole> assignedRoles;
-
-    @OneToMany(mappedBy = "user")
     private List<Ban> bans;
 
     @OneToMany(mappedBy = "userWhoAssigned")
     private List<Ban> assignedBans;
 
+    @ManyToOne
+    @JoinColumn(name = "forum_role_id")
+    private Role role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(AssignedRole::getRole)
-                .toList();
+        List<GrantedAuthority> authorities = new ArrayList<>(role.getAuthorities());
+        authorities.add(role);
+        return authorities;
     }
 
     @Override
@@ -102,17 +97,17 @@ public class User implements org.springframework.security.core.userdetails.UserD
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return isBanned(this);
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return isBanned(this);
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return isBanned(this);
     }
 
     @Override
