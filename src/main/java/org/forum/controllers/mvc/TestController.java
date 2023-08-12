@@ -32,7 +32,7 @@ public class TestController {
     @Autowired
     private BanRepository banRepository;
 
-    @GetMapping("/")
+    @GetMapping("/test")
     public String testReturn() {
         System.out.println();
         System.out.println(userRepository.findById(1));
