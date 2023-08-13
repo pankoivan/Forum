@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.forum.utils.BansUtils.isBanned;
+import static org.forum.utils.BanUtils.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -68,7 +68,10 @@ public class User implements UserDetails {
     @ManyToMany(mappedBy = "usersWhoLiked")
     private List<Message> likedMessages;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(
+            mappedBy = "user",
+            fetch = FetchType.EAGER
+    )
     private List<Ban> bans;
 
     @OneToMany(mappedBy = "userWhoAssigned")
@@ -92,27 +95,27 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return isBanned(this);
+        return isActive(this);
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return isBanned(this);
+        return isActive(this);
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return isBanned(this);
+        return isActive(this);
     }
 
     @Override
     public boolean isEnabled() {
-        return isBanned(this);
+        return isActive(this);
     }
 
 }

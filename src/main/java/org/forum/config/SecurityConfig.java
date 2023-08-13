@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,18 +36,25 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/resources/**").permitAll()
+
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/auth/login", "/auth/registration").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/img/**", "/favicon/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/auth/login").permitAll()
+                        .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login-processing")
                         .defaultSuccessUrl("/")
+                        .failureUrl("/auth/login?error")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
-                        .logoutSuccessUrl("/auth/login?logout=true")
+                        .logoutSuccessUrl("/")
                 );
 
         return http.build();

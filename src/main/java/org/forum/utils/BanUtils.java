@@ -6,12 +6,16 @@ import org.forum.entities.User;
 import java.time.LocalDate;
 
 @UtilityClass
-public final class BansUtils {
+public final class BanUtils {
 
     public static boolean isBanned(User user) {
         return user.getBans()
                 .stream()
                 .anyMatch(ban -> LocalDate.now().isBefore(ban.getEndDate()));
+    }
+
+    public static boolean isActive(User user) {
+        return !isBanned(user);
     }
 
 }

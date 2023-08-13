@@ -26,14 +26,15 @@ public class Role implements GrantedAuthority {
     @Column(name = "id")
     private Integer id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "name")
     private RoleEnum role;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "forum_role_forum_authority",
-            joinColumns = @JoinColumn(name = "forum_role"),
-            inverseJoinColumns = @JoinColumn(name = "forum_authority")
+            joinColumns = @JoinColumn(name = "forum_role_id"),
+            inverseJoinColumns = @JoinColumn(name = "forum_authority_id")
     )
     private List<Authority> authorities;
 

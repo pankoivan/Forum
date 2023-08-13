@@ -30,7 +30,10 @@ public class Authority implements GrantedAuthority {
     @Column(name = "name")
     private AuthorityEnum authority;
 
-    @ManyToMany(mappedBy = "authorities")
+    @ManyToMany(
+            mappedBy = "authorities",
+            fetch = FetchType.EAGER
+    )
     private List<Role> roles;
 
     @Override
