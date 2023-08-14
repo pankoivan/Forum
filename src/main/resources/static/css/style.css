@@ -34,3 +34,26 @@
 .footer-inscriptions {
     font-size: 12px;
 }
+
+.section {
+    padding: 0.5em;
+}
+
+.fs-20 {
+    font-size: 20px;
+}
+
+.message-header {
+    padding: 0.7em;
+}
+
+.fs-10 {
+    font-size: 10px;
+}
+
+.fs-12 {
+    font-size: 12px;
+}
+
+.btn__like {
+}

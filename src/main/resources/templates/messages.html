@@ -1,10 +1,441 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Сообщения</title>
+        <link
+            href="../static/css/bootstrap.min.css"
+            th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
+        />
+        <link
+            href="../static/css/style.css"
+            th:href="@{/css/style.css}"
+            rel="stylesheet"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="../static/favicon/apple-touch-icon.png"
+            th:href="@{/favicon/apple-touch-icon.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
+        />
+        <link
+            href="../static/favicon/site.webmanifest"
+            th:href="@{/favicon/site.webmanifest}"
+            rel="manifest"
+        />
+    </head>
+
+    <body
+        class="vh-100 min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
+    >
+        <div th:replace="~{fragments/auth-header :: header}">
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-aliceblue mb-5"
+                style="height: 75px"
+            >
+                <h3>Статический заголовок для просмотра в браузере</h3>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-6 col-md-6 col-lg-6 mx-auto text-center">
+                    <h2>Текущая тема: "Флуд"</h2>
+                </div>
+            </div>
+            <div sec:authorize="hasAuthority('LATER')" class="row mb-5">
+                <div class="col-6 col-md-6 col-lg-6 mx-auto text-center">
+                    <div>
+                        <a href="#" class="btn btn-primary btn-lg"
+                            >Написать сообщение</a
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="bg-dark rounded text-aliceblue">
+                        <div
+                            class="d-flex justify-content-around align-items-center border-bottom border-white message-header"
+                        >
+                            <div sec:authorize="hasAuthority('LATER')">
+                                <a href="#" class="text-decoration-none">
+                                    <img
+                                        src="../static/img/edit.jpg"
+                                        alt="edit"
+                                        width="16"
+                                        class="rounded-circle"
+                                    />
+                                </a>
+                                <a href="#" class="text-decoration-none">
+                                    <img
+                                        src="../static/img/delete.png"
+                                        alt="edit"
+                                        width="16"
+                                        class="rounded-circle"
+                                    />
+                                </a>
+                            </div>
+                            <div class="text-center">
+                                <img
+                                    src="../static/img/волк.png"
+                                    alt="user"
+                                    width="24"
+                                    class="rounden-circle"
+                                />
+                                <span>
+                                    <a href="#" class="text-aliceblue"
+                                        >Имя пользователя</a
+                                    >
+                                </span>
+                            </div>
+                            <div class="text-center">
+                                <span>18.07.2021 15:34:48</span>
+                            </div>
+                            <div>
+                                <button
+                                    class="btn btn-primary btn__like"
+                                    id="like-btn"
+                                    type="submit"
+                                >
+                                    <span>Нравится: </span
+                                    ><span class="" id="count">9</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="message-header">
+                            <span
+                                >Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Dolorum fugiat nostrum sequi
+                                excepturi dolor accusamus? Officia consequatur
+                                qui expedita consectetur quisquam ipsa fuga
+                                totam eum optio, cumque animi? Dolores cumque et
+                                eius sequi autem quisquam, minus, ipsam
+                                voluptates exercitationem pariatur beatae velit
+                                quos dolore voluptas. Accusantium natus
+                                explicabo illum nostrum voluptatibus magnam,
+                                inventore delectus, doloremque qui consequuntur
+                                voluptas in ipsum? Eaque exercitationem fugiat,
+                                adipisci dolor odit excepturi officia, sed
+                                ratione ea facilis molestias ducimus, magnam
+                                optio ipsum saepe asperiores tempora illo?
+                                Dolorum quam, nihil et laborum assumenda dolor
+                                nobis vel sed deserunt corrupti velit ullam ad
+                                autem dicta porro fuga quibusdam amet. Facere
+                                vel, vero asperiores animi eum officiis incidunt
+                                modi nostrum, deserunt officia ducimus voluptate
+                                necessitatibus molestias accusantium ab! Id
+                                voluptates optio sit deleniti. Itaque, odit
+                                repudiandae culpa ipsam ut eligendi cumque
+                                exercitationem nesciunt eaque maiores voluptatum
+                                ea consectetur alias nam dolor voluptas? Esse
+                                suscipit accusamus repellendus doloremque
+                                mollitia.</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="bg-dark rounded text-aliceblue">
+                        <div
+                            class="d-flex justify-content-around align-items-center border-bottom border-white message-header"
+                        >
+                            <div class="text-center">
+                                <img
+                                    src="../static/img/волк.png"
+                                    alt="user"
+                                    width="24"
+                                    class="rounden-circle"
+                                />
+                                <span>
+                                    <a href="#" class="text-aliceblue"
+                                        >Имя пользователя</a
+                                    >
+                                </span>
+                            </div>
+                            <div class="text-center">
+                                <span>18.07.2021 15:34:48</span>
+                            </div>
+                            <div>
+                                <button
+                                    class="btn btn-primary btn__like"
+                                    id="like-btn"
+                                    type="submit"
+                                >
+                                    <span>Нравится: </span
+                                    ><span id="count">9</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="message-header">
+                            <span
+                                >Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Dolorum fugiat nostrum sequi
+                                excepturi dolor accusamus? Officia consequatur
+                                qui expedita consectetur quisquam ipsa fuga
+                                totam eum optio, cumque animi? Dolores cumque et
+                                eius sequi autem quisquam, minus, ipsam
+                                voluptates exercitationem pariatur beatae velit
+                                quos dolore voluptas. Accusantium natus
+                                explicabo illum nostrum voluptatibus magnam,
+                                inventore delectus, doloremque qui consequuntur
+                                voluptas in ipsum? Eaque exercitationem fugiat,
+                                adipisci dolor odit excepturi officia, sed
+                                ratione ea facilis molestias ducimus, magnam
+                                optio ipsum saepe asperiores tempora illo?
+                                Dolorum quam, nihil et laborum assumenda dolor
+                                nobis vel sed deserunt corrupti velit ullam ad
+                                autem dicta porro fuga quibusdam amet. Facere
+                                vel, vero asperiores animi eum officiis incidunt
+                                modi nostrum, deserunt officia ducimus voluptate
+                                necessitatibus molestias accusantium ab! Id
+                                voluptates optio sit deleniti. Itaque, odit
+                                repudiandae culpa ipsam ut eligendi cumque
+                                exercitationem nesciunt eaque maiores voluptatum
+                                ea consectetur alias nam dolor voluptas? Esse
+                                suscipit accusamus repellendus doloremque
+                                mollitia.</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="bg-dark rounded text-aliceblue">
+                        <div
+                            class="d-flex justify-content-around align-items-center border-bottom border-white message-header"
+                        >
+                            <div class="text-center">
+                                <img
+                                    src="../static/img/волк.png"
+                                    alt="user"
+                                    width="24"
+                                    class="rounden-circle"
+                                />
+                                <span>
+                                    <a href="#" class="text-aliceblue"
+                                        >Имя пользователя</a
+                                    >
+                                </span>
+                            </div>
+                            <div class="text-center">
+                                <span>18.07.2021 15:34:48</span>
+                            </div>
+                            <div>
+                                <button
+                                    class="btn btn-primary btn__like"
+                                    id="like-btn"
+                                    type="submit"
+                                >
+                                    <span>Нравится: </span
+                                    ><span id="count">9</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="message-header">
+                            <span
+                                >Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Dolorum fugiat nostrum sequi
+                                excepturi dolor accusamus? Officia consequatur
+                                qui expedita consectetur quisquam ipsa fuga
+                                totam eum optio, cumque animi? Dolores cumque et
+                                eius sequi autem quisquam, minus, ipsam
+                                voluptates exercitationem pariatur beatae velit
+                                quos dolore voluptas. Accusantium natus
+                                explicabo illum nostrum voluptatibus magnam,
+                                inventore delectus, doloremque qui consequuntur
+                                voluptas in ipsum? Eaque exercitationem fugiat,
+                                adipisci dolor odit excepturi officia, sed
+                                ratione ea facilis molestias ducimus, magnam
+                                optio ipsum saepe asperiores tempora illo?
+                                Dolorum quam, nihil et laborum assumenda dolor
+                                nobis vel sed deserunt corrupti velit ullam ad
+                                autem dicta porro fuga quibusdam amet. Facere
+                                vel, vero asperiores animi eum officiis incidunt
+                                modi nostrum, deserunt officia ducimus voluptate
+                                necessitatibus molestias accusantium ab! Id
+                                voluptates optio sit deleniti. Itaque, odit
+                                repudiandae culpa ipsam ut eligendi cumque
+                                exercitationem nesciunt eaque maiores voluptatum
+                                ea consectetur alias nam dolor voluptas? Esse
+                                suscipit accusamus repellendus doloremque
+                                mollitia.</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="bg-dark rounded text-aliceblue">
+                        <div
+                            class="d-flex justify-content-around align-items-center border-bottom border-white message-header"
+                        >
+                            <div class="text-center">
+                                <img
+                                    src="../static/img/волк.png"
+                                    alt="user"
+                                    width="24"
+                                    class="rounden-circle"
+                                />
+                                <span>
+                                    <a href="#" class="text-aliceblue"
+                                        >Имя пользователя</a
+                                    >
+                                </span>
+                            </div>
+                            <div class="text-center">
+                                <span>18.07.2021 15:34:48</span>
+                            </div>
+                            <div>
+                                <button
+                                    class="btn btn-primary btn__like"
+                                    id="like-btn"
+                                    type="submit"
+                                >
+                                    <span>Нравится: </span
+                                    ><span id="count">9</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="message-header">
+                            <span
+                                >Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Dolorum fugiat nostrum sequi
+                                excepturi dolor accusamus? Officia consequatur
+                                qui expedita consectetur quisquam ipsa fuga
+                                totam eum optio, cumque animi? Dolores cumque et
+                                eius sequi autem quisquam, minus, ipsam
+                                voluptates exercitationem pariatur beatae velit
+                                quos dolore voluptas. Accusantium natus
+                                explicabo illum nostrum voluptatibus magnam,
+                                inventore delectus, doloremque qui consequuntur
+                                voluptas in ipsum? Eaque exercitationem fugiat,
+                                adipisci dolor odit excepturi officia, sed
+                                ratione ea facilis molestias ducimus, magnam
+                                optio ipsum saepe asperiores tempora illo?
+                                Dolorum quam, nihil et laborum assumenda dolor
+                                nobis vel sed deserunt corrupti velit ullam ad
+                                autem dicta porro fuga quibusdam amet. Facere
+                                vel, vero asperiores animi eum officiis incidunt
+                                modi nostrum, deserunt officia ducimus voluptate
+                                necessitatibus molestias accusantium ab! Id
+                                voluptates optio sit deleniti. Itaque, odit
+                                repudiandae culpa ipsam ut eligendi cumque
+                                exercitationem nesciunt eaque maiores voluptatum
+                                ea consectetur alias nam dolor voluptas? Esse
+                                suscipit accusamus repellendus doloremque
+                                mollitia
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="bg-dark rounded text-aliceblue">
+                        <div
+                            class="d-flex justify-content-around align-items-center border-bottom border-white message-header"
+                        >
+                            <div class="text-center">
+                                <img
+                                    src="../static/img/волк.png"
+                                    alt="user"
+                                    width="24"
+                                    class="rounden-circle"
+                                />
+                                <span>
+                                    <a href="#" class="text-aliceblue"
+                                        >Имя пользователя</a
+                                    >
+                                </span>
+                            </div>
+                            <div class="text-center">
+                                <span>18.07.2021 15:34:48</span>
+                            </div>
+                            <div>
+                                <button
+                                    class="btn btn-primary btn__like"
+                                    id="like-btn"
+                                    type="submit"
+                                >
+                                    <span>Нравится: </span
+                                    ><span id="count">9</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="message-header">
+                            <span
+                                >Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Dolorum fugiat nostrum sequi
+                                excepturi dolor accusamus? Officia consequatur
+                                qui expedita consectetur quisquam ipsa fuga
+                                totam eum optio, cumque animi? Dolores cumque et
+                                eius sequi autem quisquam, minus, ipsam
+                                voluptates exercitationem pariatur beatae velit
+                                quos dolore voluptas. Accusantium natus
+                                explicabo illum nostrum voluptatibus magnam,
+                                inventore delectus, doloremque qui consequuntur
+                                voluptas in ipsum? Eaque exercitationem fugiat,
+                                adipisci dolor odit excepturi officia, sed
+                                ratione ea facilis molestias ducimus, magnam
+                                optio ipsum saepe asperiores tempora illo?
+                                Dolorum quam, nihil et laborum assumenda dolor
+                                nobis vel sed deserunt corrupti velit ullam ad
+                                autem dicta porro fuga quibusdam amet. Facere
+                                vel, vero asperiores animi eum officiis incidunt
+                                modi nostrum, deserunt officia ducimus voluptate
+                                necessitatibus molestias accusantium ab! Id
+                                voluptates optio sit deleniti. Itaque, odit
+                                repudiandae culpa ipsam ut eligendi cumque
+                                exercitationem nesciunt eaque maiores voluptatum
+                                ea consectetur alias nam dolor voluptas? Esse
+                                suscipit accusamus repellendus doloremque
+                                mollitia.</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="~{fragments/footer :: footer}">
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-aliceblue mt-5"
+                style="height: 185px"
+            >
+                <h3>Статический футер для просмотра в браузере</h3>
+            </div>
+        </div>
+
+        <script
+            src="../static/js/bootstrap.bundle.min.js"
+            th:src="@{/js/bootstrap.bundle.min.js}"
+        ></script>
+
+        <script
+            src="../static/js/script.js"
+            th:src="@{/js/bootstrap.bundle.min.js}"
+        ></script>
+    </body>
 </html>

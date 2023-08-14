@@ -46,7 +46,10 @@
         class="vh-100 min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
     >
         <div th:replace="~{fragments/auth-header :: header}">
-            <div class="bg-dark d-flex align-items-center justify-content-center text-aliceblue" style="height: 75px">
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-aliceblue mb-5"
+                style="height: 75px"
+            >
                 <h3>Статический заголовок для просмотра в браузере</h3>
             </div>
         </div>
@@ -78,10 +81,21 @@
                                 </a>
                             </div>
                         </div>
-                        <div th:if="${param.error}" class="mt-2 text-center login-error">
-                            <span>Неверный логин или пароль. Пожалуйста, повторите попытку</span>
+                        <div
+                            th:if="${error}"
+                            class="mt-2 text-center login-error"
+                        >
+                            <span
+                                >Неверный логин или пароль. Пожалуйста,
+                                повторите попытку</span
+                            >
                         </div>
-                        <form action="#" th:action="@{/auth/login-processing}" method="post" class="my-4">
+                        <form
+                            action="#"
+                            th:action="@{/auth/login-processing}"
+                            method="post"
+                            class="my-4"
+                        >
                             <div>
                                 <p>
                                     <input
@@ -133,11 +147,17 @@
         </div>
 
         <div th:replace="~{fragments/footer :: footer}">
-            <div class="bg-dark d-flex align-items-center justify-content-center text-aliceblue" style="height: 185px">
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-aliceblue mt-5"
+                style="height: 185px"
+            >
                 <h3>Статический футер для просмотра в браузере</h3>
             </div>
         </div>
 
-        <script src="../static/js/bootstrap.bundle.min.js" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+        <script
+            src="../static/js/bootstrap.bundle.min.js"
+            th:src="@{/js/bootstrap.bundle.min.js}"
+        ></script>
     </body>
 </html>

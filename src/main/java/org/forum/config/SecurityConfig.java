@@ -1,5 +1,8 @@
 package org.forum.config;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,10 +10,15 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+
+import java.io.IOException;
 
 @Configuration
 public class SecurityConfig {
@@ -33,6 +41,7 @@ public class SecurityConfig {
     }
 
     @Bean
+
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
@@ -50,7 +59,8 @@ public class SecurityConfig {
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login-processing")
                         .defaultSuccessUrl("/")
-                        .failureUrl("/auth/login?error")
+                        .failureUrl("/auth/login")
+                        .failureHandler(authenticationFailureHandler())
                 )
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
@@ -58,6 +68,21 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new SimpleUrlAuthenticationFailureHandler("/auth/login") {
+            @Override
+            public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                                AuthenticationException exception) throws IOException, ServletException {
+
+                //setUseForward(true);
+
+                request.setAttribute("error", true);
+                super.onAuthenticationFailure(request, response, exception);
+            }
+        };
     }
 
 }
