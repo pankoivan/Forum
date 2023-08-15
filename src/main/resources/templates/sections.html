@@ -58,9 +58,13 @@
             <div sec:authorize="hasAuthority('LATER')" class="row mb-5">
                 <div class="col-6 col-md-6 col-lg-6 mx-auto text-center">
                     <div>
-                        <a href="#" class="btn btn-primary btn-lg"
-                            >Создать раздел</a
+                        <a
+                            href="#"
+                            th:href="@{/sections/add}"
+                            class="btn btn-primary btn-lg"
                         >
+                            Создать раздел
+                        </a>
                     </div>
                 </div>
             </div>
