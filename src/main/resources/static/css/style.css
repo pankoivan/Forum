@@ -61,3 +61,17 @@
 
 .btn__like {
 }
+
+.carousel-control-prev {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+}
+
+.carousel-control-next {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+}
