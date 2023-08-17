@@ -43,113 +43,120 @@
     </head>
 
     <body
-        class="vh-100 min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
+        class="min-vh-100 vh-100 bg-lightgray d-flex flex-column justify-content-between"
     >
+        <!-- ---------------------------------------- Заголовок ---------------------------------------- -->
         <div th:replace="~{fragments/auth-header :: header}">
             <div
-                class="bg-dark d-flex align-items-center justify-content-center text-aliceblue mb-5"
-                style="height: 75px"
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
             >
                 <h3>Статический заголовок для просмотра в браузере</h3>
             </div>
         </div>
 
+        <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div class="container">
             <div class="row">
-                <div class="col-11 col-md-8 col-lg-5 mx-auto">
-                    <div class="bg-dark rounded login">
-                        <div class="d-flex flex-row justify-content-between">
+                <div class="col-12 col-md-8 col-lg-5 mx-auto">
+                    <!-- Непосредственно блок входа -->
+                    <div class="bg-dark text-white rounded px-3 py-2">
+                        <!-- Заголовок и картинка "на главную" -->
+                        <div
+                            class="d-flex flex-row justify-content-between border-bottom border-white"
+                        >
+                            <!-- Заголовок -->
                             <div>
-                                <p class="mb-1 login-title text-aliceblue">
-                                    Вход
-                                </p>
-                                <p
-                                    class="mb-1 login-inscriptions text-aliceblue"
-                                >
-                                    Введите логин и пароль
-                                </p>
+                                <h5 class="mb-1">Вход</h5>
+                                <p class="mb-2">Введите логин и пароль</p>
                             </div>
+                            <!-- Картинка "на главную" -->
                             <div>
-                                <a href="#" th:href="@{/}">
+                                <a
+                                    href="../templates/index.html"
+                                    th:href="@{/}"
+                                >
                                     <img
                                         src="../static/img/волк.png"
                                         th:src="@{/img/волк.png}"
-                                        alt="волк"
+                                        alt="На главную"
                                         width="48"
-                                        class="rounded-circle"
+                                        class="mb-2"
                                     />
                                 </a>
                             </div>
                         </div>
-                        <div
-                            th:if="${error}"
-                            class="mt-2 text-center login-error"
-                        >
-                            <span
-                                >Неверный логин или пароль. Пожалуйста,
-                                повторите попытку</span
-                            >
-                        </div>
+                        <!-- Сама форма -->
                         <form
                             action="#"
                             th:action="@{/auth/login-processing}"
                             method="post"
-                            class="my-4"
+                            class="mt-2 mb-3"
                         >
-                            <div>
-                                <p>
-                                    <input
-                                        name="username"
-                                        class="form-control"
-                                        type="text"
-                                        placeholder="Логин..."
-                                    />
-                                </p>
-                                <p>
-                                    <input
-                                        name="password"
-                                        class="form-control"
-                                        type="password"
-                                        placeholder="Пароль..."
-                                    />
-                                </p>
-                                <div
-                                    class="d-flex flex-row justify-content-between"
+                            <!-- Логин -->
+                            <div class="text-center mb-3">
+                                <label for="username" class="form-label"
+                                    >Логин</label
                                 >
-                                    <input
-                                        type="submit"
-                                        class="btn btn-primary"
-                                    />
-                                    <div>
-                                        <input type="checkbox" id="remember" />
-                                        <label
-                                            class="text-aliceblue"
-                                            for="remember"
-                                            >Запомнить меня</label
-                                        >
-                                    </div>
+                                <input
+                                    id="username"
+                                    name="username"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="example@yandex.ru"
+                                />
+                            </div>
+                            <!-- Пароль -->
+                            <div class="text-center mb-4">
+                                <label for="password" class="form-label"
+                                    >Пароль</label
+                                >
+                                <input
+                                    id="password"
+                                    class="form-control"
+                                    name="password"
+                                    type="password"
+                                    placeholder="Jdk37#@anxndfjr87la"
+                                />
+                            </div>
+                            <!-- Кнопка отправки и предложение запомнить пользователя -->
+                            <div
+                                class="d-flex flex-row justify-content-between mb-4"
+                            >
+                                <!-- Кнопка отправки -->
+                                <button type="submit" class="btn btn-primary">
+                                    Отправить
+                                </button>
+                                <!-- Предложение запомнить пользователя -->
+                                <div>
+                                    <input type="checkbox" id="rememberMe" />
+                                    <label
+                                        class="text-aliceblue"
+                                        for="rememberMe"
+                                        >Запомнить меня</label
+                                    >
                                 </div>
                             </div>
                         </form>
-                        <div class="text-center">
-                            <p class="mb-1 login-inscriptions text-aliceblue">
-                                Забыли пароль?
+                        <!-- Кнопка отправки и предложение запомнить пользователя -->
+                        <div class="text-center border-top border-white pt-2">
+                            <div>
+                                <span>Забыли пароль?</span>
                                 <a href="#">Восстановление пароля</a>
-                            </p>
-                            <p class="mb-1 login-inscriptions text-aliceblue">
-                                Нет аккаунта?
+                            </div>
+                            <div>
+                                <span>Нет аккаунта?</span>
                                 <a href="#">Регистрация</a>
-                            </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- ---------------------------------------- Футер ---------------------------------------- -->
         <div th:replace="~{fragments/footer :: footer}">
             <div
-                class="bg-dark d-flex align-items-center justify-content-center text-aliceblue mt-5"
-                style="height: 185px"
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5"
             >
                 <h3>Статический футер для просмотра в браузере</h3>
             </div>

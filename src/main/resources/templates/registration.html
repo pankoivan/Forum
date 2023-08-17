@@ -59,10 +59,10 @@
             <div class="row">
                 <div class="col-12 col-md-9 col-lg-6 mx-auto">
                     <!-- Непосредственно блок регистрации -->
-                    <div class="bg-dark rounded px-3 py-2">
+                    <div class="bg-dark text-white rounded px-3 py-2">
                         <!-- Заголовок и картинка "на главную" -->
                         <div
-                            class="d-flex flex-row justify-content-between border-bottom border-white text-white"
+                            class="d-flex flex-row justify-content-between border-bottom border-white"
                         >
                             <!-- Заголовок -->
                             <div>
@@ -78,7 +78,7 @@
                                     <img
                                         src="../static/img/волк.png"
                                         th:src="@{/img/волк.png}"
-                                        alt="волк"
+                                        alt="На главную"
                                         width="48"
                                         class="mb-2"
                                     />
@@ -90,14 +90,14 @@
                             action="#"
                             th:action="@{/auth/registration-processing}"
                             method="post"
-                            class="mt-2 mb-4"
+                            class="mt-2 mb-3"
                         >
                             <!-- Имя пользователя и почта -->
                             <div
                                 class="d-flex flex-wrap flex-row justify-content-center mb-3"
                             >
                                 <!-- Имя пользователя -->
-                                <div class="text-center text-white m-1">
+                                <div class="text-center m-2">
                                     <label for="username" class="form-label"
                                         >Имя пользователя</label
                                     >
@@ -110,7 +110,7 @@
                                     />
                                 </div>
                                 <!-- Почта -->
-                                <div class="text-center text-white m-1">
+                                <div class="text-center m-2">
                                     <label for="email" class="form-label"
                                         >Почта</label
                                     >
@@ -124,7 +124,7 @@
                                 </div>
                             </div>
                             <!-- Пароль -->
-                            <div class="text-center text-white mb-4">
+                            <div class="text-center mb-4">
                                 <label for="password" class="form-label"
                                     >Пароль</label
                                 >
@@ -172,10 +172,10 @@
                                         <div class="bg-dark text-white pt-3">
                                             <!-- Имя и пол -->
                                             <div
-                                                class="d-flex flex-wrap flex-row justify-content-center mb-3"
+                                                class="d-flex flex-wrap flex-row justify-content-center mb-1"
                                             >
                                                 <!-- Имя -->
-                                                <div class="text-center m-1">
+                                                <div class="text-center m-2">
                                                     <label
                                                         for="name"
                                                         class="form-label"
@@ -190,9 +190,7 @@
                                                     />
                                                 </div>
                                                 <!-- Пол -->
-                                                <div
-                                                    class="text-center text-white m-1"
-                                                >
+                                                <div class="text-center m-2">
                                                     <label
                                                         for="gender"
                                                         class="form-label text-center"
@@ -236,9 +234,7 @@
                                                 class="d-flex flex-wrap flex-row justify-content-center mb-3"
                                             >
                                                 <!-- Страна -->
-                                                <div
-                                                    class="text-center text-white m-1"
-                                                >
+                                                <div class="text-center m-2">
                                                     <label
                                                         for="country"
                                                         class="form-label"
@@ -253,9 +249,7 @@
                                                     />
                                                 </div>
                                                 <!-- Город -->
-                                                <div
-                                                    class="text-center text-white m-1"
-                                                >
+                                                <div class="text-center m-2">
                                                     <label
                                                         for="city"
                                                         class="form-label"
@@ -271,9 +265,7 @@
                                                 </div>
                                             </div>
                                             <!-- Дата рождения -->
-                                            <div
-                                                class="text-center text-white mb-3"
-                                            >
+                                            <div class="text-center mb-3">
                                                 <label
                                                     for="dateOfBirth"
                                                     class="form-label"
@@ -286,10 +278,8 @@
                                                     type="date"
                                                 />
                                             </div>
-                                            <!-- Изображение -->
-                                            <div
-                                                class="text-center text-white mb-1"
-                                            >
+                                            <!-- Аватарка -->
+                                            <div class="text-center">
                                                 <label
                                                     for="image"
                                                     class="form-label"
@@ -306,9 +296,9 @@
                                 </div>
                             </div>
                         </form>
-                        <!-- Предложение войти, если есть аккаунт -->
+                        <!-- Предложение войти, если уже зарегистрирован -->
                         <div class="text-center border-top border-white pt-1">
-                            <span class="text-white"> Уже есть аккаунт? </span>
+                            <span> Уже зарегистрированы? </span>
                             <a
                                 href="../templates/login.html"
                                 th:href="@{/auth/login}"
