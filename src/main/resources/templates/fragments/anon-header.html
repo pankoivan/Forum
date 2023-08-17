@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Заголовок: фрагмент (до входа)</title>
+        <title>Заголовок (anon)</title>
         <link
             href="../../static/css/bootstrap.min.css"
             th:href="@{/css/bootstrap.min.css}"
@@ -15,9 +15,36 @@
             th:href="@{/css/style.css}"
             rel="stylesheet"
         />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="../../static/favicon/apple-touch-icon.png"
+            th:href="@{/favicon/apple-touch-icon.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="../../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="../../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
+        />
+        <link
+            href="../../static/favicon/site.webmanifest"
+            th:href="@{/favicon/site.webmanifest}"
+            rel="manifest"
+        />
     </head>
 
-    <body>
+    <body
+        class="min-vh-100 vh-100 bg-lightgray d-flex flex-column justify-content-start"
+    >
         <header
             class="bg-dark text-center p-3 mb-5 border-bottom"
             th:fragment="anon-header"
