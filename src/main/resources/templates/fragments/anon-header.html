@@ -20,7 +20,7 @@
     <body>
         <header
             class="bg-dark text-center p-3 mb-5 border-bottom"
-            th:fragment="header"
+            th:fragment="anon-header"
         >
             <div class="container">
                 <div class="row">
@@ -134,7 +134,7 @@
                         >
                         <a
                             href="#"
-                            th:href="@{auth/registration}"
+                            th:href="@{/auth/registration}"
                             class="btn btn-warning"
                             >Зарегистрироваться</a
                         >
