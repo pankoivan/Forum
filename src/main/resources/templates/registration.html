@@ -1,10 +1,337 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Регистрация</title>
+        <link
+            href="../static/css/bootstrap.min.css"
+            th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
+        />
+        <link
+            href="../static/css/style.css"
+            th:href="@{/css/style.css}"
+            rel="stylesheet"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="../static/favicon/apple-touch-icon.png"
+            th:href="@{/favicon/apple-touch-icon.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
+        />
+        <link
+            href="../static/favicon/site.webmanifest"
+            th:href="@{/favicon/site.webmanifest}"
+            rel="manifest"
+        />
+    </head>
+
+    <body
+        class="min-vh-100 vh-100 bg-lightgray d-flex flex-column justify-content-between"
+    >
+        <!-- ---------------------------------------- Заголовок ---------------------------------------- -->
+        <div th:replace="~{fragments/auth-header :: header}">
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
+            >
+                <h3>Статический заголовок для просмотра в браузере</h3>
+            </div>
+        </div>
+
+        <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-9 col-lg-6 mx-auto">
+                    <!-- Непосредственно блок регистрации -->
+                    <div class="bg-dark rounded px-3 py-2">
+                        <!-- Заголовок и картинка "на главную" -->
+                        <div
+                            class="d-flex flex-row justify-content-between border-bottom border-white text-white"
+                        >
+                            <!-- Заголовок -->
+                            <div>
+                                <h5 class="mb-1">Регистрация</h5>
+                                <p class="mb-2">Введите свои данные</p>
+                            </div>
+                            <!-- Картинка "на главную" -->
+                            <div>
+                                <a
+                                    href="../templates/index.html"
+                                    th:href="@{/}"
+                                >
+                                    <img
+                                        src="../static/img/волк.png"
+                                        th:src="@{/img/волк.png}"
+                                        alt="волк"
+                                        width="48"
+                                        class="mb-2"
+                                    />
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Сама форма -->
+                        <form
+                            action="#"
+                            th:action="@{/auth/registration-processing}"
+                            method="post"
+                            class="mt-2 mb-4"
+                        >
+                            <!-- Имя пользователя и почта -->
+                            <div
+                                class="d-flex flex-wrap flex-row justify-content-center mb-3"
+                            >
+                                <!-- Имя пользователя -->
+                                <div class="text-center text-white m-1">
+                                    <label for="username" class="form-label"
+                                        >Имя пользователя</label
+                                    >
+                                    <input
+                                        id="username"
+                                        name="username"
+                                        class="form-control"
+                                        type="text"
+                                        placeholder="Byb"
+                                    />
+                                </div>
+                                <!-- Почта -->
+                                <div class="text-center text-white m-1">
+                                    <label for="email" class="form-label"
+                                        >Почта</label
+                                    >
+                                    <input
+                                        id="email"
+                                        name="email"
+                                        class="form-control"
+                                        type="text"
+                                        placeholder="example@yandex.ru"
+                                    />
+                                </div>
+                            </div>
+                            <!-- Пароль -->
+                            <div class="text-center text-white mb-4">
+                                <label for="password" class="form-label"
+                                    >Пароль</label
+                                >
+                                <input
+                                    id="password"
+                                    name="password"
+                                    class="form-control"
+                                    type="password"
+                                    placeholder="Jdk37#@anxndfjr87la"
+                                />
+                            </div>
+                            <!-- Кнопка отправки -->
+                            <div class="text-center mb-4">
+                                <button
+                                    type="submit"
+                                    class="btn btn-lg btn-primary"
+                                >
+                                    Отправить
+                                </button>
+                            </div>
+                            <!-- Аккордеон: показать/скрыть необязательные поля -->
+                            <div
+                                class="accordion accordion-flush"
+                                id="optionalFields"
+                            >
+                                <div class="accordion-item">
+                                    <div>
+                                        <button
+                                            class="accordion-button collapsed"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapsed"
+                                            aria-expanded="false"
+                                            aria-controls="collapsed"
+                                        >
+                                            Показать необязательные поля
+                                        </button>
+                                    </div>
+                                    <div
+                                        id="collapsed"
+                                        class="accordion-collapse collapse"
+                                        data-bs-parent="#optionalFields"
+                                    >
+                                        <!-- Полезная нагрузка аккордеона, которая скрывается/открывается -->
+                                        <div class="bg-dark text-white pt-3">
+                                            <!-- Имя и пол -->
+                                            <div
+                                                class="d-flex flex-wrap flex-row justify-content-center mb-3"
+                                            >
+                                                <!-- Имя -->
+                                                <div class="text-center m-1">
+                                                    <label
+                                                        for="name"
+                                                        class="form-label"
+                                                        >Имя</label
+                                                    >
+                                                    <input
+                                                        id="name"
+                                                        name="name"
+                                                        class="form-control"
+                                                        type="text"
+                                                        placeholder="Иванов Иван"
+                                                    />
+                                                </div>
+                                                <!-- Пол -->
+                                                <div
+                                                    class="text-center text-white m-1"
+                                                >
+                                                    <label
+                                                        for="gender"
+                                                        class="form-label text-center"
+                                                        >Пол</label
+                                                    >
+                                                    <div id="gender">
+                                                        <div class="form-check">
+                                                            <input
+                                                                class="form-check-input"
+                                                                type="radio"
+                                                                name="flexRadioDefault"
+                                                                id="flexRadioDefault1"
+                                                            />
+                                                            <label
+                                                                class="form-check-label"
+                                                                for="flexRadioDefault1"
+                                                            >
+                                                                Мужской
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input
+                                                                class="form-check-input"
+                                                                type="radio"
+                                                                name="flexRadioDefault"
+                                                                id="flexRadioDefault2"
+                                                                checked
+                                                            />
+                                                            <label
+                                                                class="form-check-label"
+                                                                for="flexRadioDefault2"
+                                                            >
+                                                                Женский
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Страна и город -->
+                                            <div
+                                                class="d-flex flex-wrap flex-row justify-content-center mb-3"
+                                            >
+                                                <!-- Страна -->
+                                                <div
+                                                    class="text-center text-white m-1"
+                                                >
+                                                    <label
+                                                        for="country"
+                                                        class="form-label"
+                                                        >Страна</label
+                                                    >
+                                                    <input
+                                                        id="country"
+                                                        name="country"
+                                                        class="form-control"
+                                                        type="text"
+                                                        placeholder="Россия"
+                                                    />
+                                                </div>
+                                                <!-- Город -->
+                                                <div
+                                                    class="text-center text-white m-1"
+                                                >
+                                                    <label
+                                                        for="city"
+                                                        class="form-label"
+                                                        >Город</label
+                                                    >
+                                                    <input
+                                                        id="city"
+                                                        name="city"
+                                                        class="form-control"
+                                                        type="text"
+                                                        placeholder="Санкт-петербург"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <!-- Дата рождения -->
+                                            <div
+                                                class="text-center text-white mb-3"
+                                            >
+                                                <label
+                                                    for="dateOfBirth"
+                                                    class="form-label"
+                                                    >Дата рождения</label
+                                                >
+                                                <input
+                                                    id="dateOfBirth"
+                                                    name="dateOfBirth"
+                                                    class="form-control"
+                                                    type="date"
+                                                />
+                                            </div>
+                                            <!-- Изображение -->
+                                            <div
+                                                class="text-center text-white mb-1"
+                                            >
+                                                <label
+                                                    for="image"
+                                                    class="form-label"
+                                                    >Аватарка</label
+                                                >
+                                                <input
+                                                    class="form-control"
+                                                    type="file"
+                                                    id="image"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- Предложение войти, если есть аккаунт -->
+                        <div class="text-center border-top border-white pt-1">
+                            <span class="text-white"> Уже есть аккаунт? </span>
+                            <a
+                                href="../templates/login.html"
+                                th:href="@{/auth/login}"
+                                >Войти</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ---------------------------------------- Футер ---------------------------------------- -->
+        <div th:replace="~{fragments/footer :: footer}">
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5"
+            >
+                <h3>Статический футер для просмотра в браузере</h3>
+            </div>
+        </div>
+
+        <script
+            src="../static/js/bootstrap.bundle.min.js"
+            th:src="@{/js/bootstrap.bundle.min.js}"
+        ></script>
+    </body>
 </html>
