@@ -91,6 +91,7 @@
                             th:action="@{/auth/registration-processing}"
                             method="post"
                             class="mt-2 mb-3"
+                            th:object="${user}"
                         >
                             <!-- Имя пользователя и почта -->
                             <div
@@ -107,6 +108,7 @@
                                         class="form-control"
                                         type="text"
                                         placeholder="Byb"
+                                        th:field="*{username}"
                                     />
                                 </div>
                                 <!-- Почта -->
@@ -120,6 +122,7 @@
                                         class="form-control"
                                         type="text"
                                         placeholder="example@yandex.ru"
+                                        th:field="*{email}"
                                     />
                                 </div>
                             </div>
@@ -134,6 +137,7 @@
                                     class="form-control"
                                     type="password"
                                     placeholder="Jdk37#@anxndfjr87la"
+                                    th:field="*{password}"
                                 />
                             </div>
                             <!-- Кнопка отправки -->
@@ -187,46 +191,70 @@
                                                         class="form-control"
                                                         type="text"
                                                         placeholder="Иванов Иван"
+                                                        th:field="*{userInformation.name}"
                                                     />
                                                 </div>
                                                 <!-- Пол -->
                                                 <div class="text-center m-2">
+                                                    <!-- Этот вариант используется при запущенном сервере -->
                                                     <label
                                                         for="gender"
                                                         class="form-label text-center"
                                                         >Пол</label
                                                     >
                                                     <div id="gender">
-                                                        <div class="form-check">
+                                                        <div
+                                                            class="form-check"
+                                                            th:each="each : ${genders}"
+                                                        >
                                                             <input
                                                                 class="form-check-input"
                                                                 type="radio"
-                                                                name="flexRadioDefault"
-                                                                id="flexRadioDefault1"
+                                                                th:field="*{userInformation.gender}"
+                                                                th:text="${each.alias}"
+                                                                th:value="${each}"
                                                             />
-                                                            <label
-                                                                class="form-check-label"
-                                                                for="flexRadioDefault1"
-                                                            >
-                                                                Мужской
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input
-                                                                class="form-check-input"
-                                                                type="radio"
-                                                                name="flexRadioDefault"
-                                                                id="flexRadioDefault2"
-                                                                checked
-                                                            />
-                                                            <label
-                                                                class="form-check-label"
-                                                                for="flexRadioDefault2"
-                                                            >
-                                                                Женский
-                                                            </label>
                                                         </div>
                                                     </div>
+                                                    <!-- Этот вариант используется при просмотре в браузере -->
+                                                    <!--<div>
+                                                        <label
+                                                                for="gender"
+                                                                class="form-label text-center"
+                                                        >Пол</label
+                                                        >
+                                                        <div id="gender">
+                                                            <div class="form-check">
+                                                                <input
+                                                                        class="form-check-input"
+                                                                        type="radio"
+                                                                        name="flexRadioDefault"
+                                                                        id="flexRadioDefault1"
+                                                                />
+                                                                <label
+                                                                        class="form-check-label"
+                                                                        for="flexRadioDefault1"
+                                                                >
+                                                                    Мужской
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input
+                                                                        class="form-check-input"
+                                                                        type="radio"
+                                                                        name="flexRadioDefault"
+                                                                        id="flexRadioDefault2"
+                                                                        checked
+                                                                />
+                                                                <label
+                                                                        class="form-check-label"
+                                                                        for="flexRadioDefault2"
+                                                                >
+                                                                    Женский
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>-->
                                                 </div>
                                             </div>
                                             <!-- Страна и город -->
@@ -246,6 +274,7 @@
                                                         class="form-control"
                                                         type="text"
                                                         placeholder="Россия"
+                                                        th:field="*{userInformation.country}"
                                                     />
                                                 </div>
                                                 <!-- Город -->
@@ -261,6 +290,7 @@
                                                         class="form-control"
                                                         type="text"
                                                         placeholder="Санкт-петербург"
+                                                        th:field="*{userInformation.city}"
                                                     />
                                                 </div>
                                             </div>
@@ -276,6 +306,7 @@
                                                     name="dateOfBirth"
                                                     class="form-control"
                                                     type="date"
+                                                    th:field="*{userInformation.dateOfBirth}"
                                                 />
                                             </div>
                                             <!-- Аватарка -->

@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.forum.utils.BanUtils.*;
+import static jakarta.persistence.CascadeType.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -53,8 +54,11 @@ public class User implements UserDetails {
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
-    @OneToOne(mappedBy = "user")
-    private UserInformation userInformation;
+    @OneToOne(
+            mappedBy = "user",
+            cascade = ALL
+    )
+    private UserInformation userInformation = new UserInformation();
 
     @OneToMany(mappedBy = "userWhoCreated")
     private List<Section> createdSections;

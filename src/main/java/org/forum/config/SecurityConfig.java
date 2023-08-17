@@ -52,6 +52,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/auth/login", "/auth/registration").permitAll()
+                        .requestMatchers("/auth/registration-processing").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/favicon/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -60,7 +61,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/auth/login-processing")
                         .defaultSuccessUrl("/")
                         .failureUrl("/auth/login")
-                        .failureHandler(authenticationFailureHandler())
+                        //.failureHandler(authenticationFailureHandler())
                 )
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
@@ -70,7 +71,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
+    /*@Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
         return new SimpleUrlAuthenticationFailureHandler("/auth/login") {
             @Override
@@ -83,6 +84,6 @@ public class SecurityConfig {
                 super.onAuthenticationFailure(request, response, exception);
             }
         };
-    }
+    }*/
 
 }
