@@ -45,124 +45,131 @@
     <body
         class="min-vh-100 vh-100 bg-lightgray d-flex flex-column justify-content-start"
     >
-        <header
-            class="bg-dark text-center p-3 mb-5 border-bottom"
-            th:fragment="anon-header"
-        >
+        <!-- ---------------------------------------- Сам фрагмент: заголовок для анонимного пользователя ---------------------------------------- -->
+        <header class="bg-dark text-center p-2 mb-5" th:fragment="anon-header">
             <div class="container">
-                <div class="row">
-                    <div class="col-12 col-md-1 col-lg-1 my-auto">
-                        <a href="#" th:href="@{/}">
-                            <img
-                                src="../../static/img/волк.png"
-                                th:src="@{/img/волк.png}"
-                                alt="волк"
-                                width="32"
-                                class="rounded-circle"
-                            />
-                        </a>
-                    </div>
-                    <nav class="col-12 col-md-7 col-lg-7 my-auto">
-                        <ul
-                            class="nav justify-content-center justify-content-md-center justify-content-lg-start"
-                        >
-                            <li>
-                                <a
-                                    href="#"
-                                    th:href="@{/}"
-                                    class="nav-link text-secondary"
-                                    th:classapend="${#strings.equals(page, 'index')} ? text-secondary"
-                                    >Главная</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    th:href="@{/sections}"
-                                    class="nav-link text-wheat"
-                                    th:classapend="${#strings.equals(page, 'sections')} ? text-secondary"
-                                    >Разделы</a
-                                >
-                            </li>
-                            <li>
-                                <div class="dropdown">
+                <div
+                    class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-between justify-content-xl-between"
+                >
+                    <div
+                        class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-center"
+                    >
+                        <div class="m-2">
+                            <a href="#" th:href="@{/}">
+                                <img
+                                    src="../../static/img/волк.png"
+                                    th:src="@{/img/волк.png}"
+                                    alt="На главную"
+                                    width="32"
+                                />
+                            </a>
+                        </div>
+                        <nav class="m-2">
+                            <ul class="nav justify-content-center">
+                                <li>
                                     <a
                                         href="#"
-                                        class="nav-link d-block text-wheat"
-                                        th:classapend="${#strings.equals(page, 'topics')} ? text-secondary"
-                                        id="topics"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                        >Темы</a
+                                        th:href="@{/}"
+                                        class="nav-link text-wheat"
+                                        th:classapend="${#strings.equals(page, 'index')} ? text-secondary"
+                                        >Главная</a
                                     >
-                                    <ul
-                                        class="dropdown-menu text-small"
-                                        aria-labelledby="topics"
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        th:href="@{/sections}"
+                                        class="nav-link text-wheat"
+                                        th:classapend="${#strings.equals(page, 'sections')} ? text-secondary"
+                                        >Разделы</a
                                     >
-                                        <li>
-                                            <a class="dropdown-item" href="#"
-                                                >В разделе "Главный"</a
-                                            >
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider" />
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="#"
-                                                >В разделе "Новости"</a
-                                            >
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider" />
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="#"
-                                                >В разделе "Обо всём"</a
-                                            >
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    th:href="@{/users}"
-                                    class="nav-link text-wheat"
-                                    th:classapend="${#strings.equals(page, 'users')} ? text-secondary"
-                                    >Участники</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    th:href="@{/moders}"
-                                    class="nav-link text-wheat"
-                                    th:classapend="${#strings.equals(page, 'moders')} ? text-secondary"
-                                    >Модераторы</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    th:href="@{/admins}"
-                                    class="nav-link text-wheat"
-                                    th:classapend="${#strings.equals(page, 'admins')} ? text-secondary"
-                                    >Администраторы</a
-                                >
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="col-12 col-md-4 col-lg-4 my-auto">
+                                </li>
+                                <li>
+                                    <div class="dropdown">
+                                        <a
+                                            href="#"
+                                            class="nav-link d-block text-wheat"
+                                            th:classapend="${#strings.equals(page, 'topics')} ? text-secondary"
+                                            id="topics"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                            >Темы</a
+                                        >
+                                        <ul
+                                            class="dropdown-menu text-small"
+                                            aria-labelledby="topics"
+                                        >
+                                            <li>
+                                                <a
+                                                    class="dropdown-item"
+                                                    href="#"
+                                                    >В разделе "Главный"</a
+                                                >
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider" />
+                                            </li>
+                                            <li>
+                                                <a
+                                                    class="dropdown-item"
+                                                    href="#"
+                                                    >В разделе "Новости"</a
+                                                >
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider" />
+                                            </li>
+                                            <li>
+                                                <a
+                                                    class="dropdown-item"
+                                                    href="#"
+                                                    >В разделе "Обо всём"</a
+                                                >
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        th:href="@{/users}"
+                                        class="nav-link text-wheat"
+                                        th:classapend="${#strings.equals(page, 'users')} ? text-secondary"
+                                        >Участники</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        th:href="@{/moders}"
+                                        class="nav-link text-wheat"
+                                        th:classapend="${#strings.equals(page, 'moders')} ? text-secondary"
+                                        >Модераторы</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        th:href="@{/admins}"
+                                        class="nav-link text-wheat"
+                                        th:classapend="${#strings.equals(page, 'admins')} ? text-secondary"
+                                        >Администраторы</a
+                                    >
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="m-1">
                         <a
                             href="#"
                             th:href="@{/auth/login}"
-                            class="btn btn-primary"
+                            class="btn btn-primary m-1"
                             >Войти</a
                         >
                         <a
                             href="#"
                             th:href="@{/auth/registration}"
-                            class="btn btn-warning"
+                            class="btn btn-warning m-1"
                             >Зарегистрироваться</a
                         >
                     </div>

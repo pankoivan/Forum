@@ -46,7 +46,9 @@
         class="min-vh-100 vh-100 bg-lightgray d-flex flex-column justify-content-between"
     >
         <!-- ---------------------------------------- Заголовок ---------------------------------------- -->
-        <div th:replace="${currentUser} ? ~{fragments/auth-header :: auth-header} : ~{fragments/anon-header :: anon-header}">
+        <div
+            th:replace="${currentUser} ? ~{fragments/auth-header :: auth-header} : ~{fragments/anon-header :: anon-header}"
+        >
             <div
                 class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
             >
@@ -90,7 +92,7 @@
                             action="#"
                             th:action="@{/auth/registration-processing}"
                             method="post"
-                            class="mt-2 mb-3"
+                            class="mt-2 mb-4"
                             th:object="${user}"
                         >
                             <!-- Имя пользователя и почта -->

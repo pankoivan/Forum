@@ -1,9 +1,15 @@
+/* Маркерные стили для js (временно) */
+
 .btn__like {
 }
+
+/* Цвета фона */
 
 .bg-lightgray {
     background-color: lightgray;
 }
+
+/* Стили для статических элементов при просмотре в браузере */
 
 .static-header {
     height: 75px;
@@ -13,12 +19,24 @@
     height: 185px;
 }
 
+.static-block {
+    height: 225px;
+}
+
+/* Цвета текста */
+
 .text-wheat {
     color: wheat;
 }
 
 .text-red {
     color: red;
+}
+
+/* Стили текста */
+
+.fw-bold {
+    font-weight: bold;
 }
 
 .fs-10 {
@@ -45,13 +63,7 @@
     font-size: 20px;
 }
 
-.static-header {
-    height: 75px;
-}
-
-.static-footer {
-    height: 185px;
-}
+/* Переопределение стилей Bootstrap */
 
 .carousel-control-prev,
 .carousel-control-next {

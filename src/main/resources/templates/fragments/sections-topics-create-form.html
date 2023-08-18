@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Форма создания раздела/темы</title>
+        <link
+            href="../../static/css/bootstrap.min.css"
+            th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
+        />
+        <link
+            href="../../static/css/style.css"
+            th:href="@{/css/style.css}"
+            rel="stylesheet"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="../../static/favicon/apple-touch-icon.png"
+            th:href="@{/favicon/apple-touch-icon.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="../../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="../../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
+        />
+        <link
+            href="../../static/favicon/site.webmanifest"
+            th:href="@{/favicon/site.webmanifest}"
+            rel="manifest"
+        />
+    </head>
+
+    <body
+        class="min-vh-100 vh-100 bg-lightgray d-flex flex-column justify-content-center"
+    >
+        <!-- ---------------------------------------- Сам фрагмент: форма создания раздела/темы ---------------------------------------- -->
+        <div class="container" th:fragment="form">
+            <div class="row">
+                <div class="col-11 col-md-8 col-lg-5 mx-auto">
+                    <!-- Непосредственно блок создания раздела/темы -->
+                    <div class="bg-dark text-white rounded px-3 py-2">
+                        <!-- Заголовок и картинка "на главную" -->
+                        <div
+                            class="d-flex flex-row justify-content-between border-bottom border-white"
+                        >
+                            <!-- Заголовок -->
+                            <div>
+                                <h5 class="mb-1">Создание раздела/темы</h5>
+                                <p class="mb-2">
+                                    Введите название раздела/темы и описание
+                                </p>
+                            </div>
+                            <!-- Картинка "на главную" -->
+                            <div>
+                                <a
+                                    href="../../templates/index.html"
+                                    th:href="@{/}"
+                                >
+                                    <img
+                                        src="../../static/img/волк.png"
+                                        th:src="@{/img/волк.png}"
+                                        alt="На главную"
+                                        width="48"
+                                        class="mb-2"
+                                    />
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Сама форма -->
+                        <form
+                            action="#"
+                            th:action="@{/sections/create/processing}"
+                            method="post"
+                            class="my-3"
+                        >
+                            <!-- Название -->
+                            <div class="text-center mb-3">
+                                <label for="name" class="form-label"
+                                    >Название</label
+                                >
+                                <input
+                                    id="name"
+                                    name="name"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Общение"
+                                />
+                            </div>
+                            <!-- Описание -->
+                            <div class="text-center mb-4">
+                                <label for="description" class="form-label"
+                                    >Описание</label
+                                >
+                                <textarea
+                                    id="description"
+                                    name="description"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="В этом разделе происходит общение на любые незапрещённые темы"
+                                ></textarea>
+                            </div>
+                            <!-- Кнопка отправки -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">
+                                    Добавить раздел/тему
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
