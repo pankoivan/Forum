@@ -45,6 +45,7 @@
     <body
         class="min-vh-100 vh-100 bg-lightgray d-flex flex-column justify-content-between"
     >
+        <!-- ---------------------------------------- Заголовок ---------------------------------------- -->
         <div
             th:replace="${currentUser} ? ~{fragments/auth-header :: auth-header} : ~{fragments/anon-header :: anon-header}"
         >
@@ -55,14 +56,12 @@
             </div>
         </div>
 
+        <!-- ---------------------------------------- Футер ---------------------------------------- -->
         <div th:replace="~{fragments/footer :: footer}">
             <div
-                class="bg-dark d-flex align-items-center justify-content-center text-aliceblue mt-5"
-                style="height: 185px"
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5"
             >
-                <span class="static-component"
-                    >Статический футер для просмотра в браузере</span
-                >
+                <h3>Статический футер для просмотра в браузере</h3>
             </div>
         </div>
 

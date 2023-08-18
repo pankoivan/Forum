@@ -48,12 +48,15 @@
         <!-- ---------------------------------------- Сам фрагмент: заголовок для анонимного пользователя ---------------------------------------- -->
         <header class="bg-dark text-center p-2 mb-5" th:fragment="anon-header">
             <div class="container">
+                <!-- Главная картинка, навигационная панель и кнопки входа и регистрации -->
                 <div
                     class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-between justify-content-xl-between"
                 >
+                    <!-- Главная картинка и навигационная панель -->
                     <div
                         class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-center"
                     >
+                        <!-- Главная картинка -->
                         <div class="m-2">
                             <a href="#" th:href="@{/}">
                                 <img
@@ -64,6 +67,7 @@
                                 />
                             </a>
                         </div>
+                        <!-- Навигационная панель -->
                         <nav class="m-2">
                             <ul class="nav justify-content-center">
                                 <li>
@@ -84,6 +88,7 @@
                                         >Разделы</a
                                     >
                                 </li>
+                                <!-- Dropdown-пункт "темы": показывает список разделов -->
                                 <li>
                                     <div class="dropdown">
                                         <a
@@ -159,13 +164,16 @@
                             </ul>
                         </nav>
                     </div>
+                    <!-- Кнопки входа и регистрации -->
                     <div class="m-1">
+                        <!-- Кнопка входа -->
                         <a
                             href="#"
                             th:href="@{/auth/login}"
                             class="btn btn-primary m-1"
                             >Войти</a
                         >
+                        <!-- Кнопка регистрации -->
                         <a
                             href="#"
                             th:href="@{/auth/registration}"
