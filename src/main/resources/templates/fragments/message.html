@@ -54,10 +54,11 @@
 
         <!-- Контейнер для фрагмента -->
         <div class="container">
-            <!-- ---------------------------------------- Сам фрагмент: сообщение ---------------------------------------- -->
-            <div class="col-12 col-md-10 col-lg-8 mx-auto mb-5">
+            <div class="col-12">
+                <!-- ---------------------------------------- Сам фрагмент: сообщение ---------------------------------------- -->
                 <div
-                    class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2"
+                    class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2 mb-5"
+                    th:fragment="message"
                 >
                     <!-- Имя пользователя и аватарка -->
                     <div class="border-end border-white text-center pe-2 me-2">
@@ -77,8 +78,9 @@
                             />
                         </div>
                     </div>
-                    <!-- Информационная панель -->
-                    <div>
+                    <!-- Информационная панель и сообщение -->
+                    <div class="flex-fill">
+                        <!-- Информационная панель -->
                         <div
                             class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-between justify-content-lg-between border-bottom border-white px-3 pb-2"
                         >
@@ -122,23 +124,20 @@
                                 </a>
                             </div>
                         </div>
-                        <!-- Текст сообщения -->
+                        <!-- Сообщение -->
                         <div class="px-2 pt-2 pb-1">
-                            <span>
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Dolorum fugiat nostrum sequi
-                                excepturi dolor accusamus? Officia consequatur
-                                qui expedita consectetur quisquam ipsa fuga
-                                totam eum optio, cumque animi? Dolores cumque et
-                                eius sequi autem quisquam, minus, ipsam
-                                voluptates exercitationem pariatur beatae velit
-                                quos dolore voluptas. Accusantium natus
-                                explicabo illum nostrum voluptatibus magnam,
-                                inventore delectus, doloremque qui consequuntur
-                                voluptas in ipsum? Eaque exercitationem fugiat,
-                                adipisci dolor odit excepturi officia, sed
-                                ratione.
-                            </span>
+                            <span
+                                >Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Deserunt alias, laudantium
+                                quasi repellendus error ipsa magnam repudiandae
+                                voluptatum harum doloremque, ad tenetur vel.
+                                Corporis, reiciendis. Necessitatibus soluta
+                                mollitia sed rerum cupiditate laboriosam,
+                                commodi explicabo voluptatem, dolor doloribus
+                                nihil accusantium sunt numquam ab autem
+                                asperiores ad. Veritatis sunt doloribus atque
+                                magni.</span
+                            >
                         </div>
                     </div>
                 </div>
