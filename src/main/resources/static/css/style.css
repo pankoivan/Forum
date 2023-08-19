@@ -23,6 +23,10 @@
     height: 225px;
 }
 
+.static-block-mini {
+    height: 150px;
+}
+
 /* Цвета текста */
 
 .text-wheat {
