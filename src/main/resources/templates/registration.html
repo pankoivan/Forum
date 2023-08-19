@@ -203,60 +203,47 @@
                                                         class="form-label text-center"
                                                         >Пол</label
                                                     >
-                                                    <!-- Этот блок используется при запущенном сервере -->
                                                     <div id="gender">
                                                         <div
                                                             class="form-check"
                                                             th:each="each : ${genders}"
                                                         >
-                                                            <input
-                                                                class="form-check-input"
-                                                                type="radio"
-                                                                th:field="*{userInformation.gender}"
-                                                                th:text="${each.alias}"
-                                                                th:value="${each}"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <!-- Этот блок используется при просмотре в браузере -->
-                                                    <!--<div>
-                                                        <label
-                                                                for="gender"
-                                                                class="form-label text-center"
-                                                        >Пол</label
-                                                        >
-                                                        <div id="gender">
-                                                            <div class="form-check">
+                                                            <div>
                                                                 <input
-                                                                        class="form-check-input"
-                                                                        type="radio"
-                                                                        name="flexRadioDefault"
-                                                                        id="flexRadioDefault1"
+                                                                    id="flexRadioDefault1"
+                                                                    class="form-check-input"
+                                                                    type="radio"
+                                                                    th:field="*{userInformation.gender}"
+                                                                    th:text="${each.alias}"
+                                                                    th:value="${each}"
                                                                 />
                                                                 <label
-                                                                        class="form-check-label"
-                                                                        for="flexRadioDefault1"
+                                                                    th:if="${false}"
+                                                                    class="form-check-label"
+                                                                    for="flexRadioDefault1"
                                                                 >
                                                                     Мужской
                                                                 </label>
                                                             </div>
-                                                            <div class="form-check">
+                                                            <div
+                                                                th:if="${false}"
+                                                            >
                                                                 <input
-                                                                        class="form-check-input"
-                                                                        type="radio"
-                                                                        name="flexRadioDefault"
-                                                                        id="flexRadioDefault2"
-                                                                        checked
+                                                                    class="form-check-input"
+                                                                    type="radio"
+                                                                    name="flexRadioDefault"
+                                                                    id="flexRadioDefault2"
+                                                                    checked
                                                                 />
                                                                 <label
-                                                                        class="form-check-label"
-                                                                        for="flexRadioDefault2"
+                                                                    class="form-check-label"
+                                                                    for="flexRadioDefault2"
                                                                 >
                                                                     Женский
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                    </div>-->
+                                                    </div>
                                                 </div>
                                             </div>
                                             <!-- Страна и город -->

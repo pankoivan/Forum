@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Пользователи</title>
+        <link
+            href="../static/css/bootstrap.min.css"
+            th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
+        />
+        <link
+            href="../static/css/style.css"
+            th:href="@{/css/style.css}"
+            rel="stylesheet"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="../static/favicon/apple-touch-icon.png"
+            th:href="@{/favicon/apple-touch-icon.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
+        />
+        <link
+            href="../static/favicon/site.webmanifest"
+            th:href="@{/favicon/site.webmanifest}"
+            rel="manifest"
+        />
+    </head>
+
+    <body
+        class="min-vh-100 vh-100 bg-lightgray d-flex flex-column justify-content-between"
+    >
+        <!-- ---------------------------------------- Заголовок ---------------------------------------- -->
+        <div
+            th:replace="${currentUser} ? ~{fragments/auth-header :: auth-header} : ~{fragments/anon-header :: anon-header}"
+        >
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
+            >
+                <h3>Статический заголовок для просмотра в браузере</h3>
+            </div>
+        </div>
+
+        <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
+        <div class="container">
+            <!-- Список пользователей -->
+            <div th:each="each : ${users}">
+                <div th:insert="~{fragments/user :: user}"></div>
+                <div
+                    th:if="${false}"
+                    class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-mini mb-5"
+                >
+                    <h3>Статический блок для просмотра в браузере</h3>
+                </div>
+                <div
+                    th:if="${false}"
+                    class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-mini mb-5"
+                >
+                    <h3>Статический блок для просмотра в браузере</h3>
+                </div>
+                <div
+                    th:if="${false}"
+                    class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-mini"
+                >
+                    <h3>Статический блок для просмотра в браузере</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- ---------------------------------------- Футер ---------------------------------------- -->
+        <div th:replace="~{fragments/footer :: footer}">
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5"
+            >
+                <h3>Статический футер для просмотра в браузере</h3>
+            </div>
+        </div>
+
+        <script
+            src="../static/js/bootstrap.bundle.min.js"
+            th:src="@{/js/bootstrap.bundle.min.js}"
+        ></script>
+    </body>
+</html>
