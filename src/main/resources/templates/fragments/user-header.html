@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Пользователь</title>
+        <link
+            href="../../static/css/bootstrap.min.css"
+            th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
+        />
+        <link
+            href="../../static/css/style.css"
+            th:href="@{/css/style.css}"
+            rel="stylesheet"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="../../static/favicon/apple-touch-icon.png"
+            th:href="@{/favicon/apple-touch-icon.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="../../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="../../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
+        />
+        <link
+            href="../../static/favicon/site.webmanifest"
+            th:href="@{/favicon/site.webmanifest}"
+            rel="manifest"
+        />
+    </head>
+
+    <body
+        class="min-vh-100 vh-100 bg-lightgray d-flex flex-column justify-content-between"
+    >
+        <!-- ---------------------------------------- Статический заголовок ---------------------------------------- -->
+        <div
+            class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
+        >
+            <h3>Статический заголовок для просмотра в браузере</h3>
+        </div>
+
+        <!-- Контейнер для фрагмента -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <!-- ---------------------------------------- Сам фрагмент: пользователь ---------------------------------------- -->
+                    <div
+                        class="bg-dark text-white rounded d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-between p-1"
+                    >
+                        <!-- Аватарка с именем -->
+                        <div class="mx-4 my-2">
+                            <span>
+                                <img
+                                    src="../../static/img/природа.png"
+                                    alt="Пользователь"
+                                    class="rounded-circle"
+                                    width="48"
+                                />
+                                <a href="#" class="text-white"
+                                    >Имя пользователя</a
+                                >
+                            </span>
+                        </div>
+                        <!-- Роль -->
+                        <div class="mx-4 my-2">
+                            <span>МОДЕРАТОР</span>
+                        </div>
+                        <!-- Дата регистрации -->
+                        <div class="mx-4 my-2">
+                            <span>21.10.2022 в 11:34:58</span>
+                        </div>
+                        <!-- Кнопки бана, удаления, добавления в модераторы и в администраторы -->
+                        <div
+                            class="mx-4 my-2"
+                            sec:authorize="hasAuthority('LATER')"
+                        >
+                            <!-- Кнопка бана -->
+                            <a href="#" class="btn btn-sm btn-danger">
+                                <img
+                                    src="../../static/img/ban.png"
+                                    alt="Забанить"
+                                    width="16"
+                                    class="mb-1"
+                                />
+                            </a>
+                            <!-- Кнопка удаления -->
+                            <a href="#" class="btn btn-sm btn-danger">
+                                <img
+                                    src="../../static/img/delete.png"
+                                    alt="Удалить"
+                                    width="16"
+                                    class="mb-1"
+                                />
+                            </a>
+                            <!-- Кнопка добавления в модераторы -->
+                            <a href="#" class="btn btn-sm btn-primary">
+                                <img
+                                    src="../../static/img/moder.png"
+                                    alt="Назначить модератором"
+                                    width="16"
+                                    class="mb-1"
+                                />
+                            </a>
+                            <!-- Кнопка добавления в администраторы -->
+                            <a href="#" class="btn btn-sm btn-primary">
+                                <img
+                                    src="../../static/img/admin.png"
+                                    alt="Назначить администратором"
+                                    width="16"
+                                    class="mb-1"
+                                />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ---------------------------------------- Статический футер ---------------------------------------- -->
+        <div
+            class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5"
+        >
+            <h3>Статический футер для просмотра в браузере</h3>
+        </div>
+    </body>
+</html>

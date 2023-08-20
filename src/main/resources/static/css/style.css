@@ -3,7 +3,7 @@
 .btn__like {
 }
 
-/* Цвета фона */
+/* Стили фона */
 
 .bg-lightgray {
     background-color: lightgray;
@@ -31,7 +31,7 @@
     height: 50px;
 }
 
-/* Цвета текста */
+/* Стили текста */
 
 .text-wheat {
     color: wheat;
@@ -41,7 +41,9 @@
     color: red;
 }
 
-/* Стили текста */
+.break-word {
+    word-wrap: break-word;
+}
 
 .fw-bold {
     font-weight: bold;
@@ -71,18 +73,8 @@
     font-size: 20px;
 }
 
-/* Переопределение стилей Bootstrap */
-
-.carousel-control-prev,
-.carousel-control-next {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    opacity: 1;
-}
-
 /* Остальные */
 
-.break-word {
-    word-wrap: break-word;
+.left-message-block {
+    max-width: 135px;
 }

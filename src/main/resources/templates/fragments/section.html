@@ -54,73 +54,75 @@
 
         <!-- Контейнер для фрагмента -->
         <div class="container">
-            <div class="col-12">
-                <!-- ---------------------------------------- Сам фрагмент: раздел ---------------------------------------- -->
-                <div class="bg-dark text-white rounded px-2 pt-2 pb-1 mb-5">
-                    <!-- Кнопки редактирования и удаления -->
-                    <div
-                        sec:authorize="hasAuthority('LATER')"
-                        class="text-center border-bottom border-white pb-2"
-                    >
-                        <!-- Кнопка редактирования -->
-                        <a href="#" class="btn btn-sm btn-success">
-                            <img
-                                src="../../static/img/edit.png"
-                                alt="edit"
-                                width="16"
-                                class="mb-1"
-                            />
-                        </a>
-                        <!-- Кнопка удаления -->
-                        <a href="#" class="btn btn-sm btn-danger">
-                            <img
-                                src="../../static/img/delete.png"
-                                alt="edit"
-                                width="16"
-                                class="mb-1"
-                            />
-                        </a>
-                    </div>
-                    <!-- Основная часть -->
-                    <div>
-                        <!-- Заголовок и описание -->
-                        <div class="text-start m-1">
-                            <!-- Заголовок -->
-                            <h5 class="mb-1">
-                                <a href="#" class="text-white link-offset-2"
-                                    >Главный</a
-                                >
-                            </h5>
-                            <!-- Описание -->
-                            <p class="mb-1">
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Quisquam officiis assumenda
-                                totam, numquam architecto quod delectus enim
-                                maxime odit error.
-                            </p>
-                        </div>
-                        <!-- Количество тем, количество сообщений и недавнее сообщение -->
+            <div class="row">
+                <div class="col-12">
+                    <!-- ---------------------------------------- Сам фрагмент: раздел ---------------------------------------- -->
+                    <div class="bg-dark text-white rounded px-2 pt-2 pb-1 mb-5">
+                        <!-- Кнопки редактирования и удаления -->
                         <div
-                            class="d-flex flex-row flex-wrap justify-content-center justify-content-md-center justify-content-lg-between"
+                            class="text-center border-bottom border-white pb-2"
+                            sec:authorize="hasAuthority('LATER')"
                         >
-                            <!-- Количество тем -->
-                            <div class="text-center mx-5 my-1">
-                                <p class="mb-1">Тем:</p>
-                                <p class="mb-1">124</p>
-                            </div>
-                            <!-- Количество сообщений -->
-                            <div class="text-center mx-5 my-1">
-                                <p class="mb-1">Сообщений:</p>
-                                <p class="mb-1">8934</p>
-                            </div>
-                            <!-- Недавнее сообщение -->
-                            <div class="text-center mx-5 my-1">
-                                <p class="mb-1">
-                                    <a href="#" class="text-white"
-                                        >Недавнее сообщение</a
+                            <!-- Кнопка редактирования -->
+                            <a href="#" class="btn btn-sm btn-success">
+                                <img
+                                    src="../../static/img/edit.png"
+                                    alt="Редактировать"
+                                    width="16"
+                                    class="mb-1"
+                                />
+                            </a>
+                            <!-- Кнопка удаления -->
+                            <a href="#" class="btn btn-sm btn-danger">
+                                <img
+                                    src="../../static/img/delete.png"
+                                    alt="Удалить"
+                                    width="16"
+                                    class="mb-1"
+                                />
+                            </a>
+                        </div>
+                        <!-- Основная часть -->
+                        <div>
+                            <!-- Заголовок и описание -->
+                            <div class="text-start m-1">
+                                <!-- Заголовок -->
+                                <h5 class="mb-1">
+                                    <a href="#" class="text-white link-offset-2"
+                                        >Главный</a
                                     >
+                                </h5>
+                                <!-- Описание -->
+                                <p class="mb-1">
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Quisquam officiis
+                                    assumenda totam, numquam architecto quod
+                                    delectus enim maxime odit error.
                                 </p>
-                                <p class="mb-1 fs-12">24.04.2011</p>
+                            </div>
+                            <!-- Количество тем, количество сообщений и недавнее сообщение -->
+                            <div
+                                class="d-flex flex-row flex-wrap justify-content-center justify-content-md-center justify-content-lg-between"
+                            >
+                                <!-- Количество тем -->
+                                <div class="text-center mx-5 my-1">
+                                    <p class="mb-1">Тем:</p>
+                                    <p class="mb-1">124</p>
+                                </div>
+                                <!-- Количество сообщений -->
+                                <div class="text-center mx-5 my-1">
+                                    <p class="mb-1">Сообщений:</p>
+                                    <p class="mb-1">8934</p>
+                                </div>
+                                <!-- Недавнее сообщение -->
+                                <div class="text-center mx-5 my-1">
+                                    <p class="mb-1">
+                                        <a href="#" class="text-white"
+                                            >Недавнее сообщение</a
+                                        >
+                                    </p>
+                                    <p class="mb-1 fs-12">24.04.2011</p>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -58,16 +58,36 @@
 
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div class="container">
-            <!-- Текущая тема -->
-            <div class="text-center mb-5">
-                <h2>Текущая тема: "Главная"</h2>
+            <!-- Текущая тема и поиск -->
+            <div
+                class="d-flex flex-row flex-wrap justify-content-center justify-content-md-between justify-content-lg-between mb-5"
+            >
+                <!-- Текущая тема -->
+                <div class="text-center m-1">
+                    <h2>Текущая тема: "Главная"</h2>
+                </div>
+                <!-- Поиск -->
+                <form action="#" method="post">
+                    <div class="d-flex flex-row justify-content-between m-1">
+                        <input
+                            type="search"
+                            placeholder="Текст..."
+                            class="form-control mx-1"
+                        />
+                        <button type="submit" class="btn btn-primary mx-1">
+                            Найти
+                        </button>
+                    </div>
+                </form>
             </div>
             <!-- Форма отправки сообщения -->
             <div
                 class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2 mb-5"
             >
                 <!-- Имя пользователя и аватарка -->
-                <div class="border-end border-white text-center pe-2 me-2">
+                <div
+                    class="border-end border-white text-center left-message-block break-word pe-2 me-2"
+                >
                     <!-- Имя пользователя -->
                     <div class="border-bottom border-white pb-1 mb-2">
                         <a href="#" class="text-white text-decoration-none"
@@ -87,24 +107,29 @@
                 <!-- Сама форма -->
                 <form
                     action="#"
-                    class="flex-fill text-center px-2 mt-1"
                     method="post"
+                    class="text-center flex-fill px-2 mt-1"
                 >
-                    <!-- Текст сообщения -->
                     <div class="mb-2">
+                        <label for="message" class="form-label"
+                            >Введите сообщение длиной не менее 15-ти
+                            символов</label
+                        >
                         <textarea
+                            id="message"
                             name="text"
-                            class="form-control"
-                            placeholder="Какое-нибудь сообщение длиной не менее 15-ти символов"
+                            class="form-control fs-14"
+                            placeholder="Какое-нибудь сообщение длиной не менее 15-ти символов..."
                         ></textarea>
                     </div>
                     <div>
-                        <a href="#" type="submit" class="btn btn-primary"
+                        <a href="#" type="submit" class="btn btn-sm btn-primary"
                             >Отправить сообщение</a
                         >
                     </div>
                 </form>
             </div>
+            <!-- Список сообщений -->
             <div th:each="each : ${messages}">
                 <div th:insert="~{fragments/message :: message}"></div>
                 <div
@@ -141,9 +166,6 @@
             src="../static/js/bootstrap.bundle.min.js"
             th:src="@{/js/bootstrap.bundle.min.js}"
         ></script>
-        <script
-            src="../static/js/script.js"
-            th:src="@{/js/bootstrap.bundle.min.js}"
-        ></script>
+        <script src="../static/js/script.js" th:src="@{/js/script.js}"></script>
     </body>
 </html>

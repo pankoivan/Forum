@@ -61,12 +61,12 @@
             <!-- Кнопка "создать раздел" -->
             <div class="text-center mb-5">
                 <div>
-                    <a href="#" class="btn btn-primary btn-lg"
+                    <a href="#" class="btn btn-lg btn-primary"
                         >Создать раздел</a
                     >
                 </div>
             </div>
-            <!-- Список сообщений -->
+            <!-- Список разделов -->
             <div th:each="each : ${sections}">
                 <div th:insert="~{fragments/section :: section}"></div>
                 <div

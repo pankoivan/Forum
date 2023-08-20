@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Главная</title>
+        <title>Управление ролями и правами</title>
         <link
             href="../static/css/bootstrap.min.css"
             th:href="@{/css/bootstrap.min.css}"
@@ -59,149 +59,172 @@
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div class="container text-white">
             <div class="row">
-                <div class="col-12 col-md-8 col-lg-8 bg-dark rounded">
-                    <div class="my-1">
-                        <div>
-                            <p>OWNER</p>
-                        </div>
-                    </div>
-                    <div>
-                        <ul>
-                            <li>CREATE_SOME</li>
-                            <li>DELETE</li>
-                            <li>READ</li>
-                        </ul>
-                    </div>
-                    <div class="my-1">
-                        <div>
-                            <p>OWNER</p>
-                        </div>
-                    </div>
-                    <div>
-                        <ul>
-                            <li>CREATE_SOME</li>
-                            <li>DELETE</li>
-                            <li>READ</li>
-                        </ul>
-                    </div>
-                    <div class="my-1">
-                        <div>
-                            <p>OWNER</p>
-                        </div>
-                    </div>
-                    <div>
-                        <ul>
-                            <li>CREATE_SOME</li>
-                            <li>DELETE</li>
-                            <li>READ</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <form action="#" method="post">
-                            <label for="gender" class="form-label text-center"
-                                >Пол</label
-                            >
-                            <div id="gender">
+                <!-- Работа с ролями -->
+                <div class="col-12 col-md-8 col-lg-8 mb-5 mb-md-0 mb-lg-0">
+                    <div class="bg-dark rounded p-2">
+                        <!-- Список ролей -->
+                        <div class="mb-5" th:each="each : ${roles}">
+                            <div class="mb-2">
                                 <div
-                                    class="form-check"
-                                    th:each="each : ${genders}"
+                                    class="d-flex flex-row align-items-center justify-content-center pb-1"
                                 >
-                                    <div>
-                                        <input
-                                            id="flexRadioDefault1"
-                                            class="form-check-input"
-                                            type="radio"
-                                            th:field="*{userInformation.gender}"
-                                            th:text="${each.alias}"
-                                            th:value="${each}"
-                                        />
-                                        <label
-                                            th:if="${false}"
-                                            class="form-check-label"
-                                            for="flexRadioDefault1"
-                                        >
-                                            Мужской
-                                        </label>
+                                    <div class="fs-20 fw-bold mx-1">
+                                        <span>MODER</span>
                                     </div>
-                                    <div th:if="${false}">
-                                        <input
-                                            class="form-check-input"
-                                            type="radio"
-                                            name="flexRadioDefault"
-                                            id="flexRadioDefault2"
-                                            checked
-                                        />
-                                        <label
-                                            class="form-check-label"
-                                            for="flexRadioDefault2"
+                                    <div class="m-1">
+                                        <a
+                                            href="#"
+                                            class="btn btn-sm btn-success"
                                         >
-                                            Женский
-                                        </label>
+                                            <img
+                                                src="../static/img/edit.png"
+                                                alt="Редактировать"
+                                                width="16"
+                                                class="mb-1"
+                                            />
+                                        </a>
                                     </div>
+                                    <div class="m-1">
+                                        <a
+                                            href="#"
+                                            class="btn btn-sm btn-danger"
+                                        >
+                                            <img
+                                                src="../static/img/delete.png"
+                                                alt="edit"
+                                                width="16"
+                                                class="mb-1"
+                                            />
+                                        </a>
+                                    </div>
+                                </div>
+                                <ul class="list-group fs-14">
+                                    <li
+                                        class="list-group-item"
+                                        aria-disabled="true"
+                                    >
+                                        A disabled item
+                                    </li>
+                                    <li class="list-group-item">
+                                        A second item
+                                    </li>
+                                    <li class="list-group-item">
+                                        A third item
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Форма добавления роли -->
+                        <form action="#" method="post">
+                            <!-- Метка, ввода названия роли и кнопка отправки -->
+                            <div class="mb-2">
+                                <label for="role" class="form-label m-1"
+                                    >Название роли</label
+                                >
+                                <div
+                                    class="d-flex flex-row justify-content-between"
+                                    id="role"
+                                >
+                                    <div class="flex-fill m-1">
+                                        <input
+                                            id="role"
+                                            type="text"
+                                            placeholder="ROLE_USER"
+                                            class="form-control"
+                                        />
+                                    </div>
+                                    <div class="m-1">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary"
+                                        >
+                                            Создать роль
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Чекбоксы выбора прав для роли -->
+                            <div
+                                class="form-check ms-1"
+                                th:each="each : ${role.authorities}"
+                            >
+                                <div>
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        value=""
+                                        id="flexCheckIndeterminate"
+                                    />
+                                    <label
+                                        class="form-check-label"
+                                        for="flexCheckIndeterminate"
+                                    >
+                                        Authority
+                                    </label>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="col-12 col-md-4 col-lg-4 bg-dark rounded">
-                    <div class="my-1">
-                        <div>
-                            <p>READ</p>
+                <!-- Работа с правами -->
+                <div class="col-12 col-md-4 col-lg-4">
+                    <div class="bg-dark rounded p-2">
+                        <!-- Список прав -->
+                        <div class="mb-5">
+                            <div
+                                class="d-flex flex-row align-items-center justify-content-center pb-1 mb-2"
+                            >
+                                <div class="fs-20 fw-bold mx-1">
+                                    <span>MODER</span>
+                                </div>
+                                <div class="m-1">
+                                    <a href="#" class="btn btn-sm btn-success">
+                                        <img
+                                            src="../static/img/edit.png"
+                                            alt="Редактировать"
+                                            width="16"
+                                            class="mb-1"
+                                        />
+                                    </a>
+                                </div>
+                                <div class="m-1">
+                                    <a href="#" class="btn btn-sm btn-danger">
+                                        <img
+                                            src="../static/img/delete.png"
+                                            alt="edit"
+                                            width="16"
+                                            class="mb-1"
+                                        />
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <!-- Кнопки редактирования и удаления -->
-                        <div sec:authorize="hasAuthority('LATER')" class="m-1">
-                            <!-- Кнопка редактирования -->
-                            <a href="#" class="btn btn-sm btn-success">
-                                <img
-                                    src="../../static/img/edit.png"
-                                    alt="edit"
-                                    width="16"
-                                    class="mb-1"
-                                />
-                            </a>
-                            <!-- Кнопка удаления -->
-                            <a href="#" class="btn btn-sm btn-danger">
-                                <img
-                                    src="../../static/img/delete.png"
-                                    alt="edit"
-                                    width="16"
-                                    class="mb-1"
-                                />
-                            </a>
-                        </div>
-                    </div>
-                    <div class="my-1">
-                        <div>
-                            <p>WRITE</p>
-                        </div>
-                        <!-- Кнопки редактирования и удаления -->
-                        <div sec:authorize="hasAuthority('LATER')" class="m-1">
-                            <!-- Кнопка редактирования -->
-                            <a href="#" class="btn btn-sm btn-success">
-                                <img
-                                    src="../../static/img/edit.png"
-                                    alt="edit"
-                                    width="16"
-                                    class="mb-1"
-                                />
-                            </a>
-                            <!-- Кнопка удаления -->
-                            <a href="#" class="btn btn-sm btn-danger">
-                                <img
-                                    src="../../static/img/delete.png"
-                                    alt="edit"
-                                    width="16"
-                                    class="mb-1"
-                                />
-                            </a>
-                        </div>
-                    </div>
-                    <div class="my-1">
+                        <!-- Форма создания права -->
                         <form action="#" method="post">
-                            <input type="text" class="form-control" />
-                            <button type="submit" class="btn btn-primary">
-                                Создать право
-                            </button>
+                            <label for="role" class="form-label m-1"
+                                >Название права</label
+                            >
+                            <div
+                                class="d-flex flex-row justify-content-between"
+                                id="role"
+                            >
+                                <div class="flex-fill m-1">
+                                    <input
+                                        id="role"
+                                        type="text"
+                                        placeholder="BAN"
+                                        class="form-control"
+                                    />
+                                </div>
+                                <div class="m-1">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary"
+                                    >
+                                        Создать право
+                                    </button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

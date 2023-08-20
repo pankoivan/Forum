@@ -58,24 +58,35 @@
 
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div class="container">
-            <!-- Название текущего раздела и кнопка "создать тему" -->
+            <!-- Название текущего раздела, кнопка "создать тему" и поиск -->
             <div
-                class="d-flex flex-row flex-wrap justify-content-center justify-content-md-between justify-content-lg-between mb-5"
+                class="d-flex flex-row flex-wrap justify-content-center justify-content-md-center justify-content-lg-between mb-5"
             >
                 <!-- Название текущего раздела -->
                 <div class="m-2 text-center">
                     <h2>Текущий раздел: "Главный"</h2>
                 </div>
                 <!-- Кнопка "создать тему" -->
-                <div class="m-2">
+                <div class="m-1">
                     <div>
-                        <a href="#" class="btn btn-primary btn-lg"
-                            >Создать тему</a
-                        >
+                        <a href="#" class="btn btn-primary">Создать тему</a>
                     </div>
                 </div>
+                <!-- Поиск -->
+                <form action="#" method="post">
+                    <div class="d-flex flex-row justify-content-between m-1">
+                        <input
+                            type="search"
+                            placeholder="Текст..."
+                            class="form-control mx-1"
+                        />
+                        <button type="submit" class="btn btn-primary mx-1">
+                            Найти
+                        </button>
+                    </div>
+                </form>
             </div>
-            <!-- Список сообщений -->
+            <!-- Список тем -->
             <div th:each="each : ${topics}">
                 <div th:insert="~{fragments/topic :: topic}"></div>
                 <div

@@ -54,7 +54,7 @@
                 >
                     <!-- Главная картинка и навигационная панель -->
                     <div
-                        class="d-flex flex-row flex-wrap align-items-center justify-content-center"
+                        class="d-flex flex-row flex-wrap justify-content-center"
                     >
                         <!-- Главная картинка -->
                         <div class="m-2">
@@ -93,7 +93,7 @@
                                     <div class="dropdown">
                                         <a
                                             href="#"
-                                            class="nav-link d-block text-wheat"
+                                            class="nav-link text-wheat d-block"
                                             th:classapend="${#strings.equals(page, 'topics')} ? text-secondary"
                                             id="topics"
                                             data-bs-toggle="dropdown"
@@ -103,28 +103,30 @@
                                         <ul
                                             class="dropdown-menu text-small"
                                             aria-labelledby="topics"
+                                            th:each="each : ${sections}"
                                         >
-                                            <li>
+                                            <!-- Сюда будет вставка из цикла -->
+                                            <li th:if="${false}">
                                                 <a
                                                     class="dropdown-item"
                                                     href="#"
                                                     >В разделе "Главный"</a
                                                 >
                                             </li>
-                                            <li>
+                                            <li th:if="${false}">
                                                 <hr class="dropdown-divider" />
                                             </li>
-                                            <li>
+                                            <li th:if="${false}">
                                                 <a
                                                     class="dropdown-item"
                                                     href="#"
                                                     >В разделе "Новости"</a
                                                 >
                                             </li>
-                                            <li>
+                                            <li th:if="${false}">
                                                 <hr class="dropdown-divider" />
                                             </li>
-                                            <li>
+                                            <li th:if="${false}">
                                                 <a
                                                     class="dropdown-item"
                                                     href="#"
@@ -169,17 +171,17 @@
                         <div class="dropdown">
                             <a
                                 href="#"
-                                class="d-block"
                                 id="user"
+                                class="d-block"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
                                 <img
                                     src="../../static/img/природа.png"
                                     th:src="@{/img/природа.png}"
-                                    alt="аватарка"
+                                    alt="Пользователь"
                                     width="32"
-                                    class="rounded-circle text-decoration-none"
+                                    class="rounded-circle"
                                 />
                             </a>
                             <ul

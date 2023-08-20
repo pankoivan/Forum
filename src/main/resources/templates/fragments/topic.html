@@ -54,91 +54,93 @@
 
         <!-- Контейнер для фрагмента -->
         <div class="container">
-            <div class="col-12">
-                <!-- ---------------------------------------- Сам фрагмент: тема ---------------------------------------- -->
-                <div class="bg-dark text-white rounded px-2 pt-2 pb-1 mb-5">
-                    <!-- Кнопки редактирования и удаления -->
-                    <div
-                        sec:authorize="hasAuthority('LATER')"
-                        class="text-center border-bottom border-white pb-2"
-                    >
-                        <!-- Кнопка редактирования -->
-                        <a href="#" class="btn btn-sm btn-success">
-                            <img
-                                src="../../static/img/edit.png"
-                                alt="edit"
-                                width="16"
-                                class="mb-1"
-                            />
-                        </a>
-                        <!-- Кнопка удаления -->
-                        <a href="#" class="btn btn-sm btn-danger">
-                            <img
-                                src="../../static/img/delete.png"
-                                alt="edit"
-                                width="16"
-                                class="mb-1"
-                            />
-                        </a>
-                    </div>
-                    <!-- Основная часть -->
-                    <div>
-                        <!-- Заголовок и описание -->
-                        <div class="text-start m-1">
-                            <!-- Заголовок -->
-                            <h5 class="mb-1">
-                                <a href="#" class="text-white link-offset-2"
-                                    >Флуд</a
-                                >
-                            </h5>
-                            <!-- Описание -->
-                            <p class="mb-1">
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Quisquam officiis assumenda
-                                totam, numquam architecto quod delectus enim
-                                maxime odit error.
-                            </p>
-                        </div>
-                        <!-- Автор, количество сообщений и недавнее сообщение -->
+            <div class="row">
+                <div class="col-12">
+                    <!-- ---------------------------------------- Сам фрагмент: тема ---------------------------------------- -->
+                    <div class="bg-dark text-white rounded px-2 pt-2 pb-1 mb-5">
+                        <!-- Кнопки редактирования и удаления -->
                         <div
-                            class="d-flex flex-row flex-wrap justify-content-center justify-content-md-center justify-content-lg-between mb-1"
+                            class="text-center border-bottom border-white pb-2"
+                            sec:authorize="hasAuthority('LATER')"
                         >
-                            <!-- Автор -->
-                            <div class="text-center mx-5 my-1">
-                                <p class="mb-1">Автор:</p>
-                                <div>
-                                    <img
-                                        src="../../static/img/природа.png"
-                                        alt="user"
-                                        width="32"
-                                        class="rounded-circle"
-                                    />
-                                    <p class="my-1">
+                            <!-- Кнопка редактирования -->
+                            <a href="#" class="btn btn-sm btn-success">
+                                <img
+                                    src="../../static/img/edit.png"
+                                    alt="Редактировать"
+                                    width="16"
+                                    class="mb-1"
+                                />
+                            </a>
+                            <!-- Кнопка удаления -->
+                            <a href="#" class="btn btn-sm btn-danger">
+                                <img
+                                    src="../../static/img/delete.png"
+                                    alt="Удалить"
+                                    width="16"
+                                    class="mb-1"
+                                />
+                            </a>
+                        </div>
+                        <!-- Основная часть -->
+                        <div>
+                            <!-- Заголовок и описание -->
+                            <div class="text-start m-1">
+                                <!-- Заголовок -->
+                                <h5 class="mb-1">
+                                    <a href="#" class="text-white link-offset-2"
+                                        >Флуд</a
+                                    >
+                                </h5>
+                                <!-- Описание -->
+                                <p class="mb-1">
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Quisquam officiis
+                                    assumenda totam, numquam architecto quod
+                                    delectus enim maxime odit error.
+                                </p>
+                            </div>
+                            <!-- Автор, количество сообщений и недавнее сообщение -->
+                            <div
+                                class="d-flex flex-row flex-wrap justify-content-center justify-content-md-center justify-content-lg-between mb-1"
+                            >
+                                <!-- Автор -->
+                                <div class="text-center mx-5 my-1">
+                                    <p class="mb-1">Автор:</p>
+                                    <div>
+                                        <img
+                                            src="../../static/img/природа.png"
+                                            alt="Пользователь"
+                                            width="32"
+                                            class="rounded-circle"
+                                        />
+                                        <p class="my-1">
+                                            <a href="#" class="text-white"
+                                                >Имя пользователя</a
+                                            >
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- Количество сообщений -->
+                                <div class="text-center mx-5 my-1">
+                                    <p class="mb-1">Сообщений:</p>
+                                    <p class="mb-1">1847</p>
+                                </div>
+                                <!-- Недавнее сообщение -->
+                                <div class="text-center mx-5 my-1">
+                                    <p class="mb-1">
                                         <a href="#" class="text-white"
-                                            >Имя пользователя</a
+                                            >Недавнее сообщение</a
                                         >
                                     </p>
+                                    <p class="mb-1 fs-12">24.04.2011</p>
                                 </div>
                             </div>
-                            <!-- Количество сообщений -->
-                            <div class="text-center mx-5 my-1">
-                                <p class="mb-1">Сообщений:</p>
-                                <p class="mb-1">1847</p>
-                            </div>
-                            <!-- Недавнее сообщение -->
-                            <div class="text-center mx-5 my-1">
-                                <p class="mb-1">
-                                    <a href="#" class="text-white"
-                                        >Недавнее сообщение</a
-                                    >
-                                </p>
-                                <p class="mb-1 fs-12">24.04.2011</p>
-                            </div>
                         </div>
-                    </div>
-                    <!-- Дата создания -->
-                    <div class="text-center border-top border-white pt-1">
-                        <span>Создана: 19.02.2015</span>
+                        <!-- Дата создания -->
+                        <div class="text-center border-top border-white pt-1">
+                            <span>Создана: 19.02.2015</span>
+                        </div>
                     </div>
                 </div>
             </div>

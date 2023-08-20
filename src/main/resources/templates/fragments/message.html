@@ -54,90 +54,97 @@
 
         <!-- Контейнер для фрагмента -->
         <div class="container">
-            <div class="col-12">
-                <!-- ---------------------------------------- Сам фрагмент: сообщение ---------------------------------------- -->
-                <div
-                    class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2 mb-5"
-                    th:fragment="message"
-                >
-                    <!-- Имя пользователя и аватарка -->
-                    <div class="border-end border-white text-center pe-2 me-2">
-                        <!-- Имя пользователя -->
-                        <div class="border-bottom border-white pb-1 mb-2">
-                            <a href="#" class="text-white text-decoration-none"
-                                >Имя пользователя</a
-                            >
-                        </div>
-                        <!-- Аватарка -->
-                        <div>
-                            <img
-                                src="../../static/img/природа.png"
-                                alt="Пользователь"
-                                class="rounded-circle"
-                                width="72"
-                            />
-                        </div>
-                    </div>
-                    <!-- Информационная панель и сообщение -->
-                    <div class="flex-fill">
-                        <!-- Информационная панель -->
+            <div class="row">
+                <div class="col-12">
+                    <!-- ---------------------------------------- Сам фрагмент: сообщение ---------------------------------------- -->
+                    <div
+                        class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2 mb-5"
+                        th:fragment="message"
+                    >
+                        <!-- Имя пользователя и аватарка -->
                         <div
-                            class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-between justify-content-lg-between border-bottom border-white px-3 pb-2"
+                            class="border-end border-white text-center left-message-block break-word pe-2 me-2"
                         >
-                            <!-- Кнопка "нравится" (к ней есть js-код) -->
-                            <div class="m-1">
-                                <button
-                                    class="btn btn-sm btn-primary btn__like"
-                                    id="like-btn"
-                                    type="submit"
+                            <!-- Имя пользователя -->
+                            <div class="border-bottom border-white pb-1 mb-2">
+                                <a
+                                    href="#"
+                                    class="text-white text-decoration-none"
+                                    >Имя пользователя</a
                                 >
-                                    <span>Нравится: </span
-                                    ><span id="count">9</span>
-                                </button>
                             </div>
-                            <!-- Дата публикации сообщения -->
-                            <div class="m-1 text-center">
-                                <span>18.07.2021 в 15:34:48</span>
-                            </div>
-                            <!-- Кнопки редактирования и удаления -->
-                            <div
-                                sec:authorize="hasAuthority('LATER')"
-                                class="m-1"
-                            >
-                                <!-- Кнопка редактирования -->
-                                <a href="#" class="btn btn-sm btn-success">
-                                    <img
-                                        src="../../static/img/edit.png"
-                                        alt="edit"
-                                        width="16"
-                                        class="mb-1"
-                                    />
-                                </a>
-                                <!-- Кнопка удаления -->
-                                <a href="#" class="btn btn-sm btn-danger">
-                                    <img
-                                        src="../../static/img/delete.png"
-                                        alt="edit"
-                                        width="16"
-                                        class="mb-1"
-                                    />
-                                </a>
+                            <!-- Аватарка -->
+                            <div>
+                                <img
+                                    src="../../static/img/природа.png"
+                                    alt="Пользователь"
+                                    class="rounded-circle"
+                                    width="72"
+                                />
                             </div>
                         </div>
-                        <!-- Сообщение -->
-                        <div class="px-2 pt-2 pb-1">
-                            <span
-                                >Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Deserunt alias, laudantium
-                                quasi repellendus error ipsa magnam repudiandae
-                                voluptatum harum doloremque, ad tenetur vel.
-                                Corporis, reiciendis. Necessitatibus soluta
-                                mollitia sed rerum cupiditate laboriosam,
-                                commodi explicabo voluptatem, dolor doloribus
-                                nihil accusantium sunt numquam ab autem
-                                asperiores ad. Veritatis sunt doloribus atque
-                                magni.</span
+                        <!-- Информационная панель и сообщение -->
+                        <div class="flex-fill">
+                            <!-- Информационная панель -->
+                            <div
+                                class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-between justify-content-lg-between border-bottom border-white px-2 pb-2"
                             >
+                                <!-- Кнопка "нравится" (к ней есть js-код) -->
+                                <div class="m-1">
+                                    <button
+                                        class="btn btn-sm btn-primary btn__like"
+                                        id="like-btn"
+                                        type="submit"
+                                    >
+                                        <span>Нравится: </span
+                                        ><span id="count">9</span>
+                                    </button>
+                                </div>
+                                <!-- Дата публикации сообщения -->
+                                <div class="text-center m-1">
+                                    <span>18.07.2021 в 15:34:48</span>
+                                </div>
+                                <!-- Кнопки редактирования и удаления -->
+                                <div
+                                    class="m-1"
+                                    sec:authorize="hasAuthority('LATER')"
+                                >
+                                    <!-- Кнопка редактирования -->
+                                    <a href="#" class="btn btn-sm btn-success">
+                                        <img
+                                            src="../../static/img/edit.png"
+                                            alt="Редактировать"
+                                            width="16"
+                                            class="mb-1"
+                                        />
+                                    </a>
+                                    <!-- Кнопка удаления -->
+                                    <a href="#" class="btn btn-sm btn-danger">
+                                        <img
+                                            src="../../static/img/delete.png"
+                                            alt="Удалить"
+                                            width="16"
+                                            class="mb-1"
+                                        />
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Сообщение -->
+                            <div class="px-2 pt-2 pb-1">
+                                <span
+                                    >Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Deserunt alias, laudantium
+                                    quasi repellendus error ipsa magnam
+                                    repudiandae voluptatum harum doloremque, ad
+                                    tenetur vel. Corporis, reiciendis.
+                                    Necessitatibus soluta mollitia sed rerum
+                                    cupiditate laboriosam, commodi explicabo
+                                    voluptatem, dolor doloribus nihil
+                                    accusantium sunt numquam ab autem asperiores
+                                    ad. Veritatis sunt doloribus atque
+                                    magni.</span
+                                >
+                            </div>
                         </div>
                     </div>
                 </div>
