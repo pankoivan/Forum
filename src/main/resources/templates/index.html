@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Сообщения</title>
+        <title>Главная</title>
         <link
             href="../static/css/bootstrap.min.css"
             th:href="@{/css/bootstrap.min.css}"
@@ -53,6 +53,236 @@
                 class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
             >
                 <h3>Статический заголовок для просмотра в браузере</h3>
+            </div>
+        </div>
+
+        <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
+        <div class="container text-center text-white break-word">
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-5 mb-5 mb-md-5 mb-lg-0">
+                    <div class="bg-dark rounded text-center fw-bold mb-2">
+                        <p>Топ пользователей</p>
+                    </div>
+                    <div
+                        class="bg-dark text-white rounded d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-between p-1 mb-2"
+                    >
+                        <!-- Аватарка с именем -->
+                        <div class="mx-2 my-1">
+                            <span>
+                                <img
+                                    src="../static/img/природа.png"
+                                    alt="Пользователь"
+                                    class="rounded-circle"
+                                    width="24"
+                                />
+                                <a
+                                    href="#"
+                                    class="text-white text-decoration-none"
+                                    >Имя пользователя</a
+                                >
+                            </span>
+                        </div>
+                        <!-- Роль -->
+                        <div class="mx-2 my-1">
+                            <span>МОДЕРАТОР</span>
+                        </div>
+                        <!-- Дата регистрации -->
+                        <div class="mx-2 my-1">
+                            <span>21.10.2022 в 11:34:58</span>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-dark text-white rounded d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-between p-1 mb-2"
+                    >
+                        <!-- Аватарка с именем -->
+                        <div class="mx-2 my-1">
+                            <span>
+                                <img
+                                    src="../static/img/природа.png"
+                                    alt="Пользователь"
+                                    class="rounded-circle"
+                                    width="16"
+                                />
+                                <a
+                                    href="#"
+                                    class="text-white text-decoration-none"
+                                    >Имя пользователя</a
+                                >
+                            </span>
+                        </div>
+                        <!-- Роль -->
+                        <div class="mx-2 my-1">
+                            <span>МОДЕРАТОР</span>
+                        </div>
+                        <!-- Дата регистрации -->
+                        <div class="mx-2 my-1">
+                            <span>21.10.2022 в 11:34:58</span>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-dark text-white rounded d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-between p-1 mb-2"
+                    >
+                        <!-- Аватарка с именем -->
+                        <div class="mx-2 my-1">
+                            <span>
+                                <img
+                                    src="../static/img/природа.png"
+                                    alt="Пользователь"
+                                    class="rounded-circle"
+                                    width="16"
+                                />
+                                <a
+                                    href="#"
+                                    class="text-white text-decoration-none"
+                                    >Имя пользователя</a
+                                >
+                            </span>
+                        </div>
+                        <!-- Роль -->
+                        <div class="mx-2 my-1">
+                            <span>МОДЕРАТОР</span>
+                        </div>
+                        <!-- Дата регистрации -->
+                        <div class="mx-2 my-1">
+                            <span>21.10.2022 в 11:34:58</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-5 mb-5 mb-md-5 mb-lg-0">
+                    <div class="bg-dark rounded text-center fw-bold mb-2">
+                        <p>Недавние сообщения</p>
+                    </div>
+                    <div
+                        th:if="${false}"
+                        class="bg-dark rounded d-flex flex-row justify-content-between px-4 py-2 mb-2"
+                    >
+                        <div>
+                            <a href="#" class="text-white">Тема</a>
+                        </div>
+                        <div>
+                            <span>22.01.2009 в 19:24:43</span>
+                        </div>
+                    </div>
+                    <div
+                        th:if="${false}"
+                        class="bg-dark rounded d-flex flex-row justify-content-between px-4 py-2 mb-2"
+                    >
+                        <div>
+                            <a href="#" class="text-white">Тема</a>
+                        </div>
+                        <div>
+                            <span>22.01.2009 в 19:24:43</span>
+                        </div>
+                    </div>
+                    <div
+                        th:if="${false}"
+                        class="bg-dark rounded d-flex flex-row justify-content-between px-4 py-2 mb-2"
+                    >
+                        <div>
+                            <a href="#" class="text-white">Тема</a>
+                        </div>
+                        <div>
+                            <span>22.01.2009 в 19:24:43</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-12 col-lg-2">
+                    <div class="bg-dark rounded text-center fw-bold mb-2">
+                        <p>Статистика</p>
+                    </div>
+                    <div class="fs-14">
+                        <!-- Пользователей зарегистрировано -->
+                        <div class="bg-dark rounded p-1 mb-2">
+                            <div class="border-bottom border-white fw-bold">
+                                <span>Пользователей зарегистрировано</span>
+                            </div>
+                            <div>
+                                <span>12842</span>
+                            </div>
+                        </div>
+                        <!-- Из них администраторов -->
+                        <div class="bg-dark rounded p-1 mb-2">
+                            <div class="border-bottom border-white fw-bold">
+                                <span>Из них администраторов</span>
+                            </div>
+                            <div>
+                                <span>4</span>
+                            </div>
+                        </div>
+                        <!-- Из них модераторов -->
+                        <div class="bg-dark rounded p-1 mb-2">
+                            <div class="border-bottom border-white fw-bold">
+                                <span>Из них модераторов</span>
+                            </div>
+                            <div>
+                                <span>17</span>
+                            </div>
+                        </div>
+                        <!-- Сообщений отправлено -->
+                        <div class="bg-dark rounded p-1 mb-2">
+                            <div class="border-bottom border-white fw-bold">
+                                <span>Сообщений отправлено</span>
+                            </div>
+                            <div>
+                                <span>99821</span>
+                            </div>
+                        </div>
+                        <!-- Лайков поставлено -->
+                        <div class="bg-dark rounded p-1 mb-2">
+                            <div class="border-bottom border-white fw-bold">
+                                <span>Лайков поставлено</span>
+                            </div>
+                            <div>
+                                <span>471082</span>
+                            </div>
+                        </div>
+                        <!-- Разделов -->
+                        <div class="bg-dark rounded p-1 mb-2">
+                            <div class="border-bottom border-white fw-bold">
+                                <span>Разделов</span>
+                            </div>
+                            <div>
+                                <span>6</span>
+                            </div>
+                        </div>
+                        <!-- Тем создано -->
+                        <div class="bg-dark rounded p-1 mb-2">
+                            <div class="border-bottom border-white fw-bold">
+                                <span>Тем создано</span>
+                            </div>
+                            <div>
+                                <span>224</span>
+                            </div>
+                        </div>
+                        <!-- Выдано банов -->
+                        <div class="bg-dark rounded p-1 mb-2">
+                            <div class="border-bottom border-white fw-bold">
+                                <span>Выдано банов</span>
+                            </div>
+                            <div>
+                                <span>921</span>
+                            </div>
+                        </div>
+                        <!-- Удалено пользователей -->
+                        <div class="bg-dark rounded p-1 mb-2">
+                            <div class="border-bottom border-white fw-bold">
+                                <span>Удалено пользователей</span>
+                            </div>
+                            <div>
+                                <span>5</span>
+                            </div>
+                        </div>
+                        <!-- Сейчас в бане -->
+                        <div class="bg-dark rounded p-1 mb-2">
+                            <div class="border-bottom border-white fw-bold">
+                                <span>Сейчас в бане</span>
+                            </div>
+                            <div>
+                                <span>19</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
