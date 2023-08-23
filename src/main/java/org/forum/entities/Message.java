@@ -11,10 +11,10 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode(exclude = {
-        "usersWhoLiked"
+        "likedUsers"
 })
 @ToString(exclude = {
-        "usersWhoLiked"
+        "likedUsers"
 })
 @Entity
 @Table(name = "forum_message")
@@ -35,13 +35,8 @@ public class Message {
     @JoinColumn(name = "creator_id")
     private User userWhoPosted;
 
-    @ManyToMany
-    @JoinTable(
-            name = "forum_like",
-            joinColumns = @JoinColumn(name = "forum_message_id"),
-            inverseJoinColumns = @JoinColumn(name = "forum_user_id")
-    )
-    private List<User> usersWhoLiked;
+    @OneToMany(mappedBy = "message")
+    private List<Like> likedUsers;
 
     @ManyToOne
     @JoinColumn(name = "topic_id")

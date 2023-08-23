@@ -9,7 +9,7 @@
     background-color: lightgray;
 }
 
-/* Стили для статических элементов при просмотре в браузере */
+/* Стили для элементов при статическом просмотре в браузере */
 
 .static-header {
     height: 75px;
@@ -41,8 +41,17 @@
     color: red;
 }
 
+.text-blue {
+    color: blue;
+}
+
 .break-word {
     word-wrap: break-word;
+}
+
+.break-all {
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .fw-bold {

@@ -2,10 +2,12 @@ package org.forum.entities.enums;
 
 public enum RoleEnum {
 
-    ROLE_ADMIN,
+    OWNER,
 
-    ROLE_MODER,
+    ADMIN,
 
-    ROLE_USER
+    MODER,
+
+    USER
 
 }

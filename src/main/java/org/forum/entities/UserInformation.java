@@ -41,6 +41,9 @@ public class UserInformation {
     @Column(name = "city")
     private String city;
 
+    @Column(name = "image")
+    private String linkToImage;
+
     @OneToOne
     @JoinColumn(name = "forum_user_id")
     private User user;

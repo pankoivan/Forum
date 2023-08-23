@@ -2,7 +2,9 @@ package org.forum.entities.enums;
 
 public enum AuthorityEnum {
 
-    CREATE_SECTION,
+    WORKING_WITH_ROLES_AND_AUTHORITIES,
+
+    WORKING_WITH_SECTIONS,
 
     ASSIGN_ROLE,
 

@@ -73,10 +73,7 @@
                             </div>
                             <!-- Картинка "на главную" -->
                             <div>
-                                <a
-                                    href="../templates/index.html"
-                                    th:href="@{/}"
-                                >
+                                <a href="/index.html" th:href="@{/}">
                                     <img
                                         src="../static/img/волк.png"
                                         th:src="@{/img/волк.png}"
@@ -90,7 +87,7 @@
                         <!-- Сама форма -->
                         <form
                             action="#"
-                            th:action="@{/auth/registration-processing}"
+                            th:action="@{/auth/registration/processing}"
                             method="post"
                             class="mt-2 mb-4"
                             th:object="${user}"
@@ -110,7 +107,7 @@
                                         class="form-control"
                                         type="text"
                                         placeholder="Byb"
-                                        th:field="*{username}"
+                                        th:field="*{nickname}"
                                     />
                                 </div>
                                 <!-- Почта -->
@@ -159,8 +156,8 @@
                                 <div class="accordion-item">
                                     <div>
                                         <button
-                                            class="accordion-button collapsed"
                                             type="button"
+                                            class="accordion-button collapsed"
                                             data-bs-toggle="collapse"
                                             data-bs-target="#collapsed"
                                             aria-expanded="false"
@@ -208,36 +205,37 @@
                                                             class="form-check"
                                                             th:each="each : ${genders}"
                                                         >
+                                                            <!-- Динамический и статический просмотр -->
                                                             <div>
                                                                 <input
-                                                                    id="flexRadioDefault1"
-                                                                    class="form-check-input"
+                                                                    id="radio1"
                                                                     type="radio"
+                                                                    class="form-check-input"
                                                                     th:field="*{userInformation.gender}"
                                                                     th:text="${each.alias}"
                                                                     th:value="${each}"
                                                                 />
                                                                 <label
                                                                     th:if="${false}"
+                                                                    for="radio1"
                                                                     class="form-check-label"
-                                                                    for="flexRadioDefault1"
                                                                 >
                                                                     Мужской
                                                                 </label>
                                                             </div>
+                                                            <!-- Статический просмотр -->
                                                             <div
                                                                 th:if="${false}"
                                                             >
                                                                 <input
-                                                                    class="form-check-input"
+                                                                    id="radio2"
                                                                     type="radio"
-                                                                    name="flexRadioDefault"
-                                                                    id="flexRadioDefault2"
+                                                                    class="form-check-input"
                                                                     checked
                                                                 />
                                                                 <label
+                                                                    for="radio2"
                                                                     class="form-check-label"
-                                                                    for="flexRadioDefault2"
                                                                 >
                                                                     Женский
                                                                 </label>
@@ -259,9 +257,8 @@
                                                     >
                                                     <input
                                                         id="country"
-                                                        name="country"
-                                                        class="form-control"
                                                         type="text"
+                                                        class="form-control"
                                                         placeholder="Россия"
                                                         th:field="*{userInformation.country}"
                                                     />
@@ -275,9 +272,8 @@
                                                     >
                                                     <input
                                                         id="city"
-                                                        name="city"
-                                                        class="form-control"
                                                         type="text"
+                                                        class="form-control"
                                                         placeholder="Санкт-петербург"
                                                         th:field="*{userInformation.city}"
                                                     />
@@ -292,9 +288,8 @@
                                                 >
                                                 <input
                                                     id="dateOfBirth"
-                                                    name="dateOfBirth"
-                                                    class="form-control"
                                                     type="date"
+                                                    class="form-control"
                                                     th:field="*{userInformation.dateOfBirth}"
                                                 />
                                             </div>
@@ -306,9 +301,9 @@
                                                     >Аватарка</label
                                                 >
                                                 <input
-                                                    class="form-control"
-                                                    type="file"
                                                     id="image"
+                                                    type="file"
+                                                    class="form-control"
                                                 />
                                             </div>
                                         </div>
@@ -319,9 +314,7 @@
                         <!-- Предложение войти, если уже зарегистрирован -->
                         <div class="text-center border-top border-white pt-1">
                             <span> Уже зарегистрированы? </span>
-                            <a
-                                href="../templates/login.html"
-                                th:href="@{/auth/login}"
+                            <a href="/login.html" th:href="@{/auth/login}"
                                 >Войти</a
                             >
                         </div>

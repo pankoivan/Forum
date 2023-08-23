@@ -26,9 +26,8 @@ public class Authority implements GrantedAuthority {
     @Column(name = "id")
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "name")
-    private AuthorityEnum authority;
+    private String name;
 
     @ManyToMany(
             mappedBy = "authorities",
@@ -38,7 +37,7 @@ public class Authority implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return authority.name();
+        return name;
     }
 
 }

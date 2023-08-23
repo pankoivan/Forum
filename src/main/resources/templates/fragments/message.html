@@ -59,7 +59,7 @@
                     <!-- ---------------------------------------- Сам фрагмент: сообщение ---------------------------------------- -->
                     <div
                         class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2 mb-5"
-                        th:fragment="message"
+                        th:fragment="message (currentMessage)"
                     >
                         <!-- Имя пользователя и аватарка -->
                         <div
@@ -69,7 +69,9 @@
                             <div class="border-bottom border-white pb-1 mb-2">
                                 <a
                                     href="#"
+                                    th:href="@{/profile/__${currentMessage.userWhoPosted.id}__}"
                                     class="text-white text-decoration-none"
+                                    th:text="${currentMessage.userWhoPosted.nickname}"
                                     >Имя пользователя</a
                                 >
                             </div>
@@ -77,6 +79,7 @@
                             <div>
                                 <img
                                     src="../../static/img/природа.png"
+                                    th:src="@{/img/природа.png}"
                                     alt="Пользователь"
                                     class="rounded-circle"
                                     width="72"
@@ -89,49 +92,60 @@
                             <div
                                 class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-between justify-content-lg-between border-bottom border-white px-2 pb-2"
                             >
-                                <!-- Кнопка "нравится" (к ней есть js-код) -->
-                                <div class="m-1">
-                                    <button
-                                        class="btn btn-sm btn-primary btn__like"
-                                        id="like-btn"
-                                        type="submit"
+                                <!-- Кнопка лайка -->
+                                <div
+                                    sec:authorize="isAuthenticated()"
+                                    class="m-1"
+                                >
+                                    <form
+                                        action="#"
+                                        th:action="@{/inner/likes/create}"
+                                        method="post"
                                     >
-                                        <span>Нравится: </span
-                                        ><span id="count">9</span>
-                                    </button>
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-primary"
+                                            th:text="'Нравится: ' + ${currentMessage.getLikesCount()}"
+                                        >
+                                            Нравится: 9
+                                        </button>
+                                    </form>
                                 </div>
                                 <!-- Дата публикации сообщения -->
                                 <div class="text-center m-1">
-                                    <span>18.07.2021 в 15:34:48</span>
+                                    <span
+                                        th:text="${currentMessage.creationDate}"
+                                        >18.07.2021 в 15:34:48</span
+                                    >
                                 </div>
                                 <!-- Кнопки редактирования и удаления -->
                                 <div
-                                    class="m-1"
-                                    sec:authorize="hasAuthority('LATER')"
+                                    th:if="${currentUser.id == currentMessage.userWhoPosted.id
+                                        or #authorization.expression('hasAuthority(''WORKING_WITH_OTHER_MESSAGES'')')}"
+                                    th:replace="~{fragments/buttons :: edit-delete
+                                        (editFormUrl = '@{/messages/inner/edit}', deleteFormUrl = '@{/messages/inner/delete}')}"
+                                    class="d-flex flex-row align-items-center justify-content-between"
                                 >
-                                    <!-- Кнопка редактирования -->
-                                    <a href="#" class="btn btn-sm btn-success">
-                                        <img
-                                            src="../../static/img/edit.png"
-                                            alt="Редактировать"
-                                            width="16"
-                                            class="mb-1"
-                                        />
-                                    </a>
-                                    <!-- Кнопка удаления -->
-                                    <a href="#" class="btn btn-sm btn-danger">
-                                        <img
-                                            src="../../static/img/delete.png"
-                                            alt="Удалить"
-                                            width="16"
-                                            class="mb-1"
-                                        />
-                                    </a>
+                                    <!-- Статический просмотр -->
+                                    <div>
+                                        <button
+                                            class="btn btn-sm btn-success m-1"
+                                        >
+                                            Edit
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button
+                                            class="btn btn-sm btn-danger m-1"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Сообщение -->
                             <div class="px-2 pt-2 pb-1">
-                                <span
+                                <span th:text="${currentMessage.text}"
                                     >Lorem ipsum dolor sit amet consectetur
                                     adipisicing elit. Deserunt alias, laudantium
                                     quasi repellendus error ipsa magnam
@@ -157,10 +171,5 @@
         >
             <h3>Статический футер для просмотра в браузере</h3>
         </div>
-
-        <script
-            src="../../static/js/script.js"
-            th:src="@{/js/script.js}"
-        ></script>
     </body>
 </html>

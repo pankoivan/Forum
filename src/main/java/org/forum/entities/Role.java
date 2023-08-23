@@ -26,9 +26,8 @@ public class Role implements GrantedAuthority {
     @Column(name = "id")
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "name")
-    private RoleEnum role;
+    private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -43,7 +42,7 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return role.name();
+        return name;
     }
 
 }

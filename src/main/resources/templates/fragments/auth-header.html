@@ -75,7 +75,7 @@
                                         href="#"
                                         th:href="@{/}"
                                         class="nav-link text-wheat"
-                                        th:classapend="${#strings.equals(page, 'index')} ? text-secondary"
+                                        th:classappend="${#strings.equals(page, 'index')} ? text-secondary"
                                         >Главная</a
                                     >
                                 </li>
@@ -84,42 +84,47 @@
                                         href="#"
                                         th:href="@{/sections}"
                                         class="nav-link text-wheat"
-                                        th:classapend="${#strings.equals(page, 'sections')} ? text-secondary"
+                                        th:classappend="${#strings.equals(page, 'sections')} ? text-secondary"
                                         >Разделы</a
                                     >
                                 </li>
                                 <!-- Dropdown-пункт "темы": показывает список разделов -->
                                 <li>
                                     <div class="dropdown">
+                                        <!-- Сам пункт "темы" -->
                                         <a
+                                            id="topics"
                                             href="#"
                                             class="nav-link text-wheat d-block"
-                                            th:classapend="${#strings.equals(page, 'topics')} ? text-secondary"
-                                            id="topics"
+                                            th:classappend="${#strings.equals(page, 'topics')} ? text-secondary"
                                             data-bs-toggle="dropdown"
                                             aria-expanded="false"
                                             >Темы</a
                                         >
+                                        <!-- Список -->
                                         <ul
-                                            class="dropdown-menu text-small"
                                             aria-labelledby="topics"
+                                            class="dropdown-menu text-small"
                                             th:each="each : ${sections}"
                                         >
-                                            <!-- Сюда будет вставка из цикла -->
-                                            <li th:if="${false}">
+                                            <!-- Динамический и статический просмотр -->
+                                            <li>
                                                 <a
-                                                    class="dropdown-item"
                                                     href="#"
+                                                    th:href="@{/sections/__${each.id}__}"
+                                                    class="dropdown-item"
+                                                    th:text="'В разделе' + ${each.name}"
                                                     >В разделе "Главный"</a
                                                 >
                                             </li>
-                                            <li th:if="${false}">
+                                            <li>
                                                 <hr class="dropdown-divider" />
                                             </li>
+                                            <!-- Статический просмотр -->
                                             <li th:if="${false}">
                                                 <a
-                                                    class="dropdown-item"
                                                     href="#"
+                                                    class="dropdown-item"
                                                     >В разделе "Новости"</a
                                                 >
                                             </li>
@@ -128,8 +133,8 @@
                                             </li>
                                             <li th:if="${false}">
                                                 <a
-                                                    class="dropdown-item"
                                                     href="#"
+                                                    class="dropdown-item"
                                                     >В разделе "Обо всём"</a
                                                 >
                                             </li>
@@ -141,7 +146,7 @@
                                         href="#"
                                         th:href="@{/users}"
                                         class="nav-link text-wheat"
-                                        th:classapend="${#strings.equals(page, 'users')} ? text-secondary"
+                                        th:classappend="${#strings.equals(page, 'users')} ? text-secondary"
                                         >Участники</a
                                     >
                                 </li>
@@ -150,7 +155,7 @@
                                         href="#"
                                         th:href="@{/moders}"
                                         class="nav-link text-wheat"
-                                        th:classapend="${#strings.equals(page, 'moders')} ? text-secondary"
+                                        th:classappend="${#strings.equals(page, 'moders')} ? text-secondary"
                                         >Модераторы</a
                                     >
                                 </li>
@@ -159,7 +164,7 @@
                                         href="#"
                                         th:href="@{/admins}"
                                         class="nav-link text-wheat"
-                                        th:classapend="${#strings.equals(page, 'admins')} ? text-secondary"
+                                        th:classappend="${#strings.equals(page, 'admins')} ? text-secondary"
                                         >Администраторы</a
                                     >
                                 </li>
@@ -169,9 +174,10 @@
                     <!-- Dropdown-аватарка пользователя -->
                     <div class="m-2">
                         <div class="dropdown">
+                            <!-- Сама аватарка -->
                             <a
-                                href="#"
                                 id="user"
+                                href="#"
                                 class="d-block"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
@@ -184,20 +190,46 @@
                                     class="rounded-circle"
                                 />
                             </a>
+                            <!-- Список -->
                             <ul
-                                class="dropdown-menu text-small"
                                 aria-labelledby="user"
+                                class="dropdown-menu text-small"
                             >
                                 <li>
-                                    <a class="dropdown-item" href="#"
+                                    <a
+                                        href="#"
+                                        th:href="@{/profile/__${currentUser.id}__}"
+                                        class="dropdown-item"
                                         >Профиль</a
                                     >
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider" />
                                 </li>
+                                <li sec:authorize="hasRole('OWNER')">
+                                    <a
+                                        href="#"
+                                        th:href="@{/roles-authorities}"
+                                        class="dropdown-item"
+                                        >Управление ролями и правами</a
+                                    >
+                                </li>
+                                <li sec:authorize="hasRole('OWNER')">
+                                    <hr class="dropdown-divider" />
+                                </li>
                                 <li>
-                                    <a class="dropdown-item" href="#">Выйти</a>
+                                    <form
+                                        action="#"
+                                        th:action="@{/auth/logout}"
+                                        method="post"
+                                    >
+                                        <button
+                                            type="submit"
+                                            class="dropdown-item"
+                                        >
+                                            Выйти
+                                        </button>
+                                    </form>
                                 </li>
                             </ul>
                         </div>

@@ -73,10 +73,7 @@
                             </div>
                             <!-- Картинка "на главную" -->
                             <div>
-                                <a
-                                    href="../templates/index.html"
-                                    th:href="@{/}"
-                                >
+                                <a href="/index.html" th:href="@{/}">
                                     <img
                                         src="../static/img/волк.png"
                                         th:src="@{/img/волк.png}"
@@ -87,10 +84,10 @@
                                 </a>
                             </div>
                         </div>
-                        <!-- Сама форма -->
+                        <!-- Форма -->
                         <form
                             action="#"
-                            th:action="@{/auth/login-processing}"
+                            th:action="@{/auth/login/processing}"
                             method="post"
                             class="my-3"
                         >
@@ -131,9 +128,7 @@
                                 <!-- Предложение запомнить пользователя -->
                                 <div>
                                     <input type="checkbox" id="rememberMe" />
-                                    <label
-                                        class="text-aliceblue"
-                                        for="rememberMe"
+                                    <label for="rememberMe"
                                         >Запомнить меня</label
                                     >
                                 </div>
@@ -143,11 +138,15 @@
                         <div class="text-center border-top border-white pt-2">
                             <div>
                                 <span>Забыли пароль?</span>
-                                <a href="#">Восстановление пароля</a>
+                                <a href="#" th:href="@{/auth/password-recovery}"
+                                    >Восстановление пароля</a
+                                >
                             </div>
                             <div>
                                 <span>Нет аккаунта?</span>
-                                <a href="#">Регистрация</a>
+                                <a href="#" th:href="@{/auth/registration}"
+                                    >Регистрация</a
+                                >
                             </div>
                         </div>
                     </div>

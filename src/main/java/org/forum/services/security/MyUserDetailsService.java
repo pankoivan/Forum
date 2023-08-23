@@ -1,4 +1,4 @@
-package org.forum.security;
+package org.forum.services.security;
 
 import org.forum.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

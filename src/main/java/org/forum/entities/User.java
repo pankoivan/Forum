@@ -5,13 +5,11 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import static org.forum.utils.BanUtils.*;
-import static jakarta.persistence.CascadeType.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,7 +41,7 @@ public class User implements UserDetails {
     private Integer id;
 
     @Column(name = "username")
-    private String username;
+    private String nickname;
 
     @Column(name = "email")
     private String email;
@@ -56,7 +54,7 @@ public class User implements UserDetails {
 
     @OneToOne(
             mappedBy = "user",
-            cascade = ALL
+            cascade = CascadeType.ALL
     )
     private UserInformation userInformation = new UserInformation();
 
@@ -69,8 +67,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "userWhoPosted")
     private List<Message> postedMessages;
 
-    @ManyToMany(mappedBy = "usersWhoLiked")
-    private List<Message> likedMessages;
+    @OneToMany(mappedBy = "user")
+    private List<Like> likedMessages;
 
     @OneToMany(
             mappedBy = "user",
@@ -87,14 +85,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>(role.getAuthorities());
-        authorities.add(role);
-        return authorities;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
+        return getRoleAndAuthorities();
     }
 
     @Override
@@ -103,23 +94,43 @@ public class User implements UserDetails {
     }
 
     @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
-        return isActive(this);
+        return isActive();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return isActive(this);
+        return isActive();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return isActive(this);
+        return isActive();
     }
 
     @Override
     public boolean isEnabled() {
-        return isActive(this);
+        return isActive();
+    }
+
+    private Collection<? extends GrantedAuthority> getRoleAndAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>(role.getAuthorities());
+        authorities.add(role);
+        return authorities;
+    }
+
+    private boolean isBanned() {
+        return bans.stream()
+                .anyMatch(ban -> LocalDate.now().isBefore(ban.getEndDate()));
+    }
+
+    private boolean isActive() {
+        return !isBanned();
     }
 
 }

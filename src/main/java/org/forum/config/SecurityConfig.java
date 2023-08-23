@@ -3,6 +3,7 @@ package org.forum.config;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.forum.entities.enums.RoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,9 +42,7 @@ public class SecurityConfig {
     }
 
     @Bean
-
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
@@ -51,15 +50,19 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
 
                         .requestMatchers("/").permitAll()
-                        .requestMatchers("/auth/login", "/auth/registration").permitAll()
-                        .requestMatchers("/auth/registration-processing").permitAll()
+                        .requestMatchers("/test").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/sections/**").permitAll()
+                        .requestMatchers("/users/**").permitAll()
+                        .requestMatchers("/profile/**").authenticated()
+                        .requestMatchers("/roles-authorities/**").hasRole("OWNER")
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/favicon/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")
-                        .loginProcessingUrl("/auth/login-processing")
-                        .defaultSuccessUrl("/")
+                        .loginProcessingUrl("/auth/login/processing")
+                        .defaultSuccessUrl("/", true)
                         .failureUrl("/auth/login")
                         //.failureHandler(authenticationFailureHandler())
                 )

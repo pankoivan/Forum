@@ -6,33 +6,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "ban_table")
-public class Ban {
+@Table(name = "forum_like")
+public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "forum_user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "creator_id")
-    private User userWhoAssigned;
-
-    @Column(name = "start_date")
-    private LocalDate startDate;
-
-    @Column(name = "end_date")
-    private LocalDate endDate;
+    @JoinColumn(name = "forum_message_id")
+    private Message message;
 
 }
