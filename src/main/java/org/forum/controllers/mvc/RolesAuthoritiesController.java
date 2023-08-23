@@ -1,33 +1,80 @@
 package org.forum.controllers.mvc;
 
-import org.forum.repositories.AuthorityRepository;
-import org.forum.repositories.RoleRepository;
-import org.forum.utils.AuthenticationUtils;
+import org.forum.entities.Authority;
+import org.forum.entities.Role;
+import org.forum.services.implementations.RoleAuthorityServiceImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/roles-authorities")
 public class RolesAuthoritiesController {
 
-    private final RoleRepository roleRepository;
+    private final RoleAuthorityServiceImpl roleAuthorityService;
 
-    private final AuthorityRepository authorityRepository;
-
-    public RolesAuthoritiesController(RoleRepository roleRepository, AuthorityRepository authorityRepository) {
-        this.roleRepository = roleRepository;
-        this.authorityRepository = authorityRepository;
+    public RolesAuthoritiesController(RoleAuthorityServiceImpl roleAuthorityService) {
+        this.roleAuthorityService = roleAuthorityService;
     }
 
     @GetMapping
-    public String returnRolesAuthoritiesPanel(Authentication authentication, Model model) {
-        model.addAttribute("currentUser", AuthenticationUtils.extractCurrentUserOrNull(authentication));
-        model.addAttribute("roles", roleRepository.findAll());
-        model.addAttribute("authorities", authorityRepository.findAll());
+    public String returnRolesAuthoritiesPanel(Model model, Authentication authentication) {
+        roleAuthorityService.fillRolesAuthoritiesPage(model, authentication);
         return "roles-authorities-panel";
+    }
+
+    @PostMapping("/inner/authority/create")
+    public String redirectRolesAuthoritiesAfterCreationAuthority(Authority authority) {
+        roleAuthorityService.saveAuthority(authority);
+        return "redirect:/roles-authorities";
+    }
+
+    @PostMapping("/inner/authority/edit/{id}")
+    public String redirectRolesAuthoritiesAfterEditingAuthority(Model model,
+                                                         Authentication authentication,
+                                                         @PathVariable("id") Integer id) {
+
+        roleAuthorityService.fillRolesAuthoritiesPageForAuthorityEditing(model, authentication, id);
+        return "redirect:/roles-authorities";
+    }
+
+    @PostMapping("/inner/authority/delete/{id}")
+    public String redirectRolesAuthoritiesAfterDeletingAuthority(Model model,
+                                                         Authentication authentication,
+                                                         @PathVariable("id") Integer id) {
+
+        roleAuthorityService.deleteAuthorityById(id);
+        return "redirect:/roles-authorities";
+    }
+
+    @PostMapping("/inner/role/create")
+    public String redirectRolesAuthoritiesAfterCreationRole(Role role,
+                                                         @RequestParam("selectedAuthorities")
+                                                         List<Authority> authorities) {
+
+        roleAuthorityService.saveRole(role, authorities);
+        return "redirect:/roles-authorities";
+    }
+
+    @PostMapping("/inner/role/edit/{id}")
+    public String redirectRolesAuthoritiesAfterEditingRole(Model model,
+                                                         Authentication authentication,
+                                                         @PathVariable("id") Integer id) {
+
+        roleAuthorityService.fillRolesAuthoritiesPageForRoleEditing(model, authentication, id);
+        return "redirect:/roles-authorities";
+    }
+
+    @PostMapping("/inner/role/delete/{id}")
+    public String redirectRolesAuthoritiesAfterDeletingRole(Model model,
+                                                         Authentication authentication,
+                                                         @PathVariable("id") Integer id) {
+
+        roleAuthorityService.deleteRoleById(id);
+        return "redirect:/roles-authorities";
     }
 
 }

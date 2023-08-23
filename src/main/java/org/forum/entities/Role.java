@@ -5,6 +5,7 @@ import lombok.*;
 import org.forum.entities.enums.RoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Collection;
 import java.util.List;
 
 @NoArgsConstructor
@@ -29,6 +30,7 @@ public class Role implements GrantedAuthority {
     @Column(name = "name")
     private String name;
 
+    // скорее всего, тут надо orphanRemoval добавить ещё
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "forum_role_forum_authority",
@@ -43,6 +45,14 @@ public class Role implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return name;
+    }
+
+    public void clearAuthorities() {
+        authorities.clear();
+    }
+
+    public void addAuthorities(Collection<? extends Authority> authorities) {
+        this.authorities.addAll(authorities);
     }
 
 }
