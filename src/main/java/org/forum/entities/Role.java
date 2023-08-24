@@ -34,6 +34,7 @@ public class Role implements GrantedAuthority {
     @Column(name = "name")
     private String name;
 
+    @NotNull(message = "Список прав для роли не должен быть пустым")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "forum_role_forum_authority",
@@ -58,9 +59,12 @@ public class Role implements GrantedAuthority {
         this.authorities.addAll(authorities);
     }
 
+    public void removeAuthority(Authority authority) {
+        authorities.remove(authority);
+    }
+
     public boolean containsAuthorityById(Integer authorityId) {
         return authorities != null && authorities.stream()
                 .anyMatch(authority -> authority.getId().equals(authorityId));
     }
-
 }

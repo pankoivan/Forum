@@ -35,7 +35,8 @@ public class RolesAuthoritiesController {
                                                                 Authentication authentication,
                                                                 @Valid Role role,
                                                                 BindingResult bindingResult,
-                                                                @RequestParam("selectedAuthorities")
+                                                                @RequestParam(value = "selectedAuthorities",
+                                                                        required = false)
                                                                 List<Authority> authorities) {
         if (bindingResult.hasErrors()) {
             roleAuthorityService.fillModelForRoleErrors(model, authentication, role, authorities, bindingResult);

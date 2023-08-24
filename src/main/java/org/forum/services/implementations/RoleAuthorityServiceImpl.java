@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class RoleAuthorityServiceImpl implements RoleAuthorityService {
@@ -64,7 +63,7 @@ public class RoleAuthorityServiceImpl implements RoleAuthorityService {
         } else {
             fillModelWithCreateRoleTextAndCreateAuthorityText(model);
         }
-        fillModelWithAnySingleError(model, bindingResult, "roleError");
+        fillModelWithAnySingleErrorAttribute(model, bindingResult, "roleError");
     }
 
     @Override
@@ -79,7 +78,7 @@ public class RoleAuthorityServiceImpl implements RoleAuthorityService {
         } else {
             fillModelWithCreateRoleTextAndCreateAuthorityText(model);
         }
-        fillModelWithAnySingleError(model, bindingResult, "authorityError");
+        fillModelWithAnySingleErrorAttribute(model, bindingResult, "authorityError");
     }
 
     @Override
@@ -105,6 +104,8 @@ public class RoleAuthorityServiceImpl implements RoleAuthorityService {
 
     @Override
     public void deleteAuthorityById(Integer id) {
+        Authority authority = authorityRepository.findById(id).orElseThrow();
+        authority.getRoles().forEach(role -> role.removeAuthority(authority));
         authorityRepository.deleteById(id);
     }
 
@@ -164,7 +165,7 @@ public class RoleAuthorityServiceImpl implements RoleAuthorityService {
                 "Создать роль", "Сохранить");
     }
 
-    private void fillModelWithAnySingleError(Model model, BindingResult bindingResult, String attributeName) {
+    private void fillModelWithAnySingleErrorAttribute(Model model, BindingResult bindingResult, String attributeName) {
         model.addAttribute(attributeName, bindingResult.getAllErrors().stream()
                 .findAny()
                 .orElse(null));
