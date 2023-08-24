@@ -78,8 +78,8 @@
                                     <!-- Кнопки редактирования и удаления -->
                                     <div
                                         th:replace="~{fragments/buttons :: edit-delete
-                                        (editFormUrl = '@{/roles-authorities/inner/role/edit/__${each.id}__}',
-                                        deleteFormUrl = '@{/roles-authorities/inner/role/delete/__${each.id}__}')}"
+                                            (editFormUrl = '/roles-authorities/inner/role/edit/__${each.id}__',
+                                            deleteFormUrl = '/roles-authorities/inner/role/delete/__${each.id}__')}"
                                         class="d-flex flex-row align-items-center justify-content-between"
                                     >
                                         <!-- Статический просмотр -->
@@ -119,6 +119,16 @@
                             method="post"
                             th:object="${role}"
                         >
+                            <input type="hidden" th:field="*{id}" />
+                            <!-- Блок с возможными ошибками -->
+                            <div
+                                th:if="${roleError}"
+                                class="text-center text-red"
+                            >
+                                <span th:text="${roleError.getDefaultMessage()}"
+                                    >Текст ошибки</span
+                                >
+                            </div>
                             <!-- Метка, ввод названия роли и кнопка отправки -->
                             <div class="mb-2">
                                 <label for="role" class="form-label m-1"
@@ -140,6 +150,7 @@
                                         <button
                                             type="submit"
                                             class="btn btn-primary"
+                                            th:text="${roleFormSubmitButtonText}"
                                         >
                                             Создать роль
                                         </button>
@@ -148,18 +159,18 @@
                             </div>
                             <!-- Чекбоксы выбора прав для роли -->
                             <div
-                                id="selectedAuthorities"
-                                class="form-check ms-1"
+                                class="form-check break-all ms-1"
                                 th:each="each : ${authorities}"
-                                name="selectedAuthorities"
                             >
                                 <!-- Динамический и статический просмотр -->
                                 <input
                                     id="staticCheck"
                                     type="checkbox"
                                     class="form-check-input"
+                                    th:name="selectedAuthorities"
                                     th:text="${each.name}"
                                     th:value="${each.id}"
+                                    th:checked="${role.containsAuthorityById(each.id)}"
                                 />
                                 <label
                                     th:if="${false}"
@@ -191,8 +202,8 @@
                                 <!-- Кнопки редактирования и удаления -->
                                 <div
                                     th:replace="~{fragments/buttons :: edit-delete
-                                        (editFormUrl = '@{/roles-authorities/inner/authority/edit/__${each.id}__}',
-                                        deleteFormUrl = '@{/roles-authorities/inner/authority/delete/__${each.id}__}')}"
+                                        (editFormUrl = '/roles-authorities/inner/authority/edit/__${each.id}__',
+                                        deleteFormUrl = '/roles-authorities/inner/authority/delete/__${each.id}__')}"
                                     class="d-flex flex-row align-items-center justify-content-between"
                                 >
                                     <!-- Статический просмотр -->
@@ -220,6 +231,18 @@
                             method="post"
                             th:object="${authority}"
                         >
+                            <input type="hidden" th:field="*{id}" />
+                            <!-- Блок с возможными ошибками -->
+                            <div
+                                th:if="${authorityError}"
+                                class="text-center text-red"
+                            >
+                                <span
+                                    th:text="${authorityError.getDefaultMessage()}"
+                                    >Текст ошибки</span
+                                >
+                            </div>
+                            <!-- Метка, ввод названия права и кнопка отправки -->
                             <label for="authority" class="form-label m-1"
                                 >Название права</label
                             >
@@ -239,6 +262,7 @@
                                     <button
                                         type="submit"
                                         class="btn btn-primary"
+                                        th:text="${authorityFormSubmitButtonText}"
                                     >
                                         Создать право
                                     </button>

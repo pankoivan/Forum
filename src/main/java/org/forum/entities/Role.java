@@ -1,8 +1,8 @@
 package org.forum.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
-import org.forum.entities.enums.RoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
@@ -27,10 +27,13 @@ public class Role implements GrantedAuthority {
     @Column(name = "id")
     private Integer id;
 
+    @NotEmpty(message = "Название роли не должно быть пустым")
+    @NotBlank(message = "Название роли не должно содержать только пробелы")
+    @Size(min = 7, max = 32, message = "Минимальная длина названия роли - 7 символов, максимальная - 32 символа")
+    @Pattern(regexp = "ROLE_.*", message = "Название роли должно начинаться с приставки \"ROLE_\"")
     @Column(name = "name")
     private String name;
 
-    // скорее всего, тут надо orphanRemoval добавить ещё
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "forum_role_forum_authority",
@@ -53,6 +56,11 @@ public class Role implements GrantedAuthority {
 
     public void addAuthorities(Collection<? extends Authority> authorities) {
         this.authorities.addAll(authorities);
+    }
+
+    public boolean containsAuthorityById(Integer authorityId) {
+        return authorities != null && authorities.stream()
+                .anyMatch(authority -> authority.getId().equals(authorityId));
     }
 
 }
