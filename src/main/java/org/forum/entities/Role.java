@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -34,14 +34,14 @@ public class Role implements GrantedAuthority {
     @Column(name = "name")
     private String name;
 
-    @NotNull(message = "Список прав для роли не должен быть пустым")
+    @NotEmpty(message = "Список прав для роли не должен быть пустым")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "forum_role_forum_authority",
             joinColumns = @JoinColumn(name = "forum_role_id"),
             inverseJoinColumns = @JoinColumn(name = "forum_authority_id")
     )
-    private List<Authority> authorities;
+    private List<Authority> authorities = new ArrayList<>();
 
     @OneToMany(mappedBy = "role")
     private List<User> users;
@@ -51,20 +51,13 @@ public class Role implements GrantedAuthority {
         return name;
     }
 
-    public void clearAuthorities() {
-        authorities.clear();
-    }
-
-    public void addAuthorities(Collection<? extends Authority> authorities) {
-        this.authorities.addAll(authorities);
-    }
-
     public void removeAuthority(Authority authority) {
         authorities.remove(authority);
     }
 
     public boolean containsAuthorityById(Integer authorityId) {
-        return authorities != null && authorities.stream()
+        return authorities.stream()
                 .anyMatch(authority -> authority.getId().equals(authorityId));
     }
+
 }

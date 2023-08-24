@@ -11,8 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/roles-authorities")
 public class RolesAuthoritiesController {
@@ -25,7 +23,7 @@ public class RolesAuthoritiesController {
     }
 
     @GetMapping
-    public String returnRolesAuthorities(Model model, Authentication authentication) {
+    public String returnRolesAuthoritiesPage(Model model, Authentication authentication) {
         roleAuthorityService.fillModel(model, authentication);
         return "roles-authorities-panel";
     }
@@ -34,21 +32,18 @@ public class RolesAuthoritiesController {
     public String redirectRolesAuthoritiesPageAfterCreatingRole(Model model,
                                                                 Authentication authentication,
                                                                 @Valid Role role,
-                                                                BindingResult bindingResult,
-                                                                @RequestParam(value = "selectedAuthorities",
-                                                                        required = false)
-                                                                List<Authority> authorities) {
+                                                                BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            roleAuthorityService.fillModelForRoleErrors(model, authentication, role, authorities, bindingResult);
+            roleAuthorityService.fillModelForRoleErrors(model, authentication, role, bindingResult);
             return "roles-authorities-panel";
         }
 
-        roleAuthorityService.saveRole(role, authorities);
+        roleAuthorityService.saveRole(role);
         return "redirect:/roles-authorities";
     }
 
     @PostMapping("/inner/role/edit/{id}")
-    public String redirectRolesAuthoritiesPageAfterEditingRole(Model model,
+    public String returnRolesAuthoritiesPageForEditingRole(Model model,
                                                                Authentication authentication,
                                                                @PathVariable("id") Integer id) {
         roleAuthorityService
@@ -57,9 +52,7 @@ public class RolesAuthoritiesController {
     }
 
     @PostMapping("/inner/role/delete/{id}")
-    public String redirectRolesAuthoritiesPageAfterDeletingRole(Model model,
-                                                                Authentication authentication,
-                                                                @PathVariable("id") Integer id) {
+    public String redirectRolesAuthoritiesPageAfterDeletingRole(@PathVariable("id") Integer id) {
         roleAuthorityService.deleteRoleById(id);
         return "redirect:/roles-authorities";
     }
@@ -79,7 +72,7 @@ public class RolesAuthoritiesController {
     }
 
     @PostMapping("/inner/authority/edit/{id}")
-    public String redirectRolesAuthoritiesPageAfterEditingAuthority(Model model,
+    public String returnRolesAuthoritiesPageForEditingAuthority(Model model,
                                                          Authentication authentication,
                                                          @PathVariable("id") Integer id) {
         roleAuthorityService
@@ -88,9 +81,7 @@ public class RolesAuthoritiesController {
     }
 
     @PostMapping("/inner/authority/delete/{id}")
-    public String redirectRolesAuthoritiesPageAfterDeletingAuthority(Model model,
-                                                         Authentication authentication,
-                                                         @PathVariable("id") Integer id) {
+    public String redirectRolesAuthoritiesPageAfterDeletingAuthority(@PathVariable("id") Integer id) {
         roleAuthorityService.deleteAuthorityById(id);
         return "redirect:/roles-authorities";
     }

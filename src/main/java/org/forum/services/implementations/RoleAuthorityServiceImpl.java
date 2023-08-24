@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
-import java.util.List;
-
 @Service
 public class RoleAuthorityServiceImpl implements RoleAuthorityService {
 
@@ -52,10 +50,8 @@ public class RoleAuthorityServiceImpl implements RoleAuthorityService {
     public void fillModelForRoleErrors(Model model,
                                        Authentication authentication,
                                        Role role,
-                                       List<Authority> authorities,
                                        BindingResult bindingResult) {
 
-        role.setAuthorities(authorities);
         fillModelWithBasicContent(model, authentication);
         fillModelWithSpecifiedRoleAndEmptyAuthority(model, role);
         if (role.getId() == null) {
@@ -82,13 +78,7 @@ public class RoleAuthorityServiceImpl implements RoleAuthorityService {
     }
 
     @Override
-    public void saveRole(Role role, List<Authority> authorities) {
-        if (role.getAuthorities() == null) {
-            role.setAuthorities(authorities);
-        } else {
-            role.clearAuthorities();
-            role.addAuthorities(authorities);
-        }
+    public void saveRole(Role role) {
         roleRepository.save(role);
     }
 

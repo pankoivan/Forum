@@ -63,9 +63,9 @@
                 <div class="col-12 col-md-6 col-lg-6 mb-5 mb-md-0 mb-lg-0">
                     <div class="bg-dark rounded p-2">
                         <!-- Список ролей -->
-                        <div class="break-all mb-5" th:each="each : ${roles}">
-                            <!-- Название роли и кнопки редактирования и удаления -->
-                            <div class="mb-2">
+                        <div class="break-all mb-5">
+                            <div class="mb-3" th:each="each : ${roles}">
+                                <!-- Название роли и кнопки редактирования и удаления -->
                                 <div
                                     class="d-flex flex-row align-items-center justify-content-center pb-1"
                                 >
@@ -104,7 +104,7 @@
                                     class="list-group fs-14"
                                     th:each="each2 : ${each.authorities}"
                                 >
-                                    <li class="list-group-item">
+                                    <li class="list-group-item mb-1">
                                         <span th:text="${each2.name}"
                                             >SOME_AUTHORITY</span
                                         >
@@ -129,7 +129,7 @@
                                     >Текст ошибки</span
                                 >
                             </div>
-                            <!-- Метка, ввод названия роли и кнопка отправки -->
+                            <!-- Ввод названия роли и кнопка отправки -->
                             <div class="mb-2">
                                 <label for="role" class="form-label m-1"
                                     >Название роли</label
@@ -138,6 +138,7 @@
                                     id="role"
                                     class="d-flex flex-row justify-content-between"
                                 >
+                                    <!-- Ввод названия роли -->
                                     <div class="flex-fill m-1">
                                         <input
                                             type="text"
@@ -146,6 +147,7 @@
                                             th:field="*{name}"
                                         />
                                     </div>
+                                    <!-- Кнопка отправки -->
                                     <div class="m-1">
                                         <button
                                             type="submit"
@@ -167,7 +169,7 @@
                                     id="staticCheck"
                                     type="checkbox"
                                     class="form-check-input"
-                                    th:name="selectedAuthorities"
+                                    th:field="*{authorities}"
                                     th:text="${each.name}"
                                     th:value="${each.id}"
                                     th:checked="${role.containsAuthorityById(each.id)}"
@@ -188,38 +190,39 @@
                     <div class="bg-dark rounded p-2">
                         <!-- Список прав -->
                         <div class="break-all mb-5">
-                            <!-- Название права и кнопки редактирования и удаления -->
-                            <div
-                                class="d-flex flex-row align-items-center justify-content-center pb-1 mb-2"
-                                th:each="each : ${authorities}"
-                            >
-                                <!-- Название права -->
-                                <div class="fs-20 fw-bold mx-1">
-                                    <span th:text="${each.name}"
-                                        >SOME_AUTHORITY</span
-                                    >
-                                </div>
-                                <!-- Кнопки редактирования и удаления -->
+                            <div class="mb-2" th:each="each : ${authorities}">
+                                <!-- Название права и кнопки редактирования и удаления -->
                                 <div
-                                    th:replace="~{fragments/buttons :: edit-delete
-                                        (editFormUrl = '/roles-authorities/inner/authority/edit/__${each.id}__',
-                                        deleteFormUrl = '/roles-authorities/inner/authority/delete/__${each.id}__')}"
-                                    class="d-flex flex-row align-items-center justify-content-between"
+                                    class="d-flex flex-row align-items-center justify-content-center pb-1"
                                 >
-                                    <!-- Статический просмотр -->
-                                    <div>
-                                        <button
-                                            class="btn btn-sm btn-success m-1"
+                                    <!-- Название права -->
+                                    <div class="fs-20 fw-bold m-1">
+                                        <span th:text="${each.name}"
+                                            >SOME_AUTHORITY</span
                                         >
-                                            Edit
-                                        </button>
                                     </div>
-                                    <div>
-                                        <button
-                                            class="btn btn-sm btn-danger m-1"
-                                        >
-                                            Delete
-                                        </button>
+                                    <!-- Кнопки редактирования и удаления -->
+                                    <div
+                                        th:replace="~{fragments/buttons :: edit-delete
+                                            (editFormUrl = '/roles-authorities/inner/authority/edit/__${each.id}__',
+                                            deleteFormUrl = '/roles-authorities/inner/authority/delete/__${each.id}__')}"
+                                        class="d-flex flex-row align-items-center justify-content-between"
+                                    >
+                                        <!-- Статический просмотр -->
+                                        <div>
+                                            <button
+                                                class="btn btn-sm btn-success m-1"
+                                            >
+                                                Edit
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button
+                                                class="btn btn-sm btn-danger m-1"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -242,7 +245,7 @@
                                     >Текст ошибки</span
                                 >
                             </div>
-                            <!-- Метка, ввод названия права и кнопка отправки -->
+                            <!-- Ввод названия права и кнопка отправки -->
                             <label for="authority" class="form-label m-1"
                                 >Название права</label
                             >
@@ -250,6 +253,7 @@
                                 id="authority"
                                 class="d-flex flex-row justify-content-between"
                             >
+                                <!-- Ввод названия права -->
                                 <div class="flex-fill m-1">
                                     <input
                                         type="text"
@@ -258,6 +262,7 @@
                                         th:field="*{name}"
                                     />
                                 </div>
+                                <!-- Кнопка отправки -->
                                 <div class="m-1">
                                     <button
                                         type="submit"

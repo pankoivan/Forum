@@ -6,8 +6,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
-import java.util.List;
-
 public interface RoleAuthorityService {
 
     void fillModel(Model model, Authentication authentication);
@@ -16,13 +14,13 @@ public interface RoleAuthorityService {
 
     void fillModelForAuthorityEditing(Model model, Authentication authentication, Integer authorityId);
 
-    void fillModelForRoleErrors(Model model, Authentication authentication, Role role, List<Authority> authorities,
+    void fillModelForRoleErrors(Model model, Authentication authentication, Role role,
                                 BindingResult bindingResult);
 
     void fillModelForAuthorityErrors(Model model, Authentication authentication, Authority authority,
                                      BindingResult bindingResult);
 
-    void saveRole(Role role, List<Authority> authorities);
+    void saveRole(Role role);
 
     void deleteRoleById(Integer id);
 

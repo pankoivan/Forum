@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -40,7 +41,7 @@ public class Authority implements GrantedAuthority {
             mappedBy = "authorities",
             fetch = FetchType.EAGER
     )
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     @Override
     public String getAuthority() {
