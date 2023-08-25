@@ -125,9 +125,7 @@
                                 th:if="${roleError}"
                                 class="text-center text-red"
                             >
-                                <span th:text="${roleError.getDefaultMessage()}"
-                                    >Текст ошибки</span
-                                >
+                                <span th:text="${roleError}">Текст ошибки</span>
                             </div>
                             <!-- Ввод названия роли и кнопка отправки -->
                             <div class="mb-2">
@@ -240,8 +238,7 @@
                                 th:if="${authorityError}"
                                 class="text-center text-red"
                             >
-                                <span
-                                    th:text="${authorityError.getDefaultMessage()}"
+                                <span th:text="${authorityError}"
                                     >Текст ошибки</span
                                 >
                             </div>

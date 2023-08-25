@@ -60,4 +60,8 @@ public class Role implements GrantedAuthority {
                 .anyMatch(authority -> authority.getId().equals(authorityId));
     }
 
+    public boolean hasUsers() {
+        return !users.isEmpty();
+    }
+
 }

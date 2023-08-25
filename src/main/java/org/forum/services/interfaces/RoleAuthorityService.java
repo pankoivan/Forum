@@ -2,27 +2,41 @@ package org.forum.services.interfaces;
 
 import org.forum.entities.Authority;
 import org.forum.entities.Role;
-import org.springframework.security.core.Authentication;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+
+import java.util.List;
 
 public interface RoleAuthorityService {
 
-    void fillModel(Model model, Authentication authentication);
+    boolean roleFullValidation(Role role, BindingResult bindingResult);
 
-    void fillModelForRoleEditing(Model model, Authentication authentication, Integer roleId);
+    boolean roleDeletingValidation(Role role);
 
-    void fillModelForAuthorityEditing(Model model, Authentication authentication, Integer authorityId);
+    boolean authorityFullValidation(Authority authority, BindingResult bindingResult);
 
-    void fillModelForRoleErrors(Model model, Authentication authentication, Role role,
-                                BindingResult bindingResult);
+    boolean authorityDeletingValidation(Authority authority);
 
-    void fillModelForAuthorityErrors(Model model, Authentication authentication, Authority authority,
-                                     BindingResult bindingResult);
+    String extractAnySingleError(BindingResult bindingResult);
+
+    Role newRole();
+
+    boolean isNewRole(Role role);
+
+    Role findRoleById(Integer id);
+
+    List<Role> findAllRoles();
 
     void saveRole(Role role);
 
     void deleteRoleById(Integer id);
+
+    Authority newAuthority();
+
+    boolean isNewAuthority(Authority authority);
+
+    Authority findAuthorityById(Integer id);
+
+    List<Authority> findAllAuthorities();
 
     void saveAuthority(Authority authority);
 
