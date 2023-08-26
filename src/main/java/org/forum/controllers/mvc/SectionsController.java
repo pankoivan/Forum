@@ -29,6 +29,7 @@ public class SectionsController implements ConvenientController {
     public String returnSectionsPage(Model model, Authentication authentication) {
         addCurrentUser(model, authentication);
         add(model, "sections", service.findAll());
+        add(model, "page", "sections");
         return "sections";
     }
 
@@ -41,16 +42,16 @@ public class SectionsController implements ConvenientController {
     }
 
     @PostMapping("/inner/save")
-    public String redirectSectionsPageAfterCreating(Model model,
-                                                    Authentication authentication,
-                                                    @Valid Section section,
-                                                    BindingResult bindingResult) {
+    public String redirectSectionsPageAfterSaving(Model model,
+                                                  Authentication authentication,
+                                                  @Valid Section section,
+                                                  BindingResult bindingResult) {
 
         if (service.savingValidation(section, bindingResult)) {
             addCurrentUser(model, authentication);
             add(model, "section", section);
-            add(model, "error", service.extractAnySingleError(bindingResult));
             add(model, "formSubmitButtonText", service.isNew(section) ? "Создать раздел" : "Сохранить");
+            add(model, "error", service.extractAnySingleError(bindingResult));
             return "section-form";
         }
 
@@ -78,6 +79,7 @@ public class SectionsController implements ConvenientController {
         if (msg != null) {
             addCurrentUser(model, authentication);
             add(model, "sections", service.findAll());
+            add(model, "page", "sections");
             add(model, "error", msg);
             return "sections";
         }

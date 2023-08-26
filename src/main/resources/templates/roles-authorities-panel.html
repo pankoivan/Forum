@@ -78,8 +78,8 @@
                                     <!-- Кнопки редактирования и удаления -->
                                     <div
                                         th:replace="~{fragments/buttons :: edit-delete
-                                            (editFormUrl = '/roles-authorities/inner/role/edit/__${each.id}__',
-                                            deleteFormUrl = '/roles-authorities/inner/role/delete/__${each.id}__')}"
+                                            (editFormUrl = '/roles-authorities/roles/inner/edit/__${each.id}__',
+                                            deleteFormUrl = '/roles-authorities/roles/inner/delete/__${each.id}__')}"
                                         class="d-flex flex-row align-items-center justify-content-between"
                                     >
                                         <!-- Статический просмотр -->
@@ -115,7 +115,7 @@
                         <!-- Форма создания роли -->
                         <form
                             action="#"
-                            th:action="@{/roles-authorities/inner/role/save}"
+                            th:action="@{/roles-authorities/roles/inner/save}"
                             method="post"
                             th:object="${role}"
                         >
@@ -202,8 +202,8 @@
                                     <!-- Кнопки редактирования и удаления -->
                                     <div
                                         th:replace="~{fragments/buttons :: edit-delete
-                                            (editFormUrl = '/roles-authorities/inner/authority/edit/__${each.id}__',
-                                            deleteFormUrl = '/roles-authorities/inner/authority/delete/__${each.id}__')}"
+                                            (editFormUrl = '/roles-authorities/authorities/inner/edit/__${each.id}__',
+                                            deleteFormUrl = '/roles-authorities/authorities/inner/delete/__${each.id}__')}"
                                         class="d-flex flex-row align-items-center justify-content-between"
                                     >
                                         <!-- Статический просмотр -->
@@ -228,7 +228,7 @@
                         <!-- Форма создания права -->
                         <form
                             action="#"
-                            th:action="@{/roles-authorities/inner/authority/save}"
+                            th:action="@{/roles-authorities/authorities/inner/save}"
                             method="post"
                             th:object="${authority}"
                         >

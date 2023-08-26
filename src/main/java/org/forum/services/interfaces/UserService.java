@@ -5,9 +5,7 @@ import org.forum.entities.enums.Gender;
 
 import java.util.List;
 
-public interface UserService {
-
-    User newUser();
+public interface UserService extends CommonService<User, Integer> {
 
     List<Gender> genders();
 

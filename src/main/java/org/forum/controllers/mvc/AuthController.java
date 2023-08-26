@@ -30,7 +30,7 @@ public class AuthController {
     @GetMapping("/registration")
     public String returnRegistrationPage(Model model, Authentication authentication) {
         fillModelWithCurrentUserAttribute(model, authentication);
-        model.addAttribute("user", service.newUser());
+        model.addAttribute("user", service.empty());
         model.addAttribute("genders", service.genders());
         return "registration";
     }

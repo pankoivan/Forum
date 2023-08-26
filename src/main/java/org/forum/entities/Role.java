@@ -55,7 +55,7 @@ public class Role implements GrantedAuthority {
         return !users.isEmpty();
     }
 
-    public Integer authoritiesCount() {
+    public int authoritiesCount() {
         return authorities.size();
     }
 

@@ -23,7 +23,7 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public boolean savingValidation(Section section, BindingResult bindingResult) {
-        if (!repository.existsById(section.getId())) {
+        if (isNew(section)) {
             if (repository.existsByName(section.getName())) {
                 bindingResult.addError(new ObjectError("existsByName",
                         "Раздел с таким названием уже существует"));
