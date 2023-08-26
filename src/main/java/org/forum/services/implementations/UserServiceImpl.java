@@ -4,7 +4,7 @@ import org.forum.entities.User;
 import org.forum.entities.enums.Gender;
 import org.forum.repositories.UserRepository;
 import org.forum.services.interfaces.UserService;
-import org.forum.services.interfaces.ValidationService;
+import org.forum.services.interfaces.common.ValidationService;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 

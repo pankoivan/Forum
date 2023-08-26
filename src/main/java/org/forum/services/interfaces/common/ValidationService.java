@@ -1,4 +1,4 @@
-package org.forum.services.interfaces;
+package org.forum.services.interfaces.common;
 
 import org.springframework.validation.BindingResult;
 

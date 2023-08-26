@@ -2,6 +2,7 @@ package org.forum.services.interfaces;
 
 import org.forum.entities.User;
 import org.forum.entities.enums.Gender;
+import org.forum.services.interfaces.common.CommonService;
 
 import java.util.List;
 
