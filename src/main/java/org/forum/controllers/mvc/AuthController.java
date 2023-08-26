@@ -1,8 +1,8 @@
 package org.forum.controllers.mvc;
 
-import org.forum.entities.User;
-import org.forum.entities.enums.Gender;
+import org.forum.services.interfaces.UserService;
 import org.forum.utils.AuthenticationUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,24 +14,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/auth")
 public class AuthController {
 
+    private final UserService service;
+
+    @Autowired
+    public AuthController(UserService service) {
+        this.service = service;
+    }
+
+    @GetMapping("/login")
+    public String returnLoginPage(Model model, Authentication authentication) {
+        fillModelWithCurrentUserAttribute(model, authentication);
+        return "login";
+    }
+
     @GetMapping("/registration")
-    public String returnRegistrationPage(Authentication authentication, Model model) {
-        model.addAttribute("currentUser", AuthenticationUtils.extractCurrentUserOrNull(authentication));
-        model.addAttribute("user", new User());
-        model.addAttribute("genders", Gender.values());
+    public String returnRegistrationPage(Model model, Authentication authentication) {
+        fillModelWithCurrentUserAttribute(model, authentication);
+        model.addAttribute("user", service.newUser());
+        model.addAttribute("genders", service.genders());
         return "registration";
     }
 
     @PostMapping("/registration/processing")
-    public String redirectLoginAfterRegistration(User user) {
-        System.out.println(user);
+    public String redirectLoginPageAfterRegistration() {
         return "redirect:/auth/login";
     }
 
-    @GetMapping("/login")
-    public String returnLoginPage(Authentication authentication, Model model) {
+    private void fillModelWithCurrentUserAttribute(Model model, Authentication authentication) {
         model.addAttribute("currentUser", AuthenticationUtils.extractCurrentUserOrNull(authentication));
-        return "login";
     }
 
 }

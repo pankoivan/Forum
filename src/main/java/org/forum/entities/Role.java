@@ -51,6 +51,14 @@ public class Role implements GrantedAuthority {
         return name;
     }
 
+    public boolean hasUsers() {
+        return !users.isEmpty();
+    }
+
+    public Integer authoritiesCount() {
+        return authorities.size();
+    }
+
     public void removeAuthority(Authority authority) {
         authorities.remove(authority);
     }
@@ -58,10 +66,6 @@ public class Role implements GrantedAuthority {
     public boolean containsAuthorityById(Integer authorityId) {
         return authorities.stream()
                 .anyMatch(authority -> authority.getId().equals(authorityId));
-    }
-
-    public boolean hasUsers() {
-        return !users.isEmpty();
     }
 
 }

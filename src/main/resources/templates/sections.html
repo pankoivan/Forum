@@ -58,17 +58,31 @@
 
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div class="container">
-            <!-- Кнопка "создать раздел" -->
+            <!-- Кнопка создания раздела -->
             <div class="text-center mb-5">
                 <div>
-                    <a href="#" class="btn btn-lg btn-primary"
+                    <a
+                        href="#"
+                        th:href="@{/sections/create}"
+                        class="btn btn-lg btn-primary"
                         >Создать раздел</a
                     >
                 </div>
             </div>
+            <!-- Блок с возможными ошибками -->
+            <div
+                th:if="${error}"
+                class="text-center text-red fs-20 fw-bold mb-5"
+            >
+                <span th:text="${error}">Текст ошибки</span>
+            </div>
             <!-- Список разделов -->
             <div th:each="each : ${sections}">
-                <div th:insert="~{fragments/section :: section}"></div>
+                <!-- Динамический просмотр -->
+                <div
+                    th:replace="~{fragments/section :: section (section = ${each})}"
+                ></div>
+                <!-- Статический просмотр -->
                 <div
                     th:if="${false}"
                     class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-mini mb-5"

@@ -115,7 +115,7 @@
                         <!-- Форма создания роли -->
                         <form
                             action="#"
-                            th:action="@{/roles-authorities/inner/role/create}"
+                            th:action="@{/roles-authorities/inner/role/save}"
                             method="post"
                             th:object="${role}"
                         >
@@ -228,7 +228,7 @@
                         <!-- Форма создания права -->
                         <form
                             action="#"
-                            th:action="@{/roles-authorities/inner/authority/create}"
+                            th:action="@{/roles-authorities/inner/authority/save}"
                             method="post"
                             th:object="${authority}"
                         >

@@ -57,30 +57,31 @@
             <div class="row">
                 <div class="col-12">
                     <!-- ---------------------------------------- Сам фрагмент: раздел ---------------------------------------- -->
-                    <div class="bg-dark text-white rounded px-2 pt-2 pb-1 mb-5">
-                        <!-- Кнопки редактирования и удаления -->
-                        <div
-                            class="text-center border-bottom border-white pb-2"
-                            sec:authorize="hasAuthority('LATER')"
-                        >
-                            <!-- Кнопка редактирования -->
-                            <a href="#" class="btn btn-sm btn-success">
-                                <img
-                                    src="../../static/img/edit.png"
-                                    alt="Редактировать"
-                                    width="16"
-                                    class="mb-1"
-                                />
-                            </a>
-                            <!-- Кнопка удаления -->
-                            <a href="#" class="btn btn-sm btn-danger">
-                                <img
-                                    src="../../static/img/delete.png"
-                                    alt="Удалить"
-                                    width="16"
-                                    class="mb-1"
-                                />
-                            </a>
+                    <div
+                        class="bg-dark text-white rounded px-2 pt-2 pb-1 mb-5"
+                        th:fragment="section (section)"
+                    >
+                        <!-- Верхняя панель раздела -->
+                        <div class="border-bottom border-white pb-1">
+                            <!-- Кнопки редактирования и удаления -->
+                            <div
+                                th:replace="~{fragments/buttons :: edit-delete
+                                    (editFormUrl = '/sections/inner/edit/__${section.id}__',
+                                    deleteFormUrl = '/sections/inner/delete/__${section.id}__')}"
+                                class="d-flex flex-row align-items-center justify-content-between"
+                            >
+                                <!-- Статический просмотр -->
+                                <div>
+                                    <button class="btn btn-sm btn-success m-1">
+                                        Edit
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-danger m-1">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <!-- Основная часть -->
                         <div>
@@ -88,12 +89,19 @@
                             <div class="text-start m-1">
                                 <!-- Заголовок -->
                                 <h5 class="mb-1">
-                                    <a href="#" class="text-white link-offset-2"
+                                    <a
+                                        href="#"
+                                        th:href="@{/sections/__${section.id}__/topics}"
+                                        class="text-white link-offset-2"
+                                        th:text="${section.name}"
                                         >Главный</a
                                     >
                                 </h5>
                                 <!-- Описание -->
-                                <p class="mb-1">
+                                <p
+                                    class="mb-1"
+                                    th:text="${section.description}"
+                                >
                                     Lorem ipsum dolor sit amet consectetur
                                     adipisicing elit. Quisquam officiis
                                     assumenda totam, numquam architecto quod
@@ -107,21 +115,42 @@
                                 <!-- Количество тем -->
                                 <div class="text-center mx-5 my-1">
                                     <p class="mb-1">Тем:</p>
-                                    <p class="mb-1">124</p>
+                                    <p
+                                        class="mb-1"
+                                        th:text="${section.topicsCount}"
+                                    >
+                                        124
+                                    </p>
                                 </div>
                                 <!-- Количество сообщений -->
                                 <div class="text-center mx-5 my-1">
                                     <p class="mb-1">Сообщений:</p>
-                                    <p class="mb-1">8934</p>
+                                    <p
+                                        class="mb-1"
+                                        th:text="${section.messagesCount}"
+                                    >
+                                        8934
+                                    </p>
                                 </div>
                                 <!-- Недавнее сообщение -->
-                                <div class="text-center mx-5 my-1">
+                                <div
+                                    th:if="${section.recentMessage}"
+                                    class="text-center mx-5 my-1"
+                                >
                                     <p class="mb-1">
-                                        <a href="#" class="text-white"
+                                        <a
+                                            href="#"
+                                            th:href="@{/section/__${section.id}__/topics/__${section.recentMessage.topic.id}__}"
+                                            class="text-white"
                                             >Недавнее сообщение</a
                                         >
                                     </p>
-                                    <p class="mb-1 fs-12">24.04.2011</p>
+                                    <p
+                                        class="mb-1 fs-12"
+                                        th:text="${section.recentMessage.creationDate}"
+                                    >
+                                        24.04.2011
+                                    </p>
                                 </div>
                             </div>
                         </div>

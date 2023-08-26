@@ -8,6 +8,8 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = {
         "messages"
 })
@@ -42,5 +44,9 @@ public class Topic {
 
     @OneToMany(mappedBy = "topic")
     private List<Message> messages;
+
+    public Integer messagesCount() {
+        return messages.size();
+    }
 
 }

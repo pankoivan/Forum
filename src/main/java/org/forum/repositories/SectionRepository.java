@@ -7,4 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SectionRepository extends JpaRepository<Section, Integer> {
 
+    boolean existsByName(String name);
+
+    boolean existsByDescription(String name);
+
 }
