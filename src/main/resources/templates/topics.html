@@ -70,8 +70,11 @@
                         Текущий раздел: "Главный"
                     </h2>
                 </div>
-                <!-- Кнопка "создать тему" -->
-                <div class="m-2">
+                <!-- Кнопка создания темы -->
+                <div
+                    sec:authorize="hasAuthority('WORK_WITH_OWN_TOPICS')"
+                    class="m-2"
+                >
                     <div>
                         <a
                             href="#"
@@ -97,10 +100,12 @@
             </div>
             <!-- Список тем -->
             <div th:each="each, status : ${topics}">
+                <!-- Динамический просмотр -->
                 <div
                     th:insert="~{fragments/topic :: topic (topic = ${each})}"
                     th:classappend="${!status.last} ? mb-5"
                 ></div>
+                <!-- Статический просмотр -->
                 <div
                     th:if="${false}"
                     class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-mini mb-5"

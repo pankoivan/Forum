@@ -64,7 +64,9 @@
             >
                 <!-- Текущая тема -->
                 <div class="text-center m-1">
-                    <h2 th:text="'Текущая тема: ' + ${topic.name}">
+                    <h2
+                        th:text="'Текущая тема: ' + '&quot;' + ${topic.name} + '&quot;'"
+                    >
                         Текущая тема: "Главная"
                     </h2>
                 </div>
@@ -84,6 +86,7 @@
             </div>
             <!-- Форма отправки сообщения -->
             <div
+                sec:authorize="isAuthenticated()"
                 class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2 mb-5"
             >
                 <!-- Имя пользователя и аватарка -->
@@ -94,7 +97,7 @@
                     <div class="border-bottom border-white pb-1 mb-2">
                         <a
                             href="#"
-                            th:href="@{/profile/__${currentUser.id}__}"
+                            th:href="@{/profiles/__${currentUser.id}__}"
                             class="text-white text-decoration-none"
                             th:text="${currentUser.nickname}"
                             >Имя пользователя</a
@@ -114,7 +117,7 @@
                 <!-- Сама форма -->
                 <form
                     action="#"
-                    th:action="@{messages/inner/add}"
+                    th:action="@{/sections/__${section.id}__/topics/__${topic.id}__/messages/inner/save}"
                     method="post"
                     class="text-center flex-fill px-2 mt-1"
                     th:object="${message}"
@@ -126,24 +129,28 @@
                         >
                         <textarea
                             id="message"
-                            name="text"
                             class="form-control fs-14"
                             placeholder="Какое-нибудь сообщение длиной не менее 15-ти символов..."
                             th:field="*{text}"
                         ></textarea>
                     </div>
                     <div>
-                        <button type="submit" class="btn btn-sm btn-primary">
+                        <button
+                            type="submit"
+                            class="btn btn-sm btn-primary"
+                            th:text="${formSubmitButtonText}"
+                        >
                             Отправить сообщение
                         </button>
                     </div>
                 </form>
             </div>
             <!-- Список сообщений -->
-            <div th:each="each : ${messages}">
-                <!-- Динамический и статический просмотр -->
+            <div th:each="each, status : ${messages}">
+                <!-- Динамический просмотр -->
                 <div
-                    th:insert="~{fragments/message :: message (currentMessage = ${each})}"
+                    th:insert="~{fragments/message :: message (message = ${each})}"
+                    th:classappend="${!status.last} ? mb-5"
                 ></div>
                 <!-- Статический просмотр -->
                 <div

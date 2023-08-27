@@ -39,45 +39,30 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 )
                 .authorizeHttpRequests(authorize -> authorize
-
                         .requestMatchers("/").permitAll()
-                        .requestMatchers("/test").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/sections/**").permitAll()
+                        .requestMatchers("/sections/create").hasAuthority("WORK_WITH_SECTIONS")
                         .requestMatchers("/users/**").permitAll()
-                        .requestMatchers("/profile/**").authenticated()
+                        .requestMatchers("/moders/**").permitAll()
+                        .requestMatchers("/admins/**").permitAll()
+                        .requestMatchers("/profiles/**").authenticated()
                         .requestMatchers("/roles-authorities/**").hasRole("OWNER")
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/favicon/**").permitAll()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login/processing")
-                        .defaultSuccessUrl("/", true)
-                        .failureUrl("/auth/login")
-                        //.failureHandler(authenticationFailureHandler())
+                        .defaultSuccessUrl("/")
+                        .failureUrl("/auth/login?error")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/auth/login?logout")
                 );
 
         return http.build();
     }
-
-    /*@Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new SimpleUrlAuthenticationFailureHandler("/auth/login") {
-            @Override
-            public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                                AuthenticationException exception) throws IOException, ServletException {
-
-                //setUseForward(true);
-
-                request.setAttribute("error", true);
-                super.onAuthenticationFailure(request, response, exception);
-            }
-        };
-    }*/
 
 }

@@ -59,7 +59,10 @@
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div class="container">
             <!-- Кнопка создания раздела -->
-            <div class="text-center mb-5">
+            <div
+                sec:authorize="hasAuthority('WORK_WITH_SECTIONS')"
+                class="text-center mb-5"
+            >
                 <div>
                     <a
                         href="#"

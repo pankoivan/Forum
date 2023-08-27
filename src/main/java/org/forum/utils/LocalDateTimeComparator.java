@@ -1,6 +1,5 @@
 package org.forum.utils;
 
-import org.forum.entities.interfaces.LocalDateGetter;
 import org.forum.entities.interfaces.LocalDateTimeGetter;
 
 import java.util.Comparator;

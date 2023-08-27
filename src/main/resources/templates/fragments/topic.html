@@ -58,11 +58,17 @@
                 <div class="col-12">
                     <!-- ---------------------------------------- Сам фрагмент: тема ---------------------------------------- -->
                     <div
-                        class="bg-dark text-white rounded px-2 pt-2 pb-1"
+                        class="bg-dark text-white rounded px-2 py-1"
                         th:fragment="topic (topic)"
                     >
                         <!-- Верхняя панель темы -->
-                        <div class="border-bottom border-white pb-1">
+                        <div
+                            th:if="${currentUser != null
+                                        AND (currentUser.id == topic.userWhoCreated.id
+                                        OR #authorization.expression('hasAuthority(''WORK_WITH_OWN_TOPICS'')')
+                                    )}"
+                            class="border-bottom border-white pb-1"
+                        >
                             <!-- Кнопки редактирования и удаления -->
                             <div
                                 th:replace="~{fragments/buttons :: edit-delete

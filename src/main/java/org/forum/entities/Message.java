@@ -1,6 +1,9 @@
 package org.forum.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.forum.entities.interfaces.LocalDateTimeGetter;
 
@@ -26,8 +29,11 @@ public class Message implements LocalDateTimeGetter {
     @Column(name = "id")
     private Long id;
 
+    @NotEmpty(message = "Сообщение не должно быть пустым")
+    @NotBlank(message = "Сообщение не должно содержать только пробелы")
+    @Size(min = 15, max = 4096, message = "Минимальная длина сообщения - 15 символов, максимальная - 4096 символов")
     @Column(name = "message_text")
-    private String messageText;
+    private String text;
 
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
@@ -46,6 +52,10 @@ public class Message implements LocalDateTimeGetter {
     @Override
     public LocalDateTime get() {
         return creationDate;
+    }
+
+    public boolean hasLikes() {
+        return !likedUsers.isEmpty();
     }
 
     public int likesCount() {

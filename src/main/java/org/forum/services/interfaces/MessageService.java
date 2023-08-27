@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
-public interface MessageService extends CommonService<Message, Integer>, ValidationService<Message> {
+public interface MessageService extends CommonService<Message, Long>, ValidationService<Message> {
 
     void save(Message message, Authentication authentication, Topic topic);
 

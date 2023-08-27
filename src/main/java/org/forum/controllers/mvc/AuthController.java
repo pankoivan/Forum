@@ -1,7 +1,8 @@
 package org.forum.controllers.mvc;
 
+import org.forum.controllers.mvc.common.ConvenientController;
+import org.forum.services.interfaces.SectionService;
 import org.forum.services.interfaces.UserService;
-import org.forum.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -12,24 +13,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController extends ConvenientController {
+
+    private final SectionService sectionService;
 
     private final UserService service;
 
     @Autowired
-    public AuthController(UserService service) {
+    public AuthController(SectionService sectionService, UserService service) {
+        this.sectionService = sectionService;
         this.service = service;
     }
 
     @GetMapping("/login")
     public String returnLoginPage(Model model, Authentication authentication) {
-        fillModelWithCurrentUserAttribute(model, authentication);
+        addForHeader(model, authentication, sectionService);
         return "login";
     }
 
     @GetMapping("/registration")
     public String returnRegistrationPage(Model model, Authentication authentication) {
-        fillModelWithCurrentUserAttribute(model, authentication);
+        addForHeader(model, authentication, sectionService);
         model.addAttribute("user", service.empty());
         model.addAttribute("genders", service.genders());
         return "registration";
@@ -38,10 +42,6 @@ public class AuthController {
     @PostMapping("/registration/processing")
     public String redirectLoginPageAfterRegistration() {
         return "redirect:/auth/login";
-    }
-
-    private void fillModelWithCurrentUserAttribute(Model model, Authentication authentication) {
-        model.addAttribute("currentUser", AuthenticationUtils.extractCurrentUserOrNull(authentication));
     }
 
 }
