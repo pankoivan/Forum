@@ -1,7 +1,7 @@
 package org.forum.controllers.mvc;
 
 import jakarta.validation.Valid;
-import org.forum.controllers.mvc.interfaces.ConvenientController;
+import org.forum.controllers.mvc.common.ConvenientController;
 import org.forum.entities.Section;
 import org.forum.services.interfaces.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/sections")
-public class SectionsController implements ConvenientController {
+public class SectionsController extends ConvenientController {
 
     private final SectionService service;
 
@@ -27,7 +27,7 @@ public class SectionsController implements ConvenientController {
 
     @GetMapping
     public String returnSectionsPage(Model model, Authentication authentication) {
-        addCurrentUser(model, authentication);
+        addForHeader(model, authentication, service);
         add(model, "sections", service.findAll());
         add(model, "page", "sections");
         return "sections";
@@ -35,8 +35,8 @@ public class SectionsController implements ConvenientController {
 
     @GetMapping("/create")
     public String returnSectionFormPageForCreating(Model model, Authentication authentication) {
-        addCurrentUser(model, authentication);
-        add(model, "section", service.empty());
+        addForHeader(model, authentication, service);
+        add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать раздел");
         return "section-form";
     }
@@ -48,14 +48,14 @@ public class SectionsController implements ConvenientController {
                                                   BindingResult bindingResult) {
 
         if (service.savingValidation(section, bindingResult)) {
-            addCurrentUser(model, authentication);
-            add(model, "section", section);
+            addForHeader(model, authentication, service);
+            add(model, "object", section);
             add(model, "formSubmitButtonText", service.isNew(section) ? "Создать раздел" : "Сохранить");
             add(model, "error", service.extractAnySingleError(bindingResult));
             return "section-form";
         }
 
-        service.save(section);
+        service.save(section, authentication);
         return "redirect:/sections";
     }
 
@@ -64,8 +64,8 @@ public class SectionsController implements ConvenientController {
                                                   Authentication authentication,
                                                   @PathVariable("id") Integer id) {
 
-        addCurrentUser(model, authentication);
-        add(model, "section", service.findById(id));
+        addForHeader(model, authentication, service);
+        add(model, "object", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить");
         return "section-form";
     }
@@ -77,7 +77,7 @@ public class SectionsController implements ConvenientController {
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
-            addCurrentUser(model, authentication);
+            addForHeader(model, authentication, service);
             add(model, "sections", service.findAll());
             add(model, "page", "sections");
             add(model, "error", msg);

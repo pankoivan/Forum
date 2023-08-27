@@ -58,7 +58,7 @@
                 <div class="col-12">
                     <!-- ---------------------------------------- Сам фрагмент: раздел ---------------------------------------- -->
                     <div
-                        class="bg-dark text-white rounded px-2 pt-2 pb-1 mb-5"
+                        class="bg-dark text-white rounded px-2 pt-2 pb-1"
                         th:fragment="section (section)"
                     >
                         <!-- Верхняя панель раздела -->
@@ -108,10 +108,35 @@
                                     delectus enim maxime odit error.
                                 </p>
                             </div>
-                            <!-- Количество тем, количество сообщений и недавнее сообщение -->
+                            <!-- Автор, количество тем, количество сообщений и недавнее сообщение -->
                             <div
-                                class="d-flex flex-row flex-wrap justify-content-center justify-content-md-center justify-content-lg-between"
+                                class="d-flex flex-row flex-wrap justify-content-center justify-content-md-center justify-content-lg-between mb-1"
                             >
+                                <!-- Автор -->
+                                <div class="mx-4 my-2">
+                                    <div
+                                        class="d-flex flex-row align-items-center justify-content-between"
+                                    >
+                                        <div class="me-1">
+                                            <img
+                                                src="../../static/img/природа.png"
+                                                th:src="@{/img/природа.png}"
+                                                alt="Пользователь"
+                                                class="rounded-circle"
+                                                width="42"
+                                            />
+                                        </div>
+                                        <div class="my-auto">
+                                            <a
+                                                href="#"
+                                                th:href="@{/profiles/__${section.userWhoCreated.id}__}"
+                                                class="text-white"
+                                                th:text="${section.userWhoCreated.nickname}"
+                                                >Имя пользователя</a
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
                                 <!-- Количество тем -->
                                 <div class="text-center mx-5 my-1">
                                     <p class="mb-1">Тем:</p>
@@ -140,7 +165,7 @@
                                     <p class="mb-1">
                                         <a
                                             href="#"
-                                            th:href="@{/section/__${section.id}__/topics/__${section.recentMessage.topic.id}__}"
+                                            th:href="@{/sections/__${section.id}__/topics/__${section.recentMessage.topic.id}__/messages}"
                                             class="text-white"
                                             >Недавнее сообщение</a
                                         >
@@ -152,6 +177,14 @@
                                         24.04.2011
                                     </p>
                                 </div>
+                            </div>
+                            <!-- Дата создания -->
+                            <div
+                                class="text-center border-top border-white pt-1"
+                            >
+                                <span th:text="${section.creationDate}"
+                                    >Создана: 19.02.2015</span
+                                >
                             </div>
                         </div>
                     </div>

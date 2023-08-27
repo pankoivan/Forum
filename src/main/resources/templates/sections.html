@@ -43,7 +43,7 @@
     </head>
 
     <body
-        class="min-vh-100 vh-100 bg-lightgray d-flex flex-column justify-content-between"
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
     >
         <!-- ---------------------------------------- Заголовок ---------------------------------------- -->
         <div
@@ -77,10 +77,11 @@
                 <span th:text="${error}">Текст ошибки</span>
             </div>
             <!-- Список разделов -->
-            <div th:each="each : ${sections}">
+            <div th:each="each, status : ${sections}">
                 <!-- Динамический просмотр -->
                 <div
-                    th:replace="~{fragments/section :: section (section = ${each})}"
+                    th:insert="~{fragments/section :: section (section = ${each})}"
+                    th:classappend="${!status.last} ? mb-5"
                 ></div>
                 <!-- Статический просмотр -->
                 <div

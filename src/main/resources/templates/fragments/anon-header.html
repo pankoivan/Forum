@@ -105,20 +105,22 @@
                                         <ul
                                             aria-labelledby="topics"
                                             class="dropdown-menu text-small"
-                                            th:each="each : ${sections}"
                                         >
                                             <!-- Динамический и статический просмотр -->
-                                            <li>
+                                            <li
+                                                th:each="each, status : ${sections}"
+                                            >
                                                 <a
                                                     href="#"
                                                     th:href="@{/sections/__${each.id}__/topics}"
                                                     class="dropdown-item"
-                                                    th:text="'В разделе' + ${each.name}"
+                                                    th:text="'В разделе ' + '&quot;' + ${each.name} + '&quot;'"
                                                     >В разделе "Главный"</a
                                                 >
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider" />
+                                                <hr
+                                                    th:if="${!status.last}"
+                                                    class="dropdown-divider"
+                                                />
                                             </li>
                                             <!-- Статический просмотр -->
                                             <li th:if="${false}">
@@ -127,8 +129,6 @@
                                                     class="dropdown-item"
                                                     >В разделе "Новости"</a
                                                 >
-                                            </li>
-                                            <li th:if="${false}">
                                                 <hr class="dropdown-divider" />
                                             </li>
                                             <li th:if="${false}">

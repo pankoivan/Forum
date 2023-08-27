@@ -12,8 +12,6 @@ public interface CommonService<T, M> {
 
     List<T> findAll();
 
-    void save(T t);
-
     void deleteById(M id);
 
 }

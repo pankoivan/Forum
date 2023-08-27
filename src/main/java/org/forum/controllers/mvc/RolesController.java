@@ -1,10 +1,11 @@
 package org.forum.controllers.mvc;
 
 import jakarta.validation.Valid;
-import org.forum.controllers.mvc.interfaces.ConvenientController;
+import org.forum.controllers.mvc.common.ConvenientController;
 import org.forum.entities.Role;
 import org.forum.services.interfaces.AuthorityService;
 import org.forum.services.interfaces.RoleService;
+import org.forum.services.interfaces.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -16,14 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/roles-authorities/roles")
-public class RolesController implements ConvenientController {
+public class RolesController extends ConvenientController {
+
+    private final SectionService sectionService;
 
     private final RoleService roleService;
 
     private final AuthorityService authorityService;
 
     @Autowired
-    public RolesController(RoleService roleService, AuthorityService authorityService) {
+    public RolesController(SectionService sectionService, RoleService roleService, AuthorityService authorityService) {
+        this.sectionService = sectionService;
         this.roleService = roleService;
         this.authorityService = authorityService;
     }
@@ -35,7 +39,7 @@ public class RolesController implements ConvenientController {
                                                               BindingResult bindingResult) {
 
         if (roleService.savingValidation(role, bindingResult)) {
-            addCurrentUser(model, authentication);
+            addForHeader(model, authentication, sectionService);
             add(model, "roles", roleService.findAll());
             add(model, "authorities", authorityService.findAll());
             add(model, "role", role);
@@ -55,7 +59,7 @@ public class RolesController implements ConvenientController {
                                                            Authentication authentication,
                                                            @PathVariable("id") Integer id) {
 
-        addCurrentUser(model, authentication);
+        addForHeader(model, authentication, sectionService);
         add(model, "roles", roleService.findAll());
         add(model, "authorities", authorityService.findAll());
         add(model, "role", roleService.findById(id));
@@ -72,7 +76,7 @@ public class RolesController implements ConvenientController {
 
         String msg = roleService.deletingValidation(roleService.findById(id));
         if (msg != null) {
-            addCurrentUser(model, authentication);
+            addForHeader(model, authentication, sectionService);
             add(model, "roles", roleService.findAll());
             add(model, "authorities", authorityService.findAll());
             add(model, "role", roleService.empty());

@@ -2,6 +2,7 @@ package org.forum.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.forum.entities.interfaces.LocalDateTimeGetter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 })
 @Entity
 @Table(name = "forum_message")
-public class Message {
+public class Message implements LocalDateTimeGetter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,5 +42,14 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "topic_id")
     private Topic topic;
+
+    @Override
+    public LocalDateTime get() {
+        return creationDate;
+    }
+
+    public int likesCount() {
+        return likedUsers.size();
+    }
 
 }

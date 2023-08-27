@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.forum.entities.interfaces.LocalDateTimeGetter;
+import org.forum.utils.LocalDateTimeComparator;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import java.util.List;
 })
 @Entity
 @Table(name = "forum_section")
-public class Section {
+public class Section implements LocalDateTimeGetter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,6 +53,11 @@ public class Section {
     @OneToMany(mappedBy = "section")
     private List<Topic> topics = new ArrayList<>();
 
+    @Override
+    public LocalDateTime get() {
+        return creationDate;
+    }
+
     public boolean hasTopics() {
         return !topics.isEmpty();
     }
@@ -68,14 +75,7 @@ public class Section {
     public Message recentMessage() {
         return topics.stream()
                 .flatMap(topic -> topic.getMessages().stream())
-                .min((o1, o2) -> {
-                    if (o1.getCreationDate().isBefore(o2.getCreationDate())) {
-                        return -1;
-                    } else if (o1.getCreationDate().isAfter(o2.getCreationDate())) {
-                        return 1;
-                    }
-                    return 0;
-                })
+                .min(new LocalDateTimeComparator())
                 .orElse(null);
     }
 

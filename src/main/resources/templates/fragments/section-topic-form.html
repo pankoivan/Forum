@@ -53,7 +53,7 @@
         </div>
 
         <!-- ---------------------------------------- Сам фрагмент: форма создания раздела/темы ---------------------------------------- -->
-        <div class="container" th:fragment="form (concrete)">
+        <div class="container" th:fragment="form (titlePart, submitUrl)">
             <div class="row">
                 <div class="col-11 col-md-8 col-lg-5 mx-auto">
                     <!-- Непосредственно блок создания раздела/темы -->
@@ -66,13 +66,13 @@
                             <div>
                                 <h5
                                     class="mb-1"
-                                    th:text="'Создание ' + ${concrete}"
+                                    th:text="'Создание ' + ${titlePart}"
                                 >
                                     Создание раздела/темы
                                 </h5>
                                 <p
                                     class="mb-2"
-                                    th:text="'Введите название ' + ${concrete} + ' и описание'"
+                                    th:text="'Введите название ' + ${titlePart} + ' и описание'"
                                 >
                                     Введите название раздела/темы и описание
                                 </p>
@@ -96,10 +96,10 @@
                         <!-- Сама форма -->
                         <form
                             action="#"
-                            th:action="@{/sections/inner/save}"
+                            th:action="${submitUrl}"
                             method="post"
                             class="my-3"
-                            th:object="${section}"
+                            th:object="${object}"
                         >
                             <input type="hidden" th:field="*{id}" />
                             <!-- Блок с возможными ошибками -->

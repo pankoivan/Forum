@@ -57,30 +57,31 @@
             <div class="row">
                 <div class="col-12">
                     <!-- ---------------------------------------- Сам фрагмент: тема ---------------------------------------- -->
-                    <div class="bg-dark text-white rounded px-2 pt-2 pb-1 mb-5">
-                        <!-- Кнопки редактирования и удаления -->
-                        <div
-                            class="text-center border-bottom border-white pb-2"
-                            sec:authorize="hasAuthority('LATER')"
-                        >
-                            <!-- Кнопка редактирования -->
-                            <a href="#" class="btn btn-sm btn-success">
-                                <img
-                                    src="../../static/img/edit.png"
-                                    alt="Редактировать"
-                                    width="16"
-                                    class="mb-1"
-                                />
-                            </a>
-                            <!-- Кнопка удаления -->
-                            <a href="#" class="btn btn-sm btn-danger">
-                                <img
-                                    src="../../static/img/delete.png"
-                                    alt="Удалить"
-                                    width="16"
-                                    class="mb-1"
-                                />
-                            </a>
+                    <div
+                        class="bg-dark text-white rounded px-2 pt-2 pb-1"
+                        th:fragment="topic (topic)"
+                    >
+                        <!-- Верхняя панель темы -->
+                        <div class="border-bottom border-white pb-1">
+                            <!-- Кнопки редактирования и удаления -->
+                            <div
+                                th:replace="~{fragments/buttons :: edit-delete
+                                    (editFormUrl = '/sections/__${topic.section.id}__/topics/inner/edit/__${topic.id}__',
+                                    deleteFormUrl = '/sections/__${topic.section.id}__/topics/inner/delete/__${topic.id}__')}"
+                                class="d-flex flex-row align-items-center justify-content-between"
+                            >
+                                <!-- Статический просмотр -->
+                                <div>
+                                    <button class="btn btn-sm btn-success m-1">
+                                        Edit
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-danger m-1">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <!-- Основная часть -->
                         <div>
@@ -88,58 +89,98 @@
                             <div class="text-start m-1">
                                 <!-- Заголовок -->
                                 <h5 class="mb-1">
-                                    <a href="#" class="text-white link-offset-2"
+                                    <a
+                                        href="#"
+                                        th:href="@{/sections/__${topic.section.id}__/topics/__${topic.id}__/messages}"
+                                        class="text-white link-offset-2"
+                                        th:text="${topic.name}"
                                         >Флуд</a
                                     >
                                 </h5>
                                 <!-- Описание -->
-                                <p class="mb-1">
+                                <p class="mb-1" th:text="${topic.description}">
                                     Lorem ipsum dolor sit amet consectetur
                                     adipisicing elit. Quisquam officiis
                                     assumenda totam, numquam architecto quod
                                     delectus enim maxime odit error.
                                 </p>
                             </div>
-                            <!-- Автор, количество сообщений и недавнее сообщение -->
+                            <!-- Автор, количество сообщений, количество лайков и недавнее сообщение -->
                             <div
                                 class="d-flex flex-row flex-wrap justify-content-center justify-content-md-center justify-content-lg-between mb-1"
                             >
                                 <!-- Автор -->
-                                <div class="text-center mx-5 my-1">
-                                    <p class="mb-1">Автор:</p>
-                                    <div>
-                                        <img
-                                            src="../../static/img/природа.png"
-                                            alt="Пользователь"
-                                            width="32"
-                                            class="rounded-circle"
-                                        />
-                                        <p class="my-1">
-                                            <a href="#" class="text-white"
+                                <div class="mx-4 my-2">
+                                    <div
+                                        class="d-flex flex-row align-items-center justify-content-between"
+                                    >
+                                        <div class="me-1">
+                                            <img
+                                                src="../../static/img/природа.png"
+                                                th:src="@{/img/природа.png}"
+                                                alt="Пользователь"
+                                                class="rounded-circle"
+                                                width="42"
+                                            />
+                                        </div>
+                                        <div class="my-auto">
+                                            <a
+                                                href="#"
+                                                th:href="@{/profiles/__${topic.userWhoCreated.id}__}"
+                                                class="text-white"
+                                                th:text="${topic.userWhoCreated.nickname}"
                                                 >Имя пользователя</a
                                             >
-                                        </p>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- Количество сообщений -->
                                 <div class="text-center mx-5 my-1">
                                     <p class="mb-1">Сообщений:</p>
-                                    <p class="mb-1">1847</p>
+                                    <p
+                                        class="mb-1"
+                                        th:text="${topic.messagesCount}"
+                                    >
+                                        1847
+                                    </p>
+                                </div>
+                                <!-- Количество лайков -->
+                                <div class="text-center mx-5 my-1">
+                                    <p class="mb-1">Лайков:</p>
+                                    <p
+                                        class="mb-1"
+                                        th:text="${topic.likesCount}"
+                                    >
+                                        8901
+                                    </p>
                                 </div>
                                 <!-- Недавнее сообщение -->
-                                <div class="text-center mx-5 my-1">
+                                <div
+                                    th:if="${topic.recentMessage}"
+                                    class="text-center mx-5 my-1"
+                                >
                                     <p class="mb-1">
-                                        <a href="#" class="text-white"
+                                        <a
+                                            href="#"
+                                            th:href="@{/sections/__${topic.section.id}__/topics/__${topic.id}__/messages}"
+                                            class="text-white"
                                             >Недавнее сообщение</a
                                         >
                                     </p>
-                                    <p class="mb-1 fs-12">24.04.2011</p>
+                                    <p
+                                        class="mb-1 fs-12"
+                                        th:text="${topic.recentMessage.creationDate}"
+                                    >
+                                        24.04.2011
+                                    </p>
                                 </div>
                             </div>
                         </div>
                         <!-- Дата создания -->
                         <div class="text-center border-top border-white pt-1">
-                            <span>Создана: 19.02.2015</span>
+                            <span th:text="${topic.creationDate}"
+                                >Создана: 19.02.2015</span
+                            >
                         </div>
                     </div>
                 </div>

@@ -59,7 +59,7 @@
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div
             class="container bg-dark d-flex align-items-center justify-content-center text-center text-white static-block mb-5"
-            th:replace="~{fragments/section-topic-form :: form (concrete = 'раздела')}"
+            th:replace="~{fragments/section-topic-form :: form (titlePart = 'раздела', submitUrl = '/sections/inner/save')}"
         >
             <h3>
                 Статический блок основной части страницы для просмотра в

@@ -3,7 +3,9 @@ package org.forum.services.implementations;
 import org.forum.entities.Section;
 import org.forum.repositories.SectionRepository;
 import org.forum.services.interfaces.SectionService;
+import org.forum.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -67,8 +69,9 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public void save(Section section) {
+    public void save(Section section, Authentication authentication) {
         section.setCreationDate(LocalDateTime.now());
+        section.setUserWhoCreated(AuthenticationUtils.extractCurrentUser(authentication));
         repository.save(section);
     }
 
