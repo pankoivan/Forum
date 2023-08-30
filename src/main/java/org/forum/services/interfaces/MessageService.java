@@ -14,4 +14,8 @@ public interface MessageService extends CommonService<Message, Long>, Validation
 
     List<Message> findAllByTopicId(Integer topicId);
 
+    List<Message> findAllForPage(int pageNumber);
+
+    int pagesCount();
+
 }

@@ -159,12 +159,14 @@
                 </form>
             </div>
             <!-- Список сообщений -->
-            <div th:each="each, status : ${messages}">
+            <div class="mb-5">
                 <!-- Динамический просмотр -->
-                <div
-                    th:insert="~{fragments/message :: message (message = ${each})}"
-                    th:classappend="${!status.last} ? mb-2"
-                ></div>
+                <div th:each="each, status : ${messages}">
+                    <div
+                        th:insert="~{fragments/message :: message (message = ${each})}"
+                        th:classappend="${!status.last} ? mb-2"
+                    ></div>
+                </div>
                 <!-- Статический просмотр -->
                 <div
                     th:if="${false}"
@@ -185,6 +187,37 @@
                     <h3>Статический блок для просмотра в браузере</h3>
                 </div>
             </div>
+            <!-- Пагинация -->
+            <nav class="d-flex justify-content-center">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#">Previous</a>
+                    </li>
+                    <!-- Статический и динамический просмотр -->
+                    <li
+                        th:each="i : ${#numbers.sequence(1, pagesCount)}"
+                        class="page-item"
+                    >
+                        <a
+                            class="page-link"
+                            href="#"
+                            th:href="@{/sections/__${section.id}__/topics/__${topic.id}__/messages/page__${i}__}"
+                            th:text="${i}"
+                            >1</a
+                        >
+                    </li>
+                    <!-- Статический просмотр -->
+                    <li th:if="${false}" class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li th:if="${false}" class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
 
         <!-- ---------------------------------------- Футер ---------------------------------------- -->

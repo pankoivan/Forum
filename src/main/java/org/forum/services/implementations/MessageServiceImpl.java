@@ -5,6 +5,7 @@ import org.forum.entities.Topic;
 import org.forum.repositories.MessageRepository;
 import org.forum.services.interfaces.MessageService;
 import org.forum.utils.AuthenticationUtils;
+import org.forum.utils.constants.PaginationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -72,6 +73,20 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public List<Message> findAllForPage(int pageNumber) {
+        return findAll().stream()
+                .skip((long) (pageNumber - 1) * PaginationConstants.MESSAGES)
+                .limit(PaginationConstants.MESSAGES)
+                .toList();
+    }
+
+    @Override
+    public int pagesCount() {
+        System.out.println(Math.ceilDiv(findAll().size(), PaginationConstants.MESSAGES));
+        return Math.ceilDiv(findAll().size(), PaginationConstants.MESSAGES);
     }
 
 }

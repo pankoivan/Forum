@@ -34,17 +34,24 @@ public class MessagesController extends ConvenientController {
     }
 
     @GetMapping
+    public String redirectMessagesPageWithPagination() {
+        return "redirect:/sections/{sectionId}/topics/{topicId}/messages/page1";
+    }
+
+    @GetMapping("/page{pageNumber}")
     public String returnMessagesPage(Model model,
                                      Authentication authentication,
                                      @PathVariable("sectionId") Integer sectionId,
-                                     @PathVariable("topicId") Integer topicId) {
+                                     @PathVariable("topicId") Integer topicId,
+                                     @PathVariable("pageNumber") Integer pageNumber) {
 
         addForHeader(model, authentication, sectionService);
         add(model, "message", service.empty());
-        add(model, "messages", service.findAllByTopicId(topicId));
+        add(model, "messages", service.findAllForPage(pageNumber));
         add(model, "section", sectionService.findById(sectionId));
         add(model, "topic", topicService.findById(topicId));
         add(model, "formSubmitButtonText", "Отправить сообщение");
+        add(model, "pagesCount", service.pagesCount());
         return "messages";
     }
 

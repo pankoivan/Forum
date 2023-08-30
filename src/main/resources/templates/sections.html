@@ -80,12 +80,14 @@
                 <span th:text="${error}">Текст ошибки</span>
             </div>
             <!-- Список разделов -->
-            <div th:each="each, status : ${sections}">
+            <div>
                 <!-- Динамический просмотр -->
-                <div
-                    th:insert="~{fragments/section :: section (section = ${each})}"
-                    th:classappend="${!status.last} ? mb-5"
-                ></div>
+                <div th:each="each, status : ${sections}">
+                    <div
+                        th:insert="~{fragments/section :: section (section = ${each})}"
+                        th:classappend="${!status.last} ? mb-5"
+                    ></div>
+                </div>
                 <!-- Статический просмотр -->
                 <div
                     th:if="${false}"

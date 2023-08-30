@@ -106,12 +106,14 @@
                 <span th:text="${error}">Текст ошибки</span>
             </div>
             <!-- Список тем -->
-            <div th:each="each, status : ${topics}">
+            <div>
                 <!-- Динамический просмотр -->
-                <div
-                    th:insert="~{fragments/topic :: topic (topic = ${each})}"
-                    th:classappend="${!status.last} ? mb-5"
-                ></div>
+                <div th:each="each, status : ${topics}">
+                    <div
+                        th:insert="~{fragments/topic :: topic (topic = ${each})}"
+                        th:classappend="${!status.last} ? mb-5"
+                    ></div>
+                </div>
                 <!-- Статический просмотр -->
                 <div
                     th:if="${false}"
