@@ -98,6 +98,13 @@
                     </div>
                 </form>
             </div>
+            <!-- Блок с возможными ошибками -->
+            <div
+                th:if="${error}"
+                class="text-center text-red fs-20 fw-bold mb-5"
+            >
+                <span th:text="${error}">Текст ошибки</span>
+            </div>
             <!-- Список тем -->
             <div th:each="each, status : ${topics}">
                 <!-- Динамический просмотр -->

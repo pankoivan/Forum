@@ -84,6 +84,13 @@
                     </div>
                 </form>
             </div>
+            <!-- Блок с возможными ошибками -->
+            <div
+                th:if="${error}"
+                class="text-center text-red fs-20 fw-bold mb-5"
+            >
+                <span th:text="${error}">Текст ошибки</span>
+            </div>
             <!-- Форма отправки сообщения -->
             <div
                 sec:authorize="isAuthenticated()"
@@ -122,6 +129,12 @@
                     class="text-center flex-fill px-2 mt-1"
                     th:object="${message}"
                 >
+                    <input type="hidden" th:field="*{id}" />
+                    <!-- Блок с возможными ошибками -->
+                    <div th:if="${formError}" class="text-center text-red mb-2">
+                        <span th:text="${formError}">Текст ошибки</span>
+                    </div>
+                    <!-- Ввод текста сообщения и кнопка отправки -->
                     <div class="mb-2">
                         <label for="message" class="form-label"
                             >Введите сообщение длиной не менее 15-ти
@@ -150,7 +163,7 @@
                 <!-- Динамический просмотр -->
                 <div
                     th:insert="~{fragments/message :: message (message = ${each})}"
-                    th:classappend="${!status.last} ? mb-5"
+                    th:classappend="${!status.last} ? mb-2"
                 ></div>
                 <!-- Статический просмотр -->
                 <div

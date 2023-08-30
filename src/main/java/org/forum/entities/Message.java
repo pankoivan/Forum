@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.forum.entities.interfaces.LocalDateTimeGetter;
+import org.forum.entities.interfaces.ChronoGetter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
 })
 @Entity
 @Table(name = "forum_message")
-public class Message implements LocalDateTimeGetter {
+public class Message implements ChronoGetter<LocalDateTime> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

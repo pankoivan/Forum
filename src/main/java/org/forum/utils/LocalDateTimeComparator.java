@@ -1,13 +1,14 @@
 package org.forum.utils;
 
-import org.forum.entities.interfaces.LocalDateTimeGetter;
+import org.forum.entities.interfaces.ChronoGetter;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 
-public class LocalDateTimeComparator implements Comparator<LocalDateTimeGetter> {
+public class LocalDateTimeComparator implements Comparator<ChronoGetter<LocalDateTime>> {
 
     @Override
-    public int compare(LocalDateTimeGetter chrono1, LocalDateTimeGetter chrono2) {
+    public int compare(ChronoGetter<LocalDateTime> chrono1, ChronoGetter<LocalDateTime> chrono2) {
         return chrono1.get().isBefore(chrono2.get()) ? -1
                 : chrono1.get().isAfter(chrono2.get()) ? 1
                 : 0;

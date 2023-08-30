@@ -58,7 +58,7 @@
                 <div class="col-12">
                     <!-- ---------------------------------------- Сам фрагмент: сообщение ---------------------------------------- -->
                     <div
-                        class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2 mb-5"
+                        class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2"
                         th:fragment="message (message)"
                     >
                         <!-- Имя пользователя и аватарка -->
@@ -126,10 +126,10 @@
                                 >
                                     <div
                                         th:replace="~{fragments/buttons :: edit-delete
-                                            (editFormUrl =
-                                                '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/inner/edit/__${message.id}__',
-                                            deleteFormUrl =
-                                                '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/inner/delete/__${message.id}__')}"
+                                        (editFormUrl =
+                                          '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/inner/edit/__${message.id}__',
+                                        deleteFormUrl =
+                                          '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/inner/delete/__${message.id}__')}"
                                         class="d-flex flex-row align-items-center justify-content-between"
                                     >
                                         <!-- Статический просмотр -->
