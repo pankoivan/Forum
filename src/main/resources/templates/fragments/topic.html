@@ -43,7 +43,7 @@
     </head>
 
     <body
-        class="min-vh-100 vh-100 bg-lightgray d-flex flex-column justify-content-between"
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
     >
         <!-- ---------------------------------------- Статический заголовок ---------------------------------------- -->
         <div
@@ -65,7 +65,7 @@
                         <div
                             th:if="${currentUser != null
                                         AND (currentUser.id == topic.userWhoCreated.id
-                                        OR #authorization.expression('hasAuthority(''WORK_WITH_OWN_TOPICS'')')
+                                        OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_TOPICS'')')
                                     )}"
                             class="border-bottom border-white pb-1"
                         >
