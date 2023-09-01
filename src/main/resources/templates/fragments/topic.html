@@ -71,9 +71,10 @@
                         >
                             <!-- Кнопки редактирования и удаления -->
                             <div
-                                th:replace="~{fragments/buttons :: edit-delete
-                                    (editFormUrl = '/sections/__${topic.section.id}__/topics/inner/edit/__${topic.id}__',
-                                    deleteFormUrl = '/sections/__${topic.section.id}__/topics/inner/delete/__${topic.id}__')}"
+                                th:replace="~{fragments/buttons :: edit-delete (
+                                        editFormUrl = '/sections/__${topic.section.id}__/topics/inner/edit/__${topic.id}__',
+                                        deleteFormUrl = '/sections/__${topic.section.id}__/topics/inner/delete/__${topic.id}__'
+                                    )}"
                                 class="d-flex flex-row align-items-center justify-content-between"
                             >
                                 <!-- Статический просмотр -->

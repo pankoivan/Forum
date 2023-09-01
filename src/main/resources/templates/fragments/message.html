@@ -120,16 +120,17 @@
                                 <!-- Кнопки редактирования и удаления -->
                                 <div
                                     th:if="${currentUser != null
-                                        AND (currentUser.id == topic.userWhoCreated.id
-                                        OR #authorization.expression('hasAuthority(''WORK_WITH_OWN_TOPICS'')')
+                                        AND (currentUser.id == message.userWhoPosted.id
+                                        OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_MESSAGES'')')
                                     )}"
                                 >
                                     <div
-                                        th:replace="~{fragments/buttons :: edit-delete
-                                        (editFormUrl =
-                                          '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/inner/edit/__${message.id}__',
-                                        deleteFormUrl =
-                                          '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/inner/delete/__${message.id}__')}"
+                                        th:replace="~{fragments/buttons :: edit-delete (
+                                            editFormUrl =
+                                                '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/edit/__${message.id}__',
+                                            deleteFormUrl =
+                                                '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/delete/__${message.id}__'
+                                            )}"
                                         class="d-flex flex-row align-items-center justify-content-between"
                                     >
                                         <!-- Статический просмотр -->

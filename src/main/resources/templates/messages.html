@@ -124,22 +124,30 @@
                 <!-- Сама форма -->
                 <form
                     action="#"
-                    th:action="@{/sections/__${section.id}__/topics/__${topic.id}__/messages/inner/save}"
+                    th:action="@{/sections/__${section.id}__/topics/__${topic.id}__/messages/page__${currentPage}__/inner/save}"
                     method="post"
                     class="text-center flex-fill px-2 mt-1"
                     th:object="${message}"
                 >
                     <input type="hidden" th:field="*{id}" />
-                    <!-- Блок с возможными ошибками -->
-                    <div th:if="${formError}" class="text-center text-red mb-2">
-                        <span th:text="${formError}">Текст ошибки</span>
-                    </div>
                     <!-- Ввод текста сообщения и кнопка отправки -->
                     <div class="mb-2">
-                        <label for="message" class="form-label"
-                            >Введите сообщение длиной не менее 15-ти
-                            символов</label
+                        <div
+                            class="d-flex flex-row align-items-center justify-content-between mb-1"
                         >
+                            <label for="message" class="form-label me-1 fs-16"
+                                >Введите сообщение</label
+                            >
+                            <div class="ms-1">
+                                <button
+                                    type="submit"
+                                    class="btn btn-sm btn-primary"
+                                    th:text="${formSubmitButtonText}"
+                                >
+                                    Отправить сообщение
+                                </button>
+                            </div>
+                        </div>
                         <textarea
                             id="message"
                             class="form-control fs-14"
@@ -147,14 +155,9 @@
                             th:field="*{text}"
                         ></textarea>
                     </div>
-                    <div>
-                        <button
-                            type="submit"
-                            class="btn btn-sm btn-primary"
-                            th:text="${formSubmitButtonText}"
-                        >
-                            Отправить сообщение
-                        </button>
+                    <!-- Блок с возможными ошибками -->
+                    <div th:if="${formError}" class="text-center text-red mb-2">
+                        <span th:text="${formError}">Текст ошибки</span>
                     </div>
                 </form>
             </div>
@@ -191,12 +194,19 @@
             <nav class="d-flex justify-content-center">
                 <ul class="pagination">
                     <li class="page-item">
-                        <a class="page-link" href="#">Previous</a>
+                        <a
+                            class="page-link"
+                            href="#"
+                            th:href="@{/sections/__${section.id}__/topics/__${topic.id}__/messages/page
+                                __${currentPage != 1 ? currentPage - 1 : currentPage}__}"
+                            >Назад</a
+                        >
                     </li>
                     <!-- Статический и динамический просмотр -->
                     <li
                         th:each="i : ${#numbers.sequence(1, pagesCount)}"
                         class="page-item"
+                        th:classappend="${i == currentPage} ? active"
                     >
                         <a
                             class="page-link"
@@ -214,7 +224,13 @@
                         <a class="page-link" href="#">3</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
+                        <a
+                            class="page-link"
+                            href="#"
+                            th:href="@{/sections/__${section.id}__/topics/__${topic.id}__/messages/page
+                                __${currentPage != pagesCount ? currentPage + 1 : currentPage}__}"
+                            >Вперёд</a
+                        >
                     </li>
                 </ul>
             </nav>

@@ -76,17 +76,16 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> findAllForPage(int pageNumber) {
-        return findAll().stream()
+    public List<Message> extractForPage(List<Message> messages, int pageNumber) {
+        return messages.stream()
                 .skip((long) (pageNumber - 1) * PaginationConstants.MESSAGES)
                 .limit(PaginationConstants.MESSAGES)
                 .toList();
     }
 
     @Override
-    public int pagesCount() {
-        System.out.println(Math.ceilDiv(findAll().size(), PaginationConstants.MESSAGES));
-        return Math.ceilDiv(findAll().size(), PaginationConstants.MESSAGES);
+    public int calculatePagesCount(List<Message> messages) {
+        return Math.ceilDiv(messages.size(), PaginationConstants.MESSAGES);
     }
 
 }

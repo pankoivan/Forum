@@ -47,75 +47,89 @@ public class MessagesController extends ConvenientController {
 
         addForHeader(model, authentication, sectionService);
         add(model, "message", service.empty());
-        add(model, "messages", service.findAllForPage(pageNumber));
+        add(model, "messages", service.extractForPage(service.findAllByTopicId(topicId), pageNumber));
         add(model, "section", sectionService.findById(sectionId));
         add(model, "topic", topicService.findById(topicId));
         add(model, "formSubmitButtonText", "Отправить сообщение");
-        add(model, "pagesCount", service.pagesCount());
+        add(model, "pagesCount", service.calculatePagesCount(service.findAllByTopicId(topicId)));
+        add(model, "currentPage", pageNumber);
         return "messages";
     }
 
-    @PostMapping("/inner/save")
+    @PostMapping("/page{pageNumber}/inner/save")
     public String redirectMessagesPageAfterSaving(Model model,
                                                   Authentication authentication,
                                                   @Valid Message message,
                                                   BindingResult bindingResult,
                                                   @PathVariable("sectionId") Integer sectionId,
-                                                  @PathVariable("topicId") Integer topicId) {
+                                                  @PathVariable("topicId") Integer topicId,
+                                                  @PathVariable("pageNumber") Integer pageNumber) {
 
+        boolean isNew = service.isNew(message);
         if (service.savingValidation(message, bindingResult)) {
             addForHeader(model, authentication, sectionService);
             add(model, "message", message);
-            add(model, "messages", service.findAllByTopicId(topicId));
+            add(model, "messages", service.extractForPage(service.findAllByTopicId(topicId), pageNumber));
             add(model, "section", sectionService.findById(sectionId));
             add(model, "topic", topicService.findById(topicId));
-            add(model, "formSubmitButtonText", service.isNew(message)
+            add(model, "formSubmitButtonText", isNew
                     ? "Отправить сообщение" : "Сохранить изменения");
+            add(model, "pagesCount", service.calculatePagesCount(service.findAllByTopicId(topicId)));
+            add(model, "currentPage", pageNumber);
             add(model, "formError", service.extractAnySingleError(bindingResult));
             return "messages";
         }
 
         service.save(message, authentication, topicService.findById(topicId));
-        return "redirect:/sections/{sectionId}/topics/{topicId}/messages";
+        return isNew
+                ? "redirect:/sections/{sectionId}/topics/{topicId}/messages/page" +
+                        service.calculatePagesCount(service.findAllByTopicId(topicId))
+                : "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
     }
 
-    @PostMapping("/inner/edit/{id}")
+    @PostMapping("/page{pageNumber}/inner/edit/{id}")
     public String returnMessagesPageForEditing(Model model,
                                                Authentication authentication,
                                                @PathVariable("id") Long id,
                                                @PathVariable("sectionId") Integer sectionId,
-                                               @PathVariable("topicId") Integer topicId) {
+                                               @PathVariable("topicId") Integer topicId,
+                                               @PathVariable("pageNumber") Integer pageNumber) {
 
         addForHeader(model, authentication, sectionService);
         add(model, "message", service.findById(id));
-        add(model, "messages", service.findAllByTopicId(topicId));
+        add(model, "messages", service.extractForPage(service.findAllByTopicId(topicId), pageNumber));
         add(model, "section", sectionService.findById(sectionId));
         add(model, "topic", topicService.findById(topicId));
         add(model, "formSubmitButtonText", "Сохранить изменения");
+        add(model, "pagesCount", service.calculatePagesCount(service.findAllByTopicId(topicId)));
+        add(model, "currentPage", pageNumber);
         return "messages";
     }
 
-    @PostMapping("/inner/delete/{id}")
+    @PostMapping("/page{pageNumber}/inner/delete/{id}")
     public String redirectMessagesPageAfterDeleting(Model model,
                                                     Authentication authentication,
                                                     @PathVariable("id") Long id,
                                                     @PathVariable("sectionId") Integer sectionId,
-                                                    @PathVariable("topicId") Integer topicId) {
+                                                    @PathVariable("topicId") Integer topicId,
+                                                    @PathVariable("pageNumber") Integer pageNumber) {
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
             addForHeader(model, authentication, sectionService);
             add(model, "message", service.empty());
-            add(model, "messages", service.findAllByTopicId(topicId));
+            add(model, "messages", service.extractForPage(service.findAllByTopicId(topicId), pageNumber));
             add(model, "section", sectionService.findById(sectionId));
             add(model, "topic", topicService.findById(topicId));
             add(model, "formSubmitButtonText", "Отправить сообщение");
+            add(model, "pagesCount", service.calculatePagesCount(service.findAllByTopicId(topicId)));
+            add(model, "currentPage", pageNumber);
             add(model, "error", msg);
             return "messages";
         }
 
         service.deleteById(id);
-        return "redirect:/sections/{sectionId}/topics/{topicId}/messages";
+        return "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
     }
 
 }
