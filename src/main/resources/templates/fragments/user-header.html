@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html
+    lang="en"
+    xmlns:th="https://www.thymeleaf.org"
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -59,6 +63,7 @@
                     <!-- ---------------------------------------- Сам фрагмент: пользователь ---------------------------------------- -->
                     <div
                         class="bg-dark text-white rounded d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-between p-1"
+                        th:fragment="user (user)"
                     >
                         <!-- Аватарка с именем -->
                         <div class="mx-4 my-2">
@@ -68,13 +73,18 @@
                                 <div class="me-1">
                                     <img
                                         src="../../static/img/природа.png"
+                                        th:src="@{/img/природа.png}"
                                         alt="Пользователь"
                                         class="rounded-circle"
                                         width="32"
                                     />
                                 </div>
                                 <div class="my-auto">
-                                    <a href="#" class="text-white"
+                                    <a
+                                        href="#"
+                                        th:href="@{/profiles/__${user.id}__}"
+                                        class="text-white"
+                                        th:text="${user.nickname}"
                                         >Имя пользователя</a
                                     >
                                 </div>
@@ -82,48 +92,73 @@
                         </div>
                         <!-- Роль -->
                         <div class="mx-4 my-2">
-                            <span>МОДЕРАТОР</span>
+                            <span th:text="${user.role}">МОДЕРАТОР</span>
                         </div>
                         <!-- Дата регистрации -->
                         <div class="mx-4 my-2">
-                            <span>21.10.2022 в 11:34:58</span>
+                            <span th:text="${user.registrationDate}"
+                                >21.10.2022 в 11:34:58</span
+                            >
                         </div>
                         <!-- Кнопки бана, удаления, добавления в модераторы и в администраторы -->
                         <div
+                            th:if="${currentUser.id != user.id AND (
+                                #authorization.expression('hasAnyAuthority(''BAN_AND_UNBAN'', ''DELETE_USERS'', ''ASSIGN_AND_REMOVE_MODERS'',
+                                ''ASSIGN_AND_REMOVE_ADMINS'')')
+                            )}"
                             class="mx-4 my-2"
-                            sec:authorize="hasAuthority('LATER')"
                         >
-                            <!-- Кнопка бана -->
-                            <a href="#" class="btn btn-sm btn-danger">
+                            <!-- Кнопка бана/разбана -->
+                            <a
+                                sec:authorize="hasAuthority('BAN_AND_UNBAN')"
+                                href="#"
+                                class="btn btn-sm btn-danger"
+                            >
                                 <img
                                     src="../../static/img/ban.png"
+                                    th:src="@{/img/ban.png}"
                                     alt="Забанить"
                                     width="16"
                                     class="mb-1"
                                 />
                             </a>
                             <!-- Кнопка удаления -->
-                            <a href="#" class="btn btn-sm btn-danger">
+                            <a
+                                sec:authorize="hasAuthority('DELETE_USERS')"
+                                href="#"
+                                class="btn btn-sm btn-danger"
+                            >
                                 <img
                                     src="../../static/img/delete.png"
+                                    th:src="@{/img/delete.png}"
                                     alt="Удалить"
                                     width="16"
                                     class="mb-1"
                                 />
                             </a>
-                            <!-- Кнопка добавления в модераторы -->
-                            <a href="#" class="btn btn-sm btn-primary">
+                            <!-- Кнопка присвоения/снятия модераторства -->
+                            <a
+                                sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_MODERS')"
+                                href="#"
+                                class="btn btn-sm btn-primary"
+                            >
                                 <img
                                     src="../../static/img/moder.png"
+                                    th:src="@{/img/moder.png}"
                                     alt="Назначить модератором"
                                     width="16"
                                     class="mb-1"
                                 />
                             </a>
-                            <!-- Кнопка добавления в администраторы -->
-                            <a href="#" class="btn btn-sm btn-primary">
+                            <!-- Кнопка присвоения/снятия администраторства -->
+                            <a
+                                sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_ADMINS')"
+                                href="#"
+                                class="btn btn-sm btn-primary"
+                            >
                                 <img
                                     src="../../static/img/admin.png"
+                                    th:src="@{/img/admin.png}"
                                     alt="Назначить администратором"
                                     width="16"
                                     class="mb-1"

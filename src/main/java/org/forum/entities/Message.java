@@ -6,8 +6,11 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.forum.entities.interfaces.ChronoGetter;
+import org.forum.utils.constants.DateTimeFormatConstants;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @NoArgsConstructor
@@ -52,6 +55,10 @@ public class Message implements ChronoGetter<LocalDateTime> {
     @Override
     public LocalDateTime get() {
         return creationDate;
+    }
+
+    public String getFormattedCreationDate() {
+        return creationDate.format(DateTimeFormatConstants.SEPARATED_FORMAT);
     }
 
     public boolean hasLikes() {

@@ -64,6 +64,13 @@
                     <div class="bg-dark rounded text-center fw-bold mb-2">
                         <p>Топ пользователей</p>
                     </div>
+                    <!-- Динамический просмотр -->
+                    <div th:each="each, status : ${topUsers}">
+                        <div
+                            th:insert="~{fragments/user-header :: user (user = ${each})}"
+                            th:classappend="${!status.last} ? mb-2"
+                        ></div>
+                    </div>
                     <!-- Статический просмотр -->
                     <div
                         th:if="${false}"

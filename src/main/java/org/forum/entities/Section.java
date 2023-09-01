@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.forum.entities.interfaces.ChronoGetter;
-import org.forum.utils.LocalDateTimeComparator;
+import org.forum.utils.comparators.LocalDateTimeComparator;
+import org.forum.utils.constants.DateTimeFormatConstants;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -56,6 +57,10 @@ public class Section implements ChronoGetter<LocalDateTime> {
     @Override
     public LocalDateTime get() {
         return creationDate;
+    }
+
+    public String getFormattedCreationDate() {
+        return creationDate.format(DateTimeFormatConstants.SEPARATED_FORMAT);
     }
 
     public boolean hasTopics() {

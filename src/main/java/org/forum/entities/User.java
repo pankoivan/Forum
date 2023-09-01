@@ -3,6 +3,7 @@ package org.forum.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.forum.entities.interfaces.ChronoGetter;
+import org.forum.utils.constants.DateTimeFormatConstants;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -51,7 +52,7 @@ public class User implements UserDetails, ChronoGetter<LocalDateTime> {
     private String password;
 
     @Column(name = "creation_date")
-    private LocalDateTime creationDate;
+    private LocalDateTime registrationDate;
 
     @OneToOne(
             mappedBy = "user",
@@ -86,7 +87,11 @@ public class User implements UserDetails, ChronoGetter<LocalDateTime> {
 
     @Override
     public LocalDateTime get() {
-        return creationDate;
+        return registrationDate;
+    }
+
+    public String getFormattedRegistrationDate() {
+        return registrationDate.format(DateTimeFormatConstants.SEPARATED_FORMAT);
     }
 
     @Override
