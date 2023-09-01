@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html
+    lang="en"
+    xmlns:th="https://www.thymeleaf.org"
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -68,9 +72,10 @@
                         >
                             <!-- Кнопки редактирования и удаления -->
                             <div
-                                th:replace="~{fragments/buttons :: edit-delete
-                                    (editFormUrl = '/sections/inner/edit/__${section.id}__',
-                                    deleteFormUrl = '/sections/inner/delete/__${section.id}__')}"
+                                th:replace="~{fragments/buttons :: edit-delete (
+                                    editFormUrl = '/sections/inner/edit/__${section.id}__',
+                                    deleteFormUrl = '/sections/inner/delete/__${section.id}__'
+                                )}"
                                 class="d-flex flex-row align-items-center justify-content-between"
                             >
                                 <!-- Статический просмотр -->

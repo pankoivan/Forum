@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html
+    lang="en"
+    xmlns:th="https://www.thymeleaf.org"
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -93,7 +97,7 @@
             </div>
             <!-- Форма отправки сообщения -->
             <div
-                sec:authorize="isAuthenticated()"
+                sec:authorize="hasAuthority('WORK_WITH_OWN_MESSAGES')"
                 class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2 mb-5"
             >
                 <!-- Имя пользователя и аватарка -->
@@ -193,16 +197,15 @@
             <!-- Пагинация -->
             <nav class="d-flex justify-content-center">
                 <ul class="pagination">
+                    <!-- Статический и динамический просмотр -->
                     <li class="page-item">
                         <a
                             class="page-link"
                             href="#"
-                            th:href="@{/sections/__${section.id}__/topics/__${topic.id}__/messages/page
-                                __${currentPage != 1 ? currentPage - 1 : currentPage}__}"
+                            th:href="@{/sections/__${section.id}__/topics/__${topic.id}__/messages/page__${currentPage != 1 ? currentPage - 1 : currentPage}__}"
                             >Назад</a
                         >
                     </li>
-                    <!-- Статический и динамический просмотр -->
                     <li
                         th:each="i : ${#numbers.sequence(1, pagesCount)}"
                         class="page-item"
@@ -223,12 +226,12 @@
                     <li th:if="${false}" class="page-item">
                         <a class="page-link" href="#">3</a>
                     </li>
+                    <!-- Статический и динамический просмотр -->
                     <li class="page-item">
                         <a
                             class="page-link"
                             href="#"
-                            th:href="@{/sections/__${section.id}__/topics/__${topic.id}__/messages/page
-                                __${currentPage != pagesCount ? currentPage + 1 : currentPage}__}"
+                            th:href="@{/sections/__${section.id}__/topics/__${topic.id}__/messages/page__${currentPage != pagesCount ? currentPage + 1 : currentPage}__}"
                             >Вперёд</a
                         >
                     </li>

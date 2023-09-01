@@ -103,7 +103,7 @@ public class TopicsController extends ConvenientController {
         }
 
         service.deleteById(id);
-        return "redirect:/topics";
+        return "redirect:/sections/{sectionId}/topics";
     }
 
 }

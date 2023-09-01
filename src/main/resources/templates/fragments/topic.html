@@ -63,18 +63,21 @@
                     >
                         <!-- Верхняя панель темы -->
                         <div
-                            th:if="${currentUser != null
-                                        AND (currentUser.id == topic.userWhoCreated.id
-                                        OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_TOPICS'')')
-                                    )}"
+                            th:if="${currentUser != null AND (
+                                currentUser.id == topic.userWhoCreated.id
+                                AND #authorization.expression('hasAuthority(''WORK_WITH_OWN_TOPICS'')')
+                                OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_TOPICS'')')
+                            )}"
                             class="border-bottom border-white pb-1"
                         >
                             <!-- Кнопки редактирования и удаления -->
                             <div
                                 th:replace="~{fragments/buttons :: edit-delete (
-                                        editFormUrl = '/sections/__${topic.section.id}__/topics/inner/edit/__${topic.id}__',
-                                        deleteFormUrl = '/sections/__${topic.section.id}__/topics/inner/delete/__${topic.id}__'
-                                    )}"
+                                    editFormUrl =
+                                        '/sections/__${topic.section.id}__/topics/inner/edit/__${topic.id}__',
+                                    deleteFormUrl =
+                                        '/sections/__${topic.section.id}__/topics/inner/delete/__${topic.id}__'
+                                )}"
                                 class="d-flex flex-row align-items-center justify-content-between"
                             >
                                 <!-- Статический просмотр -->
