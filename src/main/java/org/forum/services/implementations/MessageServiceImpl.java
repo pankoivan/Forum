@@ -64,10 +64,17 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void save(Message message, Authentication authentication, Topic topic) {
-        message.setCreationDate(LocalDateTime.now());
-        message.setUserWhoPosted(AuthenticationUtils.extractCurrentUser(authentication));
-        message.setTopic(topic);
-        repository.save(message);
+        if (isNew(message)) {
+            message.setCreationDate(LocalDateTime.now());
+            message.setUserWhoPosted(AuthenticationUtils.extractCurrentUser(authentication));
+            message.setTopic(topic);
+            repository.save(message);
+        } else {
+            Message oldMessage = findById(message.getId());
+            oldMessage.setEditingDate(LocalDateTime.now());
+            oldMessage.setText(message.getText());
+            repository.save(oldMessage);
+        }
     }
 
     @Override

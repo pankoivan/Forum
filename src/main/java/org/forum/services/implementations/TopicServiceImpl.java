@@ -76,10 +76,17 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public void save(Topic topic, Authentication authentication, Section section) {
-        topic.setCreationDate(LocalDateTime.now());
-        topic.setUserWhoCreated(AuthenticationUtils.extractCurrentUser(authentication));
-        topic.setSection(section);
-        repository.save(topic);
+        if (isNew(topic)) {
+            topic.setCreationDate(LocalDateTime.now());
+            topic.setUserWhoCreated(AuthenticationUtils.extractCurrentUser(authentication));
+            topic.setSection(section);
+            repository.save(topic);
+        } else {
+            Topic oldTopic = findById(topic.getId());
+            oldTopic.setName(topic.getName());
+            oldTopic.setDescription(topic.getDescription());
+            repository.save(oldTopic);
+        }
     }
 
     @Override

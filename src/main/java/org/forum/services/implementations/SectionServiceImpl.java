@@ -70,9 +70,16 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public void save(Section section, Authentication authentication) {
-        section.setCreationDate(LocalDateTime.now());
-        section.setUserWhoCreated(AuthenticationUtils.extractCurrentUser(authentication));
-        repository.save(section);
+        if (isNew(section)) {
+            section.setCreationDate(LocalDateTime.now());
+            section.setUserWhoCreated(AuthenticationUtils.extractCurrentUser(authentication));
+            repository.save(section);
+        } else {
+            Section oldSection = findById(section.getId());
+            oldSection.setName(section.getName());
+            oldSection.setDescription(oldSection.getDescription());
+            repository.save(oldSection);
+        }
     }
 
     @Override

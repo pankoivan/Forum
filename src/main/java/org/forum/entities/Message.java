@@ -41,6 +41,9 @@ public class Message implements ChronoGetter<LocalDateTime> {
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
+    @Column(name = "editing_date")
+    private LocalDateTime editingDate;
+
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User userWhoPosted;
@@ -59,6 +62,10 @@ public class Message implements ChronoGetter<LocalDateTime> {
 
     public String getFormattedCreationDate() {
         return creationDate.format(DateTimeFormatConstants.SEPARATED_FORMAT);
+    }
+
+    public String getFormattedEditingDate() {
+        return editingDate.format(DateTimeFormatConstants.SEPARATED_FORMAT);
     }
 
     public boolean hasLikes() {

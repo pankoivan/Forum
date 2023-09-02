@@ -90,7 +90,7 @@
                                 />
                             </div>
                         </div>
-                        <!-- Информационная панель и сообщение -->
+                        <!-- Информационная панель, сообщение и дата изменения -->
                         <div class="flex-fill">
                             <!-- Информационная панель -->
                             <div
@@ -171,6 +171,17 @@
                                     accusantium sunt numquam ab autem asperiores
                                     ad. Veritatis sunt doloribus atque
                                     magni.</span
+                                >
+                            </div>
+                            <!-- Дата изменения -->
+                            <div
+                                th:if="${message.editingDate}"
+                                class="text-end fs-10 fst-italic"
+                            >
+                                <span
+                                    th:text="'Отредактировано: ' + ${message.formattedEditingDate}"
+                                    >Отредактировано: 10.01.2023 в
+                                    15:43:12</span
                                 >
                             </div>
                         </div>
