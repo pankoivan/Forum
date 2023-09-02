@@ -115,6 +115,7 @@ public class MessagesController extends ConvenientController {
                                                     @PathVariable("pageNumber") Integer pageNumber) {
 
         String msg = service.deletingValidation(service.findById(id));
+        int pagesCount = service.calculatePagesCount(service.findAllByTopicId(topicId));
         if (msg != null) {
             addForHeader(model, authentication, sectionService);
             add(model, "message", service.empty());
@@ -122,14 +123,17 @@ public class MessagesController extends ConvenientController {
             add(model, "section", sectionService.findById(sectionId));
             add(model, "topic", topicService.findById(topicId));
             add(model, "formSubmitButtonText", "Отправить сообщение");
-            add(model, "pagesCount", service.calculatePagesCount(service.findAllByTopicId(topicId)));
+            add(model, "pagesCount", pagesCount);
             add(model, "currentPage", pageNumber);
             add(model, "error", msg);
             return "messages";
         }
 
         service.deleteById(id);
-        return "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
+        int newPagesCount = service.calculatePagesCount(service.findAllByTopicId(topicId));
+        return pageNumber.equals(pagesCount) && newPagesCount < pagesCount
+                ? "redirect:/sections/{sectionId}/topics/{topicId}/messages/page" + newPagesCount
+                : "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
     }
 
 }

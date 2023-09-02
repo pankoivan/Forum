@@ -92,7 +92,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public int calculatePagesCount(List<Message> messages) {
-        return Math.ceilDiv(messages.size(), PaginationConstants.MESSAGES);
+        return !messages.isEmpty()
+                ? Math.ceilDiv(messages.size(), PaginationConstants.MESSAGES)
+                : 1;
     }
 
 }
