@@ -9,6 +9,10 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
+    List<Message> findAllByOrderByCreationDateAsc();
+
     List<Message> findAllByTopicId(Integer topicId);
+
+    List<Message> findAllByTopicIdOrderByCreationDateAsc(Integer topicId);
 
 }

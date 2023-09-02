@@ -54,12 +54,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<Message> findAll() {
-        return repository.findAll();
+        return repository.findAllByOrderByCreationDateAsc();
     }
 
     @Override
     public List<Message> findAllByTopicId(Integer topicId) {
-        return repository.findAllByTopicId(topicId);
+        return repository.findAllByTopicIdOrderByCreationDateAsc(topicId);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> extractForPage(List<Message> messages, int pageNumber) {
+    public List<Message> onPage(List<Message> messages, int pageNumber) {
         return messages.stream()
                 .skip((long) (pageNumber - 1) * PaginationConstants.MESSAGES)
                 .limit(PaginationConstants.MESSAGES)
@@ -91,7 +91,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public int calculatePagesCount(List<Message> messages) {
+    public int pagesCount(List<Message> messages) {
         return !messages.isEmpty()
                 ? Math.ceilDiv(messages.size(), PaginationConstants.MESSAGES)
                 : 1;

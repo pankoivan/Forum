@@ -47,11 +47,11 @@ public class MessagesController extends ConvenientController {
 
         addForHeader(model, authentication, sectionService);
         add(model, "message", service.empty());
-        add(model, "messages", service.extractForPage(service.findAllByTopicId(topicId), pageNumber));
+        add(model, "messages", service.onPage(service.findAllByTopicId(topicId), pageNumber));
         add(model, "section", sectionService.findById(sectionId));
         add(model, "topic", topicService.findById(topicId));
         add(model, "formSubmitButtonText", "Отправить сообщение");
-        add(model, "pagesCount", service.calculatePagesCount(service.findAllByTopicId(topicId)));
+        add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
         return "messages";
     }
@@ -69,12 +69,12 @@ public class MessagesController extends ConvenientController {
         if (service.savingValidation(message, bindingResult)) {
             addForHeader(model, authentication, sectionService);
             add(model, "message", message);
-            add(model, "messages", service.extractForPage(service.findAllByTopicId(topicId), pageNumber));
+            add(model, "messages", service.onPage(service.findAllByTopicId(topicId), pageNumber));
             add(model, "section", sectionService.findById(sectionId));
             add(model, "topic", topicService.findById(topicId));
             add(model, "formSubmitButtonText", isNew
                     ? "Отправить сообщение" : "Сохранить изменения");
-            add(model, "pagesCount", service.calculatePagesCount(service.findAllByTopicId(topicId)));
+            add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
             add(model, "currentPage", pageNumber);
             add(model, "formError", service.extractAnySingleError(bindingResult));
             return "messages";
@@ -83,7 +83,7 @@ public class MessagesController extends ConvenientController {
         service.save(message, authentication, topicService.findById(topicId));
         return isNew
                 ? "redirect:/sections/{sectionId}/topics/{topicId}/messages/page" +
-                        service.calculatePagesCount(service.findAllByTopicId(topicId))
+                        service.pagesCount(service.findAllByTopicId(topicId))
                 : "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
     }
 
@@ -97,11 +97,11 @@ public class MessagesController extends ConvenientController {
 
         addForHeader(model, authentication, sectionService);
         add(model, "message", service.findById(id));
-        add(model, "messages", service.extractForPage(service.findAllByTopicId(topicId), pageNumber));
+        add(model, "messages", service.onPage(service.findAllByTopicId(topicId), pageNumber));
         add(model, "section", sectionService.findById(sectionId));
         add(model, "topic", topicService.findById(topicId));
         add(model, "formSubmitButtonText", "Сохранить изменения");
-        add(model, "pagesCount", service.calculatePagesCount(service.findAllByTopicId(topicId)));
+        add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
         return "messages";
     }
@@ -115,11 +115,11 @@ public class MessagesController extends ConvenientController {
                                                     @PathVariable("pageNumber") Integer pageNumber) {
 
         String msg = service.deletingValidation(service.findById(id));
-        int pagesCount = service.calculatePagesCount(service.findAllByTopicId(topicId));
+        int pagesCount = service.pagesCount(service.findAllByTopicId(topicId));
         if (msg != null) {
             addForHeader(model, authentication, sectionService);
             add(model, "message", service.empty());
-            add(model, "messages", service.extractForPage(service.findAllByTopicId(topicId), pageNumber));
+            add(model, "messages", service.onPage(service.findAllByTopicId(topicId), pageNumber));
             add(model, "section", sectionService.findById(sectionId));
             add(model, "topic", topicService.findById(topicId));
             add(model, "formSubmitButtonText", "Отправить сообщение");
@@ -130,7 +130,7 @@ public class MessagesController extends ConvenientController {
         }
 
         service.deleteById(id);
-        int newPagesCount = service.calculatePagesCount(service.findAllByTopicId(topicId));
+        int newPagesCount = service.pagesCount(service.findAllByTopicId(topicId));
         return pageNumber.equals(pagesCount) && newPagesCount < pagesCount
                 ? "redirect:/sections/{sectionId}/topics/{topicId}/messages/page" + newPagesCount
                 : "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
