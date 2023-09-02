@@ -12,6 +12,7 @@ import org.springframework.validation.ObjectError;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SectionServiceImpl implements SectionService {
@@ -25,17 +26,15 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public boolean savingValidation(Section section, BindingResult bindingResult) {
-        if (isNew(section)) {
-            if (repository.existsByName(section.getName())) {
-                bindingResult.addError(new ObjectError("existsByName",
-                        "Раздел с таким названием уже существует"));
-                return true;
-            }
-            if (repository.existsByDescription(section.getDescription())) {
-                bindingResult.addError(new ObjectError("existsByDescription",
-                        "Раздел с таким описанием уже существует"));
-                return true;
-            }
+        if (savingValidationByName(section)) {
+            bindingResult.addError(new ObjectError("existsByName",
+                    "Раздел с таким названием уже существует"));
+            return true;
+        }
+        if (savingValidationByDescription(section)) {
+            bindingResult.addError(new ObjectError("existsByDescription",
+                    "Раздел с таким описанием уже существует"));
+            return true;
         }
         return bindingResult.hasErrors();
     }
@@ -77,7 +76,7 @@ public class SectionServiceImpl implements SectionService {
         } else {
             Section oldSection = findById(section.getId());
             oldSection.setName(section.getName());
-            oldSection.setDescription(oldSection.getDescription());
+            oldSection.setDescription(section.getDescription());
             repository.save(oldSection);
         }
     }
@@ -85,6 +84,16 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public void deleteById(Integer id) {
         repository.deleteById(id);
+    }
+
+    private boolean savingValidationByName(Section section) {
+        Optional<Section> foundSection = repository.findByName(section.getName());
+        return foundSection.isPresent() && !foundSection.get().getId().equals(section.getId());
+    }
+
+    private boolean savingValidationByDescription(Section section) {
+        Optional<Section> foundSection = repository.findByDescription(section.getName());
+        return foundSection.isPresent() && !foundSection.get().getId().equals(section.getId());
     }
 
 }

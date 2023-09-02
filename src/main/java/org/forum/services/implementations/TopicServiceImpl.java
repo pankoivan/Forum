@@ -13,6 +13,7 @@ import org.springframework.validation.ObjectError;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TopicServiceImpl implements TopicService {
@@ -26,17 +27,15 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public boolean savingValidation(Topic topic, BindingResult bindingResult) {
-        if (isNew(topic)) {
-            if (repository.existsByName(topic.getName())) {
-                bindingResult.addError(new ObjectError("existsByName",
-                        "Тема с таким названием уже существует"));
-                return true;
-            }
-            if (repository.existsByDescription(topic.getDescription())) {
-                bindingResult.addError(new ObjectError("existsByDescription",
-                        "Тема с таким описанием уже существует"));
-                return true;
-            }
+        if (savingValidationByName(topic)) {
+            bindingResult.addError(new ObjectError("existsByName",
+                    "Тема с таким названием уже существует"));
+            return true;
+        }
+        if (savingValidationByDescription(topic)) {
+            bindingResult.addError(new ObjectError("existsByDescription",
+                    "Тема с таким описанием уже существует"));
+            return true;
         }
         return bindingResult.hasErrors();
     }
@@ -92,6 +91,16 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public void deleteById(Integer id) {
         repository.deleteById(id);
+    }
+
+    private boolean savingValidationByName(Topic topic) {
+        Optional<Topic> foundSection = repository.findByName(topic.getName());
+        return foundSection.isPresent() && !foundSection.get().getId().equals(topic.getId());
+    }
+
+    private boolean savingValidationByDescription(Topic topic) {
+        Optional<Topic> foundSection = repository.findByDescription(topic.getName());
+        return foundSection.isPresent() && !foundSection.get().getId().equals(topic.getId());
     }
 
 }
