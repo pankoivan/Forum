@@ -92,7 +92,7 @@
                         </div>
                         <!-- Роль -->
                         <div class="mx-4 my-2">
-                            <span th:text="${user.role}">МОДЕРАТОР</span>
+                            <span th:text="${user.role.name}">МОДЕРАТОР</span>
                         </div>
                         <!-- Дата регистрации -->
                         <div class="mx-4 my-2">
@@ -102,8 +102,9 @@
                         </div>
                         <!-- Кнопки бана, удаления, добавления в модераторы и в администраторы -->
                         <div
-                            th:if="${currentUser.id != user.id AND (
-                                #authorization.expression('hasAnyAuthority(''BAN_AND_UNBAN'', ''DELETE_USERS'', ''ASSIGN_AND_REMOVE_MODERS'',
+                            th:if="${currentUser != null AND (
+                                currentUser.id != user.id
+                                AND #authorization.expression('hasAnyAuthority(''BAN_AND_UNBAN'', ''DELETE_USERS'', ''ASSIGN_AND_REMOVE_MODERS'',
                                 ''ASSIGN_AND_REMOVE_ADMINS'')')
                             )}"
                             class="mx-4 my-2"

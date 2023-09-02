@@ -57,7 +57,7 @@
         </div>
 
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
-        <div class="container text-center text-white break-word">
+        <div class="container text-white break-word">
             <div class="row">
                 <!-- Топ пользователей -->
                 <div class="col-12 col-md-6 col-lg-5 mb-5 mb-md-5 mb-lg-0">
@@ -96,6 +96,13 @@
                     <div class="bg-dark rounded text-center fw-bold mb-2">
                         <p>Недавние сообщения</p>
                     </div>
+                    <!-- Динамический просмотр -->
+                    <div th:each="each, status : ${recentMessages}">
+                        <div
+                            th:insert="~{fragments/message :: message (message = ${each})}"
+                            th:classappend="${!status.last} ? mb-2"
+                        ></div>
+                    </div>
                     <!-- Статический просмотр -->
                     <div
                         th:if="${false}"
@@ -117,7 +124,7 @@
                     </div>
                 </div>
                 <!-- Статистика -->
-                <div class="col-12 col-md-12 col-lg-2">
+                <div class="col-12 col-md-12 col-lg-2 text-center">
                     <div class="bg-dark rounded text-center fw-bold mb-2">
                         <p>Статистика</p>
                     </div>
@@ -128,7 +135,7 @@
                                 <span>Пользователей зарегистрировано</span>
                             </div>
                             <div>
-                                <span>12842</span>
+                                <span th:text="${usersCount}">12842</span>
                             </div>
                         </div>
                         <!-- Из них администраторов -->
@@ -137,7 +144,7 @@
                                 <span>Из них администраторов</span>
                             </div>
                             <div>
-                                <span>4</span>
+                                <span th:text="${adminsCount}">4</span>
                             </div>
                         </div>
                         <!-- Из них модераторов -->
@@ -146,7 +153,7 @@
                                 <span>Из них модераторов</span>
                             </div>
                             <div>
-                                <span>17</span>
+                                <span th:text="${modersCount}">17</span>
                             </div>
                         </div>
                         <!-- Сообщений отправлено -->
@@ -155,7 +162,7 @@
                                 <span>Сообщений отправлено</span>
                             </div>
                             <div>
-                                <span>99821</span>
+                                <span th:text="${messagesCount}">99821</span>
                             </div>
                         </div>
                         <!-- Лайков поставлено -->
@@ -164,7 +171,7 @@
                                 <span>Лайков поставлено</span>
                             </div>
                             <div>
-                                <span>471082</span>
+                                <span th:text="${likesCount}">471082</span>
                             </div>
                         </div>
                         <!-- Разделов -->
@@ -173,7 +180,7 @@
                                 <span>Разделов</span>
                             </div>
                             <div>
-                                <span>6</span>
+                                <span th:text="${sectionsCount}">6</span>
                             </div>
                         </div>
                         <!-- Тем создано -->
@@ -182,7 +189,7 @@
                                 <span>Тем создано</span>
                             </div>
                             <div>
-                                <span>224</span>
+                                <span th:text="${topicsCount}">224</span>
                             </div>
                         </div>
                         <!-- Выдано банов -->
@@ -191,16 +198,7 @@
                                 <span>Выдано банов</span>
                             </div>
                             <div>
-                                <span>921</span>
-                            </div>
-                        </div>
-                        <!-- Удалено пользователей -->
-                        <div class="bg-dark rounded p-1 mb-2">
-                            <div class="border-bottom border-white fw-bold">
-                                <span>Удалено пользователей</span>
-                            </div>
-                            <div>
-                                <span>5</span>
+                                <span th:text="${bansCount}">921</span>
                             </div>
                         </div>
                         <!-- Сейчас в бане -->
@@ -209,7 +207,7 @@
                                 <span>Сейчас в бане</span>
                             </div>
                             <div>
-                                <span>19</span>
+                                <span th:text="${currentBansCount}">19</span>
                             </div>
                         </div>
                     </div>

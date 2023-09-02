@@ -2,6 +2,7 @@ package org.forum.controllers.mvc;
 
 import org.forum.controllers.mvc.common.ConvenientController;
 import org.forum.services.interfaces.SectionService;
+import org.forum.services.interfaces.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -13,18 +14,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class IndexController extends ConvenientController {
 
-    private final SectionService service;
+    private final SectionService sectionService;
+
+    private final StatisticsService service;
 
     @Autowired
-    public IndexController(SectionService service) {
+    public IndexController(SectionService sectionService, StatisticsService service) {
+        this.sectionService = sectionService;
         this.service = service;
     }
 
     @GetMapping
     public String returnIndexPage(Authentication authentication, Model model) {
-        addForHeader(model, authentication, service);
+        addForHeader(model, authentication, sectionService);
         add(model, "page", "index");
+        add(model, "topUsers", service.topUsers());
+        add(model, "recentMessages", service.recentMessages());
+        statistics(model);
         return "index";
+    }
+
+    private void statistics(Model model) {
+        add(model, "usersCount", service.usersCount());
+        add(model, "adminsCount", service.adminsCount());
+        add(model, "modersCount", service.modersCount());
+        add(model, "messagesCount", service.messagesCount());
+        add(model, "likesCount", service.likesCount());
+        add(model, "sectionsCount", service.sectionsCount());
+        add(model, "topicsCount", service.topicsCount());
+        add(model, "bansCount", service.bansCount());
+        add(model, "currentBansCount", service.currentBansCount());
     }
 
 }
