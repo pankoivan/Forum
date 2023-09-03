@@ -11,4 +11,6 @@ public interface AuthorityRepository extends JpaRepository<Authority, Integer> {
 
     List<Authority> findAllByOrderByNameAsc();
 
+    List<Authority> findAllByOrderByNameDesc();
+
 }

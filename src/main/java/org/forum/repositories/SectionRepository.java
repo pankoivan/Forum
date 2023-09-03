@@ -14,10 +14,12 @@ public interface SectionRepository extends JpaRepository<Section, Integer> {
 
     boolean existsByDescription(String name);
 
-    List<Section> findAllByOrderByNameAsc();
-
     Optional<Section> findByName(String name);
 
     Optional<Section> findByDescription(String description);
+
+    List<Section> findAllByOrderByNameAsc();
+
+    List<Section> findAllByOrderByNameDesc();
 
 }

@@ -17,4 +17,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     List<Message> findAllByTopicIdOrderByCreationDateAsc(Integer topicId);
 
+    List<Message> findAllByTopicIdOrderByCreationDateDesc(Integer topicId);
+
 }

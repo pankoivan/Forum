@@ -14,14 +14,18 @@ public interface TopicRepository extends JpaRepository<Topic, Integer> {
 
     boolean existsByDescription(String name);
 
-    List<Topic> findAllByOrderByNameAsc();
-
-    List<Topic> findAllBySectionIdOrderByNameAsc(Integer sectionId);
-
-    List<Topic> findAllBySectionId(Integer sectionId);
-
     Optional<Topic> findByName(String name);
 
     Optional<Topic> findByDescription(String description);
+
+    List<Topic> findAllByOrderByNameAsc();
+
+    List<Topic> findAllByOrderByNameDesc();
+
+    List<Topic> findAllBySectionId(Integer sectionId);
+
+    List<Topic> findAllBySectionIdOrderByNameAsc(Integer sectionId);
+
+    List<Topic> findAllBySectionIdOrderByNameDesc(Integer sectionId);
 
 }
