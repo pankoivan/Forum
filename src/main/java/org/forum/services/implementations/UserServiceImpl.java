@@ -5,6 +5,7 @@ import org.forum.entities.enums.Gender;
 import org.forum.repositories.UserRepository;
 import org.forum.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return repository.findAllByOrderByNicknameAsc();
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "nickname"));
     }
 
     @Override

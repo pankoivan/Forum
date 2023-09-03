@@ -6,6 +6,7 @@ import org.forum.repositories.TopicRepository;
 import org.forum.services.interfaces.TopicService;
 import org.forum.global.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -65,12 +66,12 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public List<Topic> findAll() {
-        return repository.findAllByOrderByNameAsc();
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
     @Override
     public List<Topic> findAllBySectionId(Integer sectionId) {
-        return repository.findAllBySectionIdOrderByNameAsc(sectionId);
+        return repository.findAllBySectionId(sectionId, Sort.by(Sort.Direction.ASC, "name"));
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.forum.services.interfaces.MessageService;
 import org.forum.global.utils.AuthenticationUtils;
 import org.forum.global.constants.PaginationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -54,12 +55,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<Message> findAll() {
-        return repository.findAllByOrderByCreationDateAsc();
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "creationDate"));
     }
 
     @Override
     public List<Message> findAllByTopicId(Integer topicId) {
-        return repository.findAllByTopicIdOrderByCreationDateAsc(topicId);
+        return repository.findAllByTopicId(topicId, Sort.by(Sort.Direction.ASC, "creationDate"));
     }
 
     @Override

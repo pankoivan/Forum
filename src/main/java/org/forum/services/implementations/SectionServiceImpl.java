@@ -5,6 +5,7 @@ import org.forum.repositories.SectionRepository;
 import org.forum.services.interfaces.SectionService;
 import org.forum.global.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -64,7 +65,7 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public List<Section> findAll() {
-        return repository.findAllByOrderByNameAsc();
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
     @Override

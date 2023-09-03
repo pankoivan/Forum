@@ -1,6 +1,7 @@
 package org.forum.repositories;
 
 import org.forum.entities.Topic;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,14 +19,8 @@ public interface TopicRepository extends JpaRepository<Topic, Integer> {
 
     Optional<Topic> findByDescription(String description);
 
-    List<Topic> findAllByOrderByNameAsc();
-
-    List<Topic> findAllByOrderByNameDesc();
-
     List<Topic> findAllBySectionId(Integer sectionId);
 
-    List<Topic> findAllBySectionIdOrderByNameAsc(Integer sectionId);
-
-    List<Topic> findAllBySectionIdOrderByNameDesc(Integer sectionId);
+    List<Topic> findAllBySectionId(Integer sectionId, Sort sort);
 
 }

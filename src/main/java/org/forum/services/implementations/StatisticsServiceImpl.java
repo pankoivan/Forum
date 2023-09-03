@@ -5,6 +5,7 @@ import org.forum.entities.User;
 import org.forum.repositories.*;
 import org.forum.services.interfaces.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -44,12 +45,16 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public List<User> topUsers() {
-        return userRepository.findAllByOrderByNicknameAsc().stream().limit(10).toList();
+        return userRepository.findAll(Sort.by(Sort.Direction.ASC, "nickname")).stream()
+                .limit(10)
+                .toList();
     }
 
     @Override
     public List<Message> recentMessages() {
-        return messageRepository.findAllByOrderByCreationDateDesc().stream().limit(5).toList();
+        return messageRepository.findAll(Sort.by(Sort.Direction.DESC, "creationDate")).stream()
+                .limit(5)
+                .toList();
     }
 
     @Override

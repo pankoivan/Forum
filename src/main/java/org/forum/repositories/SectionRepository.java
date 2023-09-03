@@ -18,8 +18,4 @@ public interface SectionRepository extends JpaRepository<Section, Integer> {
 
     Optional<Section> findByDescription(String description);
 
-    List<Section> findAllByOrderByNameAsc();
-
-    List<Section> findAllByOrderByNameDesc();
-
 }

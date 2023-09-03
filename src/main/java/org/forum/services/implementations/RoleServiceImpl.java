@@ -4,6 +4,7 @@ import org.forum.entities.Role;
 import org.forum.repositories.RoleRepository;
 import org.forum.services.interfaces.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -55,7 +56,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> findAll() {
-        return repository.findAllByOrderByNameAsc();
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
     @Override
