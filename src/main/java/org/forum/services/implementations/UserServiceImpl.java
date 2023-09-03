@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User empty() {
-        return null;
+        return new User();
     }
 
     @Override

@@ -129,13 +129,22 @@
                         <p>Статистика</p>
                     </div>
                     <div class="fs-14">
-                        <!-- Пользователей зарегистрировано -->
+                        <!-- Всего пользователей -->
                         <div class="bg-dark rounded p-1 mb-2">
                             <div class="border-bottom border-white fw-bold">
-                                <span>Пользователей зарегистрировано</span>
+                                <span>Всего пользователей</span>
                             </div>
                             <div>
                                 <span th:text="${usersCount}">12842</span>
+                            </div>
+                        </div>
+                        <!-- Из них обычных -->
+                        <div class="bg-dark rounded p-1 mb-2">
+                            <div class="border-bottom border-white fw-bold">
+                                <span>Из них обычных</span>
+                            </div>
+                            <div>
+                                <span th:text="${usualUsersCount}">1001</span>
                             </div>
                         </div>
                         <!-- Из них администраторов -->
@@ -174,15 +183,6 @@
                                 <span th:text="${likesCount}">471082</span>
                             </div>
                         </div>
-                        <!-- Разделов -->
-                        <div class="bg-dark rounded p-1 mb-2">
-                            <div class="border-bottom border-white fw-bold">
-                                <span>Разделов</span>
-                            </div>
-                            <div>
-                                <span th:text="${sectionsCount}">6</span>
-                            </div>
-                        </div>
                         <!-- Тем создано -->
                         <div class="bg-dark rounded p-1 mb-2">
                             <div class="border-bottom border-white fw-bold">
@@ -190,6 +190,15 @@
                             </div>
                             <div>
                                 <span th:text="${topicsCount}">224</span>
+                            </div>
+                        </div>
+                        <!-- Разделов -->
+                        <div class="bg-dark rounded p-1 mb-2">
+                            <div class="border-bottom border-white fw-bold">
+                                <span>Разделов</span>
+                            </div>
+                            <div>
+                                <span th:text="${sectionsCount}">6</span>
                             </div>
                         </div>
                         <!-- Выдано банов -->

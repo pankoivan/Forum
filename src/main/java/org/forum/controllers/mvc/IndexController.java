@@ -36,6 +36,7 @@ public class IndexController extends ConvenientController {
 
     private void statistics(Model model) {
         add(model, "usersCount", service.usersCount());
+        add(model, "usualUsersCount", service.usualUsersCount());
         add(model, "adminsCount", service.adminsCount());
         add(model, "modersCount", service.modersCount());
         add(model, "messagesCount", service.messagesCount());

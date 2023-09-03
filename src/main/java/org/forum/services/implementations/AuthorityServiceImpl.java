@@ -56,7 +56,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public List<Authority> findAll() {
-        return repository.findAll();
+        return repository.findAllByOrderByNameAsc();
     }
 
     @Override

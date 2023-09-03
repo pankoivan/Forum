@@ -65,12 +65,12 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public List<Topic> findAll() {
-        return repository.findAll();
+        return repository.findAllByOrderByNameAsc();
     }
 
     @Override
     public List<Topic> findAllBySectionId(Integer sectionId) {
-        return repository.findAllBySectionId(sectionId);
+        return repository.findAllBySectionIdOrderByNameAsc(sectionId);
     }
 
     @Override

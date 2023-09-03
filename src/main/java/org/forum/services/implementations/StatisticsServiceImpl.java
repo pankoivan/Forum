@@ -44,12 +44,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public List<User> topUsers() {
-        return userRepository.findAll().stream().limit(10).toList();
+        return userRepository.findAllByOrderByNicknameAsc().stream().limit(10).toList();
     }
 
     @Override
     public List<Message> recentMessages() {
-        return messageRepository.findAll().stream().limit(5).toList();
+        return messageRepository.findAllByOrderByCreationDateDesc().stream().limit(5).toList();
     }
 
     @Override
