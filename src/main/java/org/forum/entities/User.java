@@ -3,7 +3,7 @@ package org.forum.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.forum.entities.interfaces.ChronoGetter;
-import org.forum.utils.constants.DateTimeFormatConstants;
+import org.forum.global.constants.DateTimeFormatConstants;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -90,10 +90,6 @@ public class User implements UserDetails, ChronoGetter<LocalDateTime> {
         return registrationDate;
     }
 
-    public String getFormattedRegistrationDate() {
-        return registrationDate.format(DateTimeFormatConstants.SEPARATED_FORMAT);
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoleAndAuthorities();
@@ -129,6 +125,16 @@ public class User implements UserDetails, ChronoGetter<LocalDateTime> {
         return isActive();
     }
 
+    public String getFormattedRegistrationDate() {
+        return registrationDate.format(DateTimeFormatConstants.SEPARATED_FORMAT);
+    }
+
+    public int getLikesCount() {
+        return postedMessages.stream()
+                .mapToInt(Message::likesCount)
+                .sum();
+    }
+
     private Collection<? extends GrantedAuthority> getRoleAndAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>(role.getAuthorities());
         authorities.add(role);
@@ -137,7 +143,7 @@ public class User implements UserDetails, ChronoGetter<LocalDateTime> {
 
     private boolean isBanned() {
         return bans.stream()
-                .anyMatch(ban -> LocalDate.now().isBefore(ban.getEndDate()));
+                .anyMatch(ban -> ban.getEndDate().isAfter(LocalDate.now()));
     }
 
     private boolean isActive() {

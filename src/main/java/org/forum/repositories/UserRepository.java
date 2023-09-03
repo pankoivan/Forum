@@ -14,6 +14,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     List<User> findAllByOrderByNicknameAsc();
 
+    List<User> findAllByOrderByRegistrationDateAsc();
+
     List<User> findAllByRoleIdOrderByNicknameAsc(Integer roleId);
 
     List<User> findAllByRoleId(Integer roleId);

@@ -1,4 +1,4 @@
-package org.forum.utils.comparators;
+package org.forum.global.comparators;
 
 import org.forum.entities.interfaces.ChronoGetter;
 

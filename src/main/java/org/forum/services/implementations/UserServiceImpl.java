@@ -43,17 +43,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isNew(User user) {
-        return false;
+        return user.getId() == null || !repository.existsById(user.getId());
     }
 
     @Override
     public User findById(Integer id) {
-        return null;
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User with id \"" + id + "\" doesn't exists"));
     }
 
     @Override
     public List<User> findAll() {
-        return null;
+        return repository.findAllByOrderByNicknameAsc();
     }
 
     @Override

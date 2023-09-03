@@ -4,7 +4,7 @@ import org.forum.entities.Section;
 import org.forum.entities.Topic;
 import org.forum.repositories.TopicRepository;
 import org.forum.services.interfaces.TopicService;
-import org.forum.utils.AuthenticationUtils;
+import org.forum.global.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;

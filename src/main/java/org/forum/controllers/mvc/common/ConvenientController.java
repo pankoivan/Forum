@@ -1,7 +1,7 @@
 package org.forum.controllers.mvc.common;
 
 import org.forum.services.interfaces.SectionService;
-import org.forum.utils.AuthenticationUtils;
+import org.forum.global.utils.AuthenticationUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 

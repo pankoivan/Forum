@@ -1,4 +1,4 @@
-package org.forum.utils;
+package org.forum.global.utils;
 
 import lombok.experimental.UtilityClass;
 import org.forum.entities.User;

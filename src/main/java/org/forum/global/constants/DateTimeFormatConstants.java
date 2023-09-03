@@ -1,4 +1,4 @@
-package org.forum.utils.constants;
+package org.forum.global.constants;
 
 import lombok.experimental.UtilityClass;
 

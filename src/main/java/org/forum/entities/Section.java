@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.forum.entities.interfaces.ChronoGetter;
-import org.forum.utils.comparators.LocalDateTimeComparator;
-import org.forum.utils.constants.DateTimeFormatConstants;
+import org.forum.global.comparators.LocalDateTimeComparator;
+import org.forum.global.constants.DateTimeFormatConstants;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
