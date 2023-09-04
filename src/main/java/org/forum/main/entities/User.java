@@ -2,7 +2,6 @@ package org.forum.main.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.forum.main.entities.interfaces.ChronoGetter;
 import org.forum.auxiliary.constants.DateTimeFormatConstants;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,7 +34,7 @@ import java.util.List;
 })
 @Entity
 @Table(name = "forum_user")
-public class User implements UserDetails, ChronoGetter<LocalDateTime> {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,11 +83,6 @@ public class User implements UserDetails, ChronoGetter<LocalDateTime> {
     @ManyToOne
     @JoinColumn(name = "forum_role_id")
     private Role role;
-
-    @Override
-    public LocalDateTime get() {
-        return registrationDate;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

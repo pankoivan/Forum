@@ -5,12 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.forum.main.entities.interfaces.ChronoGetter;
-import org.forum.auxiliary.comparators.LocalDateTimeComparator;
 import org.forum.auxiliary.constants.DateTimeFormatConstants;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @NoArgsConstructor
@@ -25,7 +24,7 @@ import java.util.List;
 })
 @Entity
 @Table(name = "forum_section")
-public class Section implements ChronoGetter<LocalDateTime> {
+public class Section {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,11 +53,6 @@ public class Section implements ChronoGetter<LocalDateTime> {
     @OneToMany(mappedBy = "section")
     private List<Topic> topics = new ArrayList<>();
 
-    @Override
-    public LocalDateTime get() {
-        return creationDate;
-    }
-
     public String getFormattedCreationDate() {
         return creationDate.format(DateTimeFormatConstants.SEPARATED_DATE_TIME);
     }
@@ -80,7 +74,7 @@ public class Section implements ChronoGetter<LocalDateTime> {
     public Message recentMessage() {
         return topics.stream()
                 .flatMap(topic -> topic.getMessages().stream())
-                .min(new LocalDateTimeComparator())
+                .max(Comparator.comparing(Message::getCreationDate))
                 .orElse(null);
     }
 

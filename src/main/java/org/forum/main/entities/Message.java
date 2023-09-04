@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.forum.main.entities.interfaces.ChronoGetter;
 import org.forum.auxiliary.constants.DateTimeFormatConstants;
 
 import java.time.LocalDateTime;
@@ -23,7 +22,7 @@ import java.util.List;
 })
 @Entity
 @Table(name = "forum_message")
-public class Message implements ChronoGetter<LocalDateTime> {
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,11 +51,6 @@ public class Message implements ChronoGetter<LocalDateTime> {
     @ManyToOne
     @JoinColumn(name = "topic_id")
     private Topic topic;
-
-    @Override
-    public LocalDateTime get() {
-        return creationDate;
-    }
 
     public String getFormattedCreationDate() {
         return creationDate.format(DateTimeFormatConstants.SEPARATED_DATE_TIME);
