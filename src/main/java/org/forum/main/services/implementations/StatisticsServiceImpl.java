@@ -3,7 +3,7 @@ package org.forum.main.services.implementations;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.User;
 import org.forum.main.repositories.*;
-import org.forum.main.services.interfaces.StatisticsService;
+import org.forum.main.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.JpaSort;
@@ -17,8 +17,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
-
     private final SectionRepository sectionRepository;
 
     private final TopicRepository topicRepository;
@@ -30,13 +28,11 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final BanRepository banRepository;
 
     @Autowired
-    public StatisticsServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
-                                 SectionRepository sectionRepository, TopicRepository topicRepository,
-                                 MessageRepository messageRepository, LikeRepository likeRepository,
-                                 BanRepository banRepository) {
+    public StatisticsServiceImpl(UserRepository userRepository, SectionRepository sectionRepository,
+                                 TopicRepository topicRepository, MessageRepository messageRepository,
+                                 LikeRepository likeRepository, BanRepository banRepository) {
 
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.sectionRepository = sectionRepository;
         this.topicRepository = topicRepository;
         this.messageRepository = messageRepository;
@@ -46,68 +42,66 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public List<User> topUsers() {
-        return userRepository.findAllJoinedToMessages(JpaSort.unsafe(Sort.Direction.ASC, "COUNT(*)"));
+        return userRepository.findAllJoinedToMessagesJoinedToLikes(
+                JpaSort.unsafe(Sort.Direction.DESC, "COUNT(*)"));
     }
 
     @Override
     public List<Message> recentMessages() {
-        return messageRepository.findAll(Sort.by(Sort.Direction.DESC, "creationDate")).stream()
+        return messageRepository.findAll(Sort.by(Sort.Direction.DESC, "creationDate"))
+                .stream()
                 .limit(5)
                 .toList();
     }
 
     @Override
     public int usersCount() {
-        return userRepository.findAll().size();
+        return (int) userRepository.count();
     }
 
     @Override
     public int usualUsersCount() {
-        return countByRoleName("ROLE_USER");
-    }
-
-    @Override
-    public int adminsCount() {
-        return countByRoleName("ROLE_ADMIN");
+        return userRepository.findAllByRoleName("ROLE_USER").size();
     }
 
     @Override
     public int modersCount() {
-        return countByRoleName("ROLE_MODER");
+        return userRepository.findAllByRoleName("ROLE_MODER").size();
     }
 
     @Override
-    public long messagesCount() {
-        return messageRepository.findAll().size();
-    }
-
-    @Override
-    public long likesCount() {
-        return likeRepository.findAll().size();
+    public int adminsCount() {
+        return userRepository.findAllByRoleName("ROLE_ADMIN").size();
     }
 
     @Override
     public int sectionsCount() {
-        return sectionRepository.findAll().size();
+        return (int) sectionRepository.count();
     }
 
     @Override
     public int topicsCount() {
-        return topicRepository.findAll().size();
+        return (int) topicRepository.count();
+    }
+
+    @Override
+    public long messagesCount() {
+        return messageRepository.count();
+    }
+
+    @Override
+    public long likesCount() {
+        return likeRepository.count();
     }
 
     @Override
     public int bansCount() {
-        return banRepository.findAll().size();
+        return (int) banRepository.count();
     }
 
     @Override
     public int currentBansCount() {
         return banRepository.findAllByEndDateAfter(LocalDate.now()).size();
-    }
-
-    private int countByRoleName(String roleName) {
-        return userRepository.findAllByRoleName(roleName).size();
     }
 
 }

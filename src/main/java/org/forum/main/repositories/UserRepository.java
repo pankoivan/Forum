@@ -20,15 +20,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(value = """
             SELECT u FROM User u
-            INNER JOIN u.postedMessages pm
+            LEFT JOIN u.postedMessages pm
             GROUP BY u.id
             """)
     List<User> findAllJoinedToMessages(Sort orderBy);
 
     @Query(value = """
             SELECT u FROM User u
-            INNER JOIN u.postedMessages pm
-            INNER JOIN pm.likedUsers
+            LEFT JOIN u.postedMessages pm
+            LEFT JOIN pm.likedUsers
             GROUP BY u.id
             """)
     List<User> findAllJoinedToMessagesJoinedToLikes(Sort orderBy);

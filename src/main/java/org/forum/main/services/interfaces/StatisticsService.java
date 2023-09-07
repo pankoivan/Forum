@@ -15,17 +15,17 @@ public interface StatisticsService {
 
     int usualUsersCount();
 
-    int adminsCount();
-
     int modersCount();
 
-    long messagesCount();
-
-    long likesCount();
+    int adminsCount();
 
     int sectionsCount();
 
     int topicsCount();
+
+    long messagesCount();
+
+    long likesCount();
 
     int bansCount();
 

@@ -2,7 +2,7 @@ package org.forum.main.services.interfaces.common;
 
 import java.util.List;
 
-public interface CommonService<T, M> {
+public interface GeneralService<T, M> {
 
     T empty();
 

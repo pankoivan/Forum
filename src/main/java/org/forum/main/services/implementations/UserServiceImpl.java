@@ -79,6 +79,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> findAllByRoleName(String roleName) {
+        return repository.findAllByRoleName(roleName);
+    }
+
+    @Override
     public void save(User user, MultipartFile file) {
 
     }
