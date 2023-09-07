@@ -14,9 +14,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findByEmail(String email);
 
-    List<User> findAllByRoleId(Integer roleId);
+    List<User> findAllByRoleName(String roleName);
 
-    List<User> findAllByRoleId(Integer roleId, Sort sort);
+    List<User> findAllByRoleName(String roleName, Sort sort);
 
     @Query(value = """
             SELECT u FROM User u

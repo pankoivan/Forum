@@ -107,10 +107,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     private int countByRoleName(String roleName) {
-        return userRepository.findAllByRoleId(roleRepository.findByName(roleName)
-                        .orElseThrow(() -> new RuntimeException("Role with name \"" + roleName + "\" doesn't exists"))
-                        .getId())
-                .size();
+        return userRepository.findAllByRoleName(roleName).size();
     }
 
 }
