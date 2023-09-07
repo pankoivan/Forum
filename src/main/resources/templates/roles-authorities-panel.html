@@ -62,6 +62,93 @@
                 <!-- Работа с ролями -->
                 <div class="col-12 col-md-6 col-lg-6 mb-5 mb-md-0 mb-lg-0">
                     <div class="bg-dark rounded p-2">
+                        <!-- Форма создания роли -->
+                        <form
+                            action="#"
+                            th:action="@{/roles-authorities/roles/inner/save}"
+                            method="post"
+                            th:object="${role}"
+                            class="border-bottom border-white pb-2 mb-5"
+                        >
+                            <input type="hidden" th:field="*{id}" />
+                            <!-- Блок с возможными ошибками -->
+                            <div
+                                th:if="${roleError}"
+                                class="text-center text-red"
+                            >
+                                <span th:text="${roleError}">Текст ошибки</span>
+                            </div>
+                            <!-- Ввод названия роли и кнопка отправки -->
+                            <div class="mb-2">
+                                <div
+                                    class="d-flex flex-row justify-content-between"
+                                >
+                                    <!-- Ввод названия роли -->
+                                    <div class="m-1">
+                                        <label for="role" class="form-label"
+                                            >Название роли</label
+                                        >
+                                        <div id="role" class="flex-fill">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                placeholder="ROLE_USER"
+                                                th:field="*{name}"
+                                            />
+                                        </div>
+                                    </div>
+                                    <!-- Ввод псевдонима роли -->
+                                    <div class="m-1">
+                                        <label
+                                            for="roleAlias"
+                                            class="form-label"
+                                            >Псевдоним роли</label
+                                        >
+                                        <div id="roleAlias" class="flex-fill">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                placeholder="Пользователь"
+                                                th:field="*{alias}"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Кнопка отправки -->
+                                <div class="text-end mx-1 my-2">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary"
+                                        th:text="${roleFormSubmitButtonText}"
+                                    >
+                                        Создать роль
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Чекбоксы выбора прав для роли -->
+                            <div
+                                class="form-check break-all ms-1"
+                                th:each="each : ${authorities}"
+                            >
+                                <!-- Динамический и статический просмотр -->
+                                <input
+                                    id="staticCheck"
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    th:field="*{authorities}"
+                                    th:text="${each.name}"
+                                    th:value="${each.id}"
+                                    th:checked="${role.containsAuthorityById(each.id)}"
+                                />
+                                <label
+                                    th:if="${false}"
+                                    for="staticCheck"
+                                    class="form-check-label"
+                                >
+                                    SOME_AUTHORITY
+                                </label>
+                            </div>
+                        </form>
                         <!-- Список ролей -->
                         <div class="break-all mb-5">
                             <div class="mb-3" th:each="each : ${roles}">
@@ -71,8 +158,10 @@
                                 >
                                     <!-- Название роли -->
                                     <div class="fs-20 fw-bold m-1">
-                                        <span th:text="${each.name}"
-                                            >ROLE_SOME_ROLE</span
+                                        <span
+                                            th:text="${each.name} + ' (' + ${each.alias} + ')'"
+                                            >ROLE_SOME_ROLE (какая-то
+                                            роль)</span
                                         >
                                     </div>
                                     <!-- Кнопки редактирования и удаления -->
@@ -112,125 +201,18 @@
                                 </ul>
                             </div>
                         </div>
-                        <!-- Форма создания роли -->
-                        <form
-                            action="#"
-                            th:action="@{/roles-authorities/roles/inner/save}"
-                            method="post"
-                            th:object="${role}"
-                        >
-                            <input type="hidden" th:field="*{id}" />
-                            <!-- Блок с возможными ошибками -->
-                            <div
-                                th:if="${roleError}"
-                                class="text-center text-red"
-                            >
-                                <span th:text="${roleError}">Текст ошибки</span>
-                            </div>
-                            <!-- Ввод названия роли и кнопка отправки -->
-                            <div class="mb-2">
-                                <label for="role" class="form-label m-1"
-                                    >Название роли</label
-                                >
-                                <div
-                                    id="role"
-                                    class="d-flex flex-row justify-content-between"
-                                >
-                                    <!-- Ввод названия роли -->
-                                    <div class="flex-fill m-1">
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            placeholder="ROLE_USER"
-                                            th:field="*{name}"
-                                        />
-                                    </div>
-                                    <!-- Кнопка отправки -->
-                                    <div class="m-1">
-                                        <button
-                                            type="submit"
-                                            class="btn btn-primary"
-                                            th:text="${roleFormSubmitButtonText}"
-                                        >
-                                            Создать роль
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Чекбоксы выбора прав для роли -->
-                            <div
-                                class="form-check break-all ms-1"
-                                th:each="each : ${authorities}"
-                            >
-                                <!-- Динамический и статический просмотр -->
-                                <input
-                                    id="staticCheck"
-                                    type="checkbox"
-                                    class="form-check-input"
-                                    th:field="*{authorities}"
-                                    th:text="${each.name}"
-                                    th:value="${each.id}"
-                                    th:checked="${role.containsAuthorityById(each.id)}"
-                                />
-                                <label
-                                    th:if="${false}"
-                                    for="staticCheck"
-                                    class="form-check-label"
-                                >
-                                    SOME_AUTHORITY
-                                </label>
-                            </div>
-                        </form>
                     </div>
                 </div>
                 <!-- Работа с правами -->
                 <div class="col-12 col-md-6 col-lg-6">
                     <div class="bg-dark rounded p-2">
-                        <!-- Список прав -->
-                        <div class="break-all mb-5">
-                            <div class="mb-2" th:each="each : ${authorities}">
-                                <!-- Название права и кнопки редактирования и удаления -->
-                                <div
-                                    class="d-flex flex-row align-items-center justify-content-center pb-1"
-                                >
-                                    <!-- Название права -->
-                                    <div class="fs-20 fw-bold m-1">
-                                        <span th:text="${each.name}"
-                                            >SOME_AUTHORITY</span
-                                        >
-                                    </div>
-                                    <!-- Кнопки редактирования и удаления -->
-                                    <div
-                                        th:replace="~{fragments/buttons :: edit-delete
-                                            (editFormUrl = '/roles-authorities/authorities/inner/edit/__${each.id}__',
-                                            deleteFormUrl = '/roles-authorities/authorities/inner/delete/__${each.id}__')}"
-                                        class="d-flex flex-row align-items-center justify-content-between"
-                                    >
-                                        <!-- Статический просмотр -->
-                                        <div>
-                                            <button
-                                                class="btn btn-sm btn-success m-1"
-                                            >
-                                                Edit
-                                            </button>
-                                        </div>
-                                        <div>
-                                            <button
-                                                class="btn btn-sm btn-danger m-1"
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <!-- Форма создания права -->
                         <form
                             action="#"
                             th:action="@{/roles-authorities/authorities/inner/save}"
                             method="post"
                             th:object="${authority}"
+                            class="border-bottom border-white pb-2 mb-5"
                         >
                             <input type="hidden" th:field="*{id}" />
                             <!-- Блок с возможными ошибками -->
@@ -271,6 +253,45 @@
                                 </div>
                             </div>
                         </form>
+                        <!-- Список прав -->
+                        <div class="break-all mb-5">
+                            <div class="mb-2" th:each="each : ${authorities}">
+                                <!-- Название права и кнопки редактирования и удаления -->
+                                <div
+                                    class="d-flex flex-row align-items-center justify-content-center pb-1"
+                                >
+                                    <!-- Название права -->
+                                    <div class="fs-20 fw-bold m-1">
+                                        <span th:text="${each.name}"
+                                            >SOME_AUTHORITY</span
+                                        >
+                                    </div>
+                                    <!-- Кнопки редактирования и удаления -->
+                                    <div
+                                        th:replace="~{fragments/buttons :: edit-delete
+                                            (editFormUrl = '/roles-authorities/authorities/inner/edit/__${each.id}__',
+                                            deleteFormUrl = '/roles-authorities/authorities/inner/delete/__${each.id}__')}"
+                                        class="d-flex flex-row align-items-center justify-content-between"
+                                    >
+                                        <!-- Статический просмотр -->
+                                        <div>
+                                            <button
+                                                class="btn btn-sm btn-success m-1"
+                                            >
+                                                Edit
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button
+                                                class="btn btn-sm btn-danger m-1"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

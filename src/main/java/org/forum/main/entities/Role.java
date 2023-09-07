@@ -34,6 +34,12 @@ public class Role implements GrantedAuthority {
     @Column(name = "name")
     private String name;
 
+    @NotEmpty(message = "Псевдоним роли не быть пустым")
+    @NotBlank(message = "Псевдоним роли не должен содержать только пробелы")
+    @Size(min = 4, max = 32, message = "Минимальная длина псевдонима роли - 4 символа, максимальная - 32 символа")
+    @Column(name = "alias")
+    private String alias;
+
     @NotEmpty(message = "Список прав для роли не должен быть пустым")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
