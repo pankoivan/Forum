@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface SortingService<T, M> {
 
-    List<T> findAllSorted(M sortingEnumOption);
+    List<T> findAllSorted(M sortingOption);
 
 }

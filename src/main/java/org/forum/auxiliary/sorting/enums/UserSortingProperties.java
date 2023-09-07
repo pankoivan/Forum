@@ -1,6 +1,6 @@
 package org.forum.auxiliary.sorting.enums;
 
-public enum UsersSortingOptions {
+public enum UserSortingProperties {
 
     BY_NICKNAME,
 

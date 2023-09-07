@@ -1,6 +1,6 @@
 package org.forum.auxiliary.sorting.enums;
 
-public enum SectionsSortingOptions {
+public enum SectionSortingProperties {
 
     BY_NAME,
 

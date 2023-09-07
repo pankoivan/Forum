@@ -1,11 +1,14 @@
 package org.forum.main.services.implementations;
 
+import org.forum.auxiliary.sorting.SortingOption;
+import org.forum.auxiliary.sorting.enums.UserSortingProperties;
 import org.forum.main.entities.User;
 import org.forum.main.entities.enums.Gender;
 import org.forum.main.repositories.UserRepository;
 import org.forum.main.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,7 +58,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "nickname"));
+        return repository.findAll();
+    }
+
+    @Override
+    public List<User> findAllSorted(SortingOption<UserSortingProperties> option) {
+        return switch(option.getProperty()) {
+
+            case BY_NICKNAME -> repository.findAll(Sort.by(option.getDirection(), "nickname"));
+
+            case BY_REGISTRATION_DATE -> repository.findAll(Sort.by(option.getDirection(), "registration_date"));
+
+            case BY_MESSAGES_COUNT -> repository.findAllJoinedToMessages(
+                    JpaSort.unsafe(option.getDirection(), "COUNT(*)"));
+
+            case BY_LIKES_COUNT -> repository.findAllJoinedToMessagesJoinedToLikes(
+                    JpaSort.unsafe(option.getDirection(), "COUNT(*)"));
+
+        };
     }
 
     @Override

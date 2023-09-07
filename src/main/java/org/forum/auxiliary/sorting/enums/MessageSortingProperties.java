@@ -1,6 +1,6 @@
 package org.forum.auxiliary.sorting.enums;
 
-public enum MessagesSortingOptions {
+public enum MessageSortingProperties {
 
     BY_CREATION_DATE,
 

@@ -6,6 +6,7 @@ import org.forum.main.repositories.*;
 import org.forum.main.services.interfaces.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -45,9 +46,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public List<User> topUsers() {
-        return userRepository.findAll(Sort.by(Sort.Direction.ASC, "nickname")).stream()
-                .limit(10)
-                .toList();
+        return userRepository.findAllJoinedToMessages(JpaSort.unsafe(Sort.Direction.ASC, "COUNT(*)"));
     }
 
     @Override

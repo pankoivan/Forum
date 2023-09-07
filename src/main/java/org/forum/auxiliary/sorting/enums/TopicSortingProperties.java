@@ -1,6 +1,6 @@
 package org.forum.auxiliary.sorting.enums;
 
-public enum TopicsSortingOptions {
+public enum TopicSortingProperties {
 
     BY_NAME,
 
