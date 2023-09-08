@@ -1,5 +1,6 @@
 package org.forum.main.services.implementations;
 
+import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.sorting.SortingOption;
 import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
 import org.forum.main.entities.Section;
@@ -81,9 +82,14 @@ public class TopicServiceImpl implements TopicService {
             case BY_CREATION_DATE -> repository.findAll(Sort.by(option.getDirection(), "creationDate"));
 
             case BY_MESSAGES_COUNT -> repository.findAllJoinedToMessagesGroupedByTopicId(
-                    JpaSort.unsafe(option.getDirection(), "COUNT(*)"));
+                    JpaSort.unsafe(option.getDirection(), "COUNT(m.id)"));
 
         };
+    }
+
+    @Override
+    public List<Topic> findAllSortedByDefault() {
+        return findAllSorted(DefaultSortingOptionConstants.FOR_TOPICS);
     }
 
     @Override

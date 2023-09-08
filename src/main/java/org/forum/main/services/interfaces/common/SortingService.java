@@ -8,4 +8,6 @@ public interface SortingService<T, M extends SortingOption<? extends Enum<?>>> {
 
     List<T> findAllSorted(M sortingOption);
 
+    List<T> findAllSortedByDefault();
+
 }

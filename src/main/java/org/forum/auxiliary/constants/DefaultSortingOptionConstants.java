@@ -1,8 +1,6 @@
 package org.forum.auxiliary.constants;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.experimental.UtilityClass;
 import org.forum.auxiliary.sorting.SortingOption;
 import org.forum.auxiliary.sorting.SortingOptionImpl;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
@@ -11,26 +9,19 @@ import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
 import org.forum.auxiliary.sorting.enums.UserSortingProperties;
 import org.springframework.data.domain.Sort;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-public enum DefaultSortingOptionConstants {
+@UtilityClass
+public final class DefaultSortingOptionConstants {
 
-    FOR_USERS(
-            new SortingOptionImpl<>(Sort.Direction.ASC, UserSortingProperties.BY_NICKNAME)
-    ),
+    public static final SortingOption<UserSortingProperties> FOR_USERS =
+            new SortingOptionImpl<>(Sort.Direction.DESC, UserSortingProperties.BY_LIKES_COUNT);
 
-    FOR_SECTIONS(
-            new SortingOptionImpl<>(Sort.Direction.ASC, SectionSortingProperties.BY_NAME)
-    ),
+    public static final SortingOption<SectionSortingProperties> FOR_SECTIONS =
+            new SortingOptionImpl<>(Sort.Direction.DESC, SectionSortingProperties.BY_MESSAGES_COUNT);
 
-    FOR_TOPICS(
-            new SortingOptionImpl<>(Sort.Direction.ASC, TopicSortingProperties.BY_NAME)
-    ),
+    public static final SortingOption<TopicSortingProperties> FOR_TOPICS =
+            new SortingOptionImpl<>(Sort.Direction.DESC, TopicSortingProperties.BY_MESSAGES_COUNT);
 
-    FOR_MESSAGES(
-            new SortingOptionImpl<>(Sort.Direction.ASC, MessageSortingProperties.BY_CREATION_DATE)
-    );
-
-    private final SortingOption<? extends Enum<?>> value;
+    public static final SortingOption<MessageSortingProperties> FOR_MESSAGES =
+            new SortingOptionImpl<>(Sort.Direction.DESC, MessageSortingProperties.BY_LIKES_COUNT);
 
 }

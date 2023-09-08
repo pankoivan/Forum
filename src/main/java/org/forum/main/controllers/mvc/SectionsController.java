@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/sections")
-@SuppressWarnings("unchecked")
 public class SectionsController extends ConvenientController {
 
     private final SectionService service;
@@ -32,8 +31,7 @@ public class SectionsController extends ConvenientController {
     @GetMapping
     public String returnSectionsPage(Model model, Authentication authentication) {
         addForHeader(model, authentication, service);
-        add(model, "sections", service.findAllSorted(
-                (SortingOption<SectionSortingProperties>) DefaultSortingOptionConstants.FOR_SECTIONS.getValue()));
+        add(model, "sections", service.findAllSortedByDefault());
         add(model, "page", "sections");
         return "sections";
     }
@@ -83,7 +81,7 @@ public class SectionsController extends ConvenientController {
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
             addForHeader(model, authentication, service);
-            add(model, "sections", service.findAll());
+            add(model, "sections", service.findAllSortedByDefault());
             add(model, "page", "sections");
             add(model, "error", msg);
             return "sections";

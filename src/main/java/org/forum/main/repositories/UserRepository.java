@@ -29,7 +29,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = """
             SELECT u FROM User u
             LEFT JOIN u.postedMessages pm
-            LEFT JOIN pm.likedUsers
+            LEFT JOIN pm.likedUsers lu
             GROUP BY u.id
             """)
     List<User> findAllJoinedToMessagesJoinedToLikesGroupedByUserId(JpaSort orderBy);

@@ -1,5 +1,6 @@
 package org.forum.main.services.implementations;
 
+import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.sorting.SortingOption;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
 import org.forum.main.entities.Message;
@@ -70,9 +71,14 @@ public class MessageServiceImpl implements MessageService {
             case BY_EDITING_DATE -> repository.findAll(Sort.by(option.getDirection(), "editingDate"));
 
             case BY_LIKES_COUNT -> repository.findAllJoinedToLikesGroupedByMessageId(
-                    JpaSort.unsafe(option.getDirection(), "COUNT(*)"));
+                    JpaSort.unsafe(option.getDirection(), "COUNT(lu.id)"));
 
         };
+    }
+
+    @Override
+    public List<Message> findAllSortedByDefault() {
+        return findAllSorted(DefaultSortingOptionConstants.FOR_MESSAGES);
     }
 
     @Override
