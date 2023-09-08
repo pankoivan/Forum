@@ -68,23 +68,23 @@
                             th:action="@{/roles-authorities/roles/inner/save}"
                             method="post"
                             th:object="${role}"
-                            class="border-bottom border-white pb-2 mb-5"
+                            class="border-bottom border-white pb-3 mb-3"
                         >
                             <input type="hidden" th:field="*{id}" />
                             <!-- Блок с возможными ошибками -->
                             <div
                                 th:if="${roleError}"
-                                class="text-center text-red"
+                                class="text-center text-red fs-18 fw-bold"
                             >
                                 <span th:text="${roleError}">Текст ошибки</span>
                             </div>
                             <!-- Ввод названия роли и кнопка отправки -->
                             <div class="mb-2">
                                 <div
-                                    class="d-flex flex-row justify-content-between"
+                                    class="d-flex flex-row justify-content-center"
                                 >
                                     <!-- Ввод названия роли -->
-                                    <div class="m-1">
+                                    <div class="text-center m-1">
                                         <label for="role" class="form-label"
                                             >Название роли</label
                                         >
@@ -98,7 +98,7 @@
                                         </div>
                                     </div>
                                     <!-- Ввод псевдонима роли -->
-                                    <div class="m-1">
+                                    <div class="text-center m-1">
                                         <label
                                             for="roleAlias"
                                             class="form-label"
@@ -115,7 +115,7 @@
                                     </div>
                                 </div>
                                 <!-- Кнопка отправки -->
-                                <div class="text-end mx-1 my-2">
+                                <div class="text-center mx-1 my-2">
                                     <button
                                         type="submit"
                                         class="btn btn-primary"
@@ -128,7 +128,8 @@
                             <!-- Чекбоксы выбора прав для роли -->
                             <div
                                 class="form-check break-all ms-1"
-                                th:each="each : ${authorities}"
+                                th:each="each, status : ${authorities}"
+                                th:classappend="${!status.last} ? mb-2"
                             >
                                 <!-- Динамический и статический просмотр -->
                                 <input
@@ -149,6 +150,10 @@
                                 </label>
                             </div>
                         </form>
+                        <!-- Заголовок списка ролей -->
+                        <div class="text-center fs-18 fw-bold mb-3">
+                            <p>Текущий список ролей</p>
+                        </div>
                         <!-- Список ролей -->
                         <div class="break-all mb-5">
                             <div class="mb-3" th:each="each : ${roles}">
@@ -157,7 +162,7 @@
                                     class="d-flex flex-row align-items-center justify-content-center pb-1"
                                 >
                                     <!-- Название роли -->
-                                    <div class="fs-20 fw-bold m-1">
+                                    <div class="m-1">
                                         <span
                                             th:text="${each.name} + ' (' + ${each.alias} + ')'"
                                             >ROLE_SOME_ROLE (какая-то
@@ -190,10 +195,10 @@
                                 </div>
                                 <!-- Список прав для данной роли -->
                                 <ul
-                                    class="list-group fs-14"
+                                    class="fs-14"
                                     th:each="each2 : ${each.authorities}"
                                 >
-                                    <li class="list-group-item mb-1">
+                                    <li class="mb-1">
                                         <span th:text="${each2.name}"
                                             >SOME_AUTHORITY</span
                                         >
@@ -212,13 +217,13 @@
                             th:action="@{/roles-authorities/authorities/inner/save}"
                             method="post"
                             th:object="${authority}"
-                            class="border-bottom border-white pb-2 mb-5"
+                            class="border-bottom border-white pb-3 mb-3"
                         >
                             <input type="hidden" th:field="*{id}" />
                             <!-- Блок с возможными ошибками -->
                             <div
                                 th:if="${authorityError}"
-                                class="text-center text-red"
+                                class="text-center text-red fs-18 fw-bold"
                             >
                                 <span th:text="${authorityError}"
                                     >Текст ошибки</span
@@ -253,6 +258,10 @@
                                 </div>
                             </div>
                         </form>
+                        <!-- Заголовок списка прав -->
+                        <div class="text-center fs-18 fw-bold mb-3">
+                            <p>Текущий список прав</p>
+                        </div>
                         <!-- Список прав -->
                         <div class="break-all mb-5">
                             <div class="mb-2" th:each="each : ${authorities}">
@@ -261,7 +270,7 @@
                                     class="d-flex flex-row align-items-center justify-content-center pb-1"
                                 >
                                     <!-- Название права -->
-                                    <div class="fs-20 fw-bold m-1">
+                                    <div class="m-1">
                                         <span th:text="${each.name}"
                                             >SOME_AUTHORITY</span
                                         >
