@@ -10,18 +10,18 @@ import org.springframework.data.domain.Sort;
 @Setter
 public class SortingOptionImpl<T extends Enum<T>> implements SortingOption<T> {
 
-    private T property;
-
     private Sort.Direction direction;
 
-    @Override
-    public T getProperty() {
-        return property;
-    }
+    private T property;
 
     @Override
     public Sort.Direction getDirection() {
         return direction;
+    }
+
+    @Override
+    public T getProperty() {
+        return property;
     }
 
 }

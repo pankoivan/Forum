@@ -1,6 +1,9 @@
 package org.forum.main.controllers.mvc;
 
 import jakarta.validation.Valid;
+import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
+import org.forum.auxiliary.sorting.SortingOption;
+import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
 import org.forum.main.controllers.mvc.common.ConvenientController;
 import org.forum.main.entities.Section;
 import org.forum.main.services.interfaces.SectionService;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/sections")
+@SuppressWarnings("unchecked")
 public class SectionsController extends ConvenientController {
 
     private final SectionService service;
@@ -28,7 +32,8 @@ public class SectionsController extends ConvenientController {
     @GetMapping
     public String returnSectionsPage(Model model, Authentication authentication) {
         addForHeader(model, authentication, service);
-        add(model, "sections", service.findAll());
+        add(model, "sections", service.findAllSorted(
+                (SortingOption<SectionSortingProperties>) DefaultSortingOptionConstants.FOR_SECTIONS.getValue()));
         add(model, "page", "sections");
         return "sections";
     }
