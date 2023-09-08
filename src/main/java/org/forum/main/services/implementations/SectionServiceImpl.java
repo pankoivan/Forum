@@ -9,7 +9,6 @@ import org.forum.main.services.interfaces.SectionService;
 import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -80,11 +79,9 @@ public class SectionServiceImpl implements SectionService {
 
             case BY_CREATION_DATE -> repository.findAll(Sort.by(option.getDirection(), "creationDate"));
 
-            case BY_TOPICS_COUNT -> repository.findAllJoinedToTopicsGroupedBySectionId(
-                    JpaSort.unsafe(option.getDirection(), "COUNT(t.id)"));
+            case BY_TOPICS_COUNT -> repository.findAllByOrderByTopicsCountWithDirection(option.getDirection().name());
 
-            case BY_MESSAGES_COUNT -> repository.findAllJoinedToTopicsJoinedToMessagesGroupedBySectionId(
-                    JpaSort.unsafe(option.getDirection(), "COUNT(m.id)"));
+            case BY_MESSAGES_COUNT -> repository.findAllByOrderByMessagesCountWithDirection(option.getDirection().name());
 
         };
     }

@@ -2,7 +2,6 @@ package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.sorting.SortingOption;
-import org.forum.auxiliary.sorting.SortingOptionImpl;
 import org.forum.auxiliary.sorting.enums.UserSortingProperties;
 import org.forum.main.entities.User;
 import org.forum.main.entities.enums.Gender;
@@ -10,7 +9,6 @@ import org.forum.main.repositories.UserRepository;
 import org.forum.main.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,11 +69,9 @@ public class UserServiceImpl implements UserService {
 
             case BY_REGISTRATION_DATE -> repository.findAll(Sort.by(option.getDirection(), "registration_date"));
 
-            case BY_MESSAGES_COUNT -> repository.findAllJoinedToMessagesGroupedByUserId(
-                    JpaSort.unsafe(option.getDirection(), "COUNT(pm.id)"));
+            case BY_MESSAGES_COUNT -> repository.findAllByOrderByMessagesCountWithDirection(option.getDirection().name());
 
-            case BY_LIKES_COUNT -> repository.findAllJoinedToMessagesJoinedToLikesGroupedByUserId(
-                    JpaSort.unsafe(option.getDirection(), "COUNT(lu.id)"));
+            case BY_LIKES_COUNT -> repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name());
 
         };
     }

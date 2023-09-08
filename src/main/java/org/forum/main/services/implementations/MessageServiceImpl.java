@@ -11,7 +11,6 @@ import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.forum.auxiliary.constants.PaginationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -70,8 +69,7 @@ public class MessageServiceImpl implements MessageService {
 
             case BY_EDITING_DATE -> repository.findAll(Sort.by(option.getDirection(), "editingDate"));
 
-            case BY_LIKES_COUNT -> repository.findAllJoinedToLikesGroupedByMessageId(
-                    JpaSort.unsafe(option.getDirection(), "COUNT(lu.id)"));
+            case BY_LIKES_COUNT -> repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name());
 
         };
     }

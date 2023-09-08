@@ -1,9 +1,9 @@
 package org.forum.main.repositories;
 
 import org.forum.main.entities.Section;
-import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,15 +24,21 @@ public interface SectionRepository extends JpaRepository<Section, Integer> {
             SELECT s FROM Section s
             LEFT JOIN s.topics t
             GROUP BY s.id
+            ORDER BY
+                CASE WHEN :direction = 'ASC' THEN COUNT(t.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(t.id) END DESC
             """)
-    List<Section> findAllJoinedToTopicsGroupedBySectionId(JpaSort sortBy);
+    List<Section> findAllByOrderByTopicsCountWithDirection(@Param("direction") String direction);
 
     @Query(value = """
             SELECT s FROM Section s
             LEFT JOIN s.topics t
             LEFT JOIN t.messages m
             GROUP BY s.id
+            ORDER BY
+                CASE WHEN :direction = 'ASC' THEN COUNT(m.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(m.id) END DESC
             """)
-    List<Section> findAllJoinedToTopicsJoinedToMessagesGroupedBySectionId(JpaSort sortBy);
+    List<Section> findAllByOrderByMessagesCountWithDirection(@Param("direction") String direction);
 
 }

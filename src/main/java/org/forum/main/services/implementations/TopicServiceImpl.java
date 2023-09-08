@@ -10,7 +10,6 @@ import org.forum.main.repositories.TopicRepository;
 import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -81,8 +80,7 @@ public class TopicServiceImpl implements TopicService {
 
             case BY_CREATION_DATE -> repository.findAll(Sort.by(option.getDirection(), "creationDate"));
 
-            case BY_MESSAGES_COUNT -> repository.findAllJoinedToMessagesGroupedByTopicId(
-                    JpaSort.unsafe(option.getDirection(), "COUNT(m.id)"));
+            case BY_MESSAGES_COUNT -> repository.findAllByOrderByMessagesCountWithDirection(option.getDirection().name());
 
         };
     }

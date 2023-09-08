@@ -42,8 +42,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public List<User> topUsers() {
-        return userRepository.findAllJoinedToMessagesJoinedToLikesGroupedByUserId(
-                JpaSort.unsafe(Sort.Direction.DESC, "COUNT(*)"));
+        return userRepository.findAllByOrderByLikesCountWithDirection("DESC");
     }
 
     @Override
