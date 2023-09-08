@@ -1,11 +1,14 @@
 package org.forum.main.services.implementations;
 
+import org.forum.auxiliary.sorting.SortingOption;
+import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
 import org.forum.main.entities.Section;
 import org.forum.main.repositories.SectionRepository;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -66,6 +69,23 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public List<Section> findAll() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+    }
+
+    @Override
+    public List<Section> findAllSorted(SortingOption<SectionSortingProperties> option) {
+        return switch (option.getProperty()) {
+
+            case BY_NAME -> repository.findAll(Sort.by(option.getDirection(), "name"));
+
+            case BY_CREATION_DATE -> repository.findAll(Sort.by(option.getDirection(), "creationDate"));
+
+            case BY_TOPICS_COUNT -> repository.findAllJoinedToTopicsGroupedBySectionId(
+                    JpaSort.unsafe(option.getDirection(), "COUNT(*)"));
+
+            case BY_MESSAGES_COUNT -> repository.findAllJoinedToTopicsJoinedToMessagesGroupedBySectionId(
+                    JpaSort.unsafe(option.getDirection(), "COUNT(*)"));
+
+        };
     }
 
     @Override

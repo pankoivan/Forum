@@ -69,10 +69,10 @@ public class UserServiceImpl implements UserService {
 
             case BY_REGISTRATION_DATE -> repository.findAll(Sort.by(option.getDirection(), "registration_date"));
 
-            case BY_MESSAGES_COUNT -> repository.findAllJoinedToMessages(
+            case BY_MESSAGES_COUNT -> repository.findAllJoinedToMessagesGroupedByUserId(
                     JpaSort.unsafe(option.getDirection(), "COUNT(*)"));
 
-            case BY_LIKES_COUNT -> repository.findAllJoinedToMessagesJoinedToLikes(
+            case BY_LIKES_COUNT -> repository.findAllJoinedToMessagesJoinedToLikesGroupedByUserId(
                     JpaSort.unsafe(option.getDirection(), "COUNT(*)"));
 
         };

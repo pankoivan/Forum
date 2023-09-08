@@ -2,6 +2,7 @@ package org.forum.main.repositories;
 
 import org.forum.main.entities.User;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -23,7 +24,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             LEFT JOIN u.postedMessages pm
             GROUP BY u.id
             """)
-    List<User> findAllJoinedToMessages(Sort orderBy);
+    List<User> findAllJoinedToMessagesGroupedByUserId(JpaSort orderBy);
 
     @Query(value = """
             SELECT u FROM User u
@@ -31,6 +32,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             LEFT JOIN pm.likedUsers
             GROUP BY u.id
             """)
-    List<User> findAllJoinedToMessagesJoinedToLikes(Sort orderBy);
+    List<User> findAllJoinedToMessagesJoinedToLikesGroupedByUserId(JpaSort orderBy);
 
 }

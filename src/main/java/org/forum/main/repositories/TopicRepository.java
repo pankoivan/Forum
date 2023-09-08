@@ -2,7 +2,9 @@ package org.forum.main.repositories;
 
 import org.forum.main.entities.Topic;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,5 +24,12 @@ public interface TopicRepository extends JpaRepository<Topic, Integer> {
     List<Topic> findAllBySectionId(Integer sectionId);
 
     List<Topic> findAllBySectionId(Integer sectionId, Sort sort);
+
+    @Query(value = """
+            SELECT t FROM Topic t
+            LEFT JOIN t.messages m
+            GROUP BY t.id
+            """)
+    List<Topic> findAllJoinedToMessagesGroupedByTopicId(JpaSort sortBy);
 
 }
