@@ -1,12 +1,14 @@
 package org.forum.main.controllers.mvc;
 
 import jakarta.validation.Valid;
+import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
 import org.forum.main.controllers.mvc.common.ConvenientController;
 import org.forum.main.entities.Message;
 import org.forum.main.services.interfaces.MessageService;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,6 +55,11 @@ public class MessagesController extends ConvenientController {
         add(model, "formSubmitButtonText", "Отправить сообщение");
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
+
+        add(model, "properties", MessageSortingProperties.values());
+        add(model, "directions", Sort.Direction.values());
+        add(model, "submitUrl", "/sections/{sectionId}/topics/{topicId}/messages/sort");
+
         return "messages";
     }
 

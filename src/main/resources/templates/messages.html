@@ -95,6 +95,19 @@
             >
                 <span th:text="${error}">Текст ошибки</span>
             </div>
+            <!-- Выбор сортировки -->
+            <div class="col-12 col-md-8 col-lg-6 mx-auto">
+                <div
+                    th:replace="~{fragments/sort :: sort (properties = ${properties}, directions = ${directions}, submitUrl = ${submitUrl})}"
+                    class="mb-5"
+                >
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-mini"
+                    >
+                        <h3>Статический блок для просмотра в браузере</h3>
+                    </div>
+                </div>
+            </div>
             <!-- Форма отправки сообщения -->
             <div
                 sec:authorize="hasAuthority('WORK_WITH_OWN_MESSAGES')"
