@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Тема</title>
+        <link
+            href="../../static/css/bootstrap.min.css"
+            th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
+        />
+        <link
+            href="../../static/css/style.css"
+            th:href="@{/css/style.css}"
+            rel="stylesheet"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="../../static/favicon/apple-touch-icon.png"
+            th:href="@{/favicon/apple-touch-icon.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="../../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="../../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
+        />
+        <link
+            href="../../static/favicon/site.webmanifest"
+            th:href="@{/favicon/site.webmanifest}"
+            rel="manifest"
+        />
+    </head>
+
+    <body
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
+    >
+        <!-- ---------------------------------------- Статический заголовок ---------------------------------------- -->
+        <div
+            class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
+        >
+            <h3>Статический заголовок для просмотра в браузере</h3>
+        </div>
+
+        <!-- Контейнер для фрагмента -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-8 col-lg-6 mx-auto">
+                    <!-- Сам фрагмент: форма выбора сортировки -->
+                    <form
+                        th:fragment="sort (properties, directions, submitUrl)"
+                        action="#"
+                        th:action="${submitUrl}"
+                        method="post"
+                        th:object="${object}"
+                        class="d-flex flex-row align-items-center justify-content-between bg-dark rounded text-white px-1 py-3 mb-5"
+                    >
+                        <div class="mx-2">
+                            <select class="form-select form-select">
+                                <!-- Статический и динамический просмотр -->
+                                <option
+                                    th:each="each : ${properties}"
+                                    th:value="${each}"
+                                    th:text="${each.alias}"
+                                >
+                                    Один
+                                </option>
+                                <!-- Статический просмотр -->
+                                <option th:if="${false}" value="1">Два</option>
+                                <option th:if="${false}" value="2">Три</option>
+                            </select>
+                        </div>
+                        <div class="mx-2">
+                            <select class="form-select form-select">
+                                <!-- Статический и динамический просмотр -->
+                                <option
+                                    th:each="each : ${directions}"
+                                    th:value="${each}"
+                                    th:text="${each.alias}"
+                                >
+                                    Один
+                                </option>
+                                <!-- Статический просмотр -->
+                                <option th:if="${false}" value="1">Два</option>
+                                <option th:if="${false}" value="2">Три</option>
+                            </select>
+                        </div>
+                        <div class="mx-2">
+                            <button type="submit" class="btn btn-primary">
+                                Применить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ---------------------------------------- Статический футер ---------------------------------------- -->
+        <div
+            class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5"
+        >
+            <h3>Статический футер для просмотра в браузере</h3>
+        </div>
+    </body>
+</html>
