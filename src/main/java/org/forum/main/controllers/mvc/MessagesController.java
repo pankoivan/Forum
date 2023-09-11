@@ -58,7 +58,6 @@ public class MessagesController extends ConvenientController {
 
         add(model, "properties", MessageSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
-        add(model, "submitUrl", "/sections/{sectionId}/topics/{topicId}/messages/sort");
 
         return "messages";
     }
