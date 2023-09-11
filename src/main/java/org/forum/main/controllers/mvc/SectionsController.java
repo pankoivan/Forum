@@ -1,18 +1,21 @@
 package org.forum.main.controllers.mvc;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
+import org.forum.auxiliary.sorting.options.SectionSortingOption;
 import org.forum.main.controllers.mvc.common.ConvenientController;
 import org.forum.main.entities.Section;
 import org.forum.main.services.interfaces.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/sections")
@@ -26,10 +29,19 @@ public class SectionsController extends ConvenientController {
     }
 
     @GetMapping
-    public String returnSectionsPage(Model model, Authentication authentication) {
+    public String returnSectionsPage(Model model,
+                                     Authentication authentication,
+                                     @SessionAttribute(value = "sectionSortingOption", required = false)
+                                         SectionSortingOption sortingOption) {
+
         addForHeader(model, authentication, service);
-        add(model, "sections", service.findAllSortedByDefault());
+        add(model, "sections", sorted(sortingOption));
         add(model, "page", "sections");
+
+        add(model, "sortingObject", service.emptySortingOption());
+        add(model, "properties", SectionSortingProperties.values());
+        add(model, "directions", Sort.Direction.values());
+
         return "sections";
     }
 
@@ -73,12 +85,14 @@ public class SectionsController extends ConvenientController {
     @PostMapping("/inner/delete/{id}")
     public String redirectSectionsPageAfterDeleting(Model model,
                                                     Authentication authentication,
+                                                    @SessionAttribute(value = "sectionSortingOption", required = false)
+                                                        SectionSortingOption sortingOption,
                                                     @PathVariable("id") Integer id) {
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
             addForHeader(model, authentication, service);
-            add(model, "sections", service.findAllSortedByDefault());
+            add(model, "sections", sorted(sortingOption));
             add(model, "page", "sections");
             add(model, "error", msg);
             return "sections";
@@ -86,6 +100,18 @@ public class SectionsController extends ConvenientController {
 
         service.deleteById(id);
         return "redirect:/sections";
+    }
+
+    @PostMapping("/sort")
+    public String redirectSectionsPageAfterSorting(HttpSession session, SectionSortingOption sortingOption) {
+        session.setAttribute("sectionSortingOption", sortingOption);
+        return "redirect:/sections";
+    }
+
+    private List<Section> sorted(SectionSortingOption sortingOption) {
+        return sortingOption != null
+                ? service.findAllSorted(sortingOption)
+                : service.findAllSortedByDefault();
     }
 
 }

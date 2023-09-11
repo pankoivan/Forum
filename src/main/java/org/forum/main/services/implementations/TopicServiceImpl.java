@@ -17,6 +17,7 @@ import org.springframework.validation.ObjectError;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Service
 public class TopicServiceImpl implements TopicService {
@@ -78,15 +79,10 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public List<Topic> findAllSorted(TopicSortingOption option) {
-        return switch (option.getProperty()) {
-
-            case BY_NAME -> repository.findAll(Sort.by(option.getDirection(), "name"));
-
-            case BY_CREATION_DATE -> repository.findAll(Sort.by(option.getDirection(), "creationDate"));
-
-            case BY_MESSAGES_COUNT -> repository.findAllByOrderByMessagesCountWithDirection(option.getDirection().name());
-
-        };
+        return mySwitch(option,
+                () -> repository.findAll(Sort.by(option.getDirection(), "name")),
+                () -> repository.findAll(Sort.by(option.getDirection(), "creationDate")),
+                () -> repository.findAllByOrderByMessagesCountWithDirection(option.getDirection().name()));
     }
 
     @Override
@@ -100,13 +96,17 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<Topic> findAllBySectionIdSorted(Integer sectionId, TopicSortingOption sortingOption) {
-        return null;
+    public List<Topic> findAllBySectionIdSorted(Integer sectionId, TopicSortingOption option) {
+        return mySwitch(option,
+                () -> repository.findAllBySectionId(sectionId, Sort.by(option.getDirection(), "name")),
+                () -> repository.findAllBySectionId(sectionId, Sort.by(option.getDirection(), "creationDate")),
+                () -> repository.findAllBySectionIdOrderByMessagesCountWithDirection(sectionId,
+                        option.getDirection().name()));
     }
 
     @Override
     public List<Topic> findAllBySectionIdSortedByDefault(Integer sectionId) {
-        return null;
+        return findAllBySectionIdSorted(sectionId, DefaultSortingOptionConstants.FOR_TOPICS);
     }
 
     @Override
@@ -137,6 +137,15 @@ public class TopicServiceImpl implements TopicService {
     private boolean savingValidationByDescription(Topic topic) {
         Optional<Topic> foundSection = repository.findByDescription(topic.getName());
         return foundSection.isPresent() && !foundSection.get().getId().equals(topic.getId());
+    }
+
+    @SafeVarargs
+    private List<Topic> mySwitch(TopicSortingOption option, Supplier<List<Topic>>... suppliers) {
+        return switch (option.getProperty()) {
+            case BY_NAME -> suppliers[0].get();
+            case BY_CREATION_DATE -> suppliers[1].get();
+            case BY_MESSAGES_COUNT -> suppliers[2].get();
+        };
     }
 
 }

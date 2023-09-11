@@ -6,7 +6,6 @@ import org.forum.main.repositories.*;
 import org.forum.main.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

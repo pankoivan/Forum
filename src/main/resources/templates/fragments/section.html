@@ -190,8 +190,9 @@
                             <div
                                 class="text-center border-top border-white pt-1"
                             >
-                                <span th:text="${section.formattedCreationDate}"
-                                    >Создана: 19.02.2015</span
+                                <span
+                                    th:text="'Создан: ' + ${section.formattedCreationDate}"
+                                    >Создан: 19.02.2015</span
                                 >
                             </div>
                         </div>
