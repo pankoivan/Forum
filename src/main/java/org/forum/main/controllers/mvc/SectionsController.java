@@ -1,9 +1,6 @@
 package org.forum.main.controllers.mvc;
 
 import jakarta.validation.Valid;
-import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
-import org.forum.auxiliary.sorting.SortingOption;
-import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
 import org.forum.main.controllers.mvc.common.ConvenientController;
 import org.forum.main.entities.Section;
 import org.forum.main.services.interfaces.SectionService;

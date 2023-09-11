@@ -1,9 +1,7 @@
 package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
-import org.forum.auxiliary.sorting.SortingOption;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
-import org.forum.auxiliary.sorting.enums.UserSortingProperties;
 import org.forum.main.entities.User;
 import org.forum.main.entities.enums.Gender;
 import org.forum.main.repositories.UserRepository;
@@ -63,12 +61,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public SortingOption<UserSortingProperties> emptySortingOption() {
+    public UserSortingOption emptySortingOption() {
         return new UserSortingOption();
     }
 
     @Override
-    public List<User> findAllSorted(SortingOption<UserSortingProperties> option) {
+    public List<User> findAllSorted(UserSortingOption option) {
         return switch(option.getProperty()) {
 
             case BY_NICKNAME -> repository.findAll(Sort.by(option.getDirection(), "nickname"));

@@ -17,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/sections/{sectionId}/topics/{topicId}/messages")
 public class MessagesController extends ConvenientController {
@@ -48,12 +50,9 @@ public class MessagesController extends ConvenientController {
                                      @PathVariable("topicId") Integer topicId,
                                      @PathVariable("pageNumber") Integer pageNumber) {
 
-        if (sortingOption != null) {
-            System.out.println(sortingOption.getProperty() + " " + sortingOption.getDirection());
-        }
         addForHeader(model, authentication, sectionService);
         add(model, "message", service.empty());
-        add(model, "messages", service.onPage(service.findAllByTopicId(topicId), pageNumber));
+        add(model, "messages", sorted(sortingOption, topicId, pageNumber));
         add(model, "section", sectionService.findById(sectionId));
         add(model, "topic", topicService.findById(topicId));
         add(model, "formSubmitButtonText", "Отправить сообщение");
@@ -72,6 +71,8 @@ public class MessagesController extends ConvenientController {
                                                   Authentication authentication,
                                                   @Valid Message message,
                                                   BindingResult bindingResult,
+                                                  @SessionAttribute(value = "messageSortingOption", required = false)
+                                                      MessageSortingOption sortingOption,
                                                   @PathVariable("sectionId") Integer sectionId,
                                                   @PathVariable("topicId") Integer topicId,
                                                   @PathVariable("pageNumber") Integer pageNumber) {
@@ -80,7 +81,7 @@ public class MessagesController extends ConvenientController {
         if (service.savingValidation(message, bindingResult)) {
             addForHeader(model, authentication, sectionService);
             add(model, "message", message);
-            add(model, "messages", service.onPage(service.findAllByTopicId(topicId), pageNumber));
+            add(model, "messages", sorted(sortingOption, topicId, pageNumber));
             add(model, "section", sectionService.findById(sectionId));
             add(model, "topic", topicService.findById(topicId));
             add(model, "formSubmitButtonText", isNew
@@ -101,6 +102,8 @@ public class MessagesController extends ConvenientController {
     @PostMapping("/page{pageNumber}/inner/edit/{id}")
     public String returnMessagesPageForEditing(Model model,
                                                Authentication authentication,
+                                               @SessionAttribute(value = "messageSortingOption", required = false)
+                                                   MessageSortingOption sortingOption,
                                                @PathVariable("id") Long id,
                                                @PathVariable("sectionId") Integer sectionId,
                                                @PathVariable("topicId") Integer topicId,
@@ -108,7 +111,7 @@ public class MessagesController extends ConvenientController {
 
         addForHeader(model, authentication, sectionService);
         add(model, "message", service.findById(id));
-        add(model, "messages", service.onPage(service.findAllByTopicId(topicId), pageNumber));
+        add(model, "messages", sorted(sortingOption, topicId, pageNumber));
         add(model, "section", sectionService.findById(sectionId));
         add(model, "topic", topicService.findById(topicId));
         add(model, "formSubmitButtonText", "Сохранить изменения");
@@ -120,6 +123,8 @@ public class MessagesController extends ConvenientController {
     @PostMapping("/page{pageNumber}/inner/delete/{id}")
     public String redirectMessagesPageAfterDeleting(Model model,
                                                     Authentication authentication,
+                                                    @SessionAttribute(value = "messageSortingOption", required = false)
+                                                        MessageSortingOption sortingOption,
                                                     @PathVariable("id") Long id,
                                                     @PathVariable("sectionId") Integer sectionId,
                                                     @PathVariable("topicId") Integer topicId,
@@ -130,7 +135,7 @@ public class MessagesController extends ConvenientController {
         if (msg != null) {
             addForHeader(model, authentication, sectionService);
             add(model, "message", service.empty());
-            add(model, "messages", service.onPage(service.findAllByTopicId(topicId), pageNumber));
+            add(model, "messages", sorted(sortingOption, topicId, pageNumber));
             add(model, "section", sectionService.findById(sectionId));
             add(model, "topic", topicService.findById(topicId));
             add(model, "formSubmitButtonText", "Отправить сообщение");
@@ -142,6 +147,7 @@ public class MessagesController extends ConvenientController {
 
         service.deleteById(id);
         int newPagesCount = service.pagesCount(service.findAllByTopicId(topicId));
+
         return pageNumber.equals(pagesCount) && newPagesCount < pagesCount
                 ? "redirect:/sections/{sectionId}/topics/{topicId}/messages/page" + newPagesCount
                 : "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
@@ -151,6 +157,12 @@ public class MessagesController extends ConvenientController {
     public String redirectCurrentPageAfterSorting(HttpSession session, MessageSortingOption sortingOption) {
         session.setAttribute("messageSortingOption", sortingOption);
         return "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
+    }
+
+    private List<Message> sorted(MessageSortingOption sortingOption, Integer topicId, Integer pageNumber) {
+        return sortingOption != null
+                ? service.onPage(service.findAllByTopicIdSorted(topicId, sortingOption), pageNumber)
+                : service.onPage(service.findAllByTopicIdSortedByDefault(topicId), pageNumber);
     }
 
 }

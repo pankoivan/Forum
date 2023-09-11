@@ -2,8 +2,6 @@ package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
-import org.forum.auxiliary.sorting.SortingOption;
-import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.Topic;
 import org.forum.main.services.interfaces.MessageService;
@@ -18,6 +16,7 @@ import org.springframework.validation.BindingResult;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -63,21 +62,16 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public SortingOption<MessageSortingProperties> emptySortingOption() {
+    public MessageSortingOption emptySortingOption() {
         return new MessageSortingOption();
     }
 
     @Override
-    public List<Message> findAllSorted(SortingOption<MessageSortingProperties> option) {
-        return switch (option.getProperty()) {
-
-            case BY_CREATION_DATE -> repository.findAll(Sort.by(option.getDirection(), "creationDate"));
-
-            case BY_EDITING_DATE -> repository.findAll(Sort.by(option.getDirection(), "editingDate"));
-
-            case BY_LIKES_COUNT -> repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name());
-
-        };
+    public List<Message> findAllSorted(MessageSortingOption option) {
+        return mySwitch(option,
+                () -> repository.findAll(Sort.by(option.getDirection(), "creationDate")),
+                () -> repository.findAll(Sort.by(option.getDirection(), "editingDate")),
+                () -> repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name()));
     }
 
     @Override
@@ -88,6 +82,19 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<Message> findAllByTopicId(Integer topicId) {
         return repository.findAllByTopicId(topicId, Sort.by(Sort.Direction.ASC, "creationDate"));
+    }
+
+    @Override
+    public List<Message> findAllByTopicIdSorted(Integer topicId, MessageSortingOption option) {
+        return mySwitch(option,
+                () -> repository.findAllByTopicId(topicId, Sort.by(option.getDirection(), "creationDate")),
+                () -> repository.findAllByTopicId(topicId, Sort.by(option.getDirection(), "editingDate")),
+                () -> repository.findAllByTopicIdOrderByLikesCountWithDirection(topicId, option.getDirection().name()));
+    }
+
+    @Override
+    public List<Message> findAllByTopicIdSortedByDefault(Integer topicId) {
+        return findAllByTopicIdSorted(topicId, DefaultSortingOptionConstants.FOR_MESSAGES);
     }
 
     @Override
@@ -123,6 +130,15 @@ public class MessageServiceImpl implements MessageService {
         return !messages.isEmpty()
                 ? Math.ceilDiv(messages.size(), PaginationConstants.MESSAGES)
                 : 1;
+    }
+
+    @SafeVarargs
+    private List<Message> mySwitch(MessageSortingOption option, Supplier<List<Message>> ... suppliers) {
+        return switch (option.getProperty()) {
+            case BY_CREATION_DATE -> suppliers[0].get();
+            case BY_EDITING_DATE -> suppliers[1].get();
+            case BY_LIKES_COUNT -> suppliers[2].get();
+        };
     }
 
 }

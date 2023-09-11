@@ -1,7 +1,6 @@
 package org.forum.auxiliary.constants;
 
 import lombok.experimental.UtilityClass;
-import org.forum.auxiliary.sorting.*;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
 import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
 import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
@@ -15,16 +14,16 @@ import org.springframework.data.domain.Sort;
 @UtilityClass
 public final class DefaultSortingOptionConstants {
 
-    public static final SortingOption<UserSortingProperties> FOR_USERS =
+    public static final UserSortingOption FOR_USERS =
             new UserSortingOption(Sort.Direction.DESC, UserSortingProperties.BY_LIKES_COUNT);
 
-    public static final SortingOption<SectionSortingProperties> FOR_SECTIONS =
+    public static final SectionSortingOption FOR_SECTIONS =
             new SectionSortingOption(Sort.Direction.DESC, SectionSortingProperties.BY_MESSAGES_COUNT);
 
-    public static final SortingOption<TopicSortingProperties> FOR_TOPICS =
+    public static final TopicSortingOption FOR_TOPICS =
             new TopicSortingOption(Sort.Direction.DESC, TopicSortingProperties.BY_MESSAGES_COUNT);
 
-    public static final SortingOption<MessageSortingProperties> FOR_MESSAGES =
+    public static final MessageSortingOption FOR_MESSAGES =
             new MessageSortingOption(Sort.Direction.DESC, MessageSortingProperties.BY_LIKES_COUNT);
 
 }

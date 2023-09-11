@@ -99,7 +99,7 @@
             <div class="col-12 col-md-8 col-lg-6 mx-auto mb-5">
                 <div
                     th:replace="~{fragments/sort :: sort (properties = ${properties}, directions = ${directions},
-                        submitUrl = '/sections/__${section.id}__/topics/__${topic.id}__/messages/__${currentPage}__/sort')}"
+                        submitUrl = '/sections/__${section.id}__/topics/__${topic.id}__/messages/page__${currentPage}__/sort')}"
                 >
                     <div
                         class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-mini"

@@ -35,4 +35,16 @@ public interface TopicRepository extends JpaRepository<Topic, Integer> {
             """)
     List<Topic> findAllByOrderByMessagesCountWithDirection(@Param("direction") String direction);
 
+    @Query(value = """
+            SELECT t FROM Topic t
+            LEFT JOIN t.messages m
+            WHERE t.section.id = :sectionId
+            GROUP BY t.id
+            ORDER BY
+                CASE WHEN :direction = 'ASC' THEN COUNT(m.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(m.id) END DESC
+            """)
+    List<Topic> findAllBySectionIdOrderByMessagesCountWithDirection(@Param("sectionId") Integer sectionId,
+                                                                    @Param("direction") String direction);
+
 }

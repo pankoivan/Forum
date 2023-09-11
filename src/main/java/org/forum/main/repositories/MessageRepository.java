@@ -26,4 +26,16 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             """)
     List<Message> findAllByOrderByLikesCountWithDirection(@Param("direction") String direction);
 
+    @Query(value = """
+            SELECT m FROM Message m
+            LEFT JOIN m.likedUsers lu
+            WHERE m.topic.id = :topicId
+            GROUP BY m.id
+            ORDER BY
+                CASE WHEN :direction = 'ASC' THEN COUNT(lu.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(lu.id) END DESC
+            """)
+    List<Message> findAllByTopicIdOrderByLikesCountWithDirection(@Param("topicId") Integer topicId,
+                                                                 @Param("direction") String direction);
+
 }

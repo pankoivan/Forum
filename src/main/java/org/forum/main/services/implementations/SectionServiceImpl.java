@@ -2,8 +2,6 @@ package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
-import org.forum.auxiliary.sorting.SortingOption;
-import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
 import org.forum.main.entities.Section;
 import org.forum.main.repositories.SectionRepository;
 import org.forum.main.services.interfaces.SectionService;
@@ -73,12 +71,12 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public SortingOption<SectionSortingProperties> emptySortingOption() {
+    public SectionSortingOption emptySortingOption() {
         return new SectionSortingOption();
     }
 
     @Override
-    public List<Section> findAllSorted(SortingOption<SectionSortingProperties> option) {
+    public List<Section> findAllSorted(SectionSortingOption option) {
         return switch (option.getProperty()) {
 
             case BY_NAME -> repository.findAll(Sort.by(option.getDirection(), "name"));

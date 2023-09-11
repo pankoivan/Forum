@@ -1,7 +1,6 @@
 package org.forum.main.services.interfaces;
 
-import org.forum.auxiliary.sorting.SortingOption;
-import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
+import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.Topic;
 import org.forum.main.services.interfaces.common.SortingService;
@@ -13,10 +12,14 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 public interface MessageService extends GeneralService<Message, Long>, ValidationService<Message>,
-        PaginationService<Message>, SortingService<Message, SortingOption<MessageSortingProperties>> {
+        PaginationService<Message>, SortingService<Message, MessageSortingOption> {
 
     void save(Message message, Authentication authentication, Topic topic);
 
     List<Message> findAllByTopicId(Integer topicId);
+
+    List<Message> findAllByTopicIdSorted(Integer topicId, MessageSortingOption sortingOption);
+
+    List<Message> findAllByTopicIdSortedByDefault(Integer topicId);
 
 }
