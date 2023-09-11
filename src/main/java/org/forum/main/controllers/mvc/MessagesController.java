@@ -1,5 +1,6 @@
 package org.forum.main.controllers.mvc;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
@@ -14,10 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/sections/{sectionId}/topics/{topicId}/messages")
@@ -44,10 +42,15 @@ public class MessagesController extends ConvenientController {
     @GetMapping("/page{pageNumber}")
     public String returnMessagesPage(Model model,
                                      Authentication authentication,
+                                     @SessionAttribute(value = "messageSortingOption", required = false)
+                                         MessageSortingOption sortingOption,
                                      @PathVariable("sectionId") Integer sectionId,
                                      @PathVariable("topicId") Integer topicId,
                                      @PathVariable("pageNumber") Integer pageNumber) {
 
+        if (sortingOption != null) {
+            System.out.println(sortingOption.getProperty() + " " + sortingOption.getDirection());
+        }
         addForHeader(model, authentication, sectionService);
         add(model, "message", service.empty());
         add(model, "messages", service.onPage(service.findAllByTopicId(topicId), pageNumber));
@@ -144,10 +147,10 @@ public class MessagesController extends ConvenientController {
                 : "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
     }
 
-    @PostMapping("/sort")
-    public String redirectFirstPageAfterSorting(MessageSortingOption option) {
-        System.out.println(option.getProperty() + " " + option.getDirection());
-        return "redirect:/sections/{sectionId}/topics/{topicId}/messages/page1";
+    @PostMapping("/page{pageNumber}/sort")
+    public String redirectCurrentPageAfterSorting(HttpSession session, MessageSortingOption sortingOption) {
+        session.setAttribute("messageSortingOption", sortingOption);
+        return "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
     }
 
 }
