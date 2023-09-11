@@ -62,11 +62,14 @@
                         action="#"
                         th:action="${submitUrl}"
                         method="post"
-                        th:object="${object}"
+                        th:object="${sortingObject}"
                         class="d-flex flex-row align-items-center justify-content-between bg-dark rounded text-white px-1 py-3"
                     >
                         <div class="mx-2">
-                            <select class="form-select form-select">
+                            <select
+                                class="form-select form-select"
+                                th:field="*{property}"
+                            >
                                 <!-- Статический и динамический просмотр -->
                                 <option
                                     th:each="each : ${properties}"
@@ -81,7 +84,10 @@
                             </select>
                         </div>
                         <div class="mx-2">
-                            <select class="form-select form-select">
+                            <select
+                                class="form-select form-select"
+                                th:field="*{direction}"
+                            >
                                 <!-- Статический и динамический просмотр -->
                                 <option
                                     th:each="each : ${directions}"

@@ -1,6 +1,7 @@
 package org.forum.main.controllers.mvc;
 
 import jakarta.validation.Valid;
+import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
 import org.forum.main.controllers.mvc.common.ConvenientController;
 import org.forum.main.entities.Message;
@@ -56,6 +57,7 @@ public class MessagesController extends ConvenientController {
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
 
+        add(model, "sortingObject", service.emptySortingOption());
         add(model, "properties", MessageSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
 
@@ -140,6 +142,12 @@ public class MessagesController extends ConvenientController {
         return pageNumber.equals(pagesCount) && newPagesCount < pagesCount
                 ? "redirect:/sections/{sectionId}/topics/{topicId}/messages/page" + newPagesCount
                 : "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
+    }
+
+    @PostMapping("/sort")
+    public String redirectFirstPageAfterSorting(MessageSortingOption option) {
+        System.out.println(option.getProperty() + " " + option.getDirection());
+        return "redirect:/sections/{sectionId}/topics/{topicId}/messages/page1";
     }
 
 }

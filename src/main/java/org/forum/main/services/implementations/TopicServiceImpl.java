@@ -2,6 +2,7 @@ package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.sorting.SortingOption;
+import org.forum.auxiliary.sorting.options.TopicSortingOption;
 import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
 import org.forum.main.entities.Section;
 import org.forum.main.entities.Topic;
@@ -70,6 +71,11 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public List<Topic> findAll() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+    }
+
+    @Override
+    public SortingOption<TopicSortingProperties> emptySortingOption() {
+        return new TopicSortingOption();
     }
 
     @Override

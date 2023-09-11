@@ -1,6 +1,7 @@
 package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
+import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.sorting.SortingOption;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
 import org.forum.main.entities.Message;
@@ -59,6 +60,11 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<Message> findAll() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "creationDate"));
+    }
+
+    @Override
+    public SortingOption<MessageSortingProperties> emptySortingOption() {
+        return new MessageSortingOption();
     }
 
     @Override

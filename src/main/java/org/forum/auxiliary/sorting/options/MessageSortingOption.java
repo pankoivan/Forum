@@ -1,18 +1,20 @@
-package org.forum.auxiliary.sorting;
+package org.forum.auxiliary.sorting.options;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.forum.auxiliary.sorting.SortingOption;
+import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
 import org.springframework.data.domain.Sort;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-public class SortingOptionImpl<T extends Enum<T>> implements SortingOption<T> {
+public class MessageSortingOption implements SortingOption<MessageSortingProperties> {
 
     private Sort.Direction direction;
 
-    private T property;
+    private MessageSortingProperties property;
 
     @Override
     public Sort.Direction getDirection() {
@@ -20,7 +22,7 @@ public class SortingOptionImpl<T extends Enum<T>> implements SortingOption<T> {
     }
 
     @Override
-    public T getProperty() {
+    public MessageSortingProperties getProperty() {
         return property;
     }
 
