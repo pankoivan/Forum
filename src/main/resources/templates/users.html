@@ -58,6 +58,35 @@
 
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div class="container">
+            <!-- Выбор сортировки и поиск -->
+            <div
+                class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-between justify-content-lg-between mb-5"
+            >
+                <!-- Выбор сортировки -->
+                <div
+                    th:replace="~{fragments/sort :: sort (properties = ${properties}, directions = ${directions},
+                        submitUrl = '/users/page__${currentPage}__/sort')}"
+                >
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
+                    >
+                        <h3>Статический блок для просмотра в браузере</h3>
+                    </div>
+                </div>
+                <!-- Поиск -->
+                <form action="#" class="m-2" method="post">
+                    <div class="d-flex flex-row justify-content-between m-1">
+                        <input
+                            class="form-control mx-1"
+                            placeholder="Текст..."
+                            type="search"
+                        />
+                        <button class="btn btn-primary mx-1" type="submit">
+                            Найти
+                        </button>
+                    </div>
+                </form>
+            </div>
             <!-- Список пользователей -->
             <div class="mb-5">
                 <div th:each="each, status : ${users}">
