@@ -4,6 +4,7 @@ import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.Topic;
+import org.forum.main.services.implementations.common.AbstractPaginationServiceImpl;
 import org.forum.main.services.interfaces.MessageService;
 import org.forum.main.repositories.MessageRepository;
 import org.forum.auxiliary.utils.AuthenticationUtils;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Service
-public class MessageServiceImpl implements MessageService {
+public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> implements MessageService {
 
     private final MessageRepository repository;
 
@@ -119,17 +120,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<Message> onPage(List<Message> messages, int pageNumber) {
-        return messages.stream()
-                .skip((long) (pageNumber - 1) * PaginationConstants.MESSAGES)
-                .limit(PaginationConstants.MESSAGES)
-                .toList();
+        return onPageImpl(messages, pageNumber, PaginationConstants.MESSAGES);
     }
 
     @Override
     public int pagesCount(List<Message> messages) {
-        return !messages.isEmpty()
-                ? Math.ceilDiv(messages.size(), PaginationConstants.MESSAGES)
-                : 1;
+        return pagesCountImpl(messages, PaginationConstants.MESSAGES);
     }
 
     @SafeVarargs

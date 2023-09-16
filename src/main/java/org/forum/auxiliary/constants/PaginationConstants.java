@@ -7,4 +7,6 @@ public final class PaginationConstants {
 
     public static final int MESSAGES = 5;
 
+    public static final int USERS = 10;
+
 }

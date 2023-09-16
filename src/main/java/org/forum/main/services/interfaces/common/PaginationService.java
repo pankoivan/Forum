@@ -6,6 +6,6 @@ public interface PaginationService<T> {
 
     List<T> onPage(List<T> foundItems, int pageNumber);
 
-    int pagesCount(List<T> items);
+    int pagesCount(List<T> foundItems);
 
 }

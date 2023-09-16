@@ -1,10 +1,12 @@
 package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
+import org.forum.auxiliary.constants.PaginationConstants;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.main.entities.User;
 import org.forum.main.entities.enums.Gender;
 import org.forum.main.repositories.UserRepository;
+import org.forum.main.services.implementations.common.AbstractPaginationServiceImpl;
 import org.forum.main.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -15,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends AbstractPaginationServiceImpl<User> implements UserService {
 
     private final UserRepository repository;
 
@@ -98,6 +100,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Integer id) {
 
+    }
+
+    @Override
+    public List<User> onPage(List<User> users, int pageNumber) {
+        return onPageImpl(users, pageNumber, PaginationConstants.USERS);
+    }
+
+    @Override
+    public int pagesCount(List<User> users) {
+        return pagesCountImpl(users, PaginationConstants.USERS);
     }
 
 }
