@@ -72,7 +72,7 @@ public class User implements UserDetails {
     private List<Like> likedMessages;
 
     @OneToMany(mappedBy = "user")
-    private List<User> dislikedMessages;
+    private List<Dislike> dislikedMessages;
 
     @OneToMany(
             mappedBy = "user",
