@@ -4,7 +4,6 @@ import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.constants.PaginationConstants;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.main.entities.User;
-import org.forum.main.entities.enums.Gender;
 import org.forum.main.repositories.UserRepository;
 import org.forum.main.services.implementations.common.AbstractPaginationServiceImpl;
 import org.forum.main.services.interfaces.UserService;
@@ -42,11 +41,6 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
     }
 
     @Override
-    public List<Gender> genders() {
-        return List.of(Gender.values());
-    }
-
-    @Override
     public boolean isNew(User user) {
         return user.getId() == null || !repository.existsById(user.getId());
     }
@@ -79,6 +73,10 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
 
             case BY_LIKES_COUNT -> repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name());
 
+            case BY_DISLIKES_COUNT -> repository.findAllByOrderByDislikesCountWithDirection(option.getDirection().name());
+
+            case BY_REPUTATION -> repository.findAllByOrderByReputationWithDirection(option.getDirection().name());
+
         };
     }
 
@@ -99,7 +97,7 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
 
     @Override
     public void deleteById(Integer id) {
-
+        repository.deleteById(id);
     }
 
     @Override

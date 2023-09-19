@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpSession;
 import org.forum.auxiliary.sorting.enums.UserSortingProperties;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.main.controllers.mvc.common.ConvenientController;
-import org.forum.main.entities.Message;
 import org.forum.main.entities.User;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.UserService;

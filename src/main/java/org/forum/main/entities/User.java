@@ -71,6 +71,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Like> likedMessages;
 
+    @OneToMany(mappedBy = "user")
+    private List<User> dislikedMessages;
+
     @OneToMany(
             mappedBy = "user",
             fetch = FetchType.EAGER
@@ -127,6 +130,16 @@ public class User implements UserDetails {
         return postedMessages.stream()
                 .mapToInt(Message::likesCount)
                 .sum();
+    }
+
+    public int getDislikesCount() {
+        return postedMessages.stream()
+                .mapToInt(Message::dislikesCount)
+                .sum();
+    }
+
+    public int getReputation() {
+        return getLikesCount() - getDislikesCount();
     }
 
     private Collection<? extends GrantedAuthority> getRoleAndAuthorities() {

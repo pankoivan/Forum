@@ -1,6 +1,7 @@
 package org.forum.main.controllers.mvc;
 
 import org.forum.main.controllers.mvc.common.ConvenientController;
+import org.forum.main.entities.enums.Gender;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class AuthController extends ConvenientController {
     public String returnRegistrationPage(Model model, Authentication authentication) {
         addForHeader(model, authentication, sectionService);
         model.addAttribute("user", service.empty());
-        model.addAttribute("genders", service.genders());
+        model.addAttribute("genders", Gender.values());
         return "registration";
     }
 

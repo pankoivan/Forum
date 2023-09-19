@@ -48,6 +48,9 @@ public class Message {
     @OneToMany(mappedBy = "message")
     private List<Like> likedUsers;
 
+    @OneToMany(mappedBy = "message")
+    private List<Dislike> dislikedUsers;
+
     @ManyToOne
     @JoinColumn(name = "topic_id")
     private Topic topic;
@@ -66,6 +69,10 @@ public class Message {
 
     public int likesCount() {
         return likedUsers.size();
+    }
+
+    public int dislikesCount() {
+        return dislikedUsers.size();
     }
 
 }

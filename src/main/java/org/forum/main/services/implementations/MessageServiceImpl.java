@@ -36,8 +36,8 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
 
     @Override
     public String deletingValidation(Message message) {
-        return message.hasLikes()
-                ? "Вы не можете удалить ваше сообщение, так как ему поставлены лайки"
+        return message.likesCount() - message.dislikesCount() > 0
+                ? "Вы не можете удалить ваше сообщение, так как его репутация не отрицательна"
                 : null;
     }
 
@@ -72,7 +72,8 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
         return mySwitch(option,
                 () -> repository.findAll(Sort.by(option.getDirection(), "creationDate")),
                 () -> repository.findAll(Sort.by(option.getDirection(), "editingDate")),
-                () -> repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name()));
+                () -> repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name()),
+                () -> repository.findAllByOrderByDislikesCountWithDirection(option.getDirection().name()));
     }
 
     @Override
@@ -90,7 +91,8 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
         return mySwitch(option,
                 () -> repository.findAllByTopicId(topicId, Sort.by(option.getDirection(), "creationDate")),
                 () -> repository.findAllByTopicId(topicId, Sort.by(option.getDirection(), "editingDate")),
-                () -> repository.findAllByTopicIdOrderByLikesCountWithDirection(topicId, option.getDirection().name()));
+                () -> repository.findAllByTopicIdOrderByLikesCountWithDirection(topicId, option.getDirection().name()),
+                () -> repository.findAllByTopicIdOrderByDislikesCountWithDirection(topicId, option.getDirection().name()));
     }
 
     @Override
@@ -134,6 +136,7 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
             case BY_CREATION_DATE -> suppliers[0].get();
             case BY_EDITING_DATE -> suppliers[1].get();
             case BY_LIKES_COUNT -> suppliers[2].get();
+            case BY_DISLIKES_COUNT -> suppliers[3].get();
         };
     }
 

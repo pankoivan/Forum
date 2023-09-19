@@ -14,8 +14,6 @@ import java.util.List;
 public interface UserService extends GeneralService<User, Integer>, ValidationService<User>,
         SortingService<User, UserSortingOption>, PaginationService<User> {
 
-    List<Gender> genders();
-
     void save(User user, MultipartFile file);
 
     List<User> findAllByRoleName(String roleName);

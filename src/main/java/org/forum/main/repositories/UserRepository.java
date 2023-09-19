@@ -40,4 +40,29 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             """)
     List<User> findAllByOrderByLikesCountWithDirection(@Param("direction") String direction);
 
+    @Query(value = """
+            SELECT u FROM User u
+            LEFT JOIN u.postedMessages pm
+            LEFT JOIN pm.dislikedUsers du
+            GROUP BY u.id
+            ORDER BY
+                CASE WHEN :direction = 'ASC' THEN COUNT(du.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(du.id) END DESC
+            """)
+    List<User> findAllByOrderByDislikesCountWithDirection(@Param("direction") String direction);
+
+    // временное решение, не знаю, насколько оно корректное
+
+    @Query(value = """
+            SELECT u FROM User u
+            LEFT JOIN u.postedMessages pm
+            LEFT JOIN pm.likedUsers lu
+            LEFT JOIN pm.dislikedUsers du
+            GROUP BY u.id
+            ORDER BY
+                CASE WHEN :direction = 'ASC' THEN COUNT(lu.id) - COUNT(du.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(lu.id) - COUNT(du.id) END DESC
+            """)
+    List<User> findAllByOrderByReputationWithDirection(@Param("direction") String direction);
+
 }

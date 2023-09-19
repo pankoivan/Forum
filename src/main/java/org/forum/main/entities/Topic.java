@@ -22,7 +22,7 @@ import java.util.List;
         "messages"
 })
 @Entity
-@Table(name = "topic")
+@Table(name = "forum_topic")
 public class Topic {
 
     @Id

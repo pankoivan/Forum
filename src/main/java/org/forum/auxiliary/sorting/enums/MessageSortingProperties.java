@@ -12,7 +12,9 @@ public enum MessageSortingProperties {
 
     BY_EDITING_DATE("По дате редактирования"),
 
-    BY_LIKES_COUNT("По количеству лайков");
+    BY_LIKES_COUNT("По количеству лайков"),
+
+    BY_DISLIKES_COUNT("По количеству дизлайков");
 
     private final String alias;
 
