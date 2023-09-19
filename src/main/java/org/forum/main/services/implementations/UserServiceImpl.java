@@ -4,6 +4,7 @@ import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.constants.PaginationConstants;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.main.entities.User;
+import org.forum.main.exceptions.ServiceLayerException;
 import org.forum.main.repositories.UserRepository;
 import org.forum.main.services.implementations.common.AbstractPaginationServiceImpl;
 import org.forum.main.services.interfaces.UserService;
@@ -48,7 +49,7 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
     @Override
     public User findById(Integer id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User with id \"" + id + "\" doesn't exists"));
+                .orElseThrow(() -> new ServiceLayerException("User with id \"" + id + "\" doesn't exists"));
     }
 
     @Override

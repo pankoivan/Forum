@@ -3,6 +3,9 @@ package org.forum.main.services.implementations;
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
 import org.forum.main.entities.Section;
+import org.forum.main.exceptions.ServiceLayerException;
+import org.forum.main.exceptions.common.AuxiliaryInstrumentsException;
+import org.forum.main.exceptions.common.ForumCheckedException;
 import org.forum.main.repositories.SectionRepository;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.auxiliary.utils.AuthenticationUtils;
@@ -62,7 +65,7 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public Section findById(Integer id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Section with id \"" + id + "\" doesn't exists"));
+                .orElseThrow(() -> new ServiceLayerException("Section with id \"" + id + "\" doesn't exists"));
     }
 
     @Override
@@ -96,16 +99,20 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public void save(Section section, Authentication authentication) {
-        if (isNew(section)) {
-            section.setCreationDate(LocalDateTime.now());
-            section.setUserWhoCreated(AuthenticationUtils.extractCurrentUser(authentication));
-            repository.save(section);
-        } else {
-            Section oldSection = findById(section.getId());
-            oldSection.setName(section.getName());
-            oldSection.setDescription(section.getDescription());
-            repository.save(oldSection);
+    public void save(Section section, Authentication authentication) throws ServiceLayerException {
+        try {
+            if (isNew(section)) {
+                section.setCreationDate(LocalDateTime.now());
+                section.setUserWhoCreated(AuthenticationUtils.extractCurrentUser(authentication));
+                repository.save(section);
+            } else {
+                Section oldSection = findById(section.getId());
+                oldSection.setName(section.getName());
+                oldSection.setDescription(section.getDescription());
+                repository.save(oldSection);
+            }
+        } catch (ForumCheckedException e) {
+            throw new ServiceLayerException("Author cannot be set to section", e);
         }
     }
 

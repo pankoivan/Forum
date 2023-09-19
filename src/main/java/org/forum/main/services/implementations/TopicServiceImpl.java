@@ -4,6 +4,8 @@ import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
 import org.forum.main.entities.Section;
 import org.forum.main.entities.Topic;
+import org.forum.main.exceptions.ServiceLayerException;
+import org.forum.main.exceptions.common.ForumCheckedException;
 import org.forum.main.services.interfaces.TopicService;
 import org.forum.main.repositories.TopicRepository;
 import org.forum.auxiliary.utils.AuthenticationUtils;
@@ -64,7 +66,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public Topic findById(Integer id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Topic with id \"" + id + "\" doesn't exists"));
+                .orElseThrow(() -> new ServiceLayerException("Topic with id \"" + id + "\" doesn't exists"));
     }
 
     @Override
@@ -109,17 +111,21 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public void save(Topic topic, Authentication authentication, Section section) {
-        if (isNew(topic)) {
-            topic.setCreationDate(LocalDateTime.now());
-            topic.setUserWhoCreated(AuthenticationUtils.extractCurrentUser(authentication));
-            topic.setSection(section);
-            repository.save(topic);
-        } else {
-            Topic oldTopic = findById(topic.getId());
-            oldTopic.setName(topic.getName());
-            oldTopic.setDescription(topic.getDescription());
-            repository.save(oldTopic);
+    public void save(Topic topic, Authentication authentication, Section section) throws ServiceLayerException {
+        try {
+            if (isNew(topic)) {
+                topic.setCreationDate(LocalDateTime.now());
+                topic.setUserWhoCreated(AuthenticationUtils.extractCurrentUser(authentication));
+                topic.setSection(section);
+                repository.save(topic);
+            } else {
+                Topic oldTopic = findById(topic.getId());
+                oldTopic.setName(topic.getName());
+                oldTopic.setDescription(topic.getDescription());
+                repository.save(oldTopic);
+            }
+        } catch (ForumCheckedException e) {
+            throw new ServiceLayerException("Author cannot be set to topic", e);
         }
     }
 
