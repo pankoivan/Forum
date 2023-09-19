@@ -67,7 +67,7 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public List<Section> findAll() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        return repository.findAll();
     }
 
     @Override

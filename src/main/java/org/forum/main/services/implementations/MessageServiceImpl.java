@@ -59,7 +59,7 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
 
     @Override
     public List<Message> findAll() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "creationDate"));
+        return repository.findAll();
     }
 
     @Override
@@ -83,7 +83,7 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
 
     @Override
     public List<Message> findAllByTopicId(Integer topicId) {
-        return repository.findAllByTopicId(topicId, Sort.by(Sort.Direction.ASC, "creationDate"));
+        return repository.findAllByTopicId(topicId);
     }
 
     @Override

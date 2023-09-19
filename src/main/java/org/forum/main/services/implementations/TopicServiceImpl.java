@@ -69,7 +69,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public List<Topic> findAll() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        return repository.findAll();
     }
 
     @Override
@@ -92,7 +92,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public List<Topic> findAllBySectionId(Integer sectionId) {
-        return repository.findAllBySectionId(sectionId, Sort.by(Sort.Direction.ASC, "name"));
+        return repository.findAllBySectionId(sectionId);
     }
 
     @Override
@@ -100,8 +100,7 @@ public class TopicServiceImpl implements TopicService {
         return mySwitch(option,
                 () -> repository.findAllBySectionId(sectionId, Sort.by(option.getDirection(), "name")),
                 () -> repository.findAllBySectionId(sectionId, Sort.by(option.getDirection(), "creationDate")),
-                () -> repository.findAllBySectionIdOrderByMessagesCountWithDirection(sectionId,
-                        option.getDirection().name()));
+                () -> repository.findAllBySectionIdOrderByMessagesCountWithDirection(sectionId, option.getDirection().name()));
     }
 
     @Override

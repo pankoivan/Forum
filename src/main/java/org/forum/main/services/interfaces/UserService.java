@@ -2,7 +2,6 @@ package org.forum.main.services.interfaces;
 
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.main.entities.User;
-import org.forum.main.entities.enums.Gender;
 import org.forum.main.services.interfaces.common.GeneralService;
 import org.forum.main.services.interfaces.common.PaginationService;
 import org.forum.main.services.interfaces.common.SortingService;
