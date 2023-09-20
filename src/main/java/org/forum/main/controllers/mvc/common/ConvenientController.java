@@ -1,7 +1,7 @@
 package org.forum.main.controllers.mvc.common;
 
-import org.forum.main.exceptions.ControllerException;
-import org.forum.main.exceptions.common.ForumCheckedException;
+import org.forum.auxiliary.exceptions.ControllerException;
+import org.forum.auxiliary.exceptions.common.ForumCheckedException;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.springframework.security.core.Authentication;

@@ -2,7 +2,7 @@ package org.forum.auxiliary.utils;
 
 import lombok.experimental.UtilityClass;
 import org.forum.main.entities.User;
-import org.forum.main.exceptions.AuthenticationUtilsException;
+import org.forum.auxiliary.exceptions.AuthenticationUtilsException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 

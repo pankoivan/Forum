@@ -4,8 +4,8 @@ import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
 import org.forum.main.entities.Section;
 import org.forum.main.entities.Topic;
-import org.forum.main.exceptions.ServiceLayerException;
-import org.forum.main.exceptions.common.ForumCheckedException;
+import org.forum.auxiliary.exceptions.ServiceException;
+import org.forum.auxiliary.exceptions.common.ForumCheckedException;
 import org.forum.main.services.interfaces.TopicService;
 import org.forum.main.repositories.TopicRepository;
 import org.forum.auxiliary.utils.AuthenticationUtils;
@@ -66,7 +66,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public Topic findById(Integer id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ServiceLayerException("Topic with id \"" + id + "\" doesn't exists"));
+                .orElseThrow(() -> new ServiceException("Topic with id \"" + id + "\" doesn't exists"));
     }
 
     @Override
@@ -111,7 +111,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public void save(Topic topic, Authentication authentication, Section section) throws ServiceLayerException {
+    public void save(Topic topic, Authentication authentication, Section section) throws ServiceException {
         try {
             if (isNew(topic)) {
                 topic.setCreationDate(LocalDateTime.now());
@@ -125,7 +125,7 @@ public class TopicServiceImpl implements TopicService {
                 repository.save(oldTopic);
             }
         } catch (ForumCheckedException e) {
-            throw new ServiceLayerException("Author cannot be set to topic", e);
+            throw new ServiceException("Author cannot be set to topic", e);
         }
     }
 

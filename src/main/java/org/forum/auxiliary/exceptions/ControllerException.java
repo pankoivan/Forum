@@ -1,6 +1,6 @@
-package org.forum.main.exceptions;
+package org.forum.auxiliary.exceptions;
 
-import org.forum.main.exceptions.common.MainInstrumentsException;
+import org.forum.auxiliary.exceptions.common.MainInstrumentsException;
 
 public class ControllerException extends MainInstrumentsException {
 

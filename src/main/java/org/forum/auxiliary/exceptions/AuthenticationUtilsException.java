@@ -1,6 +1,6 @@
-package org.forum.main.exceptions;
+package org.forum.auxiliary.exceptions;
 
-import org.forum.main.exceptions.common.AuxiliaryInstrumentsException;
+import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
 
 public class AuthenticationUtilsException extends AuxiliaryInstrumentsException {
 

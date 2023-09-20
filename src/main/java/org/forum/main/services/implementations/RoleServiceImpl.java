@@ -1,7 +1,7 @@
 package org.forum.main.services.implementations;
 
 import org.forum.main.entities.Role;
-import org.forum.main.exceptions.ServiceLayerException;
+import org.forum.auxiliary.exceptions.ServiceException;
 import org.forum.main.services.interfaces.RoleService;
 import org.forum.main.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findById(Integer id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ServiceLayerException("Role with id \"" + id + "\" doesn't exists"));
+                .orElseThrow(() -> new ServiceException("Role with id \"" + id + "\" doesn't exists"));
     }
 
     @Override

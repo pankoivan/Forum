@@ -1,6 +1,10 @@
 package org.forum.main.controllers.mvc;
 
 import jakarta.validation.Valid;
+import org.forum.auxiliary.exceptions.ControllerException;
+import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
+import org.forum.auxiliary.exceptions.common.MainInstrumentsException;
+import org.forum.auxiliary.utils.PathVariableUtils;
 import org.forum.main.controllers.mvc.common.ConvenientController;
 import org.forum.main.entities.Authority;
 import org.forum.main.services.interfaces.AuthorityService;
@@ -74,7 +78,14 @@ public class AuthoritiesController extends ConvenientController {
     @PostMapping("/inner/delete/{id}")
     public String redirectRolesAuthoritiesPageAfterDeletingAuthority(Model model,
                                                                      Authentication authentication,
-                                                                     @PathVariable("id") Integer id) {
+                                                                     @PathVariable("id") String pathId) {
+
+        Integer id;
+        try {
+            id = PathVariableUtils.toNonNegativeInteger(pathId);
+        } catch (AuxiliaryInstrumentsException e) {
+            throw new ControllerException(e.getMessage(), e);
+        }
 
         String msg = authorityService.deletingValidation(authorityService.findById(id));
         if (msg != null) {

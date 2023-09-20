@@ -1,7 +1,7 @@
 package org.forum.main.services.implementations;
 
 import org.forum.main.entities.Authority;
-import org.forum.main.exceptions.ServiceLayerException;
+import org.forum.auxiliary.exceptions.ServiceException;
 import org.forum.main.repositories.AuthorityRepository;
 import org.forum.main.services.interfaces.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +51,9 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public Authority findById(Integer id) throws ServiceLayerException {
+    public Authority findById(Integer id) throws ServiceException {
         return repository.findById(id)
-                .orElseThrow(() -> new ServiceLayerException("Authority with id \"" + id + "\" doesn't exists"));
+                .orElseThrow(() -> new ServiceException("Authority with id \"" + id + "\" doesn't exists"));
     }
 
     @Override

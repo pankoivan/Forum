@@ -4,8 +4,8 @@ import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.Topic;
-import org.forum.main.exceptions.ServiceLayerException;
-import org.forum.main.exceptions.common.ForumCheckedException;
+import org.forum.auxiliary.exceptions.ServiceException;
+import org.forum.auxiliary.exceptions.common.ForumCheckedException;
 import org.forum.main.services.implementations.common.AbstractPaginationServiceImpl;
 import org.forum.main.services.interfaces.MessageService;
 import org.forum.main.repositories.MessageRepository;
@@ -56,7 +56,7 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
     @Override
     public Message findById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ServiceLayerException("Message with id \"" + id + "\" doesn't exists"));
+                .orElseThrow(() -> new ServiceException("Message with id \"" + id + "\" doesn't exists"));
     }
 
     @Override
@@ -103,7 +103,7 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
     }
 
     @Override
-    public void save(Message message, Authentication authentication, Topic topic) throws ServiceLayerException {
+    public void save(Message message, Authentication authentication, Topic topic) throws ServiceException {
         try {
             if (isNew(message)) {
                 message.setCreationDate(LocalDateTime.now());
@@ -117,7 +117,7 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
                 repository.save(oldMessage);
             }
         } catch (ForumCheckedException e) {
-            throw new ServiceLayerException("Author cannot be set to message", e);
+            throw new ServiceException("Author cannot be set to message", e);
         }
     }
 

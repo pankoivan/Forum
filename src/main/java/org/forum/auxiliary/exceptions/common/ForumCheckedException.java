@@ -1,4 +1,4 @@
-package org.forum.main.exceptions.common;
+package org.forum.auxiliary.exceptions.common;
 
 public class ForumCheckedException extends Exception {
 
