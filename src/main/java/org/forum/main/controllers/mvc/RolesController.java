@@ -57,7 +57,9 @@ public class RolesController extends ConvenientController {
     @PostMapping("/inner/edit/{id}")
     public String returnRolesAuthoritiesPageForEditingRole(Model model,
                                                            Authentication authentication,
-                                                           @PathVariable("id") Integer id) {
+                                                           @PathVariable("id") String pathId) {
+
+        Integer id = toNonNegativeInteger(pathId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "roles", roleService.findAll());
@@ -72,7 +74,9 @@ public class RolesController extends ConvenientController {
     @PostMapping("/inner/delete/{id}")
     public String redirectRolesAuthoritiesPageAfterDeletingRole(Model model,
                                                                 Authentication authentication,
-                                                                @PathVariable("id") Integer id) {
+                                                                @PathVariable("id") String pathId) {
+
+        Integer id = toNonNegativeInteger(pathId);
 
         String msg = roleService.deletingValidation(roleService.findById(id));
         if (msg != null) {

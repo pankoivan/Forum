@@ -17,7 +17,8 @@ public final class PathVariableUtils {
     }
 
     private static <T extends Number> T forNonNegativeIntegerAndLong(Supplier<T> supplier, String pathVariable,
-                                                                     String exceptionMessagePart) throws PathVariableUtilsException {
+                                                                     String exceptionMessagePart)
+            throws PathVariableUtilsException {
         T result;
         try {
             result = supplier.get();
