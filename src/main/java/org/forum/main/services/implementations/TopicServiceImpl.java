@@ -1,11 +1,13 @@
 package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
+import org.forum.auxiliary.constants.PaginationConstants;
+import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
 import org.forum.main.entities.Section;
 import org.forum.main.entities.Topic;
 import org.forum.auxiliary.exceptions.ServiceException;
-import org.forum.auxiliary.exceptions.common.ForumCheckedException;
+import org.forum.main.services.implementations.common.AbstractPaginationServiceImpl;
 import org.forum.main.services.interfaces.TopicService;
 import org.forum.main.repositories.TopicRepository;
 import org.forum.auxiliary.utils.AuthenticationUtils;
@@ -22,7 +24,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 @Service
-public class TopicServiceImpl implements TopicService {
+public class TopicServiceImpl extends AbstractPaginationServiceImpl<Topic> implements TopicService {
 
     private final TopicRepository repository;
 
@@ -124,7 +126,7 @@ public class TopicServiceImpl implements TopicService {
                 oldTopic.setDescription(topic.getDescription());
                 repository.save(oldTopic);
             }
-        } catch (ForumCheckedException e) {
+        } catch (AuxiliaryInstrumentsException e) {
             throw new ServiceException("Author cannot be set to topic", e);
         }
     }
@@ -151,6 +153,16 @@ public class TopicServiceImpl implements TopicService {
             case BY_CREATION_DATE -> suppliers[1].get();
             case BY_MESSAGES_COUNT -> suppliers[2].get();
         };
+    }
+
+    @Override
+    public List<Topic> onPage(List<Topic> foundItems, int pageNumber) {
+        return onPageImpl(foundItems, pageNumber, PaginationConstants.TOPICS);
+    }
+
+    @Override
+    public int pagesCount(List<Topic> foundItems) {
+        return pagesCountImpl(foundItems, PaginationConstants.TOPICS);
     }
 
 }

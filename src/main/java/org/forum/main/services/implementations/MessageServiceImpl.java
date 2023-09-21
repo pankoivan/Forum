@@ -1,11 +1,11 @@
 package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
+import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.Topic;
 import org.forum.auxiliary.exceptions.ServiceException;
-import org.forum.auxiliary.exceptions.common.ForumCheckedException;
 import org.forum.main.services.implementations.common.AbstractPaginationServiceImpl;
 import org.forum.main.services.interfaces.MessageService;
 import org.forum.main.repositories.MessageRepository;
@@ -116,7 +116,7 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
                 oldMessage.setText(message.getText());
                 repository.save(oldMessage);
             }
-        } catch (ForumCheckedException e) {
+        } catch (AuxiliaryInstrumentsException e) {
             throw new ServiceException("Author cannot be set to message", e);
         }
     }

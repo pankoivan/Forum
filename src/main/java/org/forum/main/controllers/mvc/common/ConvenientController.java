@@ -2,7 +2,6 @@ package org.forum.main.controllers.mvc.common;
 
 import org.forum.auxiliary.exceptions.ControllerException;
 import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
-import org.forum.auxiliary.exceptions.common.ForumCheckedException;
 import org.forum.auxiliary.utils.PathVariableUtils;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.auxiliary.utils.AuthenticationUtils;
@@ -19,7 +18,7 @@ public abstract class ConvenientController {
         try {
             add(model, "currentUser", AuthenticationUtils.extractCurrentUserOrNull(authentication));
             add(model, "sections", service.findAll());
-        } catch (ForumCheckedException e) {
+        } catch (AuxiliaryInstrumentsException e) {
             throw new ControllerException("Current user cannot be extracted");
         }
     }

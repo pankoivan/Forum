@@ -33,18 +33,28 @@ public class TopicsController extends ConvenientController {
     }
 
     @GetMapping
+    public String redirectTopicsPageWithPagination() {
+        return "redirect:/sections/{sectionId}/topics/page1";
+    }
+
+    @GetMapping("page{pageNumber}")
     public String returnTopicsPage(Model model,
                                    Authentication authentication,
                                    @SessionAttribute(value = "topicSortingOption", required = false)
                                        TopicSortingOption sortingOption,
-                                   @PathVariable("sectionId") String pathSectionId) {
+                                   @PathVariable("sectionId") String pathSectionId,
+                                   @PathVariable("pageNumber") String pathPageNumber) {
 
         Integer sectionId = toNonNegativeInteger(pathSectionId);
+        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
         add(model, "section", sectionService.findById(sectionId));
-        add(model, "topics", sorted(sortingOption, sectionId));
+        add(model, "topics", sorted(sortingOption, sectionId, pageNumber));
+
         add(model, "page", "topics");
+        add(model, "pagesCount", service.pagesCount(service.findAllBySectionId(sectionId)));
+        add(model, "currentPage", pageNumber);
 
         add(model, "sortingObject", service.emptySortingOption());
         add(model, "properties", TopicSortingProperties.values());
@@ -64,6 +74,7 @@ public class TopicsController extends ConvenientController {
         add(model, "object", service.empty());
         add(model, "sectionId", sectionId);
         add(model, "formSubmitButtonText", "Создать тему");
+
         return "topic-form";
     }
 
@@ -102,6 +113,7 @@ public class TopicsController extends ConvenientController {
         add(model, "object", service.findById(id));
         add(model, "sectionId", sectionId);
         add(model, "formSubmitButtonText", "Сохранить");
+
         return "topic-form";
     }
 
@@ -120,9 +132,18 @@ public class TopicsController extends ConvenientController {
         if (msg != null) {
             addForHeader(model, authentication, sectionService);
             add(model, "section", sectionService.findById(sectionId));
-            add(model, "topics", sorted(sortingOption, sectionId));
+            add(model, "topics", sorted(sortingOption, sectionId, 1));
+
             add(model, "page", "topics");
+            add(model, "pagesCount", service.pagesCount(service.findAllBySectionId(sectionId)));
+            add(model, "currentPage", 1);
+
+            add(model, "sortingObject", service.emptySortingOption());
+            add(model, "properties", TopicSortingProperties.values());
+            add(model, "directions", Sort.Direction.values());
+
             add(model, "error", msg);
+
             return "topics";
         }
 
@@ -136,10 +157,10 @@ public class TopicsController extends ConvenientController {
         return "redirect:/sections/{sectionId}/topics";
     }
 
-    private List<Topic> sorted(TopicSortingOption sortingOption, Integer sectionId) {
+    private List<Topic> sorted(TopicSortingOption sortingOption, Integer sectionId, Integer pageNumber) {
         return sortingOption != null
-                ? service.findAllBySectionIdSorted(sectionId, sortingOption)
-                : service.findAllBySectionIdSortedByDefault(sectionId);
+                ? service.onPage(service.findAllBySectionIdSorted(sectionId, sortingOption), pageNumber)
+                : service.onPage(service.findAllBySectionIdSortedByDefault(sectionId), pageNumber);
     }
 
 }

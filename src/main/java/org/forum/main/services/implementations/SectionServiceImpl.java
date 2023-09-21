@@ -1,10 +1,10 @@
 package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
+import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
 import org.forum.main.entities.Section;
 import org.forum.auxiliary.exceptions.ServiceException;
-import org.forum.auxiliary.exceptions.common.ForumCheckedException;
 import org.forum.main.repositories.SectionRepository;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.auxiliary.utils.AuthenticationUtils;
@@ -110,7 +110,7 @@ public class SectionServiceImpl implements SectionService {
                 oldSection.setDescription(section.getDescription());
                 repository.save(oldSection);
             }
-        } catch (ForumCheckedException e) {
+        } catch (AuxiliaryInstrumentsException e) {
             throw new ServiceException("Author cannot be set to section", e);
         }
     }
