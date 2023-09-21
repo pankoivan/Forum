@@ -37,7 +37,7 @@ public class TopicsController extends ConvenientController {
         return "redirect:/sections/{sectionId}/topics/page1";
     }
 
-    @GetMapping("page{pageNumber}")
+    @GetMapping("/page{pageNumber}")
     public String returnTopicsPage(Model model,
                                    Authentication authentication,
                                    @SessionAttribute(value = "topicSortingOption", required = false)
@@ -49,7 +49,9 @@ public class TopicsController extends ConvenientController {
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "section", sectionService.findById(sectionId));
+
+        add(model, "sectionId", sectionId);
+        add(model, "sectionName", sectionService.findById(sectionId).getName());
         add(model, "topics", sorted(sortingOption, sectionId, pageNumber));
 
         add(model, "page", "topics");
@@ -71,8 +73,9 @@ public class TopicsController extends ConvenientController {
         Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "object", service.empty());
+
         add(model, "sectionId", sectionId);
+        add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать тему");
 
         return "topic-form";
@@ -88,15 +91,20 @@ public class TopicsController extends ConvenientController {
         Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         if (service.savingValidation(topic, bindingResult)) {
+
             addForHeader(model, authentication, sectionService);
-            add(model, "object", topic);
+
             add(model, "sectionId", sectionId);
+            add(model, "object", topic);
             add(model, "formSubmitButtonText", service.isNew(topic) ? "Создать тему" : "Сохранить");
+
             add(model, "error", service.extractAnySingleError(bindingResult));
+
             return "topic-form";
         }
 
         service.save(topic, authentication, sectionService.findById(sectionId));
+
         return "redirect:/sections/{sectionId}/topics";
     }
 
@@ -110,8 +118,9 @@ public class TopicsController extends ConvenientController {
         Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "object", service.findById(id));
+
         add(model, "sectionId", sectionId);
+        add(model, "object", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить");
 
         return "topic-form";
@@ -130,8 +139,11 @@ public class TopicsController extends ConvenientController {
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
+
             addForHeader(model, authentication, sectionService);
-            add(model, "section", sectionService.findById(sectionId));
+
+            add(model, "sectionId", sectionId);
+            add(model, "sectionName", sectionService.findById(sectionId).getName());
             add(model, "topics", sorted(sortingOption, sectionId, 1));
 
             add(model, "page", "topics");
@@ -148,6 +160,7 @@ public class TopicsController extends ConvenientController {
         }
 
         service.deleteById(id);
+
         return "redirect:/sections/{sectionId}/topics";
     }
 

@@ -35,6 +35,7 @@ public class SectionsController extends ConvenientController {
                                          SectionSortingOption sortingOption) {
 
         addForHeader(model, authentication, service);
+
         add(model, "sections", sorted(sortingOption));
         add(model, "page", "sections");
 
@@ -47,9 +48,12 @@ public class SectionsController extends ConvenientController {
 
     @GetMapping("/create")
     public String returnSectionFormPageForCreating(Model model, Authentication authentication) {
+
         addForHeader(model, authentication, service);
+
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать раздел");
+
         return "section-form";
     }
 
@@ -60,14 +64,19 @@ public class SectionsController extends ConvenientController {
                                                   BindingResult bindingResult) {
 
         if (service.savingValidation(section, bindingResult)) {
+
             addForHeader(model, authentication, service);
+
             add(model, "object", section);
             add(model, "formSubmitButtonText", service.isNew(section) ? "Создать раздел" : "Сохранить");
+
             add(model, "error", service.extractAnySingleError(bindingResult));
+
             return "section-form";
         }
 
         service.save(section, authentication);
+
         return "redirect:/sections";
     }
 
@@ -79,8 +88,10 @@ public class SectionsController extends ConvenientController {
         Integer id = toNonNegativeInteger(pathId);
 
         addForHeader(model, authentication, service);
+
         add(model, "object", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить");
+
         return "section-form";
     }
 
@@ -95,10 +106,14 @@ public class SectionsController extends ConvenientController {
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
+
             addForHeader(model, authentication, service);
+
             add(model, "sections", sorted(sortingOption));
             add(model, "page", "sections");
+
             add(model, "error", msg);
+
             return "sections";
         }
 

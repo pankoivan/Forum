@@ -69,7 +69,7 @@
                 <!-- Текущий раздел -->
                 <div class="m-2 text-center">
                     <h2
-                        th:text="'Текущий раздел: ' + '&quot;' + ${section.name} + '&quot;'"
+                        th:text="'Текущий раздел: ' + '&quot;' + ${sectionName} + '&quot;'"
                     >
                         Текущий раздел: "Главный"
                     </h2>
@@ -82,7 +82,7 @@
                     <div>
                         <a
                             href="#"
-                            th:href="@{/sections/__${section.id}__/topics/create}"
+                            th:href="@{/sections/__${sectionId}__/topics/create}"
                             class="btn btn-primary"
                             >Создать тему</a
                         >
@@ -113,7 +113,7 @@
             <div class="col-12 col-md-8 col-lg-6 mx-auto mb-5">
                 <div
                     th:replace="~{fragments/sort :: sort (properties = ${properties}, directions = ${directions},
-                        submitUrl = '/sections/__${section.id}__/topics/sort')}"
+                        submitUrl = '/sections/__${sectionId}__/topics/sort')}"
                 >
                     <div
                         class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-mini"
@@ -154,7 +154,7 @@
             <!-- Пагинация -->
             <div
                 class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
-                th:replace="~{fragments/pagination :: pagination(urlPart = '/sections/__${section.id}__/topics')}"
+                th:replace="~{fragments/pagination :: pagination(urlPart = '/sections/__${sectionId}__/topics')}"
             >
                 <h3>Статический блок для просмотра в браузере</h3>
             </div>

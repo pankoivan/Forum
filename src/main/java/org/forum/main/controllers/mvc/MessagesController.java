@@ -64,7 +64,6 @@ public class MessagesController extends ConvenientController {
         add(model, "message", service.empty());
         add(model, "formSubmitButtonText", "Отправить сообщение");
 
-        add(model, "page", "messages");
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
 
@@ -103,7 +102,6 @@ public class MessagesController extends ConvenientController {
             add(model, "message", message);
             add(model, "formSubmitButtonText", isNew ? "Отправить сообщение" : "Сохранить изменения");
 
-            add(model, "page", "messages");
             add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
             add(model, "currentPage", pageNumber);
 
@@ -149,7 +147,6 @@ public class MessagesController extends ConvenientController {
         add(model, "message", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить изменения");
 
-        add(model, "page", "messages");
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
 
@@ -190,7 +187,6 @@ public class MessagesController extends ConvenientController {
             add(model, "message", service.empty());
             add(model, "formSubmitButtonText", "Отправить сообщение");
 
-            add(model, "page", "messages");
             add(model, "pagesCount", pagesCount);
             add(model, "currentPage", pageNumber);
 
