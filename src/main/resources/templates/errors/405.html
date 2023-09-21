@@ -43,26 +43,24 @@
     </head>
 
     <body
-        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
+        class="min-vh-100 bg-lightgray d-flex flex-column align-items-center justify-content-between"
     >
         <div></div>
 
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
-        <div class="container">
+        <div class="container d-flex justify-content-center align-items-center">
             <div
                 class="col-12 col-md-8 col-lg-6 text-center text-white mx-auto"
             >
                 <div class="bg-dark rounded px-3 py-2">
-                    <p class="fs-20 fw-bold">Неожиданная ошибка сервера!</p>
-                    <p th:text="${error}">
-                        Текст ошибки, передаваемый с сервера
-                    </p>
+                    <p class="fs-20 fw-bold">Ошибка 405!</p>
                     <p>
-                        Ошибка неожиданная, а это значит, что она не связана с
-                        вашей некорректной работой. Значит, в пору бить тревогу
-                        относительно состояния процессов, происходящих на
-                        сервере
+                        Ошибка с таким кодом означает, что вы обратились по
+                        данному URL-адресу неподходящим HTTP-методом. Адрес
+                        верный, но обращение к нему таким HTTP-методом не
+                        предполагалось
                     </p>
+                    <p><a href="#" th:href="@{/}">На главную</a></p>
                 </div>
             </div>
         </div>
