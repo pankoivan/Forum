@@ -46,9 +46,13 @@ public class MessagesController extends ConvenientController {
                                      Authentication authentication,
                                      @SessionAttribute(value = "messageSortingOption", required = false)
                                          MessageSortingOption sortingOption,
-                                     @PathVariable("sectionId") Integer sectionId,
-                                     @PathVariable("topicId") Integer topicId,
-                                     @PathVariable("pageNumber") Integer pageNumber) {
+                                     @PathVariable("sectionId") String pathSectionId,
+                                     @PathVariable("topicId") String pathTopicId,
+                                     @PathVariable("pageNumber") String pathPageNumber) {
+
+        Integer sectionId = toNonNegativeInteger(pathSectionId);
+        Integer topicId = toNonNegativeInteger(pathTopicId);
+        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
         add(model, "message", service.empty());
@@ -73,9 +77,13 @@ public class MessagesController extends ConvenientController {
                                                   BindingResult bindingResult,
                                                   @SessionAttribute(value = "messageSortingOption", required = false)
                                                       MessageSortingOption sortingOption,
-                                                  @PathVariable("sectionId") Integer sectionId,
-                                                  @PathVariable("topicId") Integer topicId,
-                                                  @PathVariable("pageNumber") Integer pageNumber) {
+                                                  @PathVariable("sectionId") String pathSectionId,
+                                                  @PathVariable("topicId") String pathTopicId,
+                                                  @PathVariable("pageNumber") String pathPageNumber) {
+
+        Integer sectionId = toNonNegativeInteger(pathSectionId);
+        Integer topicId = toNonNegativeInteger(pathTopicId);
+        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         boolean isNew = service.isNew(message);
         if (service.savingValidation(message, bindingResult)) {
@@ -104,10 +112,15 @@ public class MessagesController extends ConvenientController {
                                                Authentication authentication,
                                                @SessionAttribute(value = "messageSortingOption", required = false)
                                                    MessageSortingOption sortingOption,
-                                               @PathVariable("id") Long id,
-                                               @PathVariable("sectionId") Integer sectionId,
-                                               @PathVariable("topicId") Integer topicId,
-                                               @PathVariable("pageNumber") Integer pageNumber) {
+                                               @PathVariable("id") String pathId,
+                                               @PathVariable("sectionId") String pathSectionId,
+                                               @PathVariable("topicId") String pathTopicId,
+                                               @PathVariable("pageNumber") String pathPageNumber) {
+
+        Long id = toNonNegativeLong(pathId);
+        Integer sectionId = toNonNegativeInteger(pathSectionId);
+        Integer topicId = toNonNegativeInteger(pathTopicId);
+        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
         add(model, "message", service.findById(id));
@@ -125,10 +138,15 @@ public class MessagesController extends ConvenientController {
                                                     Authentication authentication,
                                                     @SessionAttribute(value = "messageSortingOption", required = false)
                                                         MessageSortingOption sortingOption,
-                                                    @PathVariable("id") Long id,
-                                                    @PathVariable("sectionId") Integer sectionId,
-                                                    @PathVariable("topicId") Integer topicId,
-                                                    @PathVariable("pageNumber") Integer pageNumber) {
+                                                    @PathVariable("id") String pathId,
+                                                    @PathVariable("sectionId") String pathSectionId,
+                                                    @PathVariable("topicId") String pathTopicId,
+                                                    @PathVariable("pageNumber") String pathPageNumber) {
+
+        Long id = toNonNegativeLong(pathId);
+        Integer sectionId = toNonNegativeInteger(pathSectionId);
+        Integer topicId = toNonNegativeInteger(pathTopicId);
+        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         String msg = service.deletingValidation(service.findById(id));
         int pagesCount = service.pagesCount(service.findAllByTopicId(topicId));

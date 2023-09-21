@@ -74,7 +74,9 @@ public class SectionsController extends ConvenientController {
     @PostMapping("/inner/edit/{id}")
     public String returnSectionFormPageForEditing(Model model,
                                                   Authentication authentication,
-                                                  @PathVariable("id") Integer id) {
+                                                  @PathVariable("id") String pathId) {
+
+        Integer id = toNonNegativeInteger(pathId);
 
         addForHeader(model, authentication, service);
         add(model, "object", service.findById(id));
@@ -87,7 +89,9 @@ public class SectionsController extends ConvenientController {
                                                     Authentication authentication,
                                                     @SessionAttribute(value = "sectionSortingOption", required = false)
                                                         SectionSortingOption sortingOption,
-                                                    @PathVariable("id") Integer id) {
+                                                    @PathVariable("id") String pathId) {
+
+        Integer id = toNonNegativeInteger(pathId);
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {

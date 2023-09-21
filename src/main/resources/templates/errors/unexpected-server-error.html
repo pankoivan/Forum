@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Разделы</title>
+        <link
+            href="../static/css/bootstrap.min.css"
+            rel="stylesheet"
+            th:href="@{/css/bootstrap.min.css}"
+        />
+        <link
+            href="../static/css/style.css"
+            rel="stylesheet"
+            th:href="@{/css/style.css}"
+        />
+        <link
+            href="../static/favicon/apple-touch-icon.png"
+            rel="apple-touch-icon"
+            sizes="180x180"
+            th:href="@{/favicon/apple-touch-icon.png}"
+        />
+        <link
+            href="../static/favicon/favicon-32x32.png"
+            rel="icon"
+            sizes="32x32"
+            th:href="@{/favicon/favicon-32x32.png}"
+            type="image/png"
+        />
+        <link
+            href="../static/favicon/favicon-16x16.png"
+            rel="icon"
+            sizes="16x16"
+            th:href="@{/favicon/favicon-16x16.png}"
+            type="image/png"
+        />
+        <link
+            href="../static/favicon/site.webmanifest"
+            rel="manifest"
+            th:href="@{/favicon/site.webmanifest}"
+        />
+    </head>
+
+    <body
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
+    >
+        <!-- ---------------------------------------- Заголовок ---------------------------------------- -->
+        <div
+            th:replace="${currentUser} ? ~{fragments/auth-header :: auth-header} : ~{fragments/anon-header :: anon-header}"
+        >
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
+            >
+                <h3>Статический заголовок для просмотра в браузере</h3>
+            </div>
+        </div>
+
+        <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
+        <div class="container">
+            <div
+                class="col-12 col-md-8 col-lg-6 text-center text-white mx-auto"
+            >
+                <div class="bg-dark rounded px-3 py-2">
+                    <p class="fs-20 fw-bold">Неожиданная ошибка сервера!</p>
+                    <p th:text="${error}">
+                        Текст ошибки, передаваемый с сервера
+                    </p>
+                    <p>
+                        Ошибка неожиданная, а это значит, что она не связана с
+                        вашей некорректной работой. Значит, в пору бить тревогу
+                        относительно состояния процессов, происходящих на
+                        сервере
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ---------------------------------------- Футер ---------------------------------------- -->
+        <div th:replace="~{fragments/footer :: footer}">
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5"
+            >
+                <h3>Статический футер для просмотра в браузере</h3>
+            </div>
+        </div>
+
+        <script
+            src="../static/js/bootstrap.bundle.min.js"
+            th:src="@{/js/bootstrap.bundle.min.js}"
+        ></script>
+    </body>
+</html>

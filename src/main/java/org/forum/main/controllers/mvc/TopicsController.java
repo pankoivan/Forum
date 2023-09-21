@@ -37,7 +37,9 @@ public class TopicsController extends ConvenientController {
                                    Authentication authentication,
                                    @SessionAttribute(value = "topicSortingOption", required = false)
                                        TopicSortingOption sortingOption,
-                                   @PathVariable("sectionId") Integer sectionId) {
+                                   @PathVariable("sectionId") String pathSectionId) {
+
+        Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "section", sectionService.findById(sectionId));
@@ -54,7 +56,9 @@ public class TopicsController extends ConvenientController {
     @GetMapping("/create")
     public String returnTopicFormPageForCreating(Model model,
                                                  Authentication authentication,
-                                                 @PathVariable("sectionId") Integer sectionId) {
+                                                 @PathVariable("sectionId") String pathSectionId) {
+
+        Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "object", service.empty());
@@ -68,7 +72,9 @@ public class TopicsController extends ConvenientController {
                                                 Authentication authentication,
                                                 @Valid Topic topic,
                                                 BindingResult bindingResult,
-                                                @PathVariable("sectionId") Integer sectionId) {
+                                                @PathVariable("sectionId") String pathSectionId) {
+
+        Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         if (service.savingValidation(topic, bindingResult)) {
             addForHeader(model, authentication, sectionService);
@@ -86,8 +92,11 @@ public class TopicsController extends ConvenientController {
     @PostMapping("/inner/edit/{topicId}")
     public String returnTopicFormPageForEditing(Model model,
                                                 Authentication authentication,
-                                                @PathVariable("topicId") Integer id,
-                                                @PathVariable("sectionId") Integer sectionId) {
+                                                @PathVariable("topicId") String pathId,
+                                                @PathVariable("sectionId") String pathSectionId) {
+
+        Integer id = toNonNegativeInteger(pathId);
+        Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "object", service.findById(id));
@@ -101,8 +110,11 @@ public class TopicsController extends ConvenientController {
                                                   Authentication authentication,
                                                   @SessionAttribute(value = "topicSortingOption", required = false)
                                                       TopicSortingOption sortingOption,
-                                                  @PathVariable("topicId") Integer id,
-                                                  @PathVariable("sectionId") Integer sectionId) {
+                                                  @PathVariable("topicId") String pathId,
+                                                  @PathVariable("sectionId") String pathSectionId) {
+
+        Integer id = toNonNegativeInteger(pathId);
+        Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {

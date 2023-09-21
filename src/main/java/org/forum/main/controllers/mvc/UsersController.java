@@ -40,7 +40,9 @@ public class UsersController extends ConvenientController {
                                   Authentication authentication,
                                   @SessionAttribute(value = "messageSortingOption", required = false)
                                       UserSortingOption sortingOption,
-                                  @PathVariable("pageNumber") Integer pageNumber) {
+                                  @PathVariable("pageNumber") String pathPageNumber) {
+
+        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
         add(model, "users", sorted(sortingOption, pageNumber));
