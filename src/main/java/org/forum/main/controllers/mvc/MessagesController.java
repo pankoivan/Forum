@@ -55,11 +55,16 @@ public class MessagesController extends ConvenientController {
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "message", service.empty());
+
+        add(model, "sectionId", sectionId);
+        add(model, "topicId", topicId);
+        add(model, "topicName", topicService.findById(topicId).getName());
         add(model, "messages", sorted(sortingOption, topicId, pageNumber));
-        add(model, "section", sectionService.findById(sectionId));
-        add(model, "topic", topicService.findById(topicId));
+
+        add(model, "message", service.empty());
         add(model, "formSubmitButtonText", "Отправить сообщение");
+
+        add(model, "page", "messages");
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
 
@@ -87,20 +92,32 @@ public class MessagesController extends ConvenientController {
 
         boolean isNew = service.isNew(message);
         if (service.savingValidation(message, bindingResult)) {
+
             addForHeader(model, authentication, sectionService);
-            add(model, "message", message);
+
+            add(model, "sectionId", sectionId);
+            add(model, "topicId", topicId);
+            add(model, "topicName", topicService.findById(topicId).getName());
             add(model, "messages", sorted(sortingOption, topicId, pageNumber));
-            add(model, "section", sectionService.findById(sectionId));
-            add(model, "topic", topicService.findById(topicId));
-            add(model, "formSubmitButtonText", isNew
-                    ? "Отправить сообщение" : "Сохранить изменения");
+
+            add(model, "message", message);
+            add(model, "formSubmitButtonText", isNew ? "Отправить сообщение" : "Сохранить изменения");
+
+            add(model, "page", "messages");
             add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
             add(model, "currentPage", pageNumber);
+
+            add(model, "sortingObject", service.emptySortingOption());
+            add(model, "properties", MessageSortingProperties.values());
+            add(model, "directions", Sort.Direction.values());
+
             add(model, "formError", service.extractAnySingleError(bindingResult));
+
             return "messages";
         }
 
         service.save(message, authentication, topicService.findById(topicId));
+
         return isNew
                 ? "redirect:/sections/{sectionId}/topics/{topicId}/messages/page" +
                         service.pagesCount(service.findAllByTopicId(topicId))
@@ -123,13 +140,23 @@ public class MessagesController extends ConvenientController {
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "message", service.findById(id));
+
+        add(model, "sectionId", sectionId);
+        add(model, "topicId", topicId);
+        add(model, "topicName", topicService.findById(topicId).getName());
         add(model, "messages", sorted(sortingOption, topicId, pageNumber));
-        add(model, "section", sectionService.findById(sectionId));
-        add(model, "topic", topicService.findById(topicId));
+
+        add(model, "message", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить изменения");
+
+        add(model, "page", "messages");
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
+
+        add(model, "sortingObject", service.emptySortingOption());
+        add(model, "properties", MessageSortingProperties.values());
+        add(model, "directions", Sort.Direction.values());
+
         return "messages";
     }
 
@@ -148,22 +175,36 @@ public class MessagesController extends ConvenientController {
         Integer topicId = toNonNegativeInteger(pathTopicId);
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        String msg = service.deletingValidation(service.findById(id));
         int pagesCount = service.pagesCount(service.findAllByTopicId(topicId));
+
+        String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
+
             addForHeader(model, authentication, sectionService);
-            add(model, "message", service.empty());
+
+            add(model, "sectionId", sectionId);
+            add(model, "topicId", topicId);
+            add(model, "topicName", topicService.findById(topicId).getName());
             add(model, "messages", sorted(sortingOption, topicId, pageNumber));
-            add(model, "section", sectionService.findById(sectionId));
-            add(model, "topic", topicService.findById(topicId));
+
+            add(model, "message", service.empty());
             add(model, "formSubmitButtonText", "Отправить сообщение");
+
+            add(model, "page", "messages");
             add(model, "pagesCount", pagesCount);
             add(model, "currentPage", pageNumber);
+
+            add(model, "sortingObject", service.emptySortingOption());
+            add(model, "properties", MessageSortingProperties.values());
+            add(model, "directions", Sort.Direction.values());
+
             add(model, "error", msg);
+
             return "messages";
         }
 
         service.deleteById(id);
+
         int newPagesCount = service.pagesCount(service.findAllByTopicId(topicId));
 
         return pageNumber.equals(pagesCount) && newPagesCount < pagesCount
