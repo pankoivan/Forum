@@ -39,6 +39,7 @@ public class RolesController extends ConvenientController {
                                                               BindingResult bindingResult) {
 
         if (roleService.savingValidation(role, bindingResult)) {
+
             addForHeader(model, authentication, sectionService);
             add(model, "roles", roleService.findAll());
             add(model, "authorities", authorityService.findAll());
@@ -47,10 +48,12 @@ public class RolesController extends ConvenientController {
             add(model, "roleFormSubmitButtonText", roleService.isNew(role) ? "Создать роль" : "Сохранить");
             add(model, "authorityFormSubmitButtonText", "Создать право");
             add(model, "roleError", roleService.extractAnySingleError(bindingResult));
+
             return "roles-authorities-panel";
         }
 
         roleService.save(role);
+
         return "redirect:/roles-authorities";
     }
 
@@ -68,6 +71,7 @@ public class RolesController extends ConvenientController {
         add(model, "authority", authorityService.empty());
         add(model, "roleFormSubmitButtonText", "Сохранить");
         add(model, "authorityFormSubmitButtonText", "Создать право");
+
         return "roles-authorities-panel";
     }
 
@@ -80,6 +84,7 @@ public class RolesController extends ConvenientController {
 
         String msg = roleService.deletingValidation(roleService.findById(id));
         if (msg != null) {
+
             addForHeader(model, authentication, sectionService);
             add(model, "roles", roleService.findAll());
             add(model, "authorities", authorityService.findAll());
@@ -88,10 +93,12 @@ public class RolesController extends ConvenientController {
             add(model, "roleFormSubmitButtonText", "Создать роль");
             add(model, "authorityFormSubmitButtonText", "Создать право");
             add(model, "roleError", msg);
+
             return "roles-authorities-panel";
         }
 
         roleService.deleteById(id);
+
         return "redirect:/roles-authorities";
     }
 

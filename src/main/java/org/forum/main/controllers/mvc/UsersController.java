@@ -48,7 +48,6 @@ public class UsersController extends ConvenientController {
         add(model, "users", sorted(sortingOption, pageNumber));
         add(model, "pagesCount", service.pagesCount(service.findAll()));
         add(model, "currentPage", pageNumber);
-
         add(model, "sortingObject", service.emptySortingOption());
         add(model, "properties", UserSortingProperties.values());
         add(model, "directions", Sort.Direction.values());

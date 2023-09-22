@@ -55,18 +55,14 @@ public class MessagesController extends ConvenientController {
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
-
         add(model, "sectionId", sectionId);
         add(model, "topicId", topicId);
         add(model, "topicName", topicService.findById(topicId).getName());
         add(model, "messages", sorted(sortingOption, topicId, pageNumber));
-
         add(model, "message", service.empty());
         add(model, "formSubmitButtonText", "Отправить сообщение");
-
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
-
         add(model, "sortingObject", service.emptySortingOption());
         add(model, "properties", MessageSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
@@ -93,22 +89,17 @@ public class MessagesController extends ConvenientController {
         if (service.savingValidation(message, bindingResult)) {
 
             addForHeader(model, authentication, sectionService);
-
             add(model, "sectionId", sectionId);
             add(model, "topicId", topicId);
             add(model, "topicName", topicService.findById(topicId).getName());
             add(model, "messages", sorted(sortingOption, topicId, pageNumber));
-
             add(model, "message", message);
             add(model, "formSubmitButtonText", isNew ? "Отправить сообщение" : "Сохранить изменения");
-
             add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
             add(model, "currentPage", pageNumber);
-
             add(model, "sortingObject", service.emptySortingOption());
             add(model, "properties", MessageSortingProperties.values());
             add(model, "directions", Sort.Direction.values());
-
             add(model, "formError", service.extractAnySingleError(bindingResult));
 
             return "messages";
@@ -138,18 +129,14 @@ public class MessagesController extends ConvenientController {
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
-
         add(model, "sectionId", sectionId);
         add(model, "topicId", topicId);
         add(model, "topicName", topicService.findById(topicId).getName());
         add(model, "messages", sorted(sortingOption, topicId, pageNumber));
-
         add(model, "message", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить изменения");
-
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
-
         add(model, "sortingObject", service.emptySortingOption());
         add(model, "properties", MessageSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
@@ -178,22 +165,17 @@ public class MessagesController extends ConvenientController {
         if (msg != null) {
 
             addForHeader(model, authentication, sectionService);
-
             add(model, "sectionId", sectionId);
             add(model, "topicId", topicId);
             add(model, "topicName", topicService.findById(topicId).getName());
             add(model, "messages", sorted(sortingOption, topicId, pageNumber));
-
             add(model, "message", service.empty());
             add(model, "formSubmitButtonText", "Отправить сообщение");
-
             add(model, "pagesCount", pagesCount);
             add(model, "currentPage", pageNumber);
-
             add(model, "sortingObject", service.emptySortingOption());
             add(model, "properties", MessageSortingProperties.values());
             add(model, "directions", Sort.Direction.values());
-
             add(model, "error", msg);
 
             return "messages";

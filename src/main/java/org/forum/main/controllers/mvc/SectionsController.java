@@ -38,7 +38,6 @@ public class SectionsController extends ConvenientController {
 
         add(model, "sections", sorted(sortingOption));
         add(model, "page", "sections");
-
         add(model, "sortingObject", service.emptySortingOption());
         add(model, "properties", SectionSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
@@ -50,7 +49,6 @@ public class SectionsController extends ConvenientController {
     public String returnSectionFormPageForCreating(Model model, Authentication authentication) {
 
         addForHeader(model, authentication, service);
-
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать раздел");
 
@@ -66,10 +64,8 @@ public class SectionsController extends ConvenientController {
         if (service.savingValidation(section, bindingResult)) {
 
             addForHeader(model, authentication, service);
-
             add(model, "object", section);
             add(model, "formSubmitButtonText", service.isNew(section) ? "Создать раздел" : "Сохранить");
-
             add(model, "error", service.extractAnySingleError(bindingResult));
 
             return "section-form";
@@ -88,7 +84,6 @@ public class SectionsController extends ConvenientController {
         Integer id = toNonNegativeInteger(pathId);
 
         addForHeader(model, authentication, service);
-
         add(model, "object", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить");
 
@@ -108,16 +103,15 @@ public class SectionsController extends ConvenientController {
         if (msg != null) {
 
             addForHeader(model, authentication, service);
-
             add(model, "sections", sorted(sortingOption));
             add(model, "page", "sections");
-
             add(model, "error", msg);
 
             return "sections";
         }
 
         service.deleteById(id);
+
         return "redirect:/sections";
     }
 

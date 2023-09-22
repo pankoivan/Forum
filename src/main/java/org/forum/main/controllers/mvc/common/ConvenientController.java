@@ -17,9 +17,9 @@ public abstract class ConvenientController {
     protected void addForHeader(Model model, Authentication authentication, SectionService service) {
         try {
             add(model, "currentUser", AuthenticationUtils.extractCurrentUserOrNull(authentication));
-            add(model, "sections", service.findAll());
+            add(model, "sections", service.findAllSortedByDefault());
         } catch (AuxiliaryInstrumentsException e) {
-            throw new ControllerException("Current user cannot be extracted");
+            throw new ControllerException("Current user cannot be extracted", e);
         }
     }
 

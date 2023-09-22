@@ -43,6 +43,7 @@ public class IndexController extends ConvenientController {
         add(model, "topicsCount", service.topicsCount());
         add(model, "messagesCount", service.messagesCount());
         add(model, "likesCount", service.likesCount());
+        add(model, "dislikesCount", service.dislikesCount());
         add(model, "bansCount", service.bansCount());
         add(model, "currentBansCount", service.currentBansCount());
     }

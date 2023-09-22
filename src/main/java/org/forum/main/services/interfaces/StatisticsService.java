@@ -27,6 +27,8 @@ public interface StatisticsService {
 
     long likesCount();
 
+    long dislikesCount();
+
     int bansCount();
 
     int currentBansCount();

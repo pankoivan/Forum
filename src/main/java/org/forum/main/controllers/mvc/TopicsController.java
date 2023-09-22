@@ -49,15 +49,12 @@ public class TopicsController extends ConvenientController {
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
-
         add(model, "sectionId", sectionId);
         add(model, "sectionName", sectionService.findById(sectionId).getName());
         add(model, "topics", sorted(sortingOption, sectionId, pageNumber));
-
         add(model, "page", "topics");
         add(model, "pagesCount", service.pagesCount(service.findAllBySectionId(sectionId)));
         add(model, "currentPage", pageNumber);
-
         add(model, "sortingObject", service.emptySortingOption());
         add(model, "properties", TopicSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
@@ -73,7 +70,6 @@ public class TopicsController extends ConvenientController {
         Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         addForHeader(model, authentication, sectionService);
-
         add(model, "sectionId", sectionId);
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать тему");
@@ -93,11 +89,9 @@ public class TopicsController extends ConvenientController {
         if (service.savingValidation(topic, bindingResult)) {
 
             addForHeader(model, authentication, sectionService);
-
             add(model, "sectionId", sectionId);
             add(model, "object", topic);
             add(model, "formSubmitButtonText", service.isNew(topic) ? "Создать тему" : "Сохранить");
-
             add(model, "error", service.extractAnySingleError(bindingResult));
 
             return "topic-form";
@@ -118,7 +112,6 @@ public class TopicsController extends ConvenientController {
         Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         addForHeader(model, authentication, sectionService);
-
         add(model, "sectionId", sectionId);
         add(model, "object", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить");
@@ -141,19 +134,15 @@ public class TopicsController extends ConvenientController {
         if (msg != null) {
 
             addForHeader(model, authentication, sectionService);
-
             add(model, "sectionId", sectionId);
             add(model, "sectionName", sectionService.findById(sectionId).getName());
             add(model, "topics", sorted(sortingOption, sectionId, 1));
-
             add(model, "page", "topics");
             add(model, "pagesCount", service.pagesCount(service.findAllBySectionId(sectionId)));
             add(model, "currentPage", 1);
-
             add(model, "sortingObject", service.emptySortingOption());
             add(model, "properties", TopicSortingProperties.values());
             add(model, "directions", Sort.Direction.values());
-
             add(model, "error", msg);
 
             return "topics";

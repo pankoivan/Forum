@@ -24,18 +24,21 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private final LikeRepository likeRepository;
 
+    private final DislikeRepository dislikeRepository;
+
     private final BanRepository banRepository;
 
     @Autowired
     public StatisticsServiceImpl(UserRepository userRepository, SectionRepository sectionRepository,
                                  TopicRepository topicRepository, MessageRepository messageRepository,
-                                 LikeRepository likeRepository, BanRepository banRepository) {
-
+                                 LikeRepository likeRepository, DislikeRepository dislikeRepository,
+                                 BanRepository banRepository) {
         this.userRepository = userRepository;
         this.sectionRepository = sectionRepository;
         this.topicRepository = topicRepository;
         this.messageRepository = messageRepository;
         this.likeRepository = likeRepository;
+        this.dislikeRepository = dislikeRepository;
         this.banRepository = banRepository;
     }
 
@@ -90,6 +93,11 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public long likesCount() {
         return likeRepository.count();
+    }
+
+    @Override
+    public long dislikesCount() {
+        return dislikeRepository.count();
     }
 
     @Override

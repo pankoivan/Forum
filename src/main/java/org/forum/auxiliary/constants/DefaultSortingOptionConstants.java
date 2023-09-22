@@ -15,15 +15,15 @@ import org.springframework.data.domain.Sort;
 public final class DefaultSortingOptionConstants {
 
     public static final UserSortingOption FOR_USERS =
-            new UserSortingOption(Sort.Direction.DESC, UserSortingProperties.BY_LIKES_COUNT);
+            new UserSortingOption(Sort.Direction.ASC, UserSortingProperties.BY_NICKNAME);
 
     public static final SectionSortingOption FOR_SECTIONS =
-            new SectionSortingOption(Sort.Direction.DESC, SectionSortingProperties.BY_MESSAGES_COUNT);
+            new SectionSortingOption(Sort.Direction.ASC, SectionSortingProperties.BY_NAME);
 
     public static final TopicSortingOption FOR_TOPICS =
-            new TopicSortingOption(Sort.Direction.DESC, TopicSortingProperties.BY_MESSAGES_COUNT);
+            new TopicSortingOption(Sort.Direction.ASC, TopicSortingProperties.BY_NAME);
 
     public static final MessageSortingOption FOR_MESSAGES =
-            new MessageSortingOption(Sort.Direction.DESC, MessageSortingProperties.BY_LIKES_COUNT);
+            new MessageSortingOption(Sort.Direction.ASC, MessageSortingProperties.BY_CREATION_DATE);
 
 }

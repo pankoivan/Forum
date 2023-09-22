@@ -40,6 +40,7 @@ public class AuthoritiesController extends ConvenientController {
                                                                    BindingResult bindingResult) {
 
         if (authorityService.savingValidation(authority, bindingResult)) {
+
             addForHeader(model, authentication, sectionService);
             add(model, "roles", roleService.findAll());
             add(model, "authorities", authorityService.findAll());
@@ -49,10 +50,12 @@ public class AuthoritiesController extends ConvenientController {
             add(model, "authorityFormSubmitButtonText", authorityService.isNew(authority)
                     ? "Создать право" : "Сохранить");
             add(model, "authorityError", authorityService.extractAnySingleError(bindingResult));
+
             return "roles-authorities-panel";
         }
 
         authorityService.save(authority);
+
         return "redirect:/roles-authorities";
     }
 
@@ -70,6 +73,7 @@ public class AuthoritiesController extends ConvenientController {
         add(model, "authority", authorityService.findById(id));
         add(model, "roleFormSubmitButtonText", "Создать роль");
         add(model, "authorityFormSubmitButtonText", "Сохранить");
+
         return "roles-authorities-panel";
     }
 
@@ -82,6 +86,7 @@ public class AuthoritiesController extends ConvenientController {
 
         String msg = authorityService.deletingValidation(authorityService.findById(id));
         if (msg != null) {
+
             addForHeader(model, authentication, sectionService);
             add(model, "roles", roleService.findAll());
             add(model, "authorities", authorityService.findAll());
@@ -90,10 +95,12 @@ public class AuthoritiesController extends ConvenientController {
             add(model, "roleFormSubmitButtonText", "Создать роль");
             add(model, "authorityFormSubmitButtonText", "Создать право");
             add(model, "authorityError", msg);
+
             return "roles-authorities-panel";
         }
 
         authorityService.deleteById(id);
+
         return "redirect:/roles-authorities";
     }
 

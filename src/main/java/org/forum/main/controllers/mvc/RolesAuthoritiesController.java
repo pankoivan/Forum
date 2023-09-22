@@ -31,6 +31,7 @@ public class RolesAuthoritiesController extends ConvenientController {
 
     @GetMapping
     public String returnRolesAuthoritiesPage(Model model, Authentication authentication) {
+
         addForHeader(model, authentication, sectionService);
         add(model, "roles", roleService.findAll());
         add(model, "authorities", authorityService.findAll());
@@ -38,6 +39,7 @@ public class RolesAuthoritiesController extends ConvenientController {
         add(model, "authority", authorityService.empty());
         add(model, "roleFormSubmitButtonText", "Создать роль");
         add(model, "authorityFormSubmitButtonText", "Создать право");
+
         return "roles-authorities-panel";
     }
 
