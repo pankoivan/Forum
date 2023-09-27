@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @Service
 public class UserServiceImpl extends AbstractPaginationServiceImpl<User> implements UserService {
@@ -64,21 +65,13 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
 
     @Override
     public List<User> findAllSorted(UserSortingOption option) {
-        return switch(option.getProperty()) {
-
-            case BY_NICKNAME -> repository.findAll(Sort.by(option.getDirection(), "nickname"));
-
-            case BY_REGISTRATION_DATE -> repository.findAll(Sort.by(option.getDirection(), "registration_date"));
-
-            case BY_MESSAGES_COUNT -> repository.findAllByOrderByMessagesCountWithDirection(option.getDirection().name());
-
-            case BY_LIKES_COUNT -> repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name());
-
-            case BY_DISLIKES_COUNT -> repository.findAllByOrderByDislikesCountWithDirection(option.getDirection().name());
-
-            case BY_REPUTATION -> repository.findAllByOrderByReputationWithDirection(option.getDirection().name());
-
-        };
+        return mySwitch(option,
+                () -> repository.findAll(Sort.by(option.getDirection(), "nickname")),
+                () -> repository.findAll(Sort.by(option.getDirection(), "registration_date")),
+                () -> repository.findAllByOrderByMessagesCountWithDirection(option.getDirection().name()),
+                () -> repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name()),
+                () -> repository.findAllByOrderByDislikesCountWithDirection(option.getDirection().name()),
+                () -> repository.findAllByOrderByReputationWithDirection(option.getDirection().name()));
     }
 
     @Override
@@ -89,6 +82,22 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
     @Override
     public List<User> findAllByRoleName(String roleName) {
         return repository.findAllByRoleName(roleName);
+    }
+
+    @Override
+    public List<User> findAllByRoleNameSorted(String roleName, UserSortingOption option) {
+        return mySwitch(option,
+                () -> repository.findAllByRoleName(roleName, Sort.by(option.getDirection(), "nickname")),
+                () -> repository.findAllByRoleName(roleName, Sort.by(option.getDirection(), "registration_date")),
+                () -> repository.findAllByRoleNameOrderByMessagesCountWithDirection(roleName, option.getDirection().name()),
+                () -> repository.findAllByRoleNameOrderByLikesCountWithDirection(roleName, option.getDirection().name()),
+                () -> repository.findAllByRoleNameOrderByDislikesCountWithDirection(roleName, option.getDirection().name()),
+                () -> repository.findAllByRoleNameOrderByReputationWithDirection(roleName, option.getDirection().name()));
+    }
+
+    @Override
+    public List<User> findAlByRoleNameSortedByDefault(String roleName) {
+        return findAllByRoleNameSorted(roleName, DefaultSortingOptionConstants.FOR_USERS);
     }
 
     @Override
@@ -109,6 +118,18 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
     @Override
     public int pagesCount(List<User> users) {
         return pagesCountImpl(users, PaginationConstants.USERS);
+    }
+
+    @SafeVarargs
+    private List<User> mySwitch(UserSortingOption option, Supplier<List<User>>... suppliers) {
+        return switch (option.getProperty()) {
+            case BY_NICKNAME -> suppliers[0].get();
+            case BY_REGISTRATION_DATE -> suppliers[1].get();
+            case BY_MESSAGES_COUNT -> suppliers[2].get();
+            case BY_LIKES_COUNT -> suppliers[3].get();
+            case BY_DISLIKES_COUNT -> suppliers[4].get();
+            case BY_REPUTATION -> suppliers[5].get();
+        };
     }
 
 }

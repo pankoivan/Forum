@@ -17,4 +17,8 @@ public interface UserService extends GeneralService<User, Integer>, ValidationSe
 
     List<User> findAllByRoleName(String roleName);
 
+    List<User> findAllByRoleNameSorted(String roleName, UserSortingOption sortingOption);
+
+    List<User> findAlByRoleNameSortedByDefault(String roleName);
+
 }

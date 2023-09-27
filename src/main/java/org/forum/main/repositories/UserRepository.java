@@ -65,4 +65,59 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             """)
     List<User> findAllByOrderByReputationWithDirection(@Param("direction") String direction);
 
+
+
+
+
+
+    @Query(value = """
+            SELECT u FROM User u
+            LEFT JOIN u.postedMessages pm
+            WHERE u.role.name = :roleName
+            GROUP BY u.id
+            ORDER BY
+                CASE WHEN :direction = 'ASC' THEN COUNT(pm.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(pm.id) END DESC
+            """)
+    List<User> findAllByRoleNameOrderByMessagesCountWithDirection(@Param("roleName") String roleName,
+                                                                  @Param("direction") String direction);
+
+    @Query(value = """
+            SELECT u FROM User u
+            LEFT JOIN u.postedMessages pm
+            LEFT JOIN pm.likedUsers lu
+            WHERE u.role.name = :roleName
+            GROUP BY u.id
+            ORDER BY
+                CASE WHEN :direction = 'ASC' THEN COUNT(lu.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(lu.id) END DESC
+            """)
+    List<User> findAllByRoleNameOrderByLikesCountWithDirection(@Param("roleName") String roleName,
+                                                               @Param("direction") String direction);
+
+    @Query(value = """
+            SELECT u FROM User u
+            LEFT JOIN u.postedMessages pm
+            LEFT JOIN pm.dislikedUsers du
+            WHERE u.role.name = :roleName
+            GROUP BY u.id
+            ORDER BY
+                CASE WHEN :direction = 'ASC' THEN COUNT(du.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(du.id) END DESC
+            """)
+    List<User> findAllByRoleNameOrderByDislikesCountWithDirection(@Param("roleName") String roleName,
+                                                                  @Param("direction") String direction);
+
+    @Query(value = """
+            SELECT u FROM User u
+            LEFT JOIN u.postedMessages pm
+            WHERE u.role.name = :roleName
+            GROUP BY u.id
+            ORDER BY
+                CASE WHEN :direction = 'ASC' THEN COUNT(pm.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(pm.id) END DESC
+            """)
+    List<User> findAllByRoleNameOrderByReputationWithDirection(@Param("roleName") String roleName,
+                                                               @Param("direction") String direction);
+
 }
