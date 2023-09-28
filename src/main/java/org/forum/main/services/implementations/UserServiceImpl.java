@@ -67,7 +67,7 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
     public List<User> findAllSorted(UserSortingOption option) {
         return mySwitch(option,
                 () -> repository.findAll(Sort.by(option.getDirection(), "nickname")),
-                () -> repository.findAll(Sort.by(option.getDirection(), "registration_date")),
+                () -> repository.findAll(Sort.by(option.getDirection(), "registrationDate")),
                 () -> repository.findAllByOrderByMessagesCountWithDirection(option.getDirection().name()),
                 () -> repository.findAllByOrderByReputationWithDirection(option.getDirection().name()));
     }
@@ -86,7 +86,7 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
     public List<User> findAllByRoleNameSorted(String roleName, UserSortingOption option) {
         return mySwitch(option,
                 () -> repository.findAllByRoleName(roleName, Sort.by(option.getDirection(), "nickname")),
-                () -> repository.findAllByRoleName(roleName, Sort.by(option.getDirection(), "registration_date")),
+                () -> repository.findAllByRoleName(roleName, Sort.by(option.getDirection(), "registrationDate")),
                 () -> repository.findAllByRoleNameOrderByMessagesCountWithDirection(roleName, option.getDirection().name()),
                 () -> repository.findAllByRoleNameOrderByReputationWithDirection(roleName, option.getDirection().name()));
     }

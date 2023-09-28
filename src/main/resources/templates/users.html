@@ -60,7 +60,7 @@
                 <!-- Выбор сортировки -->
                 <div
                     th:replace="~{fragments/sort :: sort (properties = ${properties}, directions = ${directions},
-                        submitUrl = '/users/page__${currentPage}__/sort')}"
+                        submitUrl = ${submitUrl})}"
                 >
                     <div
                         class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
@@ -111,8 +111,8 @@
             </div>
             <!-- Пагинация -->
             <div
-                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
                 th:replace="~{fragments/pagination :: pagination(urlPart = ${urlPartForPagination})}"
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
             >
                 <h3>Статический блок для просмотра в браузере</h3>
             </div>

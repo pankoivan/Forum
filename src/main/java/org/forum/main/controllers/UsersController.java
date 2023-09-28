@@ -31,7 +31,7 @@ public class UsersController extends ConvenientController {
     }
 
     @GetMapping
-    public String returnUsersPageWithPagination() {
+    public String redirectUsersPageWithPagination() {
         return "redirect:/users/page1";
     }
 
@@ -50,7 +50,8 @@ public class UsersController extends ConvenientController {
         add(model, "pagesCount", service.pagesCount(service.findAll()));
         add(model, "currentPage", pageNumber);
         add(model, "urlPartForPagination", "/users");
-        add(model, "sortingObject", service.emptySortingOption());
+        add(model, "submitUrl", "/users/page%d/sort".formatted(pageNumber));
+        add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", UserSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
 
@@ -77,7 +78,8 @@ public class UsersController extends ConvenientController {
         add(model, "pagesCount", service.pagesCount(service.findAll()));
         add(model, "currentPage", pageNumber);
         add(model, "urlPartForPagination", "/users/usual");
-        add(model, "sortingObject", service.emptySortingOption());
+        add(model, "submitUrl", "/users/usual/page%d/sort".formatted(pageNumber));
+        add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", UserSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
 
@@ -104,7 +106,8 @@ public class UsersController extends ConvenientController {
         add(model, "pagesCount", service.pagesCount(service.findAll()));
         add(model, "currentPage", pageNumber);
         add(model, "urlPartForPagination", "/users/moders");
-        add(model, "sortingObject", service.emptySortingOption());
+        add(model, "submitUrl", "/users/moders/page%d/sort".formatted(pageNumber));
+        add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", UserSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
 
@@ -131,7 +134,8 @@ public class UsersController extends ConvenientController {
         add(model, "pagesCount", service.pagesCount(service.findAll()));
         add(model, "currentPage", pageNumber);
         add(model, "urlPartForPagination", "/users/admins");
-        add(model, "sortingObject", service.emptySortingOption());
+        add(model, "submitUrl", "/users/admins/page%d/sort".formatted(pageNumber));
+        add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", UserSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
 
@@ -152,9 +156,27 @@ public class UsersController extends ConvenientController {
     }
 
     @PostMapping("/page{pageNumber}/sort")
-    public String redirectCurrentPageAfterSorting(HttpSession session, UserSortingOption sortingOption) {
+    public String redirectCurrentUsersPageAfterSorting(HttpSession session, UserSortingOption sortingOption) {
         session.setAttribute("userSortingOption", sortingOption);
         return "redirect:/users/page{pageNumber}";
+    }
+
+    @PostMapping("/usual/page{pageNumber}/sort")
+    public String redirectCurrentUsualUsersPageAfterSorting(HttpSession session, UserSortingOption sortingOption) {
+        session.setAttribute("userSortingOption", sortingOption);
+        return "redirect:/users/usual/page{pageNumber}";
+    }
+
+    @PostMapping("/moders/page{pageNumber}/sort")
+    public String redirectCurrentModersPageAfterSorting(HttpSession session, UserSortingOption sortingOption) {
+        session.setAttribute("userSortingOption", sortingOption);
+        return "redirect:/users/moders/page{pageNumber}";
+    }
+
+    @PostMapping("/admins/page{pageNumber}/sort")
+    public String redirectCurrentAdminsPageAfterSorting(HttpSession session, UserSortingOption sortingOption) {
+        session.setAttribute("userSortingOption", sortingOption);
+        return "redirect:/users/admins/page{pageNumber}";
     }
 
     private List<User> sorted(UserSortingOption sortingOption, Integer pageNumber) {
