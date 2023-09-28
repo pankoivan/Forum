@@ -47,7 +47,7 @@
                         <a
                             class="text-white text-decoration-none"
                             href="#"
-                            th:href="@{/profiles/__${message.userWhoPosted.id}__}"
+                            th:href="@{/users/__${message.userWhoPosted.id}__}"
                             th:text="${message.userWhoPosted.nickname}"
                             >Имя пользователя</a
                         >
@@ -135,7 +135,7 @@
                                         <a
                                             class="dropdown-item"
                                             href="#"
-                                            th:href="@{/profiles/__${each.id}__}"
+                                            th:href="@{/users/__${each.id}__}"
                                             th:text="${each.nickname}"
                                             >SomeNICkn4me1</a
                                         >
@@ -201,7 +201,7 @@
                                         <a
                                             class="dropdown-item"
                                             href="#"
-                                            th:href="@{/profiles/__${each.id}__}"
+                                            th:href="@{/users/__${each.id}__}"
                                             th:text="${each.nickname}"
                                             >SomeNICkn4me1</a
                                         >
