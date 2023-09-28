@@ -62,7 +62,7 @@
             <div class="row mb-5 mb-md-5 mb-lg-2">
                 <div class="col-12">
                     <div
-                        th:replace=""
+                        th:replace="~{fragments/user-header :: user-header (user = ${userForProfile})}"
                         class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro mb-2"
                     >
                         <h3>Статический блок для просмотра в браузере</h3>
@@ -74,13 +74,18 @@
                 <!-- Информация из регистрации -->
                 <div class="col-12 col-md-12 col-lg-2 mb-5 mb-md-5 mb-lg-0">
                     <div class="fs-14">
-                        <!-- Почта (только для самого пользователя) -->
-                        <div class="bg-dark rounded p-1 mb-2">
+                        <!-- Почта -->
+                        <div
+                            class="bg-dark rounded p-1 mb-2"
+                            th:if="${currentUser != null AND userForProfile.id == currentUser.id}"
+                        >
                             <div class="border-bottom border-white fw-bold">
                                 <span>Почта</span>
                             </div>
                             <div>
-                                <span>example0@yandex.ru</span>
+                                <span th:text="${userForProfile.email}"
+                                    >example0@yandex.ru</span
+                                >
                             </div>
                         </div>
                         <!-- Имя -->
@@ -89,7 +94,10 @@
                                 <span>Имя</span>
                             </div>
                             <div>
-                                <span>Иванов Иван</span>
+                                <span
+                                    th:text="${userForProfile.userInformation.name}"
+                                    >Иванов Иван</span
+                                >
                             </div>
                         </div>
                         <!-- Пол -->
@@ -98,7 +106,10 @@
                                 <span>Пол</span>
                             </div>
                             <div>
-                                <span>Мужской</span>
+                                <span
+                                    th:text="${userForProfile.userInformation.gender.alias}"
+                                    >Мужской</span
+                                >
                             </div>
                         </div>
                         <!-- Дата рождения -->
@@ -107,7 +118,10 @@
                                 <span>Дата рождения</span>
                             </div>
                             <div>
-                                <span>25.11.2001</span>
+                                <span
+                                    th:text="${userForProfile.userInformation.dateOfBirth}"
+                                    >25.11.2001</span
+                                >
                             </div>
                         </div>
                         <!-- Страна -->
@@ -116,7 +130,10 @@
                                 <span>Страна</span>
                             </div>
                             <div>
-                                <span>Россия</span>
+                                <span
+                                    th:text="${userForProfile.userInformation.country}"
+                                    >Россия</span
+                                >
                             </div>
                         </div>
                         <!-- Город -->
@@ -125,167 +142,190 @@
                                 <span>Город</span>
                             </div>
                             <div>
-                                <span>Санкт-Петербург</span>
+                                <span
+                                    th:text="${userForProfile.userInformation.city}"
+                                    >Санкт-Петербург</span
+                                >
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Недавние отправленные сообщения -->
                 <div class="col-12 col-md-12 col-lg-4 mb-5 mb-md-5 mb-lg-0">
-                    <div>
-                        <div class="bg-dark rounded text-center fw-bold mb-2">
-                            <p>Недавние отправленные сообщения</p>
-                        </div>
-                        <div th:each="each : ${recentlyPosted}">
-                            <!-- Здесь будет вставка блока из цикла -->
-                            <div
-                                th:if="${false}"
-                                class="bg-dark rounded d-flex flex-row justify-content-between px-4 py-2 mb-2"
-                            >
-                                <div>
-                                    <a href="#" class="text-white">Тема</a>
-                                </div>
-                                <div>
-                                    <span>22.01.2009 в 19:24:43</span>
-                                </div>
-                            </div>
-                            <div
-                                th:if="${false}"
-                                class="bg-dark rounded d-flex flex-row justify-content-between px-4 py-2 mb-2"
-                            >
-                                <div>
-                                    <a href="#" class="text-white">Тема</a>
-                                </div>
-                                <div>
-                                    <span>22.01.2009 в 19:24:43</span>
-                                </div>
-                            </div>
-                            <div
-                                th:if="${false}"
-                                class="bg-dark rounded d-flex flex-row justify-content-between px-4 py-2 mb-2"
-                            >
-                                <div>
-                                    <a href="#" class="text-white">Тема</a>
-                                </div>
-                                <div>
-                                    <span>22.01.2009 в 19:24:43</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="bg-dark rounded text-center fw-bold mb-2">
+                        <p>Недавние отправленные сообщения</p>
+                    </div>
+                    <!-- Динамический просмотр -->
+                    <div
+                        th:each="each, status : ${userForProfile.recentMessages}"
+                    >
+                        <div
+                            th:classappend="${!status.last} ? mb-2"
+                            th:insert="~{fragments/message :: message (message = ${each})}"
+                        ></div>
+                    </div>
+                    <!-- Статический просмотр -->
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro mb-2"
+                        th:if="${false}"
+                    >
+                        <h6>Статический блок для просмотра в браузере</h6>
+                    </div>
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro mb-2"
+                        th:if="${false}"
+                    >
+                        <h6>Статический блок для просмотра в браузере</h6>
+                    </div>
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
+                        th:if="${false}"
+                    >
+                        <h6>Статический блок для просмотра в браузере</h6>
                     </div>
                 </div>
                 <!-- Недавние понравившиеся сообщения -->
                 <div class="col-12 col-md-12 col-lg-4 mb-5 mb-md-5 mb-lg-0">
-                    <div>
-                        <div class="bg-dark rounded text-center fw-bold mb-2">
-                            <p>Недавние понравившиеся сообщения</p>
-                        </div>
-                        <div th:each="each : ${recentlyLiked}">
-                            <!-- Здесь будет вставка блока из цикла -->
-                            <div
-                                th:if="${false}"
-                                class="bg-dark rounded d-flex flex-row justify-content-between px-4 py-2 mb-2"
-                            >
-                                <div>
-                                    <a href="#" class="text-white">Тема</a>
-                                </div>
-                                <div>
-                                    <span>22.01.2009 в 19:24:43</span>
-                                </div>
-                            </div>
-                            <div
-                                th:if="${false}"
-                                class="bg-dark rounded d-flex flex-row justify-content-between px-4 py-2 mb-2"
-                            >
-                                <div>
-                                    <a href="#" class="text-white">Тема</a>
-                                </div>
-                                <div>
-                                    <span>22.01.2009 в 19:24:43</span>
-                                </div>
-                            </div>
-                            <div
-                                th:if="${false}"
-                                class="bg-dark rounded d-flex flex-row justify-content-between px-4 py-2 mb-2"
-                            >
-                                <div>
-                                    <a href="#" class="text-white">Тема</a>
-                                </div>
-                                <div>
-                                    <span>22.01.2009 в 19:24:43</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="bg-dark rounded text-center fw-bold mb-2">
+                        <p>Недавние понравившиеся сообщения</p>
+                    </div>
+                    <!-- Динамический просмотр -->
+                    <div
+                        th:each="each, status : ${userForProfile.recentLikedMessages}"
+                    >
+                        <div
+                            th:classappend="${!status.last} ? mb-2"
+                            th:insert="~{fragments/message :: message (message = ${each})}"
+                        ></div>
+                    </div>
+                    <!-- Статический просмотр -->
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro mb-2"
+                        th:if="${false}"
+                    >
+                        <h6>Статический блок для просмотра в браузере</h6>
+                    </div>
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro mb-2"
+                        th:if="${false}"
+                    >
+                        <h6>Статический блок для просмотра в браузере</h6>
+                    </div>
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
+                        th:if="${false}"
+                    >
+                        <h6>Статический блок для просмотра в браузере</h6>
                     </div>
                 </div>
                 <!-- Подробная статистика -->
                 <div
                     class="text-center text-white fs-14 col-12 col-md-12 col-lg-2"
                 >
+                    <!-- Лайков заработано -->
                     <div class="bg-dark rounded p-1 mb-2">
                         <div class="border-bottom border-white fw-bold">
                             <span>Лайков заработано</span>
                         </div>
                         <div>
-                            <span>1032</span>
-                            <!-- Только для самого пользователя -->
+                            <span th:text="${userForProfile.likesCount}"
+                                >1032</span
+                            >
                         </div>
                     </div>
+                    <!-- Дизлайков заработано -->
+                    <div class="bg-dark rounded p-1 mb-2">
+                        <div class="border-bottom border-white fw-bold">
+                            <span>Дизлайков заработано</span>
+                        </div>
+                        <div>
+                            <span th:text="${userForProfile.dislikesCount}"
+                                >132</span
+                            >
+                        </div>
+                    </div>
+                    <!-- Репутация -->
+                    <div class="bg-dark rounded p-1 mb-2">
+                        <div class="border-bottom border-white fw-bold">
+                            <span>Репутация</span>
+                        </div>
+                        <div>
+                            <span th:text="${userForProfile.reputation}"
+                                >900</span
+                            >
+                        </div>
+                    </div>
+                    <!-- Лайков поставлено -->
                     <div class="bg-dark rounded p-1 mb-2">
                         <div class="border-bottom border-white fw-bold">
                             <span>Лайков поставлено</span>
                         </div>
                         <div>
-                            <span>2093</span>
+                            <span th:text="${userForProfile.assignedLikesCount}"
+                                >2093</span
+                            >
                         </div>
                     </div>
+                    <!-- Дизлайков поставлено -->
+                    <div class="bg-dark rounded p-1 mb-2">
+                        <div class="border-bottom border-white fw-bold">
+                            <span>Дизлайков поставлено</span>
+                        </div>
+                        <div>
+                            <span
+                                th:text="${userForProfile.assignedDislikesCount}"
+                                >15322</span
+                            >
+                        </div>
+                    </div>
+                    <!-- Сообщений отправлено -->
                     <div class="bg-dark rounded p-1 mb-2">
                         <div class="border-bottom border-white fw-bold">
                             <span>Сообщений отправлено</span>
                         </div>
                         <div>
-                            <span>124</span>
+                            <span th:text="${userForProfile.messagesCount}"
+                                >881</span
+                            >
                         </div>
                     </div>
-                    <div class="bg-dark rounded p-1 mb-2">
-                        <div class="border-bottom border-white fw-bold">
-                            <span>Лайков за сообщение</span>
-                        </div>
-                        <div>
-                            <span>8.32</span>
-                        </div>
-                    </div>
+                    <!-- Тем создано -->
                     <div class="bg-dark rounded p-1 mb-2">
                         <div class="border-bottom border-white fw-bold">
                             <span>Тем создано</span>
                         </div>
                         <div>
-                            <span>11</span>
+                            <span th:text="${userForProfile.topicsCount}"
+                                >22</span
+                            >
                         </div>
                     </div>
-                    <!-- Для админов и модераторов -->
-                    <div class="bg-dark rounded p-1 mb-2">
+                    <!-- Разделов создано -->
+                    <div
+                        class="bg-dark rounded p-1 mb-2"
+                        sec:authorize="hasAuthority('WORK_WITH_SECTIONS')"
+                    >
                         <div class="border-bottom border-white fw-bold">
                             <span>Разделов создано</span>
                         </div>
                         <div>
-                            <span>2</span>
+                            <span th:text="${userForProfile.sectionsCount}"
+                                >2</span
+                            >
                         </div>
                     </div>
-                    <div class="bg-dark rounded p-1 mb-2">
+                    <!-- Пользователей забанено -->
+                    <div
+                        class="bg-dark rounded p-1 mb-2"
+                        sec:authorize="hasAuthority('BAN_AND_UNBAN')"
+                    >
                         <div class="border-bottom border-white fw-bold">
                             <span>Пользователей забанено</span>
                         </div>
                         <div>
-                            <span>34</span>
-                        </div>
-                    </div>
-                    <div class="bg-dark rounded p-1 mb-2">
-                        <div class="border-bottom border-white fw-bold">
-                            <span>Пользователей удалено</span>
-                        </div>
-                        <div>
-                            <span>3</span>
+                            <span th:text="${userForProfile.assignedBansCount}"
+                                >34</span
+                            >
                         </div>
                     </div>
                 </div>

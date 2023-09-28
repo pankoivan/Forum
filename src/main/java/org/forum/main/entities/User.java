@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 @NoArgsConstructor
@@ -126,6 +127,18 @@ public class User implements UserDetails {
         return registrationDate.format(DateTimeFormatConstants.SEPARATED_DATE_TIME);
     }
 
+    public int getMessagesCount() {
+        return postedMessages.size();
+    }
+
+    public int getTopicsCount() {
+        return createdTopics.size();
+    }
+
+    public int getSectionsCount() {
+        return createdSections.size();
+    }
+
     public int getLikesCount() {
         return postedMessages.stream()
                 .mapToInt(Message::likesCount)
@@ -140,6 +153,57 @@ public class User implements UserDetails {
 
     public int getReputation() {
         return getLikesCount() - getDislikesCount();
+    }
+
+    public int getAssignedLikesCount() {
+        return likedMessages.size();
+    }
+
+    public int getAssignedDislikesCount() {
+        return dislikedMessages.size();
+    }
+
+    public int getBansCount() {
+        return bans.size();
+    }
+
+    public int getAssignedBansCount() {
+        return assignedBans.size();
+    }
+
+    public List<Message> getRecentMessages(int limit) {
+        return postedMessages.stream()
+                .sorted(Comparator.comparing(Message::getCreationDate))
+                .limit(limit)
+                .toList();
+    }
+
+    public List<Message> getRecentMessages() {
+        return getRecentMessages(3);
+    }
+
+    public List<Message> getRecentLikedMessages(int limit) {
+        return likedMessages.stream()
+                .map(Like::getMessage)
+                .sorted(Comparator.comparing(Message::getCreationDate))
+                .limit(limit)
+                .toList();
+    }
+
+    public List<Message> getRecentLikedMessages() {
+        return getRecentLikedMessages(3);
+    }
+
+    public List<Message> getRecentDislikedMessages(int limit) {
+        return dislikedMessages.stream()
+                .map(Dislike::getMessage)
+                .sorted(Comparator.comparing(Message::getCreationDate))
+                .limit(limit)
+                .toList();
+    }
+
+    public List<Message> getRecentDislikedMessages() {
+        return getRecentDislikedMessages(3);
     }
 
     public Ban getCurrentBan() {

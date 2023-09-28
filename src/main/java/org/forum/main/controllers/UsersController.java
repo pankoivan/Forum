@@ -138,6 +138,19 @@ public class UsersController extends ConvenientController {
         return "users";
     }
 
+    @GetMapping("/{id}")
+    public String returnProfilePage(Model model,
+                                    Authentication authentication,
+                                    @PathVariable("id") String id) {
+
+        Integer userId = toNonNegativeInteger(id);
+
+        addForHeader(model, authentication, sectionService);
+        add(model, "userForProfile", service.findById(userId));
+
+        return "profile";
+    }
+
     @PostMapping("/page{pageNumber}/sort")
     public String redirectCurrentPageAfterSorting(HttpSession session, UserSortingOption sortingOption) {
         session.setAttribute("userSortingOption", sortingOption);

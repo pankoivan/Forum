@@ -78,11 +78,11 @@
                 <div class="flex-fill">
                     <!-- Информационная панель -->
                     <div
-                        class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-between justify-content-lg-between border-bottom border-white px-2 pb-2"
+                        class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-between justify-content-lg-between border-bottom border-white break-all px-2 pb-2"
                     >
                         <!-- Дата публикации сообщения -->
                         <div
-                            class="d-flex flex-fill align-items-center justify-content-center justify-content-md-start justify-content-lg-start text-center m-1"
+                            class="d-flex flex-fill align-items-center justify-content-center text-center mx-2 my-1"
                         >
                             <span th:text="${message.formattedCreationDate}"
                                 >18.07.2021 в 15:34:48</span
@@ -90,7 +90,7 @@
                         </div>
                         <!-- Кнопка лайка, опция "кому понравилось", кнопка дизлайка, опция "кому не понравилось" -->
                         <div
-                            class="d-flex flex-row align-items-center justify-content-center"
+                            class="d-flex flex-row align-items-center justify-content-center mx-2 my-1"
                         >
                             <!-- Кнопка лайка -->
                             <div
@@ -227,16 +227,16 @@
                         </div>
                         <!-- Кнопки редактирования и удаления -->
                         <div
-                            class="d-flex flex-fill"
                             th:if="${currentUser != null
                                         AND (currentUser.id == message.userWhoPosted.id
                                             AND #authorization.expression('hasAuthority(''WORK_WITH_OWN_MESSAGES'')')
                                             OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_MESSAGES'')')
                                         )
                             }"
+                            class="d-flex flex-fill align-items-center justify-content-center mx-2 my-1"
                         >
+                            <!-- Статический и динамический просмотр -->
                             <div
-                                class="d-flex flex-fill flex-row align-items-center justify-content-center justify-content-md-end justify-content-lg-end"
                                 th:replace="~{fragments/edit-delete-buttons :: edit-delete (
                                                 editFormUrl =
                                                     '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/edit/__${message.id}__',
@@ -245,7 +245,6 @@
                                             )
                                 }"
                             >
-                                <!-- Статический просмотр -->
                                 <div>
                                     <button
                                         class="btn btn-sm btn-success rounded-circle m-1"
@@ -261,6 +260,31 @@
                                     </button>
                                 </div>
                             </div>
+                            <!--<div
+                                class="d-flex flex-fill flex-row align-items-center justify-content-center justify-content-md-end justify-content-lg-end"
+                                th:replace="~{fragments/edit-delete-buttons :: edit-delete (
+                                                editFormUrl =
+                                                    '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/edit/__${message.id}__',
+                                                deleteFormUrl =
+                                                    '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/delete/__${message.id}__'
+                                            )
+                                }"
+                            >
+                                <div>
+                                    <button
+                                        class="btn btn-sm btn-success rounded-circle m-1"
+                                    >
+                                        E
+                                    </button>
+                                </div>
+                                <div>
+                                    <button
+                                        class="btn btn-sm btn-danger rounded-circle m-1"
+                                    >
+                                        D
+                                    </button>
+                                </div>
+                            </div>-->
                         </div>
                     </div>
                     <!-- Сообщение -->
