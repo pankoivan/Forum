@@ -14,10 +14,6 @@ public enum UserSortingProperties {
 
     BY_MESSAGES_COUNT("По количеству сообщений"),
 
-    BY_LIKES_COUNT("По количеству лайков"),
-
-    BY_DISLIKES_COUNT("По количеству дизлайков"),
-
     BY_REPUTATION("По репутации");
 
     private final String alias;

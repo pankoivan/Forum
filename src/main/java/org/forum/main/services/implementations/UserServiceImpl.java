@@ -69,8 +69,6 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
                 () -> repository.findAll(Sort.by(option.getDirection(), "nickname")),
                 () -> repository.findAll(Sort.by(option.getDirection(), "registration_date")),
                 () -> repository.findAllByOrderByMessagesCountWithDirection(option.getDirection().name()),
-                () -> repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name()),
-                () -> repository.findAllByOrderByDislikesCountWithDirection(option.getDirection().name()),
                 () -> repository.findAllByOrderByReputationWithDirection(option.getDirection().name()));
     }
 
@@ -90,8 +88,6 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
                 () -> repository.findAllByRoleName(roleName, Sort.by(option.getDirection(), "nickname")),
                 () -> repository.findAllByRoleName(roleName, Sort.by(option.getDirection(), "registration_date")),
                 () -> repository.findAllByRoleNameOrderByMessagesCountWithDirection(roleName, option.getDirection().name()),
-                () -> repository.findAllByRoleNameOrderByLikesCountWithDirection(roleName, option.getDirection().name()),
-                () -> repository.findAllByRoleNameOrderByDislikesCountWithDirection(roleName, option.getDirection().name()),
                 () -> repository.findAllByRoleNameOrderByReputationWithDirection(roleName, option.getDirection().name()));
     }
 
@@ -126,9 +122,7 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
             case BY_NICKNAME -> suppliers[0].get();
             case BY_REGISTRATION_DATE -> suppliers[1].get();
             case BY_MESSAGES_COUNT -> suppliers[2].get();
-            case BY_LIKES_COUNT -> suppliers[3].get();
-            case BY_DISLIKES_COUNT -> suppliers[4].get();
-            case BY_REPUTATION -> suppliers[5].get();
+            case BY_REPUTATION -> suppliers[3].get();
         };
     }
 
