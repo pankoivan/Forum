@@ -4,46 +4,43 @@
     <head>
         <meta charset="UTF-8" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <title>Разделы</title>
+        <title>Ожидаемая ошибка сервера!</title>
         <link
-            href="../static/css/bootstrap.min.css"
-            rel="stylesheet"
+            href="../../static/css/bootstrap.min.css"
             th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
         />
         <link
-            href="../static/css/style.css"
-            rel="stylesheet"
+            href="../../static/css/style.css"
             th:href="@{/css/style.css}"
+            rel="stylesheet"
         />
         <link
             href="../static/favicon/apple-touch-icon.png"
+            th:href="@{/favicon/apple-touch-icon.png}"
             rel="apple-touch-icon"
             sizes="180x180"
-            th:href="@{/favicon/apple-touch-icon.png}"
         />
         <link
             href="../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
             rel="icon"
             sizes="32x32"
-            th:href="@{/favicon/favicon-32x32.png}"
             type="image/png"
         />
         <link
             href="../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
             rel="icon"
             sizes="16x16"
-            th:href="@{/favicon/favicon-16x16.png}"
             type="image/png"
         />
     </head>
 
     <body
-        class="min-vh-100 bg-lightgray d-flex flex-column align-items-center justify-content-between"
+        class="min-vh-100 bg-lightgray d-flex flex-column align-items-center justify-content-center"
     >
-        <div></div>
-
-        <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
-        <div class="container d-flex justify-content-center align-items-center">
+        <div class="container">
             <div
                 class="col-12 col-md-8 col-lg-6 text-center text-white mx-auto"
             >
@@ -61,12 +58,5 @@
                 </div>
             </div>
         </div>
-
-        <div></div>
-
-        <script
-            src="../static/js/bootstrap.bundle.min.js"
-            th:src="@{/js/bootstrap.bundle.min.js}"
-        ></script>
     </body>
 </html>

@@ -4,45 +4,42 @@
     <head>
         <meta charset="UTF-8" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <title>Разделы</title>
+        <title>Ошибка 403!</title>
         <link
-            href="../static/css/bootstrap.min.css"
-            rel="stylesheet"
+            href="../../static/css/bootstrap.min.css"
             th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
         />
         <link
-            href="../static/css/style.css"
-            rel="stylesheet"
+            href="../../static/css/style.css"
             th:href="@{/css/style.css}"
+            rel="stylesheet"
         />
         <link
             href="../static/favicon/apple-touch-icon.png"
+            th:href="@{/favicon/apple-touch-icon.png}"
             rel="apple-touch-icon"
             sizes="180x180"
-            th:href="@{/favicon/apple-touch-icon.png}"
         />
         <link
             href="../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
             rel="icon"
             sizes="32x32"
-            th:href="@{/favicon/favicon-32x32.png}"
             type="image/png"
         />
         <link
             href="../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
             rel="icon"
             sizes="16x16"
-            th:href="@{/favicon/favicon-16x16.png}"
             type="image/png"
         />
     </head>
 
     <body
-        class="min-vh-100 bg-lightgray d-flex flex-column align-items-center justify-content-between"
+        class="min-vh-100 bg-lightgray d-flex flex-column align-items-center justify-content-center"
     >
-        <div></div>
-
-        <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div class="container d-flex justify-content-center align-items-center">
             <div
                 class="col-12 col-md-8 col-lg-6 text-center text-white mx-auto"
@@ -50,20 +47,14 @@
                 <div class="bg-dark rounded px-3 py-2">
                     <p class="fs-20 fw-bold">Ошибка 403!</p>
                     <p>
-                        Ошибка с таким кодом означает, что у вас недостаточно
-                        прав для того, чтобы получить информацию по данному
-                        URL-адресу
+                        Ошибка с кодом 403 означает, что у вас недостаточно прав
+                        для того, чтобы получить ресурс/информацию по данному
+                        URL-адресу. Адрес существует, но у вас нет прав на
+                        доступ к нему
                     </p>
                     <p><a href="#" th:href="@{/}">На главную</a></p>
                 </div>
             </div>
         </div>
-
-        <div></div>
-
-        <script
-            src="../static/js/bootstrap.bundle.min.js"
-            th:src="@{/js/bootstrap.bundle.min.js}"
-        ></script>
     </body>
 </html>
