@@ -91,7 +91,7 @@
             <div class="mb-5">
                 <div th:each="each, status : ${users}">
                     <div
-                        th:classappend="${status.last} ? mb-2"
+                        th:classappend="${!status.last} ? mb-2"
                         th:insert="~{fragments/user-header :: user-header (user = ${each})}"
                     ></div>
                     <div
