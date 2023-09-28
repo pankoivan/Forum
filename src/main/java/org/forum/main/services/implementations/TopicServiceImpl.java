@@ -146,15 +146,6 @@ public class TopicServiceImpl extends AbstractPaginationServiceImpl<Topic> imple
         return foundSection.isPresent() && !foundSection.get().getId().equals(topic.getId());
     }
 
-    @SafeVarargs
-    private List<Topic> mySwitch(TopicSortingOption option, Supplier<List<Topic>>... suppliers) {
-        return switch (option.getProperty()) {
-            case BY_NAME -> suppliers[0].get();
-            case BY_CREATION_DATE -> suppliers[1].get();
-            case BY_MESSAGES_COUNT -> suppliers[2].get();
-        };
-    }
-
     @Override
     public List<Topic> onPage(List<Topic> foundItems, int pageNumber) {
         return onPageImpl(foundItems, pageNumber, PaginationConstants.TOPICS);
@@ -163,6 +154,15 @@ public class TopicServiceImpl extends AbstractPaginationServiceImpl<Topic> imple
     @Override
     public int pagesCount(List<Topic> foundItems) {
         return pagesCountImpl(foundItems, PaginationConstants.TOPICS);
+    }
+
+    @SafeVarargs
+    private List<Topic> mySwitch(TopicSortingOption option, Supplier<List<Topic>>... suppliers) {
+        return switch (option.getProperty()) {
+            case BY_NAME -> suppliers[0].get();
+            case BY_CREATION_DATE -> suppliers[1].get();
+            case BY_MESSAGES_COUNT -> suppliers[2].get();
+        };
     }
 
 }

@@ -80,15 +80,10 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public List<Section> findAllSorted(SectionSortingOption option) {
         return switch (option.getProperty()) {
-
             case BY_NAME -> repository.findAll(Sort.by(option.getDirection(), "name"));
-
             case BY_CREATION_DATE -> repository.findAll(Sort.by(option.getDirection(), "creationDate"));
-
             case BY_TOPICS_COUNT -> repository.findAllByOrderByTopicsCountWithDirection(option.getDirection().name());
-
             case BY_MESSAGES_COUNT -> repository.findAllByOrderByMessagesCountWithDirection(option.getDirection().name());
-
         };
     }
 
