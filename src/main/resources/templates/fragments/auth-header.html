@@ -57,7 +57,7 @@
                                     class="rounded-circle"
                                 />
                             </a>
-                            <!-- Список -->
+                            <!-- Dropdown-список -->
                             <ul
                                 aria-labelledby="user"
                                 class="dropdown-menu text-small"
@@ -70,20 +70,16 @@
                                         >Профиль</a
                                     >
                                 </li>
-                                <li>
-                                    <hr class="dropdown-divider" />
-                                </li>
+                                <hr class="dropdown-divider" />
                                 <li sec:authorize="hasRole('OWNER')">
                                     <a
                                         href="#"
                                         th:href="@{/roles-authorities}"
                                         class="dropdown-item"
-                                        >Управление ролями и правами</a
+                                        >Роли и права</a
                                     >
                                 </li>
-                                <li sec:authorize="hasRole('OWNER')">
-                                    <hr class="dropdown-divider" />
-                                </li>
+                                <hr class="dropdown-divider" />
                                 <li>
                                     <form
                                         action="#"

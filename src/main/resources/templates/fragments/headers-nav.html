@@ -7,13 +7,13 @@
         <title>Навигационная панель заголовков</title>
         <link
             href="../../static/css/bootstrap.min.css"
-            rel="stylesheet"
             th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
         />
         <link
             href="../../static/css/style.css"
-            rel="stylesheet"
             th:href="@{/css/style.css}"
+            rel="stylesheet"
         />
     </head>
 
@@ -22,7 +22,7 @@
     >
         <!-- ---------------------------------------- Фрагмент: навигационная панель заголовков ---------------------------------------- -->
         <div
-            class="bg-dark d-flex flex-row flex-wrap justify-content-center"
+            class="bg-dark d-flex flex-row flex-wrap align-items-center justify-content-center"
             th:fragment="headers-nav"
         >
             <!-- Главная картинка -->
@@ -42,20 +42,20 @@
                     <!-- Главная -->
                     <li>
                         <a
-                            class="nav-link text-wheat"
                             href="#"
-                            th:classappend="${#strings.equals(page, 'index')} ? text-secondary"
+                            class="nav-link text-wheat"
                             th:href="@{/}"
+                            th:classappend="${#strings.equals(page, 'index')} ? text-secondary"
                             >Главная</a
                         >
                     </li>
                     <!-- Разделы -->
                     <li>
                         <a
-                            class="nav-link text-wheat"
                             href="#"
-                            th:classappend="${#strings.equals(page, 'sections')} ? text-secondary"
                             th:href="@{/sections}"
+                            class="nav-link text-wheat"
+                            th:classappend="${#strings.equals(page, 'sections')} ? text-secondary"
                             >Разделы</a
                         >
                     </li>
@@ -65,9 +65,9 @@
                             <!-- Сам пункт "темы" -->
                             <a
                                 aria-expanded="false"
+                                href="#"
                                 class="nav-link text-wheat d-block"
                                 data-bs-toggle="dropdown"
-                                href="#"
                                 id="topics"
                                 th:classappend="${#strings.equals(page, 'topics')} ? text-secondary"
                                 >Темы</a
@@ -80,15 +80,15 @@
                                 <!-- Динамический и статический просмотр -->
                                 <li th:each="each, status : ${sections}">
                                     <a
-                                        class="dropdown-item"
                                         href="#"
                                         th:href="@{/sections/__${each.id}__/topics}"
+                                        class="dropdown-item"
                                         th:text="'В разделе ' + '&quot;' + ${each.name} + '&quot;'"
                                         >В разделе "Главный"</a
                                     >
                                     <hr
-                                        class="dropdown-divider"
                                         th:if="${!status.last}"
+                                        class="dropdown-divider"
                                     />
                                 </li>
                                 <!-- Статический просмотр -->
@@ -106,43 +106,43 @@
                             </ul>
                         </div>
                     </li>
-                    <!-- Пользователи -->
+                    <!-- Все пользователи -->
                     <li>
                         <a
-                            class="nav-link text-wheat"
                             href="#"
-                            th:classappend="${#strings.equals(page, 'users')} ? text-secondary"
                             th:href="@{/users}"
-                            >Пользователи</a
+                            class="nav-link text-wheat"
+                            th:classappend="${#strings.equals(page, 'users')} ? text-secondary"
+                            >Все пользователи</a
                         >
                     </li>
-                    <!-- Простые -->
+                    <!-- Простые участники -->
                     <li>
                         <a
-                            class="nav-link text-wheat"
                             href="#"
-                            th:classappend="${#strings.equals(page, 'usual')} ? text-secondary"
                             th:href="@{/users/usual}"
-                            >Простые</a
+                            class="nav-link text-wheat"
+                            th:classappend="${#strings.equals(page, 'usual')} ? text-secondary"
+                            >Простые участники</a
                         >
                     </li>
                     <!-- Модераторы -->
                     <li>
                         <a
-                            class="nav-link text-wheat"
                             href="#"
-                            th:classappend="${#strings.equals(page, 'moders')} ? text-secondary"
                             th:href="@{/users/moders}"
+                            class="nav-link text-wheat"
+                            th:classappend="${#strings.equals(page, 'moders')} ? text-secondary"
                             >Модераторы</a
                         >
                     </li>
                     <!-- Администраторы -->
                     <li>
                         <a
-                            class="nav-link text-wheat"
                             href="#"
-                            th:classappend="${#strings.equals(page, 'admins')} ? text-secondary"
                             th:href="@{/users/admins}"
+                            class="nav-link text-wheat"
+                            th:classappend="${#strings.equals(page, 'admins')} ? text-secondary"
                             >Администраторы</a
                         >
                     </li>
