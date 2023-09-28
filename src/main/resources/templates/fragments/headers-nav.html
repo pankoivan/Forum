@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Навигационная панель заголовков</title>
+        <link
+            href="../../static/css/bootstrap.min.css"
+            rel="stylesheet"
+            th:href="@{/css/bootstrap.min.css}"
+        />
+        <link
+            href="../../static/css/style.css"
+            rel="stylesheet"
+            th:href="@{/css/style.css}"
+        />
+    </head>
+
+    <body
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-start"
+    >
+        <!-- ---------------------------------------- Фрагмент: навигационная панель заголовков ---------------------------------------- -->
+        <div
+            class="bg-dark d-flex flex-row flex-wrap justify-content-center"
+            th:fragment="headers-nav"
+        >
+            <!-- Главная картинка -->
+            <div class="m-2">
+                <a href="#" th:href="@{/}">
+                    <img
+                        alt="На главную"
+                        src="../../static/img/волк.png"
+                        th:src="@{/img/волк.png}"
+                        width="32"
+                    />
+                </a>
+            </div>
+            <!-- Навигационная панель -->
+            <nav class="m-2">
+                <ul class="nav justify-content-center">
+                    <!-- Главная -->
+                    <li>
+                        <a
+                            class="nav-link text-wheat"
+                            href="#"
+                            th:classappend="${#strings.equals(page, 'index')} ? text-secondary"
+                            th:href="@{/}"
+                            >Главная</a
+                        >
+                    </li>
+                    <!-- Разделы -->
+                    <li>
+                        <a
+                            class="nav-link text-wheat"
+                            href="#"
+                            th:classappend="${#strings.equals(page, 'sections')} ? text-secondary"
+                            th:href="@{/sections}"
+                            >Разделы</a
+                        >
+                    </li>
+                    <!-- Dropdown-пункт "темы": показывает список разделов -->
+                    <li>
+                        <div class="dropdown">
+                            <!-- Сам пункт "темы" -->
+                            <a
+                                aria-expanded="false"
+                                class="nav-link text-wheat d-block"
+                                data-bs-toggle="dropdown"
+                                href="#"
+                                id="topics"
+                                th:classappend="${#strings.equals(page, 'topics')} ? text-secondary"
+                                >Темы</a
+                            >
+                            <!-- Dropdown-список -->
+                            <ul
+                                aria-labelledby="topics"
+                                class="dropdown-menu text-small"
+                            >
+                                <!-- Динамический и статический просмотр -->
+                                <li th:each="each, status : ${sections}">
+                                    <a
+                                        class="dropdown-item"
+                                        href="#"
+                                        th:href="@{/sections/__${each.id}__/topics}"
+                                        th:text="'В разделе ' + '&quot;' + ${each.name} + '&quot;'"
+                                        >В разделе "Главный"</a
+                                    >
+                                    <hr
+                                        class="dropdown-divider"
+                                        th:if="${!status.last}"
+                                    />
+                                </li>
+                                <!-- Статический просмотр -->
+                                <li th:if="${false}">
+                                    <a class="dropdown-item" href="#"
+                                        >В разделе "Новости"</a
+                                    >
+                                    <hr class="dropdown-divider" />
+                                </li>
+                                <li th:if="${false}">
+                                    <a class="dropdown-item" href="#"
+                                        >В разделе "Обо всём"</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!-- Пользователи -->
+                    <li>
+                        <a
+                            class="nav-link text-wheat"
+                            href="#"
+                            th:classappend="${#strings.equals(page, 'users')} ? text-secondary"
+                            th:href="@{/users}"
+                            >Пользователи</a
+                        >
+                    </li>
+                    <!-- Простые -->
+                    <li>
+                        <a
+                            class="nav-link text-wheat"
+                            href="#"
+                            th:classappend="${#strings.equals(page, 'usual')} ? text-secondary"
+                            th:href="@{/users/usual}"
+                            >Простые</a
+                        >
+                    </li>
+                    <!-- Модераторы -->
+                    <li>
+                        <a
+                            class="nav-link text-wheat"
+                            href="#"
+                            th:classappend="${#strings.equals(page, 'moders')} ? text-secondary"
+                            th:href="@{/users/moders}"
+                            >Модераторы</a
+                        >
+                    </li>
+                    <!-- Администраторы -->
+                    <li>
+                        <a
+                            class="nav-link text-wheat"
+                            href="#"
+                            th:classappend="${#strings.equals(page, 'admins')} ? text-secondary"
+                            th:href="@{/users/admins}"
+                            >Администраторы</a
+                        >
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <script
+            src="../../static/js/bootstrap.bundle.min.js"
+            th:src="@{/js/bootstrap.bundle.min.js}"
+        ></script>
+    </body>
+</html>

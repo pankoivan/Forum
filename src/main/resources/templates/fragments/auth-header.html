@@ -15,31 +15,6 @@
             th:href="@{/css/style.css}"
             rel="stylesheet"
         />
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="../../static/favicon/apple-touch-icon.png"
-            th:href="@{/favicon/apple-touch-icon.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="../../static/favicon/favicon-32x32.png"
-            th:href="@{/favicon/favicon-32x32.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="../../static/favicon/favicon-16x16.png"
-            th:href="@{/favicon/favicon-16x16.png}"
-        />
-        <link
-            href="../../static/favicon/site.webmanifest"
-            th:href="@{/favicon/site.webmanifest}"
-            rel="manifest"
-        />
     </head>
 
     <body
@@ -53,123 +28,15 @@
                     class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-between"
                 >
                     <!-- Главная картинка и навигационная панель -->
-                    <div
-                        class="d-flex flex-row flex-wrap justify-content-center"
-                    >
-                        <!-- Главная картинка -->
-                        <div class="m-2">
-                            <a href="#" th:href="@{/}">
-                                <img
-                                    src="../../static/img/волк.png"
-                                    th:src="@{/img/волк.png}"
-                                    alt="На главную"
-                                    width="32"
-                                />
-                            </a>
-                        </div>
-                        <!-- Навигационная панель -->
-                        <nav class="m-2">
-                            <ul class="nav justify-content-center">
-                                <li>
-                                    <a
-                                        href="#"
-                                        th:href="@{/}"
-                                        class="nav-link text-wheat"
-                                        th:classappend="${#strings.equals(page, 'index')} ? text-secondary"
-                                        >Главная</a
-                                    >
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        th:href="@{/sections}"
-                                        class="nav-link text-wheat"
-                                        th:classappend="${#strings.equals(page, 'sections')} ? text-secondary"
-                                        >Разделы</a
-                                    >
-                                </li>
-                                <!-- Dropdown-пункт "темы": показывает список разделов -->
-                                <li>
-                                    <div class="dropdown">
-                                        <!-- Сам пункт "темы" -->
-                                        <a
-                                            id="topics"
-                                            href="#"
-                                            class="nav-link text-wheat d-block"
-                                            th:classappend="${#strings.equals(page, 'topics')} ? text-secondary"
-                                            data-bs-toggle="dropdown"
-                                            aria-expanded="false"
-                                            >Темы</a
-                                        >
-                                        <!-- Список -->
-                                        <ul
-                                            aria-labelledby="topics"
-                                            class="dropdown-menu text-small"
-                                        >
-                                            <!-- Динамический и статический просмотр -->
-                                            <li
-                                                th:each="each, status : ${sections}"
-                                            >
-                                                <a
-                                                    href="#"
-                                                    th:href="@{/sections/__${each.id}__/topics}"
-                                                    class="dropdown-item"
-                                                    th:text="'В разделе ' + '&quot;' + ${each.name} + '&quot;'"
-                                                    >В разделе "Главный"</a
-                                                >
-                                                <hr
-                                                    th:if="${!status.last}"
-                                                    class="dropdown-divider"
-                                                />
-                                            </li>
-                                            <!-- Статический просмотр -->
-                                            <li th:if="${false}">
-                                                <a
-                                                    href="#"
-                                                    class="dropdown-item"
-                                                    >В разделе "Новости"</a
-                                                >
-                                                <hr class="dropdown-divider" />
-                                            </li>
-                                            <li th:if="${false}">
-                                                <a
-                                                    href="#"
-                                                    class="dropdown-item"
-                                                    >В разделе "Обо всём"</a
-                                                >
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        th:href="@{/users}"
-                                        class="nav-link text-wheat"
-                                        th:classappend="${#strings.equals(page, 'users')} ? text-secondary"
-                                        >Участники</a
-                                    >
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        th:href="@{/users/moders}"
-                                        class="nav-link text-wheat"
-                                        th:classappend="${#strings.equals(page, 'moders')} ? text-secondary"
-                                        >Модераторы</a
-                                    >
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        th:href="@{/users/admins}"
-                                        class="nav-link text-wheat"
-                                        th:classappend="${#strings.equals(page, 'admins')} ? text-secondary"
-                                        >Администраторы</a
-                                    >
-                                </li>
-                            </ul>
-                        </nav>
+                    <div th:replace="~{fragments/headers-nav :: headers-nav}">
+                        <!-- Статический просмотр -->
+                        <ul class="nav">
+                            <li class="nav-link">Один</li>
+                            <li class="nav-link">Два</li>
+                            <li class="nav-link">Три</li>
+                            <li class="nav-link">Четыре</li>
+                            <li class="nav-link">Пять</li>
+                        </ul>
                     </div>
                     <!-- Dropdown-аватарка пользователя -->
                     <div class="m-2">
