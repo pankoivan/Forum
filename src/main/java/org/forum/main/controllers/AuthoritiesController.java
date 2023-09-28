@@ -1,7 +1,7 @@
-package org.forum.main.controllers.mvc;
+package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
-import org.forum.main.controllers.mvc.common.ConvenientController;
+import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Authority;
 import org.forum.main.services.interfaces.AuthorityService;
 import org.forum.main.services.interfaces.RoleService;

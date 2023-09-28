@@ -1,4 +1,4 @@
-package org.forum.main.controllers.mvc.common;
+package org.forum.main.controllers.common;
 
 import org.forum.auxiliary.exceptions.ControllerException;
 import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;

@@ -1,4 +1,4 @@
-package org.forum.main.controllers.mvc.interceptors;
+package org.forum.main.controllers.interceptors;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;

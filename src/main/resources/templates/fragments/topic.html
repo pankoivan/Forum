@@ -15,31 +15,6 @@
             th:href="@{/css/style.css}"
             rel="stylesheet"
         />
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="../../static/favicon/apple-touch-icon.png"
-            th:href="@{/favicon/apple-touch-icon.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="../../static/favicon/favicon-32x32.png"
-            th:href="@{/favicon/favicon-32x32.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="../../static/favicon/favicon-16x16.png"
-            th:href="@{/favicon/favicon-16x16.png}"
-        />
-        <link
-            href="../../static/favicon/site.webmanifest"
-            th:href="@{/favicon/site.webmanifest}"
-            rel="manifest"
-        />
     </head>
 
     <body
@@ -54,146 +29,140 @@
 
         <!-- Контейнер для фрагмента -->
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <!-- ---------------------------------------- Сам фрагмент: тема ---------------------------------------- -->
+            <!-- Сам фрагмент: тема -->
+            <div
+                class="bg-dark text-white rounded px-2 py-1"
+                th:fragment="topic (topic)"
+            >
+                <!-- Верхняя панель темы -->
+                <div
+                    class="border-bottom border-white pb-1"
+                    th:if="${currentUser != null
+                                AND (currentUser.id == topic.userWhoCreated.id
+                                    AND #authorization.expression('hasAuthority(''WORK_WITH_OWN_TOPICS'')')
+                                    OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_TOPICS'')')
+                            )
+                    }"
+                >
+                    <!-- Кнопки редактирования и удаления -->
                     <div
-                        class="bg-dark text-white rounded px-2 py-1"
-                        th:fragment="topic (topic)"
+                        class="d-flex flex-row align-items-center justify-content-between"
+                        th:replace="~{fragments/edit-delete-buttons :: edit-delete (
+                                        editFormUrl =
+                                            '/sections/__${topic.section.id}__/topics/inner/edit/__${topic.id}__',
+                                        deleteFormUrl =
+                                            '/sections/__${topic.section.id}__/topics/inner/delete/__${topic.id}__'
+                                    )
+                        }"
                     >
-                        <!-- Верхняя панель темы -->
-                        <div
-                            th:if="${currentUser != null AND (
-                                currentUser.id == topic.userWhoCreated.id
-                                AND #authorization.expression('hasAuthority(''WORK_WITH_OWN_TOPICS'')')
-                                OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_TOPICS'')')
-                            )}"
-                            class="border-bottom border-white pb-1"
-                        >
-                            <!-- Кнопки редактирования и удаления -->
-                            <div
-                                th:replace="~{fragments/buttons :: edit-delete (
-                                    editFormUrl =
-                                        '/sections/__${topic.section.id}__/topics/inner/edit/__${topic.id}__',
-                                    deleteFormUrl =
-                                        '/sections/__${topic.section.id}__/topics/inner/delete/__${topic.id}__'
-                                )}"
-                                class="d-flex flex-row align-items-center justify-content-between"
-                            >
-                                <!-- Статический просмотр -->
-                                <div>
-                                    <button class="btn btn-sm btn-success m-1">
-                                        Edit
-                                    </button>
-                                </div>
-                                <div>
-                                    <button class="btn btn-sm btn-danger m-1">
-                                        Delete
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Основная часть -->
+                        <!-- Статический просмотр -->
                         <div>
-                            <!-- Заголовок и описание -->
-                            <div class="text-start m-1">
-                                <!-- Заголовок -->
-                                <h5 class="mb-1">
-                                    <a
-                                        href="#"
-                                        th:href="@{/sections/__${topic.section.id}__/topics/__${topic.id}__/messages}"
-                                        class="text-white link-offset-2"
-                                        th:text="${topic.name}"
-                                        >Флуд</a
-                                    >
-                                </h5>
-                                <!-- Описание -->
-                                <p class="mb-1" th:text="${topic.description}">
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Quisquam officiis
-                                    assumenda totam, numquam architecto quod
-                                    delectus enim maxime odit error.
-                                </p>
-                            </div>
-                            <!-- Автор, количество сообщений, количество лайков и недавнее сообщение -->
-                            <div
-                                class="d-flex flex-row flex-wrap justify-content-center justify-content-md-center justify-content-lg-between mb-1"
+                            <button
+                                class="btn btn-sm btn-success rounded-circle m-1"
                             >
-                                <!-- Автор -->
-                                <div class="mx-4 my-2">
-                                    <div
-                                        class="d-flex flex-row align-items-center justify-content-between"
-                                    >
-                                        <div class="me-1">
-                                            <img
-                                                src="../../static/img/природа.png"
-                                                th:src="@{/img/природа.png}"
-                                                alt="Пользователь"
-                                                class="rounded-circle"
-                                                width="42"
-                                            />
-                                        </div>
-                                        <div class="my-auto">
-                                            <a
-                                                href="#"
-                                                th:href="@{/profiles/__${topic.userWhoCreated.id}__}"
-                                                class="text-white"
-                                                th:text="${topic.userWhoCreated.nickname}"
-                                                >Имя пользователя</a
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Количество сообщений -->
-                                <div class="text-center mx-5 my-1">
-                                    <p class="mb-1">Сообщений:</p>
-                                    <p
-                                        class="mb-1"
-                                        th:text="${topic.messagesCount}"
-                                    >
-                                        1847
-                                    </p>
-                                </div>
-                                <!-- Количество лайков -->
-                                <div class="text-center mx-5 my-1">
-                                    <p class="mb-1">Лайков:</p>
-                                    <p
-                                        class="mb-1"
-                                        th:text="${topic.likesCount}"
-                                    >
-                                        8901
-                                    </p>
-                                </div>
-                                <!-- Недавнее сообщение -->
-                                <div
-                                    th:if="${topic.recentMessage}"
-                                    class="text-center mx-5 my-1"
-                                >
-                                    <p class="mb-1">
-                                        <a
-                                            href="#"
-                                            th:href="@{/sections/__${topic.section.id}__/topics/__${topic.id}__/messages}"
-                                            class="text-white"
-                                            >Недавнее сообщение</a
-                                        >
-                                    </p>
-                                    <p
-                                        class="mb-1 fs-12"
-                                        th:text="${topic.recentMessage.formattedCreationDate}"
-                                    >
-                                        24.04.2011
-                                    </p>
-                                </div>
-                            </div>
+                                E
+                            </button>
                         </div>
-                        <!-- Дата создания -->
-                        <div class="text-center border-top border-white pt-1">
-                            <span
-                                th:text="'Создана: ' + ${topic.formattedCreationDate}"
-                                >Создана: 19.02.2015</span
+                        <div>
+                            <button
+                                class="btn btn-sm btn-danger rounded-circle m-1"
                             >
+                                D
+                            </button>
                         </div>
                     </div>
+                </div>
+                <!-- Основная часть -->
+                <div>
+                    <!-- Заголовок и описание -->
+                    <div class="text-start m-1">
+                        <!-- Заголовок -->
+                        <h5 class="mb-1">
+                            <a
+                                class="text-white link-offset-2"
+                                href="#"
+                                th:href="@{/sections/__${topic.section.id}__/topics/__${topic.id}__/messages}"
+                                th:text="${topic.name}"
+                                >Флуд</a
+                            >
+                        </h5>
+                        <!-- Описание -->
+                        <p class="mb-1" th:text="${topic.description}">
+                            Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Quisquam officiis assumenda totam, numquam
+                            architecto quod delectus enim maxime odit error.
+                        </p>
+                    </div>
+                    <!-- Автор, количество сообщений, количество лайков и недавнее сообщение -->
+                    <div
+                        class="d-flex flex-row flex-wrap justify-content-center justify-content-md-center justify-content-lg-between mb-1"
+                    >
+                        <!-- Автор -->
+                        <div class="mx-4 my-2">
+                            <div
+                                class="d-flex flex-row align-items-center justify-content-between"
+                            >
+                                <div class="me-1">
+                                    <img
+                                        alt="Пользователь"
+                                        class="rounded-circle"
+                                        src="../../static/img/природа.png"
+                                        th:src="@{/img/природа.png}"
+                                        width="42"
+                                    />
+                                </div>
+                                <div class="my-auto">
+                                    <a
+                                        class="text-white"
+                                        href="#"
+                                        th:href="@{/profiles/__${topic.userWhoCreated.id}__}"
+                                        th:text="${topic.userWhoCreated.nickname}"
+                                        >Имя пользователя</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Количество сообщений -->
+                        <div class="text-center mx-5 my-1">
+                            <p class="mb-1">Сообщений:</p>
+                            <p class="mb-1" th:text="${topic.messagesCount}">
+                                1847
+                            </p>
+                        </div>
+                        <!-- Количество лайков -->
+                        <div class="text-center mx-5 my-1">
+                            <p class="mb-1">Лайков:</p>
+                            <p class="mb-1" th:text="${topic.likesCount}">
+                                8901
+                            </p>
+                        </div>
+                        <!-- Недавнее сообщение -->
+                        <div
+                            class="text-center mx-5 my-1"
+                            th:if="${topic.recentMessage}"
+                        >
+                            <p class="mb-1">
+                                <a
+                                    class="text-white"
+                                    href="#"
+                                    th:href="@{/sections/__${topic.section.id}__/topics/__${topic.id}__/messages}"
+                                    >Недавнее сообщение</a
+                                >
+                            </p>
+                            <p
+                                class="mb-1 fs-12"
+                                th:text="${topic.recentMessage.formattedCreationDate}"
+                            >
+                                24.04.2011
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Дата создания -->
+                <div class="text-center border-top border-white pt-1">
+                    <span th:text="'Создана: ' + ${topic.formattedCreationDate}"
+                        >Создана: 19.02.2015</span
+                    >
                 </div>
             </div>
         </div>

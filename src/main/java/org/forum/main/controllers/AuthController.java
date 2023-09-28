@@ -1,6 +1,6 @@
-package org.forum.main.controllers.mvc;
+package org.forum.main.controllers;
 
-import org.forum.main.controllers.mvc.common.ConvenientController;
+import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.enums.Gender;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.UserService;

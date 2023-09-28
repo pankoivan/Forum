@@ -19,31 +19,6 @@
             th:href="@{/css/style.css}"
             rel="stylesheet"
         />
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="../../static/favicon/apple-touch-icon.png"
-            th:href="@{/favicon/apple-touch-icon.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="../../static/favicon/favicon-32x32.png"
-            th:href="@{/favicon/favicon-32x32.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="../../static/favicon/favicon-16x16.png"
-            th:href="@{/favicon/favicon-16x16.png}"
-        />
-        <link
-            href="../../static/favicon/site.webmanifest"
-            th:href="@{/favicon/site.webmanifest}"
-            rel="manifest"
-        />
     </head>
 
     <body
@@ -58,119 +33,115 @@
 
         <!-- Контейнер для фрагмента -->
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <!-- ---------------------------------------- Сам фрагмент: пользователь ---------------------------------------- -->
+            <!-- ---------------------------------------- Сам фрагмент: пользователь ---------------------------------------- -->
+            <div
+                class="bg-dark text-white rounded d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-between p-1"
+                th:fragment="user-header (user)"
+            >
+                <!-- Аватарка с именем -->
+                <div class="mx-4 my-2">
                     <div
-                        class="bg-dark text-white rounded d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-between p-1"
-                        th:fragment="user-header (user)"
+                        class="d-flex flex-row align-items-center justify-content-between"
                     >
-                        <!-- Аватарка с именем -->
-                        <div class="mx-4 my-2">
-                            <div
-                                class="d-flex flex-row align-items-center justify-content-between"
-                            >
-                                <div class="me-1">
-                                    <img
-                                        src="../../static/img/природа.png"
-                                        th:src="@{/img/природа.png}"
-                                        alt="Пользователь"
-                                        class="rounded-circle"
-                                        width="32"
-                                    />
-                                </div>
-                                <div class="my-auto">
-                                    <a
-                                        href="#"
-                                        th:href="@{/profiles/__${user.id}__}"
-                                        class="text-white"
-                                        th:text="${user.nickname}"
-                                        >Имя пользователя</a
-                                    >
-                                </div>
-                            </div>
+                        <div class="me-1">
+                            <img
+                                alt="Пользователь"
+                                class="rounded-circle"
+                                src="../../static/img/природа.png"
+                                th:src="@{/img/природа.png}"
+                                width="32"
+                            />
                         </div>
-                        <!-- Роль -->
-                        <div class="mx-4 my-2">
-                            <span th:text="${user.role.alias}">Модератор</span>
-                        </div>
-                        <!-- Дата регистрации -->
-                        <div class="mx-4 my-2">
-                            <span th:text="${user.formattedRegistrationDate}"
-                                >21.10.2022 в 11:34:58</span
-                            >
-                        </div>
-                        <!-- Репутация -->
-                        <div class="mx-4 my-2">
-                            <span th:text="${user.reputation}">154</span>
-                        </div>
-                        <!-- Кнопки бана, удаления, добавления в модераторы и в администраторы -->
-                        <div
-                            th:if="${currentUser != null AND (
-                                currentUser.id != user.id
-                                AND #authorization.expression('hasAnyAuthority(''BAN_AND_UNBAN'', ''DELETE_USERS'', ''ASSIGN_AND_REMOVE_MODERS'',
-                                ''ASSIGN_AND_REMOVE_ADMINS'')')
-                            )}"
-                            class="mx-4 my-2"
-                        >
-                            <!-- Кнопка бана/разбана -->
+                        <div class="my-auto">
                             <a
-                                sec:authorize="hasAuthority('BAN_AND_UNBAN')"
+                                class="text-white"
                                 href="#"
-                                class="btn btn-sm btn-danger"
+                                th:href="@{/profiles/__${user.id}__}"
+                                th:text="${user.nickname}"
+                                >Имя пользователя</a
                             >
-                                <img
-                                    src="../../static/img/ban.png"
-                                    th:src="@{/img/ban.png}"
-                                    alt="Забанить"
-                                    width="16"
-                                    class="mb-1"
-                                />
-                            </a>
-                            <!-- Кнопка удаления -->
-                            <a
-                                sec:authorize="hasAuthority('DELETE_USERS')"
-                                href="#"
-                                class="btn btn-sm btn-danger"
-                            >
-                                <img
-                                    src="../../static/img/delete.png"
-                                    th:src="@{/img/delete.png}"
-                                    alt="Удалить"
-                                    width="16"
-                                    class="mb-1"
-                                />
-                            </a>
-                            <!-- Кнопка присвоения/снятия модераторства -->
-                            <a
-                                sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_MODERS')"
-                                href="#"
-                                class="btn btn-sm btn-primary"
-                            >
-                                <img
-                                    src="../../static/img/moder.png"
-                                    th:src="@{/img/moder.png}"
-                                    alt="Назначить модератором"
-                                    width="16"
-                                    class="mb-1"
-                                />
-                            </a>
-                            <!-- Кнопка присвоения/снятия администраторства -->
-                            <a
-                                sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_ADMINS')"
-                                href="#"
-                                class="btn btn-sm btn-primary"
-                            >
-                                <img
-                                    src="../../static/img/admin.png"
-                                    th:src="@{/img/admin.png}"
-                                    alt="Назначить администратором"
-                                    width="16"
-                                    class="mb-1"
-                                />
-                            </a>
                         </div>
                     </div>
+                </div>
+                <!-- Роль -->
+                <div class="mx-4 my-2">
+                    <span th:text="${user.role.alias}">Модератор</span>
+                </div>
+                <!-- Дата регистрации -->
+                <div class="mx-4 my-2">
+                    <span th:text="${user.formattedRegistrationDate}"
+                        >21.10.2022 в 11:34:58</span
+                    >
+                </div>
+                <!-- Репутация -->
+                <div class="mx-4 my-2">
+                    <span th:text="${user.reputation}">154</span>
+                </div>
+                <!-- Кнопки бана, удаления, назначения модератором и администратором -->
+                <div
+                    class="mx-4 my-2"
+                    th:if="${currentUser != null
+                                AND currentUser.id != user.id
+                                AND #authorization.expression('hasAnyAuthority(''BAN_AND_UNBAN'', ''DELETE_USERS'',
+                                    ''ASSIGN_AND_REMOVE_MODERS'', ''ASSIGN_AND_REMOVE_ADMINS'')')
+                    }"
+                >
+                    <!-- Кнопка бана/разбана -->
+                    <a
+                        class="btn btn-sm btn-danger"
+                        href="#"
+                        sec:authorize="hasAuthority('BAN_AND_UNBAN')"
+                    >
+                        <img
+                            alt="Забанить"
+                            class="mb-1"
+                            src="../../static/img/ban.png"
+                            th:src="@{/img/ban.png}"
+                            width="16"
+                        />
+                    </a>
+                    <!-- Кнопка удаления -->
+                    <a
+                        class="btn btn-sm btn-danger"
+                        href="#"
+                        sec:authorize="hasAuthority('DELETE_USERS')"
+                    >
+                        <img
+                            alt="Удалить"
+                            class="mb-1"
+                            src="../../static/img/delete.png"
+                            th:src="@{/img/delete.png}"
+                            width="16"
+                        />
+                    </a>
+                    <!-- Кнопка присвоения/снятия модераторства -->
+                    <a
+                        class="btn btn-sm btn-primary"
+                        href="#"
+                        sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_MODERS')"
+                    >
+                        <img
+                            alt="Назначить модератором"
+                            class="mb-1"
+                            src="../../static/img/moder.png"
+                            th:src="@{/img/moder.png}"
+                            width="16"
+                        />
+                    </a>
+                    <!-- Кнопка присвоения/снятия администраторства -->
+                    <a
+                        class="btn btn-sm btn-primary"
+                        href="#"
+                        sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_ADMINS')"
+                    >
+                        <img
+                            alt="Назначить администратором"
+                            class="mb-1"
+                            src="../../static/img/admin.png"
+                            th:src="@{/img/admin.png}"
+                            width="16"
+                        />
+                    </a>
                 </div>
             </div>
         </div>

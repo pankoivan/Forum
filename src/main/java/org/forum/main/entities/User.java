@@ -142,6 +142,13 @@ public class User implements UserDetails {
         return getLikesCount() - getDislikesCount();
     }
 
+    public Ban getCurrentBan() {
+        return bans.stream()
+                .filter(ban -> ban.getEndDate().isAfter(LocalDate.now()))
+                .findAny()
+                .orElse(null);
+    }
+
     private Collection<? extends GrantedAuthority> getRoleAndAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>(role.getAuthorities());
         authorities.add(role);
@@ -149,8 +156,7 @@ public class User implements UserDetails {
     }
 
     private boolean isBanned() {
-        return bans.stream()
-                .anyMatch(ban -> ban.getEndDate().isAfter(LocalDate.now()));
+        return getCurrentBan() != null;
     }
 
     private boolean isActive() {

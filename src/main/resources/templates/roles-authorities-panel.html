@@ -171,7 +171,7 @@
                                     </div>
                                     <!-- Кнопки редактирования и удаления -->
                                     <div
-                                        th:replace="~{fragments/buttons :: edit-delete
+                                        th:replace="~{fragments/edit-delete-buttons :: edit-delete
                                             (editFormUrl = '/roles-authorities/roles/inner/edit/__${each.id}__',
                                             deleteFormUrl = '/roles-authorities/roles/inner/delete/__${each.id}__')}"
                                         class="d-flex flex-row align-items-center justify-content-between"
@@ -277,7 +277,7 @@
                                     </div>
                                     <!-- Кнопки редактирования и удаления -->
                                     <div
-                                        th:replace="~{fragments/buttons :: edit-delete
+                                        th:replace="~{fragments/edit-delete-buttons :: edit-delete
                                             (editFormUrl = '/roles-authorities/authorities/inner/edit/__${each.id}__',
                                             deleteFormUrl = '/roles-authorities/authorities/inner/delete/__${each.id}__')}"
                                         class="d-flex flex-row align-items-center justify-content-between"

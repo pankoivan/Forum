@@ -1,6 +1,6 @@
-package org.forum.main.controllers.mvc;
+package org.forum.main.controllers;
 
-import org.forum.main.controllers.mvc.common.ConvenientController;
+import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.services.interfaces.StatisticsService;
 import org.forum.main.services.interfaces.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;

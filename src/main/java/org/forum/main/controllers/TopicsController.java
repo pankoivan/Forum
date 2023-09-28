@@ -1,10 +1,10 @@
-package org.forum.main.controllers.mvc;
+package org.forum.main.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
-import org.forum.main.controllers.mvc.common.ConvenientController;
+import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Topic;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.TopicService;

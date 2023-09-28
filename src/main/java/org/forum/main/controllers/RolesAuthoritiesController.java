@@ -1,6 +1,6 @@
-package org.forum.main.controllers.mvc;
+package org.forum.main.controllers;
 
-import org.forum.main.controllers.mvc.common.ConvenientController;
+import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.services.interfaces.AuthorityService;
 import org.forum.main.services.interfaces.RoleService;
 import org.forum.main.services.interfaces.SectionService;

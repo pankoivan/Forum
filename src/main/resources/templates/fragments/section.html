@@ -19,31 +19,6 @@
             th:href="@{/css/style.css}"
             rel="stylesheet"
         />
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="../../static/favicon/apple-touch-icon.png"
-            th:href="@{/favicon/apple-touch-icon.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="../../static/favicon/favicon-32x32.png"
-            th:href="@{/favicon/favicon-32x32.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="../../static/favicon/favicon-16x16.png"
-            th:href="@{/favicon/favicon-16x16.png}"
-        />
-        <link
-            href="../../static/favicon/site.webmanifest"
-            th:href="@{/favicon/site.webmanifest}"
-            rel="manifest"
-        />
     </head>
 
     <body
@@ -58,144 +33,133 @@
 
         <!-- Контейнер для фрагмента -->
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <!-- ---------------------------------------- Сам фрагмент: раздел ---------------------------------------- -->
+            <!-- ---------------------------------------- Сам фрагмент: раздел ---------------------------------------- -->
+            <div
+                class="bg-dark text-white rounded px-2 py-1"
+                th:fragment="section (section)"
+            >
+                <!-- Верхняя панель раздела -->
+                <div
+                    class="border-bottom border-white pb-1"
+                    sec:authorize="hasAuthority('WORK_WITH_SECTIONS')"
+                >
+                    <!-- Кнопки редактирования и удаления -->
                     <div
-                        class="bg-dark text-white rounded px-2 py-1"
-                        th:fragment="section (section)"
+                        class="d-flex flex-row align-items-center justify-content-between"
+                        th:replace="~{fragments/edit-delete-buttons :: edit-delete (
+                                        editFormUrl = '/sections/inner/edit/__${section.id}__',
+                                        deleteFormUrl = '/sections/inner/delete/__${section.id}__'
+                                    )
+                        }"
                     >
-                        <!-- Верхняя панель раздела -->
-                        <div
-                            sec:authorize="hasAuthority('WORK_WITH_SECTIONS')"
-                            class="border-bottom border-white pb-1"
-                        >
-                            <!-- Кнопки редактирования и удаления -->
+                        <!-- Статический просмотр -->
+                        <div>
+                            <button
+                                class="btn btn-sm btn-success rounded-circle m-1"
+                            >
+                                E
+                            </button>
+                        </div>
+                        <div>
+                            <button
+                                class="btn btn-sm btn-danger rounded-circle m-1"
+                            >
+                                D
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Основная часть -->
+                <div>
+                    <!-- Заголовок и описание -->
+                    <div class="text-start m-1">
+                        <!-- Заголовок -->
+                        <h5 class="mb-1">
+                            <a
+                                class="text-white link-offset-2"
+                                href="#"
+                                th:href="@{/sections/__${section.id}__/topics}"
+                                th:text="${section.name}"
+                                >Главный</a
+                            >
+                        </h5>
+                        <!-- Описание -->
+                        <p class="mb-1" th:text="${section.description}">
+                            Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Quisquam officiis assumenda totam, numquam
+                            architecto quod delectus enim maxime odit error.
+                        </p>
+                    </div>
+                    <!-- Автор, количество тем, количество сообщений и недавнее сообщение -->
+                    <div
+                        class="d-flex flex-row flex-wrap justify-content-center justify-content-md-center justify-content-lg-between mb-1"
+                    >
+                        <!-- Автор -->
+                        <div class="mx-4 my-2">
                             <div
-                                th:replace="~{fragments/buttons :: edit-delete (
-                                    editFormUrl = '/sections/inner/edit/__${section.id}__',
-                                    deleteFormUrl = '/sections/inner/delete/__${section.id}__'
-                                )}"
                                 class="d-flex flex-row align-items-center justify-content-between"
                             >
-                                <!-- Статический просмотр -->
-                                <div>
-                                    <button class="btn btn-sm btn-success m-1">
-                                        Edit
-                                    </button>
+                                <div class="me-1">
+                                    <img
+                                        alt="Пользователь"
+                                        class="rounded-circle"
+                                        src="../../static/img/природа.png"
+                                        th:src="@{/img/природа.png}"
+                                        width="42"
+                                    />
                                 </div>
-                                <div>
-                                    <button class="btn btn-sm btn-danger m-1">
-                                        Delete
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Основная часть -->
-                        <div>
-                            <!-- Заголовок и описание -->
-                            <div class="text-start m-1">
-                                <!-- Заголовок -->
-                                <h5 class="mb-1">
+                                <div class="my-auto">
                                     <a
+                                        class="text-white"
                                         href="#"
-                                        th:href="@{/sections/__${section.id}__/topics}"
-                                        class="text-white link-offset-2"
-                                        th:text="${section.name}"
-                                        >Главный</a
+                                        th:href="@{/profiles/__${section.userWhoCreated.id}__}"
+                                        th:text="${section.userWhoCreated.nickname}"
+                                        >Имя пользователя</a
                                     >
-                                </h5>
-                                <!-- Описание -->
-                                <p
-                                    class="mb-1"
-                                    th:text="${section.description}"
-                                >
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Quisquam officiis
-                                    assumenda totam, numquam architecto quod
-                                    delectus enim maxime odit error.
-                                </p>
-                            </div>
-                            <!-- Автор, количество тем, количество сообщений и недавнее сообщение -->
-                            <div
-                                class="d-flex flex-row flex-wrap justify-content-center justify-content-md-center justify-content-lg-between mb-1"
-                            >
-                                <!-- Автор -->
-                                <div class="mx-4 my-2">
-                                    <div
-                                        class="d-flex flex-row align-items-center justify-content-between"
-                                    >
-                                        <div class="me-1">
-                                            <img
-                                                src="../../static/img/природа.png"
-                                                th:src="@{/img/природа.png}"
-                                                alt="Пользователь"
-                                                class="rounded-circle"
-                                                width="42"
-                                            />
-                                        </div>
-                                        <div class="my-auto">
-                                            <a
-                                                href="#"
-                                                th:href="@{/profiles/__${section.userWhoCreated.id}__}"
-                                                class="text-white"
-                                                th:text="${section.userWhoCreated.nickname}"
-                                                >Имя пользователя</a
-                                            >
-                                        </div>
-                                    </div>
                                 </div>
-                                <!-- Количество тем -->
-                                <div class="text-center mx-5 my-1">
-                                    <p class="mb-1">Тем:</p>
-                                    <p
-                                        class="mb-1"
-                                        th:text="${section.topicsCount}"
-                                    >
-                                        124
-                                    </p>
-                                </div>
-                                <!-- Количество сообщений -->
-                                <div class="text-center mx-5 my-1">
-                                    <p class="mb-1">Сообщений:</p>
-                                    <p
-                                        class="mb-1"
-                                        th:text="${section.messagesCount}"
-                                    >
-                                        8934
-                                    </p>
-                                </div>
-                                <!-- Недавнее сообщение -->
-                                <div
-                                    th:if="${section.recentMessage}"
-                                    class="text-center mx-5 my-1"
-                                >
-                                    <p class="mb-1">
-                                        <a
-                                            href="#"
-                                            th:href="@{/sections/__${section.id}__/topics/__${section.recentMessage.topic.id}__/messages}"
-                                            class="text-white"
-                                            >Недавнее сообщение</a
-                                        >
-                                    </p>
-                                    <p
-                                        class="mb-1 fs-12"
-                                        th:text="${section.recentMessage.formattedCreationDate}"
-                                    >
-                                        24.04.2011
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- Дата создания -->
-                            <div
-                                class="text-center border-top border-white pt-1"
-                            >
-                                <span
-                                    th:text="'Создан: ' + ${section.formattedCreationDate}"
-                                    >Создан: 19.02.2015</span
-                                >
                             </div>
                         </div>
+                        <!-- Количество тем -->
+                        <div class="text-center mx-5 my-1">
+                            <p class="mb-1">Тем:</p>
+                            <p class="mb-1" th:text="${section.topicsCount}">
+                                124
+                            </p>
+                        </div>
+                        <!-- Количество сообщений -->
+                        <div class="text-center mx-5 my-1">
+                            <p class="mb-1">Сообщений:</p>
+                            <p class="mb-1" th:text="${section.messagesCount}">
+                                8934
+                            </p>
+                        </div>
+                        <!-- Недавнее сообщение -->
+                        <div
+                            class="text-center mx-5 my-1"
+                            th:if="${section.recentMessage}"
+                        >
+                            <p class="mb-1">
+                                <a
+                                    class="text-white"
+                                    href="#"
+                                    th:href="@{/sections/__${section.id}__/topics/__${section.recentMessage.topic.id}__/messages}"
+                                    >Недавнее сообщение</a
+                                >
+                            </p>
+                            <p
+                                class="mb-1 fs-12"
+                                th:text="${section.recentMessage.formattedCreationDate}"
+                            >
+                                24.04.2011
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Дата создания -->
+                    <div class="text-center border-top border-white pt-1">
+                        <span
+                            th:text="'Создан: ' + ${section.formattedCreationDate}"
+                            >Создан: 19.02.2015</span
+                        >
                     </div>
                 </div>
             </div>

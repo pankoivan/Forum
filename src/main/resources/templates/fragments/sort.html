@@ -15,31 +15,6 @@
             th:href="@{/css/style.css}"
             rel="stylesheet"
         />
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="../../static/favicon/apple-touch-icon.png"
-            th:href="@{/favicon/apple-touch-icon.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="../../static/favicon/favicon-32x32.png"
-            th:href="@{/favicon/favicon-32x32.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="../../static/favicon/favicon-16x16.png"
-            th:href="@{/favicon/favicon-16x16.png}"
-        />
-        <link
-            href="../../static/favicon/site.webmanifest"
-            th:href="@{/favicon/site.webmanifest}"
-            rel="manifest"
-        />
     </head>
 
     <body
@@ -62,9 +37,10 @@
                         action="#"
                         th:action="${submitUrl}"
                         method="post"
-                        th:object="${sortingObject}"
                         class="d-flex flex-row align-items-center justify-content-between bg-dark rounded text-white px-1 py-3"
+                        th:object="${sortingObject}"
                     >
+                        <!-- Выбор опций сортировки -->
                         <div class="mx-2">
                             <select
                                 class="form-select form-select"
@@ -83,6 +59,7 @@
                                 <option th:if="${false}" value="2">Три</option>
                             </select>
                         </div>
+                        <!-- Выбор направления сортировки -->
                         <div class="mx-2">
                             <select
                                 class="form-select form-select"
@@ -101,6 +78,7 @@
                                 <option th:if="${false}" value="2">Три</option>
                             </select>
                         </div>
+                        <!-- Кнопка подтверждения выбора сортировки -->
                         <div class="mx-2">
                             <button type="submit" class="btn btn-primary">
                                 Применить

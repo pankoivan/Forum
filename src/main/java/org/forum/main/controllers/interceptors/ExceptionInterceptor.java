@@ -1,4 +1,4 @@
-package org.forum.main.controllers.mvc.interceptors;
+package org.forum.main.controllers.interceptors;
 
 import org.forum.auxiliary.exceptions.common.MainInstrumentsException;
 import org.springframework.ui.Model;

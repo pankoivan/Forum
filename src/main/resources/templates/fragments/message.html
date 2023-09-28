@@ -19,31 +19,6 @@
             th:href="@{/css/style.css}"
             rel="stylesheet"
         />
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="../../static/favicon/apple-touch-icon.png"
-            th:href="@{/favicon/apple-touch-icon.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="../../static/favicon/favicon-32x32.png"
-            th:href="@{/favicon/favicon-32x32.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="../../static/favicon/favicon-16x16.png"
-            th:href="@{/favicon/favicon-16x16.png}"
-        />
-        <link
-            href="../../static/favicon/site.webmanifest"
-            th:href="@{/favicon/site.webmanifest}"
-            rel="manifest"
-        />
     </head>
 
     <body
@@ -58,135 +33,259 @@
 
         <!-- Контейнер для фрагмента -->
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <!-- ---------------------------------------- Сам фрагмент: сообщение ---------------------------------------- -->
-                    <div
-                        class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2"
-                        th:fragment="message (message)"
-                    >
-                        <!-- Имя пользователя и аватарка -->
-                        <div
-                            class="border-end border-white text-center left-message-block break-word pe-2 me-2"
+            <!-- ---------------------------------------- Сам фрагмент: сообщение ---------------------------------------- -->
+            <div
+                class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2"
+                th:fragment="message (message)"
+            >
+                <!-- Имя пользователя, аватарка и информация и бане -->
+                <div
+                    class="border-end border-white text-center left-message-block break-word pe-2 me-2"
+                >
+                    <!-- Имя пользователя -->
+                    <div class="border-bottom border-white pb-1 mb-2">
+                        <a
+                            class="text-white text-decoration-none"
+                            href="#"
+                            th:href="@{/profiles/__${message.userWhoPosted.id}__}"
+                            th:text="${message.userWhoPosted.nickname}"
+                            >Имя пользователя</a
                         >
-                            <!-- Имя пользователя -->
-                            <div class="border-bottom border-white pb-1 mb-2">
+                    </div>
+                    <!-- Аватарка -->
+                    <div class="mb-1">
+                        <img
+                            alt="Пользователь"
+                            class="rounded-circle"
+                            src="../../static/img/природа.png"
+                            th:src="@{/img/природа.png}"
+                            width="72"
+                        />
+                    </div>
+                    <!-- Информация о бане -->
+                    <div
+                        class="text-red fs-14 fst-italic"
+                        th:if="${message.userWhoPosted.currentBan}"
+                    >
+                        <p class="mb-1">Забанен до</p>
+                        <span
+                            th:text="${message.userWhoPosted.currentBan.endDate}"
+                            >09.11.2025</span
+                        >
+                    </div>
+                </div>
+                <!-- Информационная панель, сообщение и дата изменения -->
+                <div class="flex-fill">
+                    <!-- Информационная панель -->
+                    <div
+                        class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-between justify-content-lg-between border-bottom border-white px-2 pb-2"
+                    >
+                        <!-- Дата публикации сообщения -->
+                        <div
+                            class="d-flex flex-fill align-items-center justify-content-center justify-content-md-start justify-content-lg-start text-center m-1"
+                        >
+                            <span th:text="${message.formattedCreationDate}"
+                                >18.07.2021 в 15:34:48</span
+                            >
+                        </div>
+                        <!-- Кнопка лайка, опция "кому понравилось", кнопка дизлайка, опция "кому не понравилось" -->
+                        <div
+                            class="d-flex flex-row align-items-center justify-content-center"
+                        >
+                            <!-- Кнопка лайка -->
+                            <div
+                                class="m-1"
+                                th:if="${currentUser != null
+                                            AND currentUser.id != message.userWhoPosted.id
+                                            AND #authorization.expression('hasAuthority(''LIKE'')')
+                                }"
+                            >
+                                <form
+                                    action="#"
+                                    method="post"
+                                    th:action="@{/likes/inner/save}"
+                                >
+                                    <button
+                                        class="btn btn-sm btn-success"
+                                        th:text="${message.likesCount}"
+                                        type="submit"
+                                    >
+                                        2
+                                    </button>
+                                </form>
+                            </div>
+                            <!-- Dropdown-опция "кому понравилось" -->
+                            <div class="m-1">
+                                <!-- "Кому понравилось" -->
                                 <a
+                                    aria-expanded="false"
+                                    class="d-block text-decoration-none text-white"
+                                    data-bs-toggle="dropdown"
                                     href="#"
-                                    th:href="@{/profiles/__${message.userWhoPosted.id}__}"
-                                    class="text-white text-decoration-none"
-                                    th:text="${message.userWhoPosted.nickname}"
-                                    >Имя пользователя</a
+                                    id="whoLiked"
+                                    >Кому понравилось</a
                                 >
-                            </div>
-                            <!-- Аватарка -->
-                            <div>
-                                <img
-                                    src="../../static/img/природа.png"
-                                    th:src="@{/img/природа.png}"
-                                    alt="Пользователь"
-                                    class="rounded-circle"
-                                    width="72"
-                                />
-                            </div>
-                        </div>
-                        <!-- Информационная панель, сообщение и дата изменения -->
-                        <div class="flex-fill">
-                            <!-- Информационная панель -->
-                            <div
-                                class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-between justify-content-lg-between border-bottom border-white px-2 pb-2"
-                            >
-                                <!-- Кнопка лайка -->
-                                <div
-                                    sec:authorize="isAuthenticated()"
-                                    class="m-1"
+                                <!-- Dropdown-список -->
+                                <ul
+                                    aria-labelledby="whoLiked"
+                                    class="dropdown-menu text-small"
                                 >
-                                    <form
-                                        action="#"
-                                        th:action="@{/likes/inner/save}"
-                                        method="post"
-                                    >
-                                        <button
-                                            type="submit"
-                                            class="btn btn-sm btn-primary"
-                                            th:text="'Нравится: ' + ${message.likesCount}"
+                                    <!-- Динамический и статический просмотр -->
+                                    <li th:each="each, status : ${whoLiked}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="#"
+                                            th:href="@{/profiles/__${each.id}__}"
+                                            th:text="${each.nickname}"
+                                            >SomeNICkn4me1</a
                                         >
-                                            Нравится: 9
-                                        </button>
-                                    </form>
-                                </div>
-                                <!-- Дата публикации сообщения -->
-                                <div class="text-center m-1">
-                                    <span
-                                        th:text="${message.formattedCreationDate}"
-                                        >18.07.2021 в 15:34:48</span
-                                    >
-                                </div>
-                                <!-- Кнопки редактирования и удаления -->
-                                <div
-                                    th:if="${currentUser != null AND (
-                                        currentUser.id == message.userWhoPosted.id
-                                        AND #authorization.expression('hasAuthority(''WORK_WITH_OWN_MESSAGES'')')
-                                        OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_MESSAGES'')')
-                                    )}"
-                                >
-                                    <div
-                                        th:replace="~{fragments/buttons :: edit-delete (
-                                            editFormUrl =
-                                                '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/edit/__${message.id}__',
-                                            deleteFormUrl =
-                                                '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/delete/__${message.id}__'
-                                        )}"
-                                        class="d-flex flex-row align-items-center justify-content-between"
-                                    >
-                                        <!-- Статический просмотр -->
-                                        <div>
-                                            <button
-                                                class="btn btn-sm btn-success m-1"
-                                            >
-                                                Edit
-                                            </button>
-                                        </div>
-                                        <div>
-                                            <button
-                                                class="btn btn-sm btn-danger m-1"
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                                        <hr
+                                            class="dropdown-divider"
+                                            th:if="${!status.last}"
+                                        />
+                                    </li>
+                                    <!-- Статический просмотр -->
+                                    <li th:if="${false}">
+                                        <a class="dropdown-item" href="#"
+                                            >SuperMan123</a
+                                        >
+                                        <hr class="dropdown-divider" />
+                                    </li>
+                                    <li th:if="${false}">
+                                        <a class="dropdown-item" href="#"
+                                            >CoolSg</a
+                                        >
+                                    </li>
+                                </ul>
                             </div>
-                            <!-- Сообщение -->
-                            <div class="px-2 pt-2 pb-1">
-                                <span
-                                    class="break-all"
-                                    th:text="${message.text}"
-                                    >Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Deserunt alias, laudantium
-                                    quasi repellendus error ipsa magnam
-                                    repudiandae voluptatum harum doloremque, ad
-                                    tenetur vel. Corporis, reiciendis.
-                                    Necessitatibus soluta mollitia sed rerum
-                                    cupiditate laboriosam, commodi explicabo
-                                    voluptatem, dolor doloribus nihil
-                                    accusantium sunt numquam ab autem asperiores
-                                    ad. Veritatis sunt doloribus atque
-                                    magni.</span
-                                >
-                            </div>
-                            <!-- Дата изменения -->
+                            <!-- Кнопка дизлайка -->
                             <div
-                                th:if="${message.editingDate}"
-                                class="text-end fs-10 fst-italic"
+                                class="m-1"
+                                th:if="${currentUser != null
+                                            AND currentUser.id != message.userWhoPosted.id
+                                            AND #authorization.expression('hasAuthority(''DISLIKE'')')
+                                }"
                             >
-                                <span
-                                    th:text="'Отредактировано: ' + ${message.formattedEditingDate}"
-                                    >Отредактировано: 10.01.2023 в
-                                    15:43:12</span
+                                <form
+                                    action="#"
+                                    method="post"
+                                    th:action="@{/likes/inner/save}"
                                 >
+                                    <button
+                                        class="btn btn-sm btn-danger"
+                                        th:text="${message.dislikesCount}"
+                                        type="submit"
+                                    >
+                                        1
+                                    </button>
+                                </form>
+                            </div>
+                            <!-- Dropdown-опция "кому не понравилось" -->
+                            <div class="m-1">
+                                <!-- "Кому не понравилось" -->
+                                <a
+                                    aria-expanded="false"
+                                    class="d-block text-decoration-none text-white"
+                                    data-bs-toggle="dropdown"
+                                    href="#"
+                                    id="whoDisliked"
+                                    >Кому не понравилось</a
+                                >
+                                <!-- Dropdown-список -->
+                                <ul
+                                    aria-labelledby="whoDisliked"
+                                    class="dropdown-menu text-small"
+                                >
+                                    <!-- Динамический и статический просмотр -->
+                                    <li th:each="each, status : ${whoLiked}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="#"
+                                            th:href="@{/profiles/__${each.id}__}"
+                                            th:text="${each.nickname}"
+                                            >SomeNICkn4me1</a
+                                        >
+                                        <hr
+                                            class="dropdown-divider"
+                                            th:if="${!status.last}"
+                                        />
+                                    </li>
+                                    <!-- Статический просмотр -->
+                                    <li th:if="${false}">
+                                        <a class="dropdown-item" href="#"
+                                            >SuperMan123</a
+                                        >
+                                        <hr class="dropdown-divider" />
+                                    </li>
+                                    <li th:if="${false}">
+                                        <a class="dropdown-item" href="#"
+                                            >CoolSg</a
+                                        >
+                                    </li>
+                                </ul>
                             </div>
                         </div>
+                        <!-- Кнопки редактирования и удаления -->
+                        <div
+                            class="d-flex flex-fill"
+                            th:if="${currentUser != null
+                                        AND (currentUser.id == message.userWhoPosted.id
+                                            AND #authorization.expression('hasAuthority(''WORK_WITH_OWN_MESSAGES'')')
+                                            OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_MESSAGES'')')
+                                        )
+                            }"
+                        >
+                            <div
+                                class="d-flex flex-fill flex-row align-items-center justify-content-center justify-content-md-end justify-content-lg-end"
+                                th:replace="~{fragments/edit-delete-buttons :: edit-delete (
+                                                editFormUrl =
+                                                    '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/edit/__${message.id}__',
+                                                deleteFormUrl =
+                                                    '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/delete/__${message.id}__'
+                                            )
+                                }"
+                            >
+                                <!-- Статический просмотр -->
+                                <div>
+                                    <button
+                                        class="btn btn-sm btn-success rounded-circle m-1"
+                                    >
+                                        E
+                                    </button>
+                                </div>
+                                <div>
+                                    <button
+                                        class="btn btn-sm btn-danger rounded-circle m-1"
+                                    >
+                                        D
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Сообщение -->
+                    <div class="px-2 pt-2 pb-1">
+                        <span class="break-all" th:text="${message.text}"
+                            >Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Deserunt alias, laudantium quasi repellendus
+                            error ipsa magnam repudiandae voluptatum harum
+                            doloremque, ad tenetur vel. Corporis, reiciendis.
+                            Necessitatibus soluta mollitia sed rerum cupiditate
+                            laboriosam, commodi explicabo voluptatem, dolor
+                            doloribus nihil accusantium sunt numquam ab autem
+                            asperiores ad. Veritatis sunt doloribus atque
+                            magni.</span
+                        >
+                    </div>
+                    <!-- Дата изменения -->
+                    <div
+                        class="text-end fs-10 fst-italic"
+                        th:if="${message.editingDate}"
+                    >
+                        <span
+                            th:text="'Отредактировано: ' + ${message.formattedEditingDate}"
+                            >Отредактировано: 10.01.2023 в 15:43:12</span
+                        >
                     </div>
                 </div>
             </div>
@@ -198,5 +297,10 @@
         >
             <h3>Статический футер для просмотра в браузере</h3>
         </div>
+
+        <script
+            src="../../static/js/bootstrap.bundle.min.js"
+            th:src="@{/js/bootstrap.bundle.min.js}"
+        ></script>
     </body>
 </html>

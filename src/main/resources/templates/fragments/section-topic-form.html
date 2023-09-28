@@ -15,31 +15,6 @@
             th:href="@{/css/style.css}"
             rel="stylesheet"
         />
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="../../static/favicon/apple-touch-icon.png"
-            th:href="@{/favicon/apple-touch-icon.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="../../static/favicon/favicon-32x32.png"
-            th:href="@{/favicon/favicon-32x32.png}"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="../../static/favicon/favicon-16x16.png"
-            th:href="@{/favicon/favicon-16x16.png}"
-        />
-        <link
-            href="../../static/favicon/site.webmanifest"
-            th:href="@{/favicon/site.webmanifest}"
-            rel="manifest"
-        />
     </head>
 
     <body
@@ -52,7 +27,7 @@
             <h3>Статический заголовок для просмотра в браузере</h3>
         </div>
 
-        <!-- ---------------------------------------- Сам фрагмент: форма создания раздела/темы ---------------------------------------- -->
+        <!-- ---------------------------------------- Фрагмент: форма создания раздела/темы ---------------------------------------- -->
         <div class="container" th:fragment="form (titlePart, submitUrl)">
             <div class="row">
                 <div class="col-11 col-md-8 col-lg-5 mx-auto">
@@ -130,7 +105,7 @@
                                 <textarea
                                     id="description"
                                     class="form-control"
-                                    placeholder="Какое-то описание длиной до 200 символов..."
+                                    placeholder="Информативное описание длиной до 200 символов..."
                                     th:field="*{description}"
                                 ></textarea>
                             </div>

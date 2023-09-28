@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Кнопки редактирования и удаления</title>
+        <link
+            href="../../static/css/bootstrap.min.css"
+            rel="stylesheet"
+            th:href="@{/css/bootstrap.min.css}"
+        />
+        <link
+            href="../../static/css/style.css"
+            rel="stylesheet"
+            th:href="@{/css/style.css}"
+        />
+    </head>
+
+    <body
+        class="min-vh-100 bg-lightgray d-flex flex-column align-items-center justify-content-center"
+    >
+        <!-- Контейнер для фрагмента -->
+        <div class="d-flex align-items-center justify-content-center">
+            <!-- ---------------------------------------- Сам фрагмент: кнопки редактирования и удаления ---------------------------------------- -->
+            <div
+                class="d-flex flex-row align-items-center justify-content-between"
+                th:fragment="edit-delete (editFormUrl, deleteFormUrl)"
+            >
+                <!-- Кнопка редактирования -->
+                <form action="#" method="post" th:action="${editFormUrl}">
+                    <button class="btn btn-sm btn-success rounded-circle m-1">
+                        <img
+                            alt="Редактировать"
+                            class="mb-1"
+                            src="../../static/img/edit.png"
+                            th:src="@{/img/edit.png}"
+                            width="16"
+                        />
+                    </button>
+                </form>
+                <!-- Кнопка удаления -->
+                <form action="#" method="post" th:action="${deleteFormUrl}">
+                    <button class="btn btn-sm btn-danger rounded-circle m-1">
+                        <img
+                            alt="Удалить"
+                            class="mb-1"
+                            src="../../static/img/delete.png"
+                            th:src="@{/img/delete.png}"
+                            width="16"
+                        />
+                    </button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
