@@ -213,6 +213,10 @@ public class User implements UserDetails {
                 .orElse(null);
     }
 
+    public boolean hasRole(String roleName) {
+        return role.getName().equals(roleName);
+    }
+
     private Collection<? extends GrantedAuthority> getRoleAndAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>(role.getAuthorities());
         authorities.add(role);

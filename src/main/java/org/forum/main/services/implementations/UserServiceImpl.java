@@ -3,6 +3,7 @@ package org.forum.main.services.implementations;
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
 import org.forum.auxiliary.constants.PaginationConstants;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
+import org.forum.main.entities.Role;
 import org.forum.main.entities.User;
 import org.forum.auxiliary.exceptions.ServiceException;
 import org.forum.main.repositories.UserRepository;
@@ -114,6 +115,12 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
     @Override
     public int pagesCount(List<User> users) {
         return pagesCountImpl(users, PaginationConstants.USERS);
+    }
+
+    @Override
+    public void changeRole(User user, Role role) {
+        user.setRole(role);
+        repository.save(user);
     }
 
     @SafeVarargs

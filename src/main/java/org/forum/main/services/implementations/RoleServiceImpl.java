@@ -1,5 +1,6 @@
 package org.forum.main.services.implementations;
 
+import org.forum.auxiliary.exceptions.common.MainInstrumentsException;
 import org.forum.main.entities.Role;
 import org.forum.auxiliary.exceptions.ServiceException;
 import org.forum.main.services.interfaces.RoleService;
@@ -68,6 +69,13 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteById(Integer id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public Role findByName(String name) {
+        return repository.findByName(name)
+                .orElseThrow(() -> new MainInstrumentsException("Role with name \"%s\" doesn't exists"
+                        .formatted(name)));
     }
 
 }

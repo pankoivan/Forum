@@ -6,4 +6,6 @@ import org.forum.main.services.interfaces.common.ValidationService;
 
 public interface RoleService extends SimpleSaveService<Role, Integer>, ValidationService<Role> {
 
+    Role findByName(String name);
+
 }

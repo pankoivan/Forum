@@ -77,15 +77,52 @@
                 <div class="mx-4 my-2">
                     <span th:text="${user.reputation}">154</span>
                 </div>
-                <!-- Кнопки бана, удаления, назначения модератором и администратором -->
+                <!-- Кнопки присвоения/снятия модераторства, присвоения/снятия администраторства, бана и удаления -->
                 <div
-                    class="mx-4 my-2"
                     th:if="${currentUser != null
                                 AND currentUser.id != user.id
                                 AND #authorization.expression('hasAnyAuthority(''BAN_AND_UNBAN'', ''DELETE_USERS'',
                                     ''ASSIGN_AND_REMOVE_MODERS'', ''ASSIGN_AND_REMOVE_ADMINS'')')
                     }"
+                    class="d-flex flex-row align-items-center justify-content-between mx-4 my-2"
                 >
+                    <!-- Кнопка присвоения/снятия модераторства -->
+                    <form
+                        action="#"
+                        method="post"
+                        th:action="${user.hasRole('ROLE_MODER')} ? '/users/activities/assign-user/__${user.id}__'
+                                                                 : '/users/activities/assign-moder/__${user.id}__'"
+                        th:if="${!user.hasRole('ROLE_ADMIN')}"
+                    >
+                        <button
+                            class="btn btn-sm"
+                            th:classappend="${user.hasRole('ROLE_MODER')} ? 'btn-danger' : 'btn-primary'"
+                            type="submit"
+                        >
+                            <img
+                                alt="Назначить модератором"
+                                class="mb-1"
+                                src="../../static/img/moder.png"
+                                th:alt="${user.hasRole('ROLE_MODER')} ? 'Снять модераторство' : 'Назначить модератором'"
+                                th:src="@{/img/moder.png}"
+                                width="16"
+                            />
+                        </button>
+                    </form>
+                    <!-- Кнопка присвоения/снятия администраторства -->
+                    <a
+                        class="btn btn-sm btn-primary"
+                        href="#"
+                        sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_ADMINS')"
+                    >
+                        <img
+                            alt="Назначить администратором"
+                            class="mb-1"
+                            src="../../static/img/admin.png"
+                            th:src="@{/img/admin.png}"
+                            width="16"
+                        />
+                    </a>
                     <!-- Кнопка бана/разбана -->
                     <a
                         class="btn btn-sm btn-danger"
@@ -111,34 +148,6 @@
                             class="mb-1"
                             src="../../static/img/delete.png"
                             th:src="@{/img/delete.png}"
-                            width="16"
-                        />
-                    </a>
-                    <!-- Кнопка присвоения/снятия модераторства -->
-                    <a
-                        class="btn btn-sm btn-primary"
-                        href="#"
-                        sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_MODERS')"
-                    >
-                        <img
-                            alt="Назначить модератором"
-                            class="mb-1"
-                            src="../../static/img/moder.png"
-                            th:src="@{/img/moder.png}"
-                            width="16"
-                        />
-                    </a>
-                    <!-- Кнопка присвоения/снятия администраторства -->
-                    <a
-                        class="btn btn-sm btn-primary"
-                        href="#"
-                        sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_ADMINS')"
-                    >
-                        <img
-                            alt="Назначить администратором"
-                            class="mb-1"
-                            src="../../static/img/admin.png"
-                            th:src="@{/img/admin.png}"
                             width="16"
                         />
                     </a>

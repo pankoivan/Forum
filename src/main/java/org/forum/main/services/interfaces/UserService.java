@@ -1,6 +1,7 @@
 package org.forum.main.services.interfaces;
 
 import org.forum.auxiliary.sorting.options.UserSortingOption;
+import org.forum.main.entities.Role;
 import org.forum.main.entities.User;
 import org.forum.main.services.interfaces.common.GeneralService;
 import org.forum.main.services.interfaces.common.PaginationService;
@@ -20,5 +21,7 @@ public interface UserService extends GeneralService<User, Integer>, ValidationSe
     List<User> findAllByRoleNameSorted(String roleName, UserSortingOption sortingOption);
 
     List<User> findAlByRoleNameSortedByDefault(String roleName);
+
+    void changeRole(User user, Role role);
 
 }
