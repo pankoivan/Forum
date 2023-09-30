@@ -217,18 +217,19 @@ public class User implements UserDetails {
         return role.getName().equals(roleName);
     }
 
+    public boolean isBanned() {
+        return getCurrentBan() != null;
+    }
+
+    public boolean isActive() {
+        return !isBanned();
+    }
+
     private Collection<? extends GrantedAuthority> getRoleAndAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>(role.getAuthorities());
         authorities.add(role);
         return authorities;
     }
 
-    private boolean isBanned() {
-        return getCurrentBan() != null;
-    }
-
-    private boolean isActive() {
-        return !isBanned();
-    }
 
 }
