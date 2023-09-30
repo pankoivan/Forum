@@ -29,6 +29,9 @@ public class Ban {
     @JoinColumn(name = "creator_id")
     private User userWhoAssigned;
 
+    @Column(name = "reason")
+    private String reason;
+
     @Column(name = "start_date")
     private LocalDate startDate;
 
