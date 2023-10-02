@@ -102,13 +102,18 @@
                             >
                                 <form
                                     action="#"
+                                    th:action="@{/users/activities/like/by__${currentUser.id}__}"
                                     method="post"
-                                    th:action="@{/likes/inner/save}"
                                 >
+                                    <input
+                                        name="messageId"
+                                        th:value="${message.id}"
+                                        type="hidden"
+                                    />
                                     <button
+                                        type="submit"
                                         class="btn btn-sm btn-success"
                                         th:text="${message.likesCount}"
-                                        type="submit"
                                     >
                                         2
                                     </button>
@@ -168,13 +173,18 @@
                             >
                                 <form
                                     action="#"
+                                    th:action="@{/users/activities/like/by__${currentUser.id}__}"
                                     method="post"
-                                    th:action="@{/likes/inner/save}"
                                 >
+                                    <input
+                                        name="messageId"
+                                        th:value="${message.id}"
+                                        type="hidden"
+                                    />
                                     <button
+                                        type="submit"
                                         class="btn btn-sm btn-danger"
                                         th:text="${message.dislikesCount}"
-                                        type="submit"
                                     >
                                         1
                                     </button>
