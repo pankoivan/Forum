@@ -96,6 +96,11 @@
                         method="post"
                         th:if="${!user.hasRole('ROLE_ADMIN') AND #authorization.expression('hasAuthority(''ASSIGN_AND_REMOVE_MODERS'')')}"
                     >
+                        <input
+                            name="sourcePage"
+                            th:value="${#ctx.springRequestContext.requestUri}"
+                            type="hidden"
+                        />
                         <button
                             class="btn btn-sm"
                             th:classappend="${user.hasRole('ROLE_MODER')} ? 'btn-danger' : 'btn-primary'"
@@ -120,6 +125,11 @@
                         th:action="${user.hasRole('ROLE_ADMIN')} ? '/users/activities/assign-user/__${user.id}__'
                                                                  : '/users/activities/assign-admin/__${user.id}__'"
                     >
+                        <input
+                            name="sourcePage"
+                            th:value="${#ctx.springRequestContext.requestUri}"
+                            type="hidden"
+                        />
                         <button
                             class="btn btn-sm"
                             th:classappend="${user.hasRole('ROLE_ADMIN')} ? 'btn-danger' : 'btn-primary'"
@@ -144,6 +154,11 @@
                         th:action="${user.isActive()} ? '/users/activities/ban/__${user.id}__'
                                                       : '/users/activities/unban/__${user.id}__'"
                     >
+                        <input
+                            name="sourcePage"
+                            th:value="${#ctx.springRequestContext.requestUri}"
+                            type="hidden"
+                        />
                         <button
                             class="btn btn-sm"
                             th:classappend="${user.isActive()} ? 'btn-danger' : 'btn-primary'"
