@@ -58,22 +58,24 @@ public class UsersActivitiesController extends ConvenientController {
 
     @PostMapping("/like/by{userWhoLikedId}")
     public String redirectIndexPageAfterLike(@RequestParam("messageId") Long messageId,
+                                             @RequestParam("sourcePage") String sourcePage,
                                              @PathVariable("userWhoLikedId") String pathUserWhoLikedId) {
 
         likeService.save(
                 messageService.findById(messageId), service.findById(toNonNegativeInteger(pathUserWhoLikedId))
         );
-        return "redirect:/";
+        return "redirect:" + sourcePage;
     }
 
     @PostMapping("/dislike/by{userWhoDislikedId}")
-    public String redirectIndexPageAfterDisLike(@RequestParam("messageId") Long messageId,
-                                             @PathVariable("userWhoDislikedId") String pathUserWhoDislikedId) {
+    public String redirectIndexPageAfterDislike(@RequestParam("messageId") Long messageId,
+                                                @RequestParam("sourcePage") String sourcePage,
+                                                @PathVariable("userWhoDislikedId") String pathUserWhoDislikedId) {
 
         dislikeService.save(
                 messageService.findById(messageId), service.findById(toNonNegativeInteger(pathUserWhoDislikedId))
         );
-        return "redirect:/";
+        return "redirect:" + sourcePage;
     }
 
 }

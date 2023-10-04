@@ -106,9 +106,14 @@
                                     method="post"
                                 >
                                     <input
+                                        type="hidden"
                                         name="messageId"
                                         th:value="${message.id}"
+                                    />
+                                    <input
                                         type="hidden"
+                                        name="sourcePage"
+                                        th:value="${#ctx.springRequestContext.requestUri}"
                                     />
                                     <button
                                         type="submit"
@@ -173,13 +178,18 @@
                             >
                                 <form
                                     action="#"
-                                    th:action="@{/users/activities/like/by__${currentUser.id}__}"
+                                    th:action="@{/users/activities/dislike/by__${currentUser.id}__}"
                                     method="post"
                                 >
                                     <input
+                                        type="hidden"
                                         name="messageId"
                                         th:value="${message.id}"
+                                    />
+                                    <input
                                         type="hidden"
+                                        name="sourcePage"
+                                        th:value="${#ctx.springRequestContext.requestUri}"
                                     />
                                     <button
                                         type="submit"
