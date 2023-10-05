@@ -111,6 +111,11 @@
                                         th:value="${message.id}"
                                     />
                                     <input
+                                        name="isCancellation"
+                                        th:value="${message.containsLikedUserById(currentUser.id)} ? true : false"
+                                        type="hidden"
+                                    />
+                                    <input
                                         type="hidden"
                                         name="sourcePage"
                                         th:value="${#ctx.springRequestContext.requestUri}"

@@ -75,4 +75,10 @@ public class Message {
         return dislikedUsers.size();
     }
 
+    public boolean containsLikedUserById(Integer likedUserId) {
+        return likedUsers.stream()
+                .map(Like::getUser)
+                .anyMatch(user -> user.getId().equals(likedUserId));
+    }
+
 }

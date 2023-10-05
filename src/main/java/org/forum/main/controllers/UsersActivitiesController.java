@@ -34,44 +34,49 @@ public class UsersActivitiesController extends ConvenientController {
     }
 
     @PostMapping("/assign-moder/{id}")
-    public String staySamePageAfterAssigningModeration(@PathVariable("id") String pathId,
-                                                       @RequestParam("sourcePage") String sourcePage) {
+    public String redirectSamePageAfterAssigningModeration(@PathVariable("id") String pathId,
+                                                           @RequestParam("sourcePage") String sourcePage) {
         Integer id = toNonNegativeInteger(pathId);
         service.changeRole(service.findById(id), roleService.findByName("ROLE_MODER"));
         return "redirect:" + sourcePage;
     }
 
     @PostMapping("/assign-admin/{id}")
-    public String staySamePageAfterAssigningAdministration(@PathVariable("id") String pathId,
-                                                           @RequestParam("sourcePage") String sourcePage) {
+    public String redirectSamePageAfterAssigningAdministration(@PathVariable("id") String pathId,
+                                                               @RequestParam("sourcePage") String sourcePage) {
         Integer id = toNonNegativeInteger(pathId);
         service.changeRole(service.findById(id), roleService.findByName("ROLE_ADMIN"));
         return "redirect:" + sourcePage;
     }
 
     @PostMapping("/assign-user/{id}")
-    public String staySamePageAfterAssigningUser(@PathVariable("id") String pathId,
-                                                 @RequestParam("sourcePage") String sourcePage) {
+    public String redirectSamePageAfterAssigningUser(@PathVariable("id") String pathId,
+                                                     @RequestParam("sourcePage") String sourcePage) {
         Integer id = toNonNegativeInteger(pathId);
         service.changeRole(service.findById(id), roleService.findByName("ROLE_USER"));
         return "redirect:" + sourcePage;
     }
 
     @PostMapping("/like/by{userWhoLikedId}")
-    public String staySamePageAfterLike(@RequestParam("messageId") Long messageId,
-                                        @RequestParam("sourcePage") String sourcePage,
-                                        @PathVariable("userWhoLikedId") String pathUserWhoLikedId) {
+    public String redirectSamePageAfterLike(@RequestParam("messageId") Long messageId,
+                                            @RequestParam("isCancellation") boolean isCancellation,
+                                            @RequestParam("sourcePage") String sourcePage,
+                                            @PathVariable("userWhoLikedId") String pathUserWhoLikedId) {
 
-        likeService.save(
+        /*likeService.save(
                 messageService.findById(messageId), service.findById(toNonNegativeInteger(pathUserWhoLikedId))
+        );*/
+        likeService.saveOrCancel(
+                messageService.findById(messageId), service.findById(toNonNegativeInteger(pathUserWhoLikedId)), isCancellation
         );
         return "redirect:" + sourcePage;
     }
 
     @PostMapping("/dislike/by{userWhoDislikedId}")
-    public String staySamePageAfterDislike(@RequestParam("messageId") Long messageId,
-                                           @RequestParam("sourcePage") String sourcePage,
-                                           @PathVariable("userWhoDislikedId") String pathUserWhoDislikedId) {
+    public String redirectSamePageAfterDislike(@RequestParam("messageId") Long messageId,
+                                               @RequestParam("isCancellation") boolean isCancellation,
+                                               @RequestParam("sourcePage") String sourcePage,
+                                               @PathVariable("userWhoDislikedId") String pathUserWhoDislikedId) {
 
         dislikeService.save(
                 messageService.findById(messageId), service.findById(toNonNegativeInteger(pathUserWhoDislikedId))
