@@ -5,7 +5,9 @@ import org.forum.main.entities.Dislike;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.User;
 import org.forum.main.repositories.DislikeRepository;
+import org.forum.main.repositories.LikeRepository;
 import org.forum.main.services.interfaces.DislikeService;
+import org.forum.main.services.interfaces.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,12 @@ public class DislikeServiceImpl implements DislikeService {
 
     private final DislikeRepository repository;
 
+    private final LikeRepository likeRepository;
+
     @Autowired
-    public DislikeServiceImpl(DislikeRepository repository) {
+    public DislikeServiceImpl(DislikeRepository repository, LikeRepository likeRepository) {
         this.repository = repository;
+        this.likeRepository = likeRepository;
     }
 
     @Override
@@ -30,6 +35,11 @@ public class DislikeServiceImpl implements DislikeService {
 
     @Override
     public void save(Message dislikedMessage, User userWhoDisliked) {
+        if (dislikedMessage.containsLikedUserById(userWhoDisliked.getId())) {
+            likeRepository.delete(likeRepository.findByMessageIdAndUserId(dislikedMessage.getId(), userWhoDisliked.getId())
+                    .orElseThrow(() -> new ServiceException("Like with message id \"%s\" and user id \"%s\" doesn't exists"
+                            .formatted(dislikedMessage.getId(), userWhoDisliked.getId()))));
+        }
         repository.save(
                 Dislike.builder()
                         .message(dislikedMessage)

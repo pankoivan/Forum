@@ -4,7 +4,9 @@ import org.forum.auxiliary.exceptions.ServiceException;
 import org.forum.main.entities.Like;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.User;
+import org.forum.main.repositories.DislikeRepository;
 import org.forum.main.repositories.LikeRepository;
+import org.forum.main.services.interfaces.DislikeService;
 import org.forum.main.services.interfaces.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,12 @@ public class LikeServiceImpl implements LikeService {
 
     private final LikeRepository repository;
 
+    private final DislikeRepository dislikeRepository;
+
     @Autowired
-    public LikeServiceImpl(LikeRepository repository) {
+    public LikeServiceImpl(LikeRepository repository, DislikeRepository dislikeRepository) {
         this.repository = repository;
+        this.dislikeRepository = dislikeRepository;
     }
 
     @Override
@@ -30,6 +35,11 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public void save(Message likedMessage, User userWhoLiked) {
+        if (likedMessage.containsDislikedUserById(userWhoLiked.getId())) {
+            dislikeRepository.delete(dislikeRepository.findByMessageIdAndUserId(likedMessage.getId(), userWhoLiked.getId())
+                    .orElseThrow(() -> new ServiceException("Dislike with message id \"%s\" and user id \"%s\" doesn't exists"
+                            .formatted(likedMessage.getId(), userWhoLiked.getId()))));
+        }
         repository.save(
                 Like.builder()
                         .message(likedMessage)
