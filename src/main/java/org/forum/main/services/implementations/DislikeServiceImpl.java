@@ -1,5 +1,6 @@
 package org.forum.main.services.implementations;
 
+import org.forum.auxiliary.exceptions.ServiceException;
 import org.forum.main.entities.Dislike;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.User;
@@ -21,6 +22,13 @@ public class DislikeServiceImpl implements DislikeService {
     }
 
     @Override
+    public Dislike findByMessageIdAndUserId(Long messageId, Integer userId) {
+        return repository.findByMessageIdAndUserId(messageId, userId)
+                .orElseThrow(() -> new ServiceException("Dislike with message id \"%s\" and user id \"%s\" doesn't exists"
+                        .formatted(messageId, userId)));
+    }
+
+    @Override
     public void save(Message dislikedMessage, User userWhoDisliked) {
         repository.save(
                 Dislike.builder()
@@ -29,6 +37,20 @@ public class DislikeServiceImpl implements DislikeService {
                         .creationDate(LocalDateTime.now())
                         .build()
         );
+    }
+
+    @Override
+    public void cancel(Message dislikedMessage, User userWhoDisliked) {
+        repository.delete(findByMessageIdAndUserId(dislikedMessage.getId(), userWhoDisliked.getId()));
+    }
+
+    @Override
+    public void saveOrCancel(Message dislikedMessage, User userWhoDisliked, boolean isCancellation) {
+        if (!isCancellation) {
+            save(dislikedMessage, userWhoDisliked);
+        } else {
+            cancel(dislikedMessage, userWhoDisliked);
+        }
     }
 
 }

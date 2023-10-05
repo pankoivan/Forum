@@ -63,9 +63,6 @@ public class UsersActivitiesController extends ConvenientController {
                                             @RequestParam("sourcePage") String sourcePage,
                                             @PathVariable("userWhoLikedId") String pathUserWhoLikedId) {
 
-        /*likeService.save(
-                messageService.findById(messageId), service.findById(toNonNegativeInteger(pathUserWhoLikedId))
-        );*/
         likeService.saveOrCancel(
                 messageService.findById(messageId), service.findById(toNonNegativeInteger(pathUserWhoLikedId)), isCancellation
         );
@@ -78,8 +75,8 @@ public class UsersActivitiesController extends ConvenientController {
                                                @RequestParam("sourcePage") String sourcePage,
                                                @PathVariable("userWhoDislikedId") String pathUserWhoDislikedId) {
 
-        dislikeService.save(
-                messageService.findById(messageId), service.findById(toNonNegativeInteger(pathUserWhoDislikedId))
+        dislikeService.saveOrCancel(
+                messageService.findById(messageId), service.findById(toNonNegativeInteger(pathUserWhoDislikedId)), isCancellation
         );
         return "redirect:" + sourcePage;
     }

@@ -81,4 +81,10 @@ public class Message {
                 .anyMatch(user -> user.getId().equals(likedUserId));
     }
 
+    public boolean containsDislikedUserById(Integer dislikedUserid) {
+        return dislikedUsers.stream()
+                .map(Dislike::getUser)
+                .anyMatch(user -> user.getId().equals(dislikedUserid));
+    }
+
 }
