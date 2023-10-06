@@ -96,7 +96,6 @@
                             <div
                                 class="m-1"
                                 th:if="${currentUser != null
-                                            AND currentUser.id != message.userWhoPosted.id
                                             AND #authorization.expression('hasAuthority(''LIKE'')')
                                 }"
                             >
@@ -124,6 +123,7 @@
                                         type="submit"
                                         class="btn btn-sm btn-success"
                                         th:text="${message.likesCount}"
+                                        th:classappend="${currentUser.id == message.userWhoPosted.id} ? 'disabled'"
                                     >
                                         2
                                     </button>
@@ -134,11 +134,11 @@
                                 <!-- "Кому понравилось" -->
                                 <a
                                     aria-expanded="false"
-                                    class="d-block text-decoration-none text-white"
+                                    class="d-block text-decoration-none text-white fs-12"
                                     data-bs-toggle="dropdown"
                                     href="#"
                                     id="whoLiked"
-                                    >Кому понравилось</a
+                                    >Кому</a
                                 >
                                 <!-- Dropdown-список -->
                                 <ul
@@ -146,7 +146,9 @@
                                     class="dropdown-menu text-small"
                                 >
                                     <!-- Динамический и статический просмотр -->
-                                    <li th:each="each, status : ${whoLiked}">
+                                    <li
+                                        th:each="each, status : ${message.likedUsers}"
+                                    >
                                         <a
                                             class="dropdown-item"
                                             href="#"
@@ -177,7 +179,6 @@
                             <div
                                 class="m-1"
                                 th:if="${currentUser != null
-                                            AND currentUser.id != message.userWhoPosted.id
                                             AND #authorization.expression('hasAuthority(''DISLIKE'')')
                                 }"
                             >
@@ -205,6 +206,7 @@
                                         type="submit"
                                         class="btn btn-sm btn-danger"
                                         th:text="${message.dislikesCount}"
+                                        th:classappend="${currentUser.id == message.userWhoPosted.id} ? 'disabled'"
                                     >
                                         1
                                     </button>
@@ -215,11 +217,11 @@
                                 <!-- "Кому не понравилось" -->
                                 <a
                                     aria-expanded="false"
-                                    class="d-block text-decoration-none text-white"
+                                    class="d-block text-decoration-none text-white fs-12"
                                     data-bs-toggle="dropdown"
                                     href="#"
                                     id="whoDisliked"
-                                    >Кому не понравилось</a
+                                    >Кому</a
                                 >
                                 <!-- Dropdown-список -->
                                 <ul
@@ -227,7 +229,9 @@
                                     class="dropdown-menu text-small"
                                 >
                                     <!-- Динамический и статический просмотр -->
-                                    <li th:each="each, status : ${whoLiked}">
+                                    <li
+                                        th:each="each, status : ${message.dislikedUsers}"
+                                    >
                                         <a
                                             class="dropdown-item"
                                             href="#"
@@ -274,6 +278,7 @@
                                                     '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/delete/__${message.id}__'
                                             )
                                 }"
+                                class="d-flex flex-row align-items-center justify-content-center"
                             >
                                 <div>
                                     <button
@@ -290,31 +295,6 @@
                                     </button>
                                 </div>
                             </div>
-                            <!--<div
-                                class="d-flex flex-fill flex-row align-items-center justify-content-center justify-content-md-end justify-content-lg-end"
-                                th:replace="~{fragments/edit-delete-buttons :: edit-delete (
-                                                editFormUrl =
-                                                    '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/edit/__${message.id}__',
-                                                deleteFormUrl =
-                                                    '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/delete/__${message.id}__'
-                                            )
-                                }"
-                            >
-                                <div>
-                                    <button
-                                        class="btn btn-sm btn-success rounded-circle m-1"
-                                    >
-                                        E
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        class="btn btn-sm btn-danger rounded-circle m-1"
-                                    >
-                                        D
-                                    </button>
-                                </div>
-                            </div>-->
                         </div>
                     </div>
                     <!-- Сообщение -->

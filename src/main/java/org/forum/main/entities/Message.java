@@ -87,4 +87,16 @@ public class Message {
                 .anyMatch(user -> user.getId().equals(dislikedUserid));
     }
 
+    public List<User> getLikedUsers() {
+        return likedUsers.stream()
+                .map(Like::getUser)
+                .toList();
+    }
+
+    public List<User> getDislikedUsers() {
+        return dislikedUsers.stream()
+                .map(Dislike::getUser)
+                .toList();
+    }
+
 }
