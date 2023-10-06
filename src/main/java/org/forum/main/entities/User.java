@@ -217,6 +217,11 @@ public class User implements UserDetails {
         return role.getName().equals(roleName);
     }
 
+    public boolean hasAuthority(String authorityName) {
+        return getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(authorityName));
+    }
+
     public boolean isBanned() {
         return getCurrentBan() != null;
     }

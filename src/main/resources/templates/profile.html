@@ -132,7 +132,7 @@
                             </div>
                         </div>
                         <!-- Город -->
-                        <div class="bg-dark rounded p-1 mb-2">
+                        <div class="bg-dark rounded p-1 mb-5">
                             <div class="border-bottom border-white fw-bold">
                                 <span>Город</span>
                             </div>
@@ -142,6 +142,54 @@
                                     >Санкт-Петербург</span
                                 >
                             </div>
+                        </div>
+                        <!-- Все понравившиеся сообщения -->
+                        <div class="mb-2">
+                            <a
+                                class="btn btn-primary"
+                                href="#"
+                                th:href="@{/users/__${userForProfile.id}__/liked}"
+                                >Все понравившиеся сообщения</a
+                            >
+                        </div>
+                        <!-- Все не понравившиеся сообщения -->
+                        <div class="mb-2">
+                            <a
+                                class="btn btn-primary"
+                                href="#"
+                                th:href="@{/users/__${userForProfile.id}__/disliked}"
+                                >Все не понравившиеся сообщения</a
+                            >
+                        </div>
+                        <!-- Все отправленные сообщения -->
+                        <div class="mb-2">
+                            <a
+                                class="btn btn-primary"
+                                href="#"
+                                th:href="@{/users/__${userForProfile.id}__/messages}"
+                                >Все отправленные сообщения</a
+                            >
+                        </div>
+                        <!-- Все созданные темы -->
+                        <div class="mb-2">
+                            <a
+                                class="btn btn-primary"
+                                href="#"
+                                th:href="@{/users/__${userForProfile.id}__/topics}"
+                                >Все созданные темы</a
+                            >
+                        </div>
+                        <!-- Все созданные разделы -->
+                        <div
+                            class="mb-2"
+                            th:if="${userForProfile.hasAuthority('WORK_WITH_SECTIONS')}"
+                        >
+                            <a
+                                class="btn btn-primary"
+                                href="#"
+                                th:href="@{/users/__${userForProfile.id}__/sections}"
+                                >Все созданные разделы</a
+                            >
                         </div>
                     </div>
                 </div>
