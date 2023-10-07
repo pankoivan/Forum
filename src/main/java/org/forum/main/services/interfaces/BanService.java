@@ -10,6 +10,6 @@ public interface BanService extends ValidationService<Ban> {
 
     void save(Ban ban, User user, User userWhoAssigned);
 
-    void deleteById(Integer id);
+    void unban(User user);
 
 }

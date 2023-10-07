@@ -155,14 +155,9 @@
                                                       : '/users/activities/unban'"
                     >
                         <input
-                            name="sourcePage"
-                            th:value="${#ctx.springRequestContext.requestUri}"
-                            type="hidden"
-                        />
-                        <input
                             name="userId"
-                            th:value="${user.id}"
                             type="hidden"
+                            th:value="${user.id}"
                         />
                         <button
                             class="btn btn-sm"

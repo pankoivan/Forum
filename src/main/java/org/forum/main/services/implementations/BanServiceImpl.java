@@ -45,8 +45,10 @@ public class BanServiceImpl implements BanService {
     }
 
     @Override
-    public void deleteById(Integer id) {
-
+    public void unban(User user) {
+        Ban currentBan = user.getCurrentBan();
+        currentBan.setEndDate(LocalDate.now());
+        repository.save(currentBan);
     }
 
     @Override

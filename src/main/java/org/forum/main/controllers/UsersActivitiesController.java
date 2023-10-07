@@ -128,4 +128,14 @@ public class UsersActivitiesController extends ConvenientController {
         return "redirect:/users/" + ban.getUser().getId();
     }
 
+    @PostMapping("/unban")
+    public String redirectUserProfilePageAfterUnban(@RequestParam("userId") String pathUserId) {
+
+        Integer userId = toNonNegativeInteger(pathUserId);
+
+        banService.unban(service.findById(userId));
+
+        return "redirect:/users/" + userId;
+    }
+
 }
