@@ -151,12 +151,17 @@
                         action="#"
                         class="mx-1"
                         method="post"
-                        th:action="${user.isActive()} ? '/users/activities/ban/__${user.id}__'
-                                                      : '/users/activities/unban/__${user.id}__'"
+                        th:action="${user.isActive()} ? '/users/activities/ban'
+                                                      : '/users/activities/unban'"
                     >
                         <input
                             name="sourcePage"
                             th:value="${#ctx.springRequestContext.requestUri}"
+                            type="hidden"
+                        />
+                        <input
+                            name="userId"
+                            th:value="${user.id}"
                             type="hidden"
                         />
                         <button

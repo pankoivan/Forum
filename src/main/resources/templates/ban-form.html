@@ -28,18 +28,28 @@
         </div>
 
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
-        <div class="container">
+        <div class="container text-white">
             <div class="row">
                 <div class="col-11 col-md-8 col-lg-5 mx-auto">
                     <!-- Непосредственно форма бана -->
                     <form
                         action="#"
+                        th:action="@{/users/activities/ban/process}"
                         class="bg-dark rounded px-3 py-2"
                         method="post"
-                        th:action="${submitUrl}"
-                        th:object="${object}"
+                        th:object="${ban}"
                     >
                         <input th:field="*{id}" type="hidden" />
+                        <input
+                            name="userId"
+                            th:value="${userId}"
+                            type="hidden"
+                        />
+                        <input
+                            name="userWhoAssignedId"
+                            th:value="${currentUser.id}"
+                            type="hidden"
+                        />
                         <!-- Блок с возможными ошибками -->
                         <div class="text-center text-red my-3" th:if="${error}">
                             <span th:text="${error}">Текст ошибки</span>
@@ -53,20 +63,20 @@
                                 class="form-control"
                                 id="endDate"
                                 placeholder="Общение"
-                                th:field="*{name}"
-                                type="text"
+                                th:field="*{endDate}"
+                                type="date"
                             />
                         </div>
-                        <!-- Описание -->
+                        <!-- Причина -->
                         <div class="text-center mb-4">
                             <label class="form-label" for="description"
-                                >Описание</label
+                                >Причина</label
                             >
                             <textarea
                                 class="form-control"
                                 id="description"
                                 placeholder="Информативное описание длиной до 200 символов..."
-                                th:field="*{description}"
+                                th:field="*{reason}"
                             ></textarea>
                         </div>
                         <!-- Кнопка отправки -->
