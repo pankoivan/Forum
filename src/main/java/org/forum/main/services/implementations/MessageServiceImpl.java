@@ -75,7 +75,8 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
                 () -> repository.findAll(Sort.by(option.getDirection(), "creationDate")),
                 () -> repository.findAll(Sort.by(option.getDirection(), "editingDate")),
                 () -> repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name()),
-                () -> repository.findAllByOrderByDislikesCountWithDirection(option.getDirection().name()));
+                () -> repository.findAllByOrderByDislikesCountWithDirection(option.getDirection().name())
+        );
     }
 
     @Override
@@ -94,12 +95,70 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
                 () -> repository.findAllByTopicId(topicId, Sort.by(option.getDirection(), "creationDate")),
                 () -> repository.findAllByTopicId(topicId, Sort.by(option.getDirection(), "editingDate")),
                 () -> repository.findAllByTopicIdOrderByLikesCountWithDirection(topicId, option.getDirection().name()),
-                () -> repository.findAllByTopicIdOrderByDislikesCountWithDirection(topicId, option.getDirection().name()));
+                () -> repository.findAllByTopicIdOrderByDislikesCountWithDirection(topicId, option.getDirection().name())
+        );
     }
 
     @Override
     public List<Message> findAllByTopicIdSortedByDefault(Integer topicId) {
         return findAllByTopicIdSorted(topicId, DefaultSortingOptionConstants.FOR_MESSAGES);
+    }
+
+    @Override
+    public List<Message> findAllByUserIdSorted(Integer userId, MessageSortingOption option) {
+        return mySwitch(option,
+                () -> filterPostedByUserId(repository.findAll(Sort.by(option.getDirection(), "creationDate")),
+                        userId),
+                () -> filterPostedByUserId(repository.findAll(Sort.by(option.getDirection(), "editingDate")),
+                        userId),
+                () -> filterPostedByUserId(repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name()),
+                        userId),
+                () -> filterPostedByUserId(repository.findAllByOrderByDislikesCountWithDirection(option.getDirection().name()),
+                        userId)
+        );
+    }
+
+    @Override
+    public List<Message> findAllByUserIdSortedByDefault(Integer userId) {
+        return findAllByUserIdSorted(userId, DefaultSortingOptionConstants.FOR_MESSAGES);
+    }
+
+    @Override
+    public List<Message> findAllLikedByUserIdSorted(Integer userId, MessageSortingOption option) {
+        return mySwitch(option,
+                () -> filterLikedByUserId(repository.findAll(Sort.by(option.getDirection(), "creationDate")),
+                        userId),
+                () -> filterLikedByUserId(repository.findAll(Sort.by(option.getDirection(), "editingDate")),
+                        userId),
+                () -> filterLikedByUserId(repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name()),
+                        userId),
+                () -> filterLikedByUserId(repository.findAllByOrderByDislikesCountWithDirection(option.getDirection().name()),
+                        userId)
+        );
+    }
+
+    @Override
+    public List<Message> findAllLikedByUserIdSortedByDefault(Integer userId) {
+        return findAllLikedByUserIdSorted(userId, DefaultSortingOptionConstants.FOR_MESSAGES);
+    }
+
+    @Override
+    public List<Message> findAllDislikedByUserIdSorted(Integer userId, MessageSortingOption option) {
+        return mySwitch(option,
+                () -> filterDislikedByUserId(repository.findAll(Sort.by(option.getDirection(), "creationDate")),
+                        userId),
+                () -> filterDislikedByUserId(repository.findAll(Sort.by(option.getDirection(), "editingDate")),
+                        userId),
+                () -> filterDislikedByUserId(repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name()),
+                        userId),
+                () -> filterDislikedByUserId(repository.findAllByOrderByDislikesCountWithDirection(option.getDirection().name()),
+                        userId)
+        );
+    }
+
+    @Override
+    public List<Message> findAllDislikedByUserIdSortedByDefault(Integer userId) {
+        return findAllDislikedByUserIdSorted(userId, DefaultSortingOptionConstants.FOR_MESSAGES);
     }
 
     @Override
@@ -144,6 +203,24 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
             case BY_LIKES_COUNT -> suppliers[2].get();
             case BY_DISLIKES_COUNT -> suppliers[3].get();
         };
+    }
+
+    private List<Message> filterPostedByUserId(List<Message> messages, Integer userId) {
+        return messages.stream()
+                .filter(message -> message.getUserWhoPosted().getId().equals(userId))
+                .toList();
+    }
+
+    private List<Message> filterLikedByUserId(List<Message> messages, Integer userId) {
+        return messages.stream()
+                .filter(message -> message.containsLikedUserById(userId))
+                .toList();
+    }
+
+    private List<Message> filterDislikedByUserId(List<Message> messages, Integer userId) {
+        return messages.stream()
+                .filter(message -> message.containsDislikedUserById(userId))
+                .toList();
     }
 
 }

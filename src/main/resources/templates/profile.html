@@ -143,12 +143,21 @@
                                 >
                             </div>
                         </div>
+                        <!-- Все отправленные сообщения -->
+                        <div class="mb-2">
+                            <a
+                                class="btn btn-primary"
+                                href="#"
+                                th:href="@{/users/__${userForProfile.id}__/contributions/messages/posted}"
+                                >Все отправленные сообщения</a
+                            >
+                        </div>
                         <!-- Все понравившиеся сообщения -->
                         <div class="mb-2">
                             <a
                                 class="btn btn-primary"
                                 href="#"
-                                th:href="@{/users/__${userForProfile.id}__/contributions/liked}"
+                                th:href="@{/users/__${userForProfile.id}__/contributions/messages/liked}"
                                 >Все понравившиеся сообщения</a
                             >
                         </div>
@@ -157,17 +166,8 @@
                             <a
                                 class="btn btn-primary"
                                 href="#"
-                                th:href="@{/users/__${userForProfile.id}__/contributions/disliked}"
+                                th:href="@{/users/__${userForProfile.id}__/contributions/messages/disliked}"
                                 >Все не понравившиеся сообщения</a
-                            >
-                        </div>
-                        <!-- Все отправленные сообщения -->
-                        <div class="mb-2">
-                            <a
-                                class="btn btn-primary"
-                                href="#"
-                                th:href="@{/users/__${userForProfile.id}__/contributions/messages}"
-                                >Все отправленные сообщения</a
                             >
                         </div>
                         <!-- Все созданные темы -->
@@ -175,7 +175,7 @@
                             <a
                                 class="btn btn-primary"
                                 href="#"
-                                th:href="@{/users/__${userForProfile.id}__/contributions/topics}"
+                                th:href="@{/users/__${userForProfile.id}__/contributions/topics/created}"
                                 >Все созданные темы</a
                             >
                         </div>
@@ -187,7 +187,7 @@
                             <a
                                 class="btn btn-primary"
                                 href="#"
-                                th:href="@{/users/__${userForProfile.id}__/contributions/sections}"
+                                th:href="@{/users/__${userForProfile.id}__/contributions/sections/created}"
                                 >Все созданные разделы</a
                             >
                         </div>

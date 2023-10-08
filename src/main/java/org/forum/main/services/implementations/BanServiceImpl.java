@@ -23,16 +23,6 @@ public class BanServiceImpl implements BanService {
 
     @Override
     public Ban empty() {
-        /*User userWhoAssigned;
-        try {
-            userWhoAssigned = AuthenticationUtils.extractCurrentUser(authentication);
-        } catch (AuxiliaryInstrumentsException e) {
-            throw new ServiceException("Current user cannot be extracted", e);
-        }
-        return Ban.builder()
-                .userWhoAssigned(userWhoAssigned)
-                .user(user)
-                .build();*/
         return new Ban();
     }
 

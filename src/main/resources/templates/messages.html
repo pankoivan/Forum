@@ -59,6 +59,7 @@
         <div class="container">
             <!-- Текущая тема и поиск -->
             <div
+                th:if="${!isForUserContributions}"
                 class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-between justify-content-lg-between mb-5"
             >
                 <!-- Текущая тема -->
@@ -91,7 +92,7 @@
                 <span th:text="${error}">Текст ошибки</span>
             </div>
             <!-- Выбор сортировки -->
-            <div class="col-12 col-md-8 col-lg-6 mx-auto mb-5">
+            <!--<div class="col-12 col-md-8 col-lg-6 mx-auto mb-5">
                 <div
                     th:replace="~{fragments/sort :: sort (properties = ${properties}, directions = ${directions},
                         submitUrl = '/sections/__${sectionId}__/topics/__${topicId}__/messages/page__${currentPage}__/sort')}"
@@ -102,9 +103,22 @@
                         <h3>Статический блок для просмотра в браузере</h3>
                     </div>
                 </div>
+            </div>-->
+            <div class="col-12 col-md-8 col-lg-6 mx-auto mb-5">
+                <div
+                    th:replace="~{fragments/sort :: sort (properties = ${properties}, directions = ${directions},
+                        submitUrl = '/users/__${userId}__/contributions/messages/posted/page__${currentPage}__/sort')}"
+                >
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-mini"
+                    >
+                        <h3>Статический блок для просмотра в браузере</h3>
+                    </div>
+                </div>
             </div>
             <!-- Форма отправки сообщения -->
             <div
+                th:if="${!isForUserContributions}"
                 sec:authorize="hasAuthority('WORK_WITH_OWN_MESSAGES')"
                 class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2 mb-5"
             >
@@ -203,9 +217,15 @@
                 </div>
             </div>
             <!-- Пагинация -->
-            <div
+            <!--<div
                 class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
                 th:replace="~{fragments/pagination :: pagination(urlPart = '/sections/__${sectionId}__/topics/__${topicId}__/messages')}"
+            >
+                <h3>Статический блок для просмотра в браузере</h3>
+            </div>-->
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
+                th:replace="~{fragments/pagination :: pagination(urlPart = '/users/__${userId}__/contributions/messages/posted')}"
             >
                 <h3>Статический блок для просмотра в браузере</h3>
             </div>
