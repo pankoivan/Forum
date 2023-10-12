@@ -43,7 +43,8 @@ public class AuthController extends ConvenientController {
 
     @PostMapping("/registration/processing")
     public String redirectLoginPageAfterRegistration() {
-        return "redirect:/auth/login";
+        return "redirect:%s/login"
+                .formatted(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER);
     }
 
 }

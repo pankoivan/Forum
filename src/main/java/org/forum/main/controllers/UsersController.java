@@ -33,7 +33,8 @@ public class UsersController extends ConvenientController {
 
     @GetMapping
     public String redirectUsersPageWithPagination() {
-        return "redirect:/users/page1";
+        return "redirect:%s/page1"
+                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER);
     }
 
     @GetMapping("/page{pageNumber}")
@@ -61,7 +62,8 @@ public class UsersController extends ConvenientController {
 
     @GetMapping("/usual")
     public String redirectUsualUsersPageWithPagination() {
-        return "redirect:/users/usual/page1";
+        return "redirect:%s/usual/page1"
+                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER);
     }
 
     @GetMapping("/usual/page{pageNumber}")
@@ -89,7 +91,8 @@ public class UsersController extends ConvenientController {
 
     @GetMapping("/moders")
     public String redirectModersPageWithPagination() {
-        return "redirect:/users/moders/page1";
+        return "redirect:%s/moders/page1"
+                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER);
     }
 
     @GetMapping("/moders/page{pageNumber}")
@@ -117,7 +120,8 @@ public class UsersController extends ConvenientController {
 
     @GetMapping("/admins")
     public String redirectAdminsPageWithPagination() {
-        return "redirect:/users/admins/page1";
+        return "redirect:%s/admins/page1"
+                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER);
     }
 
     @GetMapping("/admins/page{pageNumber}")
@@ -159,25 +163,29 @@ public class UsersController extends ConvenientController {
     @PostMapping("/page{pageNumber}/sort")
     public String redirectCurrentUsersPageAfterSorting(HttpSession session, UserSortingOption sortingOption) {
         session.setAttribute("userSortingOption", sortingOption);
-        return "redirect:/users/page{pageNumber}";
+        return "redirect:%s/page{pageNumber}"
+                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER);
     }
 
     @PostMapping("/usual/page{pageNumber}/sort")
     public String redirectCurrentUsualUsersPageAfterSorting(HttpSession session, UserSortingOption sortingOption) {
         session.setAttribute("userSortingOption", sortingOption);
-        return "redirect:/users/usual/page{pageNumber}";
+        return "redirect:%s/usual/page{pageNumber}"
+                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER);
     }
 
     @PostMapping("/moders/page{pageNumber}/sort")
     public String redirectCurrentModersPageAfterSorting(HttpSession session, UserSortingOption sortingOption) {
         session.setAttribute("userSortingOption", sortingOption);
-        return "redirect:/users/moders/page{pageNumber}";
+        return "redirect:%s/moders/page{pageNumber}"
+                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER);
     }
 
     @PostMapping("/admins/page{pageNumber}/sort")
     public String redirectCurrentAdminsPageAfterSorting(HttpSession session, UserSortingOption sortingOption) {
         session.setAttribute("userSortingOption", sortingOption);
-        return "redirect:/users/admins/page{pageNumber}";
+        return "redirect:%s/admins/page{pageNumber}"
+                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER);
     }
 
     private List<User> sorted(UserSortingOption sortingOption, Integer pageNumber) {

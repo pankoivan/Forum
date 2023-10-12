@@ -27,4 +27,6 @@ public class ControllerBaseUrlConstants {
 
     public static final String FOR_MESSAGES_CONTROLLER = "/sections/{sectionId}/topics/{topicId}/messages";
 
+    public static final String FOR_COMMON_ACTIONS_CONTROLLER = "/common-actions";
+
 }

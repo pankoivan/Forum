@@ -39,7 +39,8 @@ public class MessagesController extends ConvenientController {
 
     @GetMapping
     public String redirectMessagesPageWithPagination() {
-        return "redirect:/sections/{sectionId}/topics/{topicId}/messages/page1";
+        return "redirect:%s/page1"
+                .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER);
     }
 
     @GetMapping("/page{pageNumber}")
@@ -109,9 +110,12 @@ public class MessagesController extends ConvenientController {
         service.save(message, authentication, topicService.findById(topicId));
 
         return isNew
-                ? "redirect:/sections/{sectionId}/topics/{topicId}/messages/page" +
-                        service.pagesCount(service.findAllByTopicId(topicId))
-                : "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
+                ? "redirect:%s/page%s"
+                        .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
+                                service.pagesCount(service.findAllByTopicId(topicId)))
+                : "redirect:%s/page{pageNumber}"
+                        .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER);
+
     }
 
     @PostMapping("/page{pageNumber}/inner/edit/{id}")
@@ -187,14 +191,17 @@ public class MessagesController extends ConvenientController {
         int newPagesCount = service.pagesCount(service.findAllByTopicId(topicId));
 
         return pageNumber.equals(pagesCount) && newPagesCount < pagesCount
-                ? "redirect:/sections/{sectionId}/topics/{topicId}/messages/page" + newPagesCount
-                : "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
+                ? "redirect:%s/page%s"
+                        .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, newPagesCount)
+                : "redirect:%s/page{pageNumber}"
+                        .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER);
     }
 
     @PostMapping("/page{pageNumber}/sort")
     public String redirectCurrentPageAfterSorting(HttpSession session, MessageSortingOption sortingOption) {
         session.setAttribute("messageSortingOption", sortingOption);
-        return "redirect:/sections/{sectionId}/topics/{topicId}/messages/page{pageNumber}";
+        return "redirect:%s/page{pageNumber}"
+                .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER);
     }
 
     private List<Message> sorted(MessageSortingOption sortingOption, Integer topicId, Integer pageNumber) {

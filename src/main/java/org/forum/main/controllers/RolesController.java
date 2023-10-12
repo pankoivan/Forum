@@ -55,7 +55,8 @@ public class RolesController extends ConvenientController {
 
         roleService.save(role);
 
-        return "redirect:/roles-authorities";
+        return "redirect:%s"
+                .formatted(ControllerBaseUrlConstants.FOR_ROLES_AUTHORITIES_CONTROLLER);
     }
 
     @PostMapping("/inner/edit/{id}")
@@ -100,7 +101,8 @@ public class RolesController extends ConvenientController {
 
         roleService.deleteById(id);
 
-        return "redirect:/roles-authorities";
+        return "redirect:%s"
+                .formatted(ControllerBaseUrlConstants.FOR_ROLES_AUTHORITIES_CONTROLLER);
     }
 
 }

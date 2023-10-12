@@ -35,7 +35,8 @@ public class TopicsController extends ConvenientController {
 
     @GetMapping
     public String redirectTopicsPageWithPagination() {
-        return "redirect:/sections/{sectionId}/topics/page1";
+        return "redirect:%s/page1"
+                .formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
     }
 
     @GetMapping("/page{pageNumber}")
@@ -100,7 +101,8 @@ public class TopicsController extends ConvenientController {
 
         service.save(topic, authentication, sectionService.findById(sectionId));
 
-        return "redirect:/sections/{sectionId}/topics";
+        return "redirect:%s"
+                .formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
     }
 
     @PostMapping("/inner/edit/{topicId}")
@@ -151,13 +153,15 @@ public class TopicsController extends ConvenientController {
 
         service.deleteById(id);
 
-        return "redirect:/sections/{sectionId}/topics";
+        return "redirect:%s"
+                .formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
     }
 
     @PostMapping("/sort")
     public String redirectTopicsPageAfterSorting(HttpSession session, TopicSortingOption sortingOption) {
         session.setAttribute("topicSortingOption", sortingOption);
-        return "redirect:/sections/{sectionId}/topics";
+        return "redirect:%s"
+                .formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
     }
 
     private List<Topic> sorted(TopicSortingOption sortingOption, Integer sectionId, Integer pageNumber) {

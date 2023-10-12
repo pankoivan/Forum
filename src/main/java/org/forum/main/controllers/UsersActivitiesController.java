@@ -136,7 +136,8 @@ public class UsersActivitiesController extends ConvenientController {
 
         banService.unban(service.findById(userId));
 
-        return "redirect:/users/" + userId;
+        return "redirect:%s/%s"
+                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER, userId);
     }
 
 }
