@@ -1,11 +1,13 @@
 package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
+import org.forum.auxiliary.constants.PaginationConstants;
 import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
 import org.forum.main.entities.Section;
 import org.forum.auxiliary.exceptions.ServiceException;
 import org.forum.main.repositories.SectionRepository;
+import org.forum.main.services.implementations.common.AbstractPaginationServiceImpl;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SectionServiceImpl implements SectionService {
+public class SectionServiceImpl extends AbstractPaginationServiceImpl<Section> implements SectionService {
 
     private final SectionRepository repository;
 
@@ -113,6 +115,16 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public void deleteById(Integer id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public List<Section> onPage(List<Section> foundItems, int pageNumber) {
+        return onPageImpl(foundItems, pageNumber, PaginationConstants.SECTIONS);
+    }
+
+    @Override
+    public int pagesCount(List<Section> foundItems) {
+        return pagesCountImpl(foundItems, PaginationConstants.SECTIONS);
     }
 
     private boolean savingValidationByName(Section section) {

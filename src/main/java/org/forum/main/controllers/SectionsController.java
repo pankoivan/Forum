@@ -3,6 +3,7 @@ package org.forum.main.controllers;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
+import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Section;
@@ -29,15 +30,25 @@ public class SectionsController extends ConvenientController {
     }
 
     @GetMapping
+    public String redirectSectionsPageWithPagination() {
+        return "redirect:/sections/page1";
+    }
+
+    @GetMapping("/page{pageNumber}")
     public String returnSectionsPage(Model model,
                                      Authentication authentication,
                                      @SessionAttribute(value = "sectionSortingOption", required = false)
-                                         SectionSortingOption sortingOption) {
+                                         SectionSortingOption sortingOption,
+                                     @PathVariable("pageNumber") String pathPageNumber) {
+
+        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, service);
 
-        add(model, "sections", sorted(sortingOption));
+        add(model, "sections", sorted(sortingOption, pageNumber));
         add(model, "page", "sections");
+        add(model, "pagesCount", service.pagesCount(service.findAll()));
+        add(model, "currentPage", pageNumber);
         add(model, "sortingObject", service.emptySortingOption());
         add(model, "properties", SectionSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
@@ -103,8 +114,13 @@ public class SectionsController extends ConvenientController {
         if (msg != null) {
 
             addForHeader(model, authentication, service);
-            add(model, "sections", sorted(sortingOption));
+            add(model, "sections", sorted(sortingOption, 1));
             add(model, "page", "sections");
+            add(model, "pagesCount", service.pagesCount(service.findAll()));
+            add(model, "currentPage", 1);
+            add(model, "sortingObject", service.emptySortingOption());
+            add(model, "properties", TopicSortingProperties.values());
+            add(model, "directions", Sort.Direction.values());
             add(model, "error", msg);
 
             return "sections";
@@ -121,10 +137,10 @@ public class SectionsController extends ConvenientController {
         return "redirect:/sections";
     }
 
-    private List<Section> sorted(SectionSortingOption sortingOption) {
+    private List<Section> sorted(SectionSortingOption sortingOption, Integer pageNumber) {
         return sortingOption != null
-                ? service.findAllSorted(sortingOption)
-                : service.findAllSortedByDefault();
+                ? service.onPage(service.findAllSorted(sortingOption), pageNumber)
+                : service.onPage(service.findAllSortedByDefault(), pageNumber);
     }
 
 }

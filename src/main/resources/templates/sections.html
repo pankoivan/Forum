@@ -88,7 +88,7 @@
                 </div>
             </div>
             <!-- Список разделов -->
-            <div>
+            <div class="mb-5">
                 <!-- Динамический просмотр -->
                 <div th:each="each, status : ${sections}">
                     <div
@@ -115,6 +115,13 @@
                 >
                     <h3>Статический блок для просмотра в браузере</h3>
                 </div>
+            </div>
+            <!-- Пагинация -->
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
+                th:replace="~{fragments/pagination :: pagination(urlPart = '/sections')}"
+            >
+                <h3>Статический блок для просмотра в браузере</h3>
             </div>
         </div>
 
