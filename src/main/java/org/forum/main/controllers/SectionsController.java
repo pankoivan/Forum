@@ -2,6 +2,7 @@ package org.forum.main.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
 import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
 import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/sections")
+@RequestMapping(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER)
 public class SectionsController extends ConvenientController {
 
     private final SectionService service;

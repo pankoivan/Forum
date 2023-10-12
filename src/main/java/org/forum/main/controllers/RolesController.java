@@ -1,6 +1,7 @@
 package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
+import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Role;
 import org.forum.main.services.interfaces.AuthorityService;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/roles-authorities/roles")
+@RequestMapping(ControllerBaseUrlConstants.FOR_ROLES_CONTROLLER)
 public class RolesController extends ConvenientController {
 
     private final SectionService sectionService;

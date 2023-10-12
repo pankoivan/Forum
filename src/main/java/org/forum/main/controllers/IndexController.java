@@ -1,5 +1,6 @@
 package org.forum.main.controllers;
 
+import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.services.interfaces.StatisticsService;
 import org.forum.main.services.interfaces.SectionService;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping(ControllerBaseUrlConstants.FOR_INDEX_CONTROLLER)
 public class IndexController extends ConvenientController {
 
     private final SectionService sectionService;

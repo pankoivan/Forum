@@ -1,5 +1,6 @@
 package org.forum.main.controllers;
 
+import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.services.interfaces.AuthorityService;
 import org.forum.main.services.interfaces.RoleService;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/roles-authorities")
+@RequestMapping(ControllerBaseUrlConstants.FOR_ROLES_AUTHORITIES_CONTROLLER)
 public class RolesAuthoritiesController extends ConvenientController {
 
     private final SectionService sectionService;

@@ -1,5 +1,6 @@
 package org.forum.main.controllers;
 
+import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.enums.Gender;
 import org.forum.main.services.interfaces.SectionService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/auth")
+@RequestMapping(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER)
 public class AuthController extends ConvenientController {
 
     private final SectionService sectionService;

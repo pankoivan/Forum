@@ -1,6 +1,7 @@
 package org.forum.main.controllers;
 
 import jakarta.servlet.http.HttpSession;
+import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.main.controllers.common.ConvenientController;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/users/{id}/contributions")
+@RequestMapping(ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER)
 public class UsersContributionsController extends ConvenientController {
 
     private final UserService service;

@@ -1,6 +1,7 @@
 package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
+import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Ban;
 import org.forum.main.services.interfaces.*;
@@ -12,7 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/users/activities")
+@RequestMapping(ControllerBaseUrlConstants.FOR_USERS_ACTIONS_CONTROLLER)
 public class UsersActivitiesController extends ConvenientController {
 
     private final UserService service;
