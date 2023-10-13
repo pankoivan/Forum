@@ -1,6 +1,5 @@
 package org.forum.main.controllers;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
@@ -24,6 +23,10 @@ import java.util.List;
 @RequestMapping(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER)
 public class MessagesController extends ConvenientController {
 
+    private static final String URL_PART = "/messages";
+
+    private static final String SORTING_OPTION_NAME = "messageSortingOption";
+
     private final SectionService sectionService;
 
     private final TopicService topicService;
@@ -46,7 +49,7 @@ public class MessagesController extends ConvenientController {
     @GetMapping("/page{pageNumber}")
     public String returnMessagesPage(Model model,
                                      Authentication authentication,
-                                     @SessionAttribute(value = "messageSortingOption", required = false)
+                                     @SessionAttribute(value = SORTING_OPTION_NAME, required = false)
                                          MessageSortingOption sortingOption,
                                      @PathVariable("sectionId") String pathSectionId,
                                      @PathVariable("topicId") String pathTopicId,
@@ -57,10 +60,11 @@ public class MessagesController extends ConvenientController {
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
+
+        add(model, "messages", sorted(sortingOption, topicId, pageNumber));
         add(model, "sectionId", sectionId);
         add(model, "topicId", topicId);
         add(model, "topicName", topicService.findById(topicId).getName());
-        add(model, "messages", sorted(sortingOption, topicId, pageNumber));
         add(model, "message", service.empty());
         add(model, "formSubmitButtonText", "Отправить сообщение");
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
@@ -68,6 +72,13 @@ public class MessagesController extends ConvenientController {
         add(model, "sortingObject", service.emptySortingOption());
         add(model, "properties", MessageSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
+        add(model, "sortingOptionName", SORTING_OPTION_NAME);
+        add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + URL_PART);
+        add(model, "sortingSourcePageUrl", replacePatternParts(
+                ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
+                sectionId,
+                topicId
+        ));
 
         return "messages";
     }
@@ -77,7 +88,7 @@ public class MessagesController extends ConvenientController {
                                                   Authentication authentication,
                                                   @Valid Message message,
                                                   BindingResult bindingResult,
-                                                  @SessionAttribute(value = "messageSortingOption", required = false)
+                                                  @SessionAttribute(value = SORTING_OPTION_NAME, required = false)
                                                       MessageSortingOption sortingOption,
                                                   @PathVariable("sectionId") String pathSectionId,
                                                   @PathVariable("topicId") String pathTopicId,
@@ -91,10 +102,11 @@ public class MessagesController extends ConvenientController {
         if (service.savingValidation(message, bindingResult)) {
 
             addForHeader(model, authentication, sectionService);
+
+            add(model, "messages", sorted(sortingOption, topicId, pageNumber));
             add(model, "sectionId", sectionId);
             add(model, "topicId", topicId);
             add(model, "topicName", topicService.findById(topicId).getName());
-            add(model, "messages", sorted(sortingOption, topicId, pageNumber));
             add(model, "message", message);
             add(model, "formSubmitButtonText", isNew ? "Отправить сообщение" : "Сохранить изменения");
             add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
@@ -102,6 +114,13 @@ public class MessagesController extends ConvenientController {
             add(model, "sortingObject", service.emptySortingOption());
             add(model, "properties", MessageSortingProperties.values());
             add(model, "directions", Sort.Direction.values());
+            add(model, "sortingOptionName", SORTING_OPTION_NAME);
+            add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + URL_PART);
+            add(model, "sortingSourcePageUrl", replacePatternParts(
+                    ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
+                    sectionId,
+                    topicId
+            ));
             add(model, "formError", service.extractAnySingleError(bindingResult));
 
             return "messages";
@@ -111,17 +130,19 @@ public class MessagesController extends ConvenientController {
 
         return isNew
                 ? "redirect:%s/page%s"
-                        .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
-                                service.pagesCount(service.findAllByTopicId(topicId)))
+                    .formatted(
+                            ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
+                            service.pagesCount(service.findAllByTopicId(topicId))
+                    )
                 : "redirect:%s/page{pageNumber}"
-                        .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER);
+                    .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER);
 
     }
 
     @PostMapping("/page{pageNumber}/inner/edit/{id}")
     public String returnMessagesPageForEditing(Model model,
                                                Authentication authentication,
-                                               @SessionAttribute(value = "messageSortingOption", required = false)
+                                               @SessionAttribute(value = SORTING_OPTION_NAME, required = false)
                                                    MessageSortingOption sortingOption,
                                                @PathVariable("id") String pathId,
                                                @PathVariable("sectionId") String pathSectionId,
@@ -134,10 +155,11 @@ public class MessagesController extends ConvenientController {
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
+
+        add(model, "messages", sorted(sortingOption, topicId, pageNumber));
         add(model, "sectionId", sectionId);
         add(model, "topicId", topicId);
         add(model, "topicName", topicService.findById(topicId).getName());
-        add(model, "messages", sorted(sortingOption, topicId, pageNumber));
         add(model, "message", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить изменения");
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
@@ -145,6 +167,13 @@ public class MessagesController extends ConvenientController {
         add(model, "sortingObject", service.emptySortingOption());
         add(model, "properties", MessageSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
+        add(model, "sortingOptionName", SORTING_OPTION_NAME);
+        add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + URL_PART);
+        add(model, "sortingSourcePageUrl", replacePatternParts(
+                ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
+                sectionId,
+                topicId
+        ));
 
         return "messages";
     }
@@ -152,7 +181,7 @@ public class MessagesController extends ConvenientController {
     @PostMapping("/page{pageNumber}/inner/delete/{id}")
     public String redirectMessagesPageAfterDeleting(Model model,
                                                     Authentication authentication,
-                                                    @SessionAttribute(value = "messageSortingOption", required = false)
+                                                    @SessionAttribute(value = SORTING_OPTION_NAME, required = false)
                                                         MessageSortingOption sortingOption,
                                                     @PathVariable("id") String pathId,
                                                     @PathVariable("sectionId") String pathSectionId,
@@ -181,6 +210,13 @@ public class MessagesController extends ConvenientController {
             add(model, "sortingObject", service.emptySortingOption());
             add(model, "properties", MessageSortingProperties.values());
             add(model, "directions", Sort.Direction.values());
+            add(model, "sortingOptionName", SORTING_OPTION_NAME);
+            add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + URL_PART);
+            add(model, "sortingSourcePageUrl", replacePatternParts(
+                    ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
+                    sectionId,
+                    topicId
+            ));
             add(model, "error", msg);
 
             return "messages";
@@ -192,17 +228,10 @@ public class MessagesController extends ConvenientController {
 
         return pageNumber.equals(pagesCount) && newPagesCount < pagesCount
                 ? "redirect:%s/page%s"
-                        .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, newPagesCount)
+                    .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, newPagesCount)
                 : "redirect:%s/page{pageNumber}"
-                        .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER);
+                    .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER);
     }
-
-    /*@PostMapping("/page{pageNumber}/sort")
-    public String redirectCurrentPageAfterSorting(HttpSession session, MessageSortingOption sortingOption) {
-        session.setAttribute("messageSortingOption", sortingOption);
-        return "redirect:%s/page{pageNumber}"
-                .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER);
-    }*/
 
     private List<Message> sorted(MessageSortingOption sortingOption, Integer topicId, Integer pageNumber) {
         return sortingOption != null

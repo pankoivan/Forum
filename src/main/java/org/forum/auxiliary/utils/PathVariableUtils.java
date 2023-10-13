@@ -38,27 +38,27 @@ public final class PathVariableUtils {
         return result;
     }
 
-    public static String replacePatternPart(String sourceString, Object replacementPart) {
-        return sourceString.replaceFirst(PATH_VARIABLE_PATTERN, replacementPart.toString());
+    public static String replacePatternPart(String sourceUrl, Object replacementPart) {
+        return sourceUrl.replaceFirst(PATH_VARIABLE_PATTERN, replacementPart.toString());
     }
 
-    public static String replacePatternParts(String sourceString, Object ... replacementParts)
+    public static String replacePatternParts(String sourceUrl, Object ... replacementParts)
             throws PathVariableUtilsException {
 
-        Matcher matcher = Pattern.compile(PATH_VARIABLE_PATTERN).matcher(sourceString);
+        Matcher matcher = Pattern.compile(PATH_VARIABLE_PATTERN).matcher(sourceUrl);
         for (int i = 0; matcher.find(); ++i) {
             try {
-                sourceString = replacePatternPart(sourceString, replacementParts[i]);
+                sourceUrl = replacePatternPart(sourceUrl, replacementParts[i]);
             } catch (ArrayIndexOutOfBoundsException e) {
                 throw new PathVariableUtilsException(
                         "Number of pattern parts in string \"%s\" greater then number of replacement parts (%s)"
-                                .formatted(sourceString, replacementParts.length),
+                                .formatted(sourceUrl, replacementParts.length),
                         e
                 );
             }
         }
-        System.out.println("Replaced: " + sourceString);
-        return sourceString;
+        System.out.println("Replaced: " + sourceUrl);
+        return sourceUrl;
     }
 
 }

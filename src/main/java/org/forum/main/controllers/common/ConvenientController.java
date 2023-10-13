@@ -39,4 +39,16 @@ public abstract class ConvenientController {
         }
     }
 
+    protected String replacePatternPart(String sourceUrl, Object replacePart) {
+        return PathVariableUtils.replacePatternPart(sourceUrl, replacePart);
+    }
+
+    protected String replacePatternParts(String sourceUrl, Object ... replaceParts) throws ControllerException {
+        try {
+            return PathVariableUtils.replacePatternParts(sourceUrl, replaceParts);
+        } catch (AuxiliaryInstrumentsException e) {
+            throw new ControllerException(e.getMessage(), e);
+        }
+    }
+
 }
