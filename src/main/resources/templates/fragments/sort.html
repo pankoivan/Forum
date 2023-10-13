@@ -28,7 +28,7 @@
                     <form
                         th:fragment="sort"
                         action="#"
-                        th:action="${submitUrl}"
+                        th:action="${sortingSubmitUrl}"
                         method="post"
                         class="d-flex flex-row align-items-center justify-content-between bg-dark rounded text-white px-1 py-3"
                         th:object="${sortingObject}"
@@ -39,7 +39,7 @@
                             type="hidden"
                         />
                         <input
-                            name="sourcePageUrl"
+                            name="sortingSourcePageUrl"
                             th:value="${sortingSourcePageUrl}"
                             type="hidden"
                         />

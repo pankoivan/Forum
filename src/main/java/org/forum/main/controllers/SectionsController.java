@@ -1,6 +1,5 @@
 package org.forum.main.controllers;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
 import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
@@ -22,6 +21,8 @@ import java.util.List;
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER)
 public class SectionsController extends ConvenientController {
+
+    private static final String URL_PART = "/sections";
 
     private final SectionService service;
 
@@ -47,13 +48,16 @@ public class SectionsController extends ConvenientController {
 
         addForHeader(model, authentication, service);
 
-        add(model, "sections", sorted(sortingOption, pageNumber));
         add(model, "page", "sections");
+        add(model, "sections", sorted(sortingOption, pageNumber));
         add(model, "pagesCount", service.pagesCount(service.findAll()));
         add(model, "currentPage", pageNumber);
-        add(model, "sortingObject", service.emptySortingOption());
+        add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", SectionSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
+        add(model, "sortingOptionName", "sectionSortingOption");
+        add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + URL_PART);
+        add(model, "sortingSourcePageUrl", ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
 
         return "sections";
     }
@@ -62,6 +66,7 @@ public class SectionsController extends ConvenientController {
     public String returnSectionFormPageForCreating(Model model, Authentication authentication) {
 
         addForHeader(model, authentication, service);
+
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать раздел");
 
@@ -77,6 +82,7 @@ public class SectionsController extends ConvenientController {
         if (service.savingValidation(section, bindingResult)) {
 
             addForHeader(model, authentication, service);
+
             add(model, "object", section);
             add(model, "formSubmitButtonText", service.isNew(section) ? "Создать раздел" : "Сохранить");
             add(model, "error", service.extractAnySingleError(bindingResult));
@@ -98,6 +104,7 @@ public class SectionsController extends ConvenientController {
         Integer id = toNonNegativeInteger(pathId);
 
         addForHeader(model, authentication, service);
+
         add(model, "object", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить");
 
@@ -117,13 +124,17 @@ public class SectionsController extends ConvenientController {
         if (msg != null) {
 
             addForHeader(model, authentication, service);
+
             add(model, "sections", sorted(sortingOption, 1));
             add(model, "page", "sections");
             add(model, "pagesCount", service.pagesCount(service.findAll()));
             add(model, "currentPage", 1);
-            add(model, "sortingObject", service.emptySortingOption());
+            add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
             add(model, "properties", TopicSortingProperties.values());
             add(model, "directions", Sort.Direction.values());
+            add(model, "sortingOptionName", "sectionSortingOption");
+            add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + URL_PART);
+            add(model, "sortingSourcePageUrl", ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
             add(model, "error", msg);
 
             return "sections";
@@ -134,13 +145,6 @@ public class SectionsController extends ConvenientController {
         return "redirect:%s"
                 .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
     }
-
-    /*@PostMapping("/sort")
-    public String redirectSectionsPageAfterSorting(HttpSession session, SectionSortingOption sortingOption) {
-        session.setAttribute("sectionSortingOption", sortingOption);
-        return "redirect:%s"
-                .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
-    }*/
 
     private List<Section> sorted(SectionSortingOption sortingOption, Integer pageNumber) {
         return sortingOption != null

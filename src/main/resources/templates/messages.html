@@ -70,7 +70,7 @@
                     </h2>
                 </div>
                 <!-- Поиск -->
-                <div class="m-2" th:replace="~{fragments/search :: search}">
+                <div class="m-2" th:insert="~{fragments/search :: search}">
                     <div
                         class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
                     >
@@ -87,8 +87,8 @@
             </div>
             <!-- Сортировка -->
             <div
-                class="col-12 col-md-8 col-lg-6 mx-auto mb-5"
                 th:insert="~{fragments/sort :: sort}"
+                class="col-12 col-md-8 col-lg-6 mx-auto mb-5"
             >
                 <div
                     class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"

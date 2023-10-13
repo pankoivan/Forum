@@ -4,9 +4,13 @@ import lombok.experimental.UtilityClass;
 import org.forum.auxiliary.exceptions.PathVariableUtilsException;
 
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @UtilityClass
 public final class PathVariableUtils {
+
+    private static final String PATH_VARIABLE_PATTERN = "\\{.*?}";
 
     public static Integer toNonNegativeInteger(String pathVariable) throws PathVariableUtilsException {
         return forNonNegativeIntegerAndLong(() -> Integer.parseInt(pathVariable), pathVariable, "integer");
@@ -19,6 +23,7 @@ public final class PathVariableUtils {
     private static <T extends Number> T forNonNegativeIntegerAndLong(Supplier<T> supplier, String pathVariable,
                                                                      String exceptionMessagePart)
             throws PathVariableUtilsException {
+
         T result;
         try {
             result = supplier.get();
@@ -31,6 +36,29 @@ public final class PathVariableUtils {
                     exceptionMessagePart);
         }
         return result;
+    }
+
+    public static String replacePatternPart(String sourceString, Object replacementPart) {
+        return sourceString.replaceFirst(PATH_VARIABLE_PATTERN, replacementPart.toString());
+    }
+
+    public static String replacePatternParts(String sourceString, Object ... replacementParts)
+            throws PathVariableUtilsException {
+
+        Matcher matcher = Pattern.compile(PATH_VARIABLE_PATTERN).matcher(sourceString);
+        for (int i = 0; matcher.find(); ++i) {
+            try {
+                sourceString = replacePatternPart(sourceString, replacementParts[i]);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new PathVariableUtilsException(
+                        "Number of pattern parts in string \"%s\" greater then number of replacement parts (%s)"
+                                .formatted(sourceString, replacementParts.length),
+                        e
+                );
+            }
+        }
+        System.out.println("Replaced: " + sourceString);
+        return sourceString;
     }
 
 }
