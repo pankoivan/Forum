@@ -160,7 +160,7 @@ public class UsersController extends ConvenientController {
         return "profile";
     }
 
-    @PostMapping("/page{pageNumber}/sort")
+    /*@PostMapping("/page{pageNumber}/sort")
     public String redirectCurrentUsersPageAfterSorting(HttpSession session, UserSortingOption sortingOption) {
         session.setAttribute("userSortingOption", sortingOption);
         return "redirect:%s/page{pageNumber}"
@@ -186,7 +186,7 @@ public class UsersController extends ConvenientController {
         session.setAttribute("userSortingOption", sortingOption);
         return "redirect:%s/admins/page{pageNumber}"
                 .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER);
-    }
+    }*/
 
     private List<User> sorted(UserSortingOption sortingOption, Integer pageNumber) {
         return sortingOption != null

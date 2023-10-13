@@ -197,12 +197,12 @@ public class MessagesController extends ConvenientController {
                         .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER);
     }
 
-    @PostMapping("/page{pageNumber}/sort")
+    /*@PostMapping("/page{pageNumber}/sort")
     public String redirectCurrentPageAfterSorting(HttpSession session, MessageSortingOption sortingOption) {
         session.setAttribute("messageSortingOption", sortingOption);
         return "redirect:%s/page{pageNumber}"
                 .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER);
-    }
+    }*/
 
     private List<Message> sorted(MessageSortingOption sortingOption, Integer topicId, Integer pageNumber) {
         return sortingOption != null

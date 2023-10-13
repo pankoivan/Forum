@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Поиск</title>
+        <link
+            href="../../static/css/bootstrap.min.css"
+            rel="stylesheet"
+            th:href="@{/css/bootstrap.min.css}"
+        />
+        <link
+            href="../../static/css/style.css"
+            rel="stylesheet"
+            th:href="@{/css/style.css}"
+        />
+    </head>
+
+    <body
+        class="min-vh-100 bg-lightgray d-flex flex-column align-items-center justify-content-center"
+    >
+        <!-- Контейнер для фрагмента -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-8 col-lg-6 mx-auto">
+                    <!-- ---------------------------------------- Сам фрагмент: форма поиска ---------------------------------------- -->
+                    <form
+                        action="#"
+                        class="d-flex flex-row align-items-center justify-content-between bg-dark rounded text-white px-1 py-3"
+                        method="post"
+                        th:action="${submitUrl}"
+                        th:fragment="search"
+                    >
+                        <input
+                            name="searchingSourcePageUrl"
+                            th:value="${searchingSourcePageUrl}"
+                            type="hidden"
+                        />
+                        <!-- Искомый текст -->
+                        <div class="mx-2">
+                            <input
+                                class="form-control"
+                                name="searchedText"
+                                placeholder="Поиск..."
+                                type="search"
+                            />
+                        </div>
+                        <!-- Кнопка применения поиска -->
+                        <div class="mx-2">
+                            <button class="btn btn-primary" type="submit">
+                                Найти
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

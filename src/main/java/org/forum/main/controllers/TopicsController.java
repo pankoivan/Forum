@@ -157,12 +157,12 @@ public class TopicsController extends ConvenientController {
                 .formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
     }
 
-    @PostMapping("/sort")
+    /*@PostMapping("/sort")
     public String redirectTopicsPageAfterSorting(HttpSession session, TopicSortingOption sortingOption) {
         session.setAttribute("topicSortingOption", sortingOption);
         return "redirect:%s"
                 .formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
-    }
+    }*/
 
     private List<Topic> sorted(TopicSortingOption sortingOption, Integer sectionId, Integer pageNumber) {
         return sortingOption != null

@@ -74,14 +74,22 @@
             >
                 <span th:text="${error}">Текст ошибки</span>
             </div>
-            <!-- Выбор сортировки -->
-            <div class="col-12 col-md-8 col-lg-6 mx-auto mb-5">
-                <div
-                    th:replace="~{fragments/sort :: sort (properties = ${properties}, directions = ${directions},
-                        submitUrl = '/sections/sort')}"
-                >
+            <!-- Сортировка и поиск -->
+            <div
+                class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-lg-between mb-5"
+            >
+                <!-- Сортировка -->
+                <div class="m-2" th:insert="~{fragments/sort :: sort}">
                     <div
-                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-mini"
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
+                    >
+                        <h3>Статический блок для просмотра в браузере</h3>
+                    </div>
+                </div>
+                <!-- Поиск -->
+                <div class="m-2" th:insert="~{fragments/search :: search}">
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
                     >
                         <h3>Статический блок для просмотра в браузере</h3>
                     </div>
@@ -118,8 +126,8 @@
             </div>
             <!-- Пагинация -->
             <div
-                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
                 th:replace="~{fragments/pagination :: pagination(urlPart = '/sections')}"
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
             >
                 <h3>Статический блок для просмотра в браузере</h3>
             </div>

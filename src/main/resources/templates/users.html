@@ -53,15 +53,12 @@
 
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div class="container">
-            <!-- Выбор сортировки и поиск -->
+            <!-- Сортировка и поиск -->
             <div
-                class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-between justify-content-lg-between mb-5"
+                class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-lg-between mb-5"
             >
-                <!-- Выбор сортировки -->
-                <div
-                    th:replace="~{fragments/sort :: sort (properties = ${properties}, directions = ${directions},
-                        submitUrl = ${submitUrl})}"
-                >
+                <!-- Сортировка -->
+                <div class="m-2" th:insert="~{fragments/sort :: sort}">
                     <div
                         class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
                     >
@@ -69,41 +66,38 @@
                     </div>
                 </div>
                 <!-- Поиск -->
-                <form action="#" class="m-2" method="post">
-                    <div class="d-flex flex-row justify-content-between m-1">
-                        <input
-                            class="form-control mx-1"
-                            placeholder="Текст..."
-                            type="search"
-                        />
-                        <button class="btn btn-primary mx-1" type="submit">
-                            Найти
-                        </button>
+                <div class="m-2" th:insert="~{fragments/search :: search}">
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
+                    >
+                        <h3>Статический блок для просмотра в браузере</h3>
                     </div>
-                </form>
+                </div>
             </div>
             <!-- Список пользователей -->
             <div class="mb-5">
                 <div th:each="each, status : ${users}">
+                    <!-- Динамический просмотр -->
                     <div
-                        th:classappend="${!status.last} ? mb-2"
                         th:insert="~{fragments/user-header :: user-header (user = ${each})}"
+                        th:classappend="${!status.last} ? mb-2"
                     ></div>
+                    <!-- Статический просмотр -->
                     <div
-                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro mb-2"
                         th:if="${false}"
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro mb-2"
                     >
                         <h3>Статический блок для просмотра в браузере</h3>
                     </div>
                     <div
-                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro mb-2"
                         th:if="${false}"
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro mb-2"
                     >
                         <h3>Статический блок для просмотра в браузере</h3>
                     </div>
                     <div
+                        th:if="${false}"
                         class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
-                        th:if="${false}"
                     >
                         <h3>Статический блок для просмотра в браузере</h3>
                     </div>

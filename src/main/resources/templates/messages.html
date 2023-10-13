@@ -59,11 +59,10 @@
         <div class="container">
             <!-- Текущая тема и поиск -->
             <div
-                th:if="${!isForUserContributions}"
-                class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-between justify-content-lg-between mb-5"
+                class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-lg-between mb-5"
             >
                 <!-- Текущая тема -->
-                <div class="text-center m-1">
+                <div class="text-center m-2">
                     <h2
                         th:text="'Текущая тема: ' + '&quot;' + ${topicName} + '&quot;'"
                     >
@@ -71,18 +70,13 @@
                     </h2>
                 </div>
                 <!-- Поиск -->
-                <form action="#" method="post">
-                    <div class="d-flex flex-row justify-content-between m-1">
-                        <input
-                            type="search"
-                            placeholder="Текст..."
-                            class="form-control mx-1"
-                        />
-                        <button type="submit" class="btn btn-primary mx-1">
-                            Найти
-                        </button>
+                <div class="m-2" th:replace="~{fragments/search :: search}">
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
+                    >
+                        <h3>Статический блок для просмотра в браузере</h3>
                     </div>
-                </form>
+                </div>
             </div>
             <!-- Блок с возможными ошибками -->
             <div
@@ -91,34 +85,19 @@
             >
                 <span th:text="${error}">Текст ошибки</span>
             </div>
-            <!-- Выбор сортировки -->
-            <!--<div class="col-12 col-md-8 col-lg-6 mx-auto mb-5">
+            <!-- Сортировка -->
+            <div
+                class="col-12 col-md-8 col-lg-6 mx-auto mb-5"
+                th:insert="~{fragments/sort :: sort}"
+            >
                 <div
-                    th:replace="~{fragments/sort :: sort (properties = ${properties}, directions = ${directions},
-                        submitUrl = '/sections/__${sectionId}__/topics/__${topicId}__/messages/page__${currentPage}__/sort')}"
+                    class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
                 >
-                    <div
-                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-mini"
-                    >
-                        <h3>Статический блок для просмотра в браузере</h3>
-                    </div>
-                </div>
-            </div>-->
-            <div class="col-12 col-md-8 col-lg-6 mx-auto mb-5">
-                <div
-                    th:replace="~{fragments/sort :: sort (properties = ${properties}, directions = ${directions},
-                        submitUrl = '/users/__${userId}__/contributions/messages/posted/page__${currentPage}__/sort')}"
-                >
-                    <div
-                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-mini"
-                    >
-                        <h3>Статический блок для просмотра в браузере</h3>
-                    </div>
+                    <h3>Статический блок для просмотра в браузере</h3>
                 </div>
             </div>
             <!-- Форма отправки сообщения -->
             <div
-                th:if="${!isForUserContributions}"
                 sec:authorize="hasAuthority('WORK_WITH_OWN_MESSAGES')"
                 class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2 mb-5"
             >
@@ -164,6 +143,7 @@
                             <label for="message" class="form-label me-1 fs-16"
                                 >Введите сообщение</label
                             >
+                            <!-- Кнопка отправки -->
                             <div class="ms-1">
                                 <button
                                     type="submit"
@@ -174,6 +154,7 @@
                                 </button>
                             </div>
                         </div>
+                        <!-- Ввод текста сообщения -->
                         <textarea
                             id="message"
                             class="form-control fs-14"
@@ -217,15 +198,9 @@
                 </div>
             </div>
             <!-- Пагинация -->
-            <!--<div
-                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
-                th:replace="~{fragments/pagination :: pagination(urlPart = '/sections/__${sectionId}__/topics/__${topicId}__/messages')}"
-            >
-                <h3>Статический блок для просмотра в браузере</h3>
-            </div>-->
             <div
+                th:replace="~{fragments/pagination :: pagination(urlPart = '/sections/__${sectionId}__/topics/__${topicId}__/messages')}"
                 class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
-                th:replace="~{fragments/pagination :: pagination(urlPart = '/users/__${userId}__/contributions/messages/posted')}"
             >
                 <h3>Статический блок для просмотра в браузере</h3>
             </div>

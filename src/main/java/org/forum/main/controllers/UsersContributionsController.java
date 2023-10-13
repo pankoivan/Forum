@@ -66,11 +66,11 @@ public class UsersContributionsController extends ConvenientController {
         return "messages";
     }
 
-    @PostMapping("/messages/posted/page{pageNumber}/sort")
+    /*@PostMapping("/messages/posted/page{pageNumber}/sort")
     public String redirectCurrentPageAfterSorting(HttpSession session, MessageSortingOption sortingOption) {
         session.setAttribute("messageSortingOption", sortingOption);
         return "redirect:/users/{id}/contributions/messages/posted/page{pageNumber}";
-    }
+    }*/
 
     @GetMapping("/messages/liked")
     public String redirectLikedMessagesPageWithPagination() {

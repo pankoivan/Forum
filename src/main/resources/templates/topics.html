@@ -59,10 +59,10 @@
         <div class="container">
             <!-- Текущий раздел, кнопка создания темы и поиск -->
             <div
-                class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-between mb-5"
+                class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-lg-between mb-5"
             >
                 <!-- Текущий раздел -->
-                <div class="m-2 text-center">
+                <div class="text-center m-2">
                     <h2
                         th:text="'Текущий раздел: ' + '&quot;' + ${sectionName} + '&quot;'"
                     >
@@ -78,24 +78,19 @@
                         <a
                             href="#"
                             th:href="@{/sections/__${sectionId}__/topics/create}"
-                            class="btn btn-primary"
+                            class="btn btn-lg btn-primary"
                             >Создать тему</a
                         >
                     </div>
                 </div>
                 <!-- Поиск -->
-                <form action="#" method="post" class="m-2">
-                    <div class="d-flex flex-row justify-content-between m-1">
-                        <input
-                            type="search"
-                            placeholder="Текст..."
-                            class="form-control mx-1"
-                        />
-                        <button type="submit" class="btn btn-primary mx-1">
-                            Найти
-                        </button>
+                <div class="m-2" th:insert="~{fragments/search :: search}">
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
+                    >
+                        <h3>Статический блок для просмотра в браузере</h3>
                     </div>
-                </form>
+                </div>
             </div>
             <!-- Блок с возможными ошибками -->
             <div
@@ -148,8 +143,8 @@
             </div>
             <!-- Пагинация -->
             <div
-                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
                 th:replace="~{fragments/pagination :: pagination(urlPart = '/sections/__${sectionId}__/topics')}"
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
             >
                 <h3>Статический блок для просмотра в браузере</h3>
             </div>

@@ -32,8 +32,8 @@ public class SectionsController extends ConvenientController {
 
     @GetMapping
     public String redirectSectionsPageWithPagination() {
-        return "redirect%s/page1"
-                .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER)
+        return "redirect:%s/page1"
+                .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
     }
 
     @GetMapping("/page{pageNumber}")
@@ -135,12 +135,12 @@ public class SectionsController extends ConvenientController {
                 .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
     }
 
-    @PostMapping("/sort")
+    /*@PostMapping("/sort")
     public String redirectSectionsPageAfterSorting(HttpSession session, SectionSortingOption sortingOption) {
         session.setAttribute("sectionSortingOption", sortingOption);
         return "redirect:%s"
                 .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
-    }
+    }*/
 
     private List<Section> sorted(SectionSortingOption sortingOption, Integer pageNumber) {
         return sortingOption != null
