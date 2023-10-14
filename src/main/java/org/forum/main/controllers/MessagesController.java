@@ -2,6 +2,8 @@ package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
 import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.SortingOptionNameConstants;
+import org.forum.auxiliary.constants.UrlPartConstants;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
 import org.forum.main.controllers.common.ConvenientController;
@@ -22,10 +24,6 @@ import java.util.List;
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER)
 public class MessagesController extends ConvenientController {
-
-    private static final String URL_PART = "/messages";
-
-    private static final String SORTING_OPTION_NAME = "messageSortingOption";
 
     private final SectionService sectionService;
 
@@ -49,7 +47,8 @@ public class MessagesController extends ConvenientController {
     @GetMapping("/page{pageNumber}")
     public String returnMessagesPage(Model model,
                                      Authentication authentication,
-                                     @SessionAttribute(value = SORTING_OPTION_NAME, required = false)
+                                     @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGE_SORTING_OPTION,
+                                             required = false)
                                          MessageSortingOption sortingOption,
                                      @PathVariable("sectionId") String pathSectionId,
                                      @PathVariable("topicId") String pathTopicId,
@@ -69,11 +68,12 @@ public class MessagesController extends ConvenientController {
         add(model, "formSubmitButtonText", "Отправить сообщение");
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
-        add(model, "sortingObject", service.emptySortingOption());
+        add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", MessageSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
-        add(model, "sortingOptionName", SORTING_OPTION_NAME);
-        add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + URL_PART);
+        add(model, "sortingOptionName", SortingOptionNameConstants.FOR_MESSAGE_SORTING_OPTION);
+        add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
+                UrlPartConstants.MESSAGES);
         add(model, "sortingSourcePageUrl", replacePatternParts(
                 ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
                 sectionId,
@@ -88,7 +88,8 @@ public class MessagesController extends ConvenientController {
                                                   Authentication authentication,
                                                   @Valid Message message,
                                                   BindingResult bindingResult,
-                                                  @SessionAttribute(value = SORTING_OPTION_NAME, required = false)
+                                                  @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGE_SORTING_OPTION,
+                                                          required = false)
                                                       MessageSortingOption sortingOption,
                                                   @PathVariable("sectionId") String pathSectionId,
                                                   @PathVariable("topicId") String pathTopicId,
@@ -111,11 +112,12 @@ public class MessagesController extends ConvenientController {
             add(model, "formSubmitButtonText", isNew ? "Отправить сообщение" : "Сохранить изменения");
             add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
             add(model, "currentPage", pageNumber);
-            add(model, "sortingObject", service.emptySortingOption());
+            add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
             add(model, "properties", MessageSortingProperties.values());
             add(model, "directions", Sort.Direction.values());
-            add(model, "sortingOptionName", SORTING_OPTION_NAME);
-            add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + URL_PART);
+            add(model, "sortingOptionName", SortingOptionNameConstants.FOR_MESSAGE_SORTING_OPTION);
+            add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
+                    UrlPartConstants.MESSAGES);
             add(model, "sortingSourcePageUrl", replacePatternParts(
                     ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
                     sectionId,
@@ -142,7 +144,8 @@ public class MessagesController extends ConvenientController {
     @PostMapping("/page{pageNumber}/inner/edit/{id}")
     public String returnMessagesPageForEditing(Model model,
                                                Authentication authentication,
-                                               @SessionAttribute(value = SORTING_OPTION_NAME, required = false)
+                                               @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGE_SORTING_OPTION,
+                                                       required = false)
                                                    MessageSortingOption sortingOption,
                                                @PathVariable("id") String pathId,
                                                @PathVariable("sectionId") String pathSectionId,
@@ -164,11 +167,12 @@ public class MessagesController extends ConvenientController {
         add(model, "formSubmitButtonText", "Сохранить изменения");
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
-        add(model, "sortingObject", service.emptySortingOption());
+        add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", MessageSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
-        add(model, "sortingOptionName", SORTING_OPTION_NAME);
-        add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + URL_PART);
+        add(model, "sortingOptionName", SortingOptionNameConstants.FOR_MESSAGE_SORTING_OPTION);
+        add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
+                UrlPartConstants.MESSAGES);
         add(model, "sortingSourcePageUrl", replacePatternParts(
                 ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
                 sectionId,
@@ -181,7 +185,8 @@ public class MessagesController extends ConvenientController {
     @PostMapping("/page{pageNumber}/inner/delete/{id}")
     public String redirectMessagesPageAfterDeleting(Model model,
                                                     Authentication authentication,
-                                                    @SessionAttribute(value = SORTING_OPTION_NAME, required = false)
+                                                    @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGE_SORTING_OPTION,
+                                                            required = false)
                                                         MessageSortingOption sortingOption,
                                                     @PathVariable("id") String pathId,
                                                     @PathVariable("sectionId") String pathSectionId,
@@ -207,11 +212,12 @@ public class MessagesController extends ConvenientController {
             add(model, "formSubmitButtonText", "Отправить сообщение");
             add(model, "pagesCount", pagesCount);
             add(model, "currentPage", pageNumber);
-            add(model, "sortingObject", service.emptySortingOption());
+            add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
             add(model, "properties", MessageSortingProperties.values());
             add(model, "directions", Sort.Direction.values());
-            add(model, "sortingOptionName", SORTING_OPTION_NAME);
-            add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + URL_PART);
+            add(model, "sortingOptionName", SortingOptionNameConstants.FOR_MESSAGE_SORTING_OPTION);
+            add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
+                    UrlPartConstants.MESSAGES);
             add(model, "sortingSourcePageUrl", replacePatternParts(
                     ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
                     sectionId,

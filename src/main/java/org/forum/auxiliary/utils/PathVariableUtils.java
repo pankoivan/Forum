@@ -57,7 +57,6 @@ public final class PathVariableUtils {
                 );
             }
         }
-        System.out.println("Replaced: " + sourceUrl);
         return sourceUrl;
     }
 

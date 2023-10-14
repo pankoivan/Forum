@@ -2,6 +2,7 @@ package org.forum.main.controllers.common;
 
 import jakarta.servlet.http.HttpSession;
 import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.UrlPartConstants;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER)
 public class SortingController {
 
-    @PostMapping("/users")
+    @PostMapping(UrlPartConstants.USERS)
     public String redirectSourcePageAfterSortingUsers(HttpSession session,
                                                       UserSortingOption sortingOption,
                                                       @RequestParam("sortingOptionName") String sortingOptionName,
@@ -24,7 +25,7 @@ public class SortingController {
                 .formatted(sortingSourcePageUrl);
     }
 
-    @PostMapping("/sections")
+    @PostMapping(UrlPartConstants.SECTIONS)
     public String redirectSourcePageAfterSortingSections(HttpSession session,
                                                          SectionSortingOption sortingOption,
                                                          @RequestParam("sortingOptionName") String sortingOptionName,
@@ -35,19 +36,18 @@ public class SortingController {
                 .formatted(sortingSourcePageUrl);
     }
 
-    @PostMapping("/topics")
+    @PostMapping(UrlPartConstants.TOPICS)
     public String redirectSourcePageAfterSortingTopics(HttpSession session,
                                                        TopicSortingOption sortingOption,
                                                        @RequestParam("sortingOptionName") String sortingOptionName,
                                                        @RequestParam("sortingSourcePageUrl") String sortingSourcePageUrl) {
 
-        System.out.println(sortingSourcePageUrl);
         session.setAttribute(sortingOptionName, sortingOption);
         return "redirect:%s"
                 .formatted(sortingSourcePageUrl);
     }
 
-    @PostMapping("/messages")
+    @PostMapping(UrlPartConstants.MESSAGES)
     public String redirectSourcePageAfterSortingMessages(HttpSession session,
                                                          MessageSortingOption sortingOption,
                                                          @RequestParam("sortingOptionName") String sortingOptionName,

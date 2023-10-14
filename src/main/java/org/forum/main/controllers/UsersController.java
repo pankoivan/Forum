@@ -1,7 +1,7 @@
 package org.forum.main.controllers;
 
-import jakarta.servlet.http.HttpSession;
 import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.SortingOptionNameConstants;
 import org.forum.auxiliary.sorting.enums.UserSortingProperties;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.main.controllers.common.ConvenientController;
@@ -40,13 +40,15 @@ public class UsersController extends ConvenientController {
     @GetMapping("/page{pageNumber}")
     public String returnUsersPage(Model model,
                                   Authentication authentication,
-                                  @SessionAttribute(value = "userSortingOption", required = false)
+                                  @SessionAttribute(value = SortingOptionNameConstants.FOR_USER_SORTING_OPTION,
+                                          required = false)
                                       UserSortingOption sortingOption,
                                   @PathVariable("pageNumber") String pathPageNumber) {
 
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
+
         add(model, "users", sorted(sortingOption, pageNumber));
         add(model, "page", "users");
         add(model, "pagesCount", service.pagesCount(service.findAll()));

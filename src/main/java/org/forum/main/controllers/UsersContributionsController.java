@@ -1,6 +1,5 @@
 package org.forum.main.controllers;
 
-import jakarta.servlet.http.HttpSession;
 import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;

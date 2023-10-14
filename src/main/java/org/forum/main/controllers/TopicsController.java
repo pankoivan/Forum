@@ -2,10 +2,11 @@ package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
 import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.SortingOptionNameConstants;
+import org.forum.auxiliary.constants.UrlPartConstants;
 import org.forum.auxiliary.exceptions.PathVariableUtilsException;
 import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
-import org.forum.auxiliary.utils.PathVariableUtils;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Topic;
 import org.forum.main.services.interfaces.SectionService;
@@ -23,10 +24,6 @@ import java.util.List;
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER)
 public class TopicsController extends ConvenientController {
-
-    private static final String URL_PART = "/topics";
-
-    private static final String SORTING_OPTION_NAME = "topicSortingOption";
 
     private final SectionService sectionService;
 
@@ -47,7 +44,8 @@ public class TopicsController extends ConvenientController {
     @GetMapping("/page{pageNumber}")
     public String returnTopicsPage(Model model,
                                    Authentication authentication,
-                                   @SessionAttribute(value = SORTING_OPTION_NAME, required = false)
+                                   @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION,
+                                           required = false)
                                        TopicSortingOption sortingOption,
                                    @PathVariable("sectionId") String pathSectionId,
                                    @PathVariable("pageNumber") String pathPageNumber)
@@ -67,8 +65,9 @@ public class TopicsController extends ConvenientController {
         add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", TopicSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
-        add(model, "sortingOptionName", SORTING_OPTION_NAME);
-        add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + URL_PART);
+        add(model, "sortingOptionName", SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION);
+        add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
+                UrlPartConstants.TOPICS);
         add(model, "sortingSourcePageUrl", replacePatternParts(
                 ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
                 sectionId
@@ -141,7 +140,8 @@ public class TopicsController extends ConvenientController {
     @PostMapping("/inner/delete/{id}")
     public String redirectTopicsPageAfterDeleting(Model model,
                                                   Authentication authentication,
-                                                  @SessionAttribute(value = SORTING_OPTION_NAME, required = false)
+                                                  @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION,
+                                                          required = false)
                                                       TopicSortingOption sortingOption,
                                                   @PathVariable("id") String pathId,
                                                   @PathVariable("sectionId") String pathSectionId)
@@ -164,8 +164,9 @@ public class TopicsController extends ConvenientController {
             add(model, "sortingObject", service.emptySortingOption());
             add(model, "properties", TopicSortingProperties.values());
             add(model, "directions", Sort.Direction.values());
-            add(model, "sortingOptionName", SORTING_OPTION_NAME);
-            add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + URL_PART);
+            add(model, "sortingOptionName", SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION);
+            add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
+                    UrlPartConstants.TOPICS);
             add(model, "sortingSourcePageUrl", replacePatternParts(
                     ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
                     sectionId
