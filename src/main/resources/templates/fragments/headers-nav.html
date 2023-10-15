@@ -78,7 +78,7 @@
                                 class="dropdown-menu text-small"
                             >
                                 <!-- Динамический и статический просмотр -->
-                                <li th:each="each, status : ${sections}">
+                                <li th:each="each, status : ${headerSections}">
                                     <a
                                         href="#"
                                         th:href="@{/sections/__${each.id}__/topics}"
