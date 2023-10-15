@@ -93,7 +93,7 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
     }
 
     @Override
-    public List<User> findAlByRoleNameSortedByDefault(String roleName) {
+    public List<User> findAllByRoleNameSortedByDefault(String roleName) {
         return findAllByRoleNameSorted(roleName, DefaultSortingOptionConstants.FOR_USERS);
     }
 

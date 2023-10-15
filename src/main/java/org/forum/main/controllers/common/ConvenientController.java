@@ -8,6 +8,8 @@ import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 
+import java.util.Optional;
+
 public abstract class ConvenientController {
 
     protected void add(Model model, String attributeName, Object attribute) {

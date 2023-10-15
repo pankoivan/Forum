@@ -20,7 +20,7 @@ public interface UserService extends GeneralService<User, Integer>, ValidationSe
 
     List<User> findAllByRoleNameSorted(String roleName, UserSortingOption sortingOption);
 
-    List<User> findAlByRoleNameSortedByDefault(String roleName);
+    List<User> findAllByRoleNameSortedByDefault(String roleName);
 
     void changeRole(User user, Role role);
 
