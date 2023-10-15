@@ -53,6 +53,7 @@ public class SectionsController extends ConvenientController {
         add(model, "sections", sorted(sortingOption, pageNumber));
         add(model, "pagesCount", service.pagesCount(service.findAll()));
         add(model, "currentPage", pageNumber);
+        add(model, "paginationUrl", ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
         add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", SectionSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
@@ -132,6 +133,7 @@ public class SectionsController extends ConvenientController {
             add(model, "page", "sections");
             add(model, "pagesCount", service.pagesCount(service.findAll()));
             add(model, "currentPage", 1);
+            add(model, "paginationUrl", ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
             add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
             add(model, "properties", TopicSortingProperties.values());
             add(model, "directions", Sort.Direction.values());

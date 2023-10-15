@@ -48,8 +48,7 @@ public class TopicsController extends ConvenientController {
                                            required = false)
                                        TopicSortingOption sortingOption,
                                    @PathVariable("sectionId") String pathSectionId,
-                                   @PathVariable("pageNumber") String pathPageNumber)
-            throws PathVariableUtilsException {
+                                   @PathVariable("pageNumber") String pathPageNumber) {
 
         Integer sectionId = toNonNegativeInteger(pathSectionId);
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
@@ -62,6 +61,10 @@ public class TopicsController extends ConvenientController {
         add(model, "sectionName", sectionService.findById(sectionId).getName());
         add(model, "pagesCount", service.pagesCount(service.findAllBySectionId(sectionId)));
         add(model, "currentPage", pageNumber);
+        add(model, "paginationUrl", replacePatternParts(
+                ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
+                sectionId
+        ));
         add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", TopicSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
@@ -144,8 +147,7 @@ public class TopicsController extends ConvenientController {
                                                           required = false)
                                                       TopicSortingOption sortingOption,
                                                   @PathVariable("id") String pathId,
-                                                  @PathVariable("sectionId") String pathSectionId)
-            throws PathVariableUtilsException {
+                                                  @PathVariable("sectionId") String pathSectionId) {
 
         Integer id = toNonNegativeInteger(pathId);
         Integer sectionId = toNonNegativeInteger(pathSectionId);
@@ -161,7 +163,11 @@ public class TopicsController extends ConvenientController {
             add(model, "sectionName", sectionService.findById(sectionId).getName());
             add(model, "pagesCount", service.pagesCount(service.findAllBySectionId(sectionId)));
             add(model, "currentPage", 1);
-            add(model, "sortingObject", service.emptySortingOption());
+            add(model, "paginationUrl", replacePatternParts(
+                    ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
+                    sectionId
+            ));
+            add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
             add(model, "properties", TopicSortingProperties.values());
             add(model, "directions", Sort.Direction.values());
             add(model, "sortingOptionName", SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION);

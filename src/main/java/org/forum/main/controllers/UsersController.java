@@ -53,7 +53,7 @@ public class UsersController extends ConvenientController {
         add(model, "page", "users");
         add(model, "pagesCount", service.pagesCount(service.findAll()));
         add(model, "currentPage", pageNumber);
-        add(model, "urlPartForPagination", "/users");
+        add(model, "paginationUrl", ControllerBaseUrlConstants.FOR_USERS_CONTROLLER);
         add(model, "submitUrl", "/users/page%d/sort".formatted(pageNumber));
         add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", UserSortingProperties.values());
@@ -82,7 +82,7 @@ public class UsersController extends ConvenientController {
         add(model, "page", "usual");
         add(model, "pagesCount", service.pagesCount(service.findAll()));
         add(model, "currentPage", pageNumber);
-        add(model, "urlPartForPagination", "/users/usual");
+        add(model, "paginationUrl", "/users/usual");
         add(model, "submitUrl", "/users/usual/page%d/sort".formatted(pageNumber));
         add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", UserSortingProperties.values());
@@ -111,7 +111,7 @@ public class UsersController extends ConvenientController {
         add(model, "page", "moders");
         add(model, "pagesCount", service.pagesCount(service.findAll()));
         add(model, "currentPage", pageNumber);
-        add(model, "urlPartForPagination", "/users/moders");
+        add(model, "paginationUrl", "/users/moders");
         add(model, "submitUrl", "/users/moders/page%d/sort".formatted(pageNumber));
         add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", UserSortingProperties.values());
@@ -140,7 +140,7 @@ public class UsersController extends ConvenientController {
         add(model, "page", "admins");
         add(model, "pagesCount", service.pagesCount(service.findAll()));
         add(model, "currentPage", pageNumber);
-        add(model, "urlPartForPagination", "/users/admins");
+        add(model, "paginationUrl", "/users/admins");
         add(model, "submitUrl", "/users/admins/page%d/sort".formatted(pageNumber));
         add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", UserSortingProperties.values());

@@ -68,6 +68,11 @@ public class MessagesController extends ConvenientController {
         add(model, "formSubmitButtonText", "Отправить сообщение");
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
+        add(model, "paginationUrl", replacePatternParts(
+                ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
+                sectionId,
+                topicId
+        ));
         add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", MessageSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
@@ -112,6 +117,11 @@ public class MessagesController extends ConvenientController {
             add(model, "formSubmitButtonText", isNew ? "Отправить сообщение" : "Сохранить изменения");
             add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
             add(model, "currentPage", pageNumber);
+            add(model, "paginationUrl", replacePatternParts(
+                    ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
+                    sectionId,
+                    topicId
+            ));
             add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
             add(model, "properties", MessageSortingProperties.values());
             add(model, "directions", Sort.Direction.values());
@@ -167,6 +177,11 @@ public class MessagesController extends ConvenientController {
         add(model, "formSubmitButtonText", "Сохранить изменения");
         add(model, "pagesCount", service.pagesCount(service.findAllByTopicId(topicId)));
         add(model, "currentPage", pageNumber);
+        add(model, "paginationUrl", replacePatternParts(
+                ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
+                sectionId,
+                topicId
+        ));
         add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", MessageSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
@@ -212,6 +227,11 @@ public class MessagesController extends ConvenientController {
             add(model, "formSubmitButtonText", "Отправить сообщение");
             add(model, "pagesCount", pagesCount);
             add(model, "currentPage", pageNumber);
+            add(model, "paginationUrl", replacePatternParts(
+                    ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
+                    sectionId,
+                    topicId
+            ));
             add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
             add(model, "properties", MessageSortingProperties.values());
             add(model, "directions", Sort.Direction.values());

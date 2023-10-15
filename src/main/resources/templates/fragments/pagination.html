@@ -21,16 +21,13 @@
         class="min-vh-100 bg-lightgray d-flex flex-column align-items-center justify-content-center"
     >
         <!-- Фрагмент: пагинация -->
-        <nav
-            th:fragment="pagination(urlPart)"
-            class="d-flex justify-content-center"
-        >
+        <nav class="d-flex justify-content-center" th:fragment="pagination">
             <ul class="pagination">
                 <!-- Статический и динамический просмотр -->
                 <li class="page-item">
                     <a
                         href="#"
-                        th:href="${urlPart} + '/page' + ${currentPage != 1 ? currentPage - 1 : currentPage}"
+                        th:href="${paginationUrl} + '/page' + ${currentPage != 1 ? currentPage - 1 : currentPage}"
                         class="page-link"
                         >Назад</a
                     >
@@ -42,7 +39,7 @@
                 >
                     <a
                         href="#"
-                        th:href="${urlPart} + '/page' + ${i}"
+                        th:href="${paginationUrl} + '/page' + ${i}"
                         class="page-link"
                         th:text="${i}"
                         >1</a
@@ -59,7 +56,7 @@
                 <li class="page-item">
                     <a
                         href="#"
-                        th:href="${urlPart} + '/page' + ${currentPage != pagesCount ? currentPage + 1 : currentPage}"
+                        th:href="${paginationUrl} + '/page' + ${currentPage != pagesCount ? currentPage + 1 : currentPage}"
                         class="page-link"
                         >Вперёд</a
                     >
