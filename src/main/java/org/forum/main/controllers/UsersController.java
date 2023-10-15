@@ -3,6 +3,7 @@ package org.forum.main.controllers;
 import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.UrlPartConstants;
+import org.forum.auxiliary.exceptions.ControllerException;
 import org.forum.auxiliary.sorting.enums.UserSortingProperties;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.main.controllers.common.ConvenientController;
@@ -23,12 +24,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER)
 public class UsersController extends ConvenientController {
-
-    private static final Map<String, String> ROLES_MAP = Map.of(
-            UrlPartConstants.USUAL_USERS.replaceFirst("/", ""), "ROLE_USER",
-            UrlPartConstants.MODER_USERS.replaceFirst("/", ""), "ROLE_MODER",
-            UrlPartConstants.ADMIN_USERS.replaceFirst("/", ""), "ROLE_ADMIN"
-    );
 
     private final SectionService sectionService;
 
@@ -110,6 +105,16 @@ public class UsersController extends ConvenientController {
         return "profile";
     }
 
+    private String mySwitch(String roleUrlName) {
+        return switch (addFirstSlash(roleUrlName)) {
+            case UrlPartConstants.USUAL_USERS -> "ROLE_USER";
+            case UrlPartConstants.MODER_USERS -> "ROLE_MODER";
+            case UrlPartConstants.ADMIN_USERS -> "ROLE_ADMIN";
+            default -> throw new ControllerException("Unknown URL part: \"%s\""
+                    .formatted(roleUrlName));
+        };
+    }
+
     private List<User> sorted(UserSortingOption sortingOption, Optional<String> roleUrlName, Integer pageNumber) {
         return sortingOption != null
                 ? service.onPage(bySortingOption(sortingOption, roleUrlName), pageNumber)
@@ -118,13 +123,13 @@ public class UsersController extends ConvenientController {
 
     private List<User> bySortingOption(UserSortingOption sortingOption, Optional<String> roleUrlName) {
         return roleUrlName.isPresent()
-                ? service.findAllByRoleNameSorted(ROLES_MAP.get(roleUrlName.get()), sortingOption)
+                ? service.findAllByRoleNameSorted(mySwitch(roleUrlName.get()), sortingOption)
                 : service.findAllSorted(sortingOption);
     }
 
     private List<User> byDefault(Optional<String> roleUrlName) {
         return roleUrlName.isPresent()
-                ? service.findAllByRoleNameSortedByDefault(ROLES_MAP.get(roleUrlName.get()))
+                ? service.findAllByRoleNameSortedByDefault(mySwitch(roleUrlName.get()))
                 : service.findAllSortedByDefault();
     }
 

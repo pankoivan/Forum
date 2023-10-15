@@ -3,7 +3,7 @@ package org.forum.auxiliary.constants;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class SortingOptionNameConstants {
+public final class SortingOptionNameConstants {
 
     public static final String FOR_USER_SORTING_OPTION = "userSortingOption";
 

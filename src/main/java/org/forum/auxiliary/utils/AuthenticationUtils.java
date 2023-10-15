@@ -7,7 +7,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 @UtilityClass
-public class AuthenticationUtils {
+public final class AuthenticationUtils {
 
     public static User extractCurrentUser(Authentication authentication) throws AuthenticationUtilsException {
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {

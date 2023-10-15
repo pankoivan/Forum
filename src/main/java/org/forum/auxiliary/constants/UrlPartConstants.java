@@ -3,7 +3,7 @@ package org.forum.auxiliary.constants;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class UrlPartConstants {
+public final class UrlPartConstants {
 
     public static final String USERS = "/users";
 
@@ -17,6 +17,14 @@ public class UrlPartConstants {
 
     public static final String TOPICS = "/topics";
 
+    public static final String CREATED = "/created";
+
     public static final String MESSAGES = "/messages";
+
+    public static final String POSTED = "/posted";
+
+    public static final String LIKED = "/liked";
+
+    public static final String DISLIKED = "/disliked";
 
 }

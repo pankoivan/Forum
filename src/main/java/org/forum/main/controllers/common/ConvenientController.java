@@ -3,12 +3,11 @@ package org.forum.main.controllers.common;
 import org.forum.auxiliary.exceptions.ControllerException;
 import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
 import org.forum.auxiliary.utils.PathVariableUtils;
+import org.forum.auxiliary.utils.UrlUtils;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
-
-import java.util.Optional;
 
 public abstract class ConvenientController {
 
@@ -51,6 +50,14 @@ public abstract class ConvenientController {
         } catch (AuxiliaryInstrumentsException e) {
             throw new ControllerException(e.getMessage(), e);
         }
+    }
+
+    protected String addFirstSlash(String urlPart) {
+        return UrlUtils.addFirstSlash(urlPart);
+    }
+
+    protected String removeFirstSlash(String urlPart) {
+        return UrlUtils.removeFirstSlash(urlPart);
     }
 
 }

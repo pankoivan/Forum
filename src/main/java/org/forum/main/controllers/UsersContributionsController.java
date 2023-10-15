@@ -1,6 +1,9 @@
 package org.forum.main.controllers;
 
 import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.SortingOptionNameConstants;
+import org.forum.auxiliary.constants.UrlPartConstants;
+import org.forum.auxiliary.exceptions.ControllerException;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.main.controllers.common.ConvenientController;
@@ -35,80 +38,84 @@ public class UsersContributionsController extends ConvenientController {
         this.sectionService = sectionService;
     }
 
-    @GetMapping("/messages/posted")
+    @GetMapping(UrlPartConstants.MESSAGES + UrlPartConstants.POSTED)
     public String redirectPostedMessagesPageWithPagination() {
-        return "redirect:/users/{id}/contributions/messages/posted/page1";
+        return "redirect:%s%s%s/page1"
+                .formatted(
+                        ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER,
+                        UrlPartConstants.MESSAGES,
+                        UrlPartConstants.POSTED
+                );
     }
 
-    @GetMapping("/messages/posted/page{pageNumber}")
+    @GetMapping(UrlPartConstants.MESSAGES + UrlPartConstants.LIKED)
+    public String redirectLikedMessagesPageWithPagination() {
+        return "redirect:%s%s%s/page1"
+                .formatted(
+                        ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER,
+                        UrlPartConstants.MESSAGES,
+                        UrlPartConstants.LIKED
+                );
+    }
+
+    @GetMapping(UrlPartConstants.MESSAGES + UrlPartConstants.DISLIKED)
+    public String redirectDislikedMessagesPageWithPagination() {
+        return "redirect:%s%s%s/page1"
+                .formatted(
+                        ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER,
+                        UrlPartConstants.MESSAGES,
+                        UrlPartConstants.DISLIKED
+                );
+    }
+
+    @GetMapping(UrlPartConstants.MESSAGES + "/{whichMessages}/page{pageNumber}")
     public String returnPostedMessagesPage(Model model,
                                            Authentication authentication,
                                            @SessionAttribute(value = "messageSortingOption", required = false)
                                                MessageSortingOption sortingOption,
                                            @PathVariable("id") String pathUserId,
+                                           @PathVariable("whichMessages") String whichMessages,
                                            @PathVariable("pageNumber") String pathPageNumber) {
 
         Integer userId = toNonNegativeInteger(pathUserId);
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         addForHeader(model, authentication, sectionService);
+
         add(model, "isForUserContributions", true);
-        add(model, "messages", sortedPostedMessages(sortingOption,
-                service.findById(userId).getId(), pageNumber));
+        add(model, "messages", mySwitch(whichMessages, sortingOption, userId, pageNumber));
         add(model, "pagesCount", messageService.pagesCount(service.findById(userId).getPostedMessages()));
         add(model, "currentPage", pageNumber);
+        add(model, "paginationUrl", replacePatternParts(
+                ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER + UrlPartConstants.MESSAGES +
+                    "/" + whichMessages,
+                userId
+        ));
         add(model, "sortingObject", service.emptySortingOption());
         add(model, "properties", MessageSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
-        add(model, "userId", pathUserId);
+        add(model, "sortingOptionName", SortingOptionNameConstants.FOR_MESSAGE_SORTING_OPTION);
+        add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
+                UrlPartConstants.MESSAGES);
+        add(model, "sortingSourcePageUrl", replacePatternParts(
+                ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER + UrlPartConstants.MESSAGES
+                        + whichMessages,
+                userId
+        ));
 
         return "messages";
     }
 
-    /*@PostMapping("/messages/posted/page{pageNumber}/sort")
-    public String redirectCurrentPageAfterSorting(HttpSession session, MessageSortingOption sortingOption) {
-        session.setAttribute("messageSortingOption", sortingOption);
-        return "redirect:/users/{id}/contributions/messages/posted/page{pageNumber}";
-    }*/
+    private List<Message> mySwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId,
+                                   Integer pageNumber) {
 
-    @GetMapping("/messages/liked")
-    public String redirectLikedMessagesPageWithPagination() {
-        return "redirect:/users/{id}/contributions/messages/liked/page1";
-    }
-
-    @GetMapping("/messages/liked/page{pageNumber}")
-    public String returnLikedMessagesPage(Model model) {
-        return "messages";
-    }
-
-    @GetMapping("/messages/disliked")
-    public String redirectDislikedMessagesPageWithPagination() {
-        return "redirect:/users/{id}/contributions/messages/disliked/page1";
-    }
-
-    @GetMapping("/messages/disliked/page{pageNumber}")
-    public String returnDislikedMessagesPage(Model model) {
-        return "messages";
-    }
-
-    @GetMapping("/topics/created")
-    public String redirectCreatedTopicsPageWithPagination() {
-        return "redirect:/users/{id}/contributions/topics/created/page1";
-    }
-
-    @GetMapping("/topics/created/page{pageNumber}")
-    public String returnCreatedTopicsPage(Model model) {
-        return "topics";
-    }
-
-    @GetMapping("/sections/created")
-    public String redirectCreatedSectionsPageWithPagination() {
-        return "redirect:/users/{id}/contributions/sections/created/page1";
-    }
-
-    @GetMapping("/sections/created/page{pageNumber}")
-    public String returnCreatedSectionsPage() {
-        return "sections";
+        return switch (addFirstSlash(whichMessages)) {
+            case UrlPartConstants.POSTED -> sortedPostedMessages(sortingOption, userId, pageNumber);
+            case UrlPartConstants.LIKED -> sortedLikedMessages(sortingOption, userId, pageNumber);
+            case UrlPartConstants.DISLIKED -> sortedDislikedMessages(sortingOption, userId, pageNumber);
+            default -> throw new ControllerException("Unknown URL part: \"%s\""
+                            .formatted(whichMessages));
+        };
     }
 
     private List<Message> sortedPostedMessages(MessageSortingOption sortingOption, Integer userId, Integer pageNumber) {

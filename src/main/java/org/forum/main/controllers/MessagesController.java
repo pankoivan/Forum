@@ -60,6 +60,7 @@ public class MessagesController extends ConvenientController {
 
         addForHeader(model, authentication, sectionService);
 
+        add(model, "isForUserContributions", false);
         add(model, "messages", sorted(sortingOption, topicId, pageNumber));
         add(model, "sectionId", sectionId);
         add(model, "topicId", topicId);
@@ -109,6 +110,7 @@ public class MessagesController extends ConvenientController {
 
             addForHeader(model, authentication, sectionService);
 
+            add(model, "isForUserContributions", false);
             add(model, "messages", sorted(sortingOption, topicId, pageNumber));
             add(model, "sectionId", sectionId);
             add(model, "topicId", topicId);
@@ -169,6 +171,7 @@ public class MessagesController extends ConvenientController {
 
         addForHeader(model, authentication, sectionService);
 
+        add(model, "isForUserContributions", false);
         add(model, "messages", sorted(sortingOption, topicId, pageNumber));
         add(model, "sectionId", sectionId);
         add(model, "topicId", topicId);
@@ -219,6 +222,8 @@ public class MessagesController extends ConvenientController {
         if (msg != null) {
 
             addForHeader(model, authentication, sectionService);
+
+            add(model, "isForUserContributions", false);
             add(model, "sectionId", sectionId);
             add(model, "topicId", topicId);
             add(model, "topicName", topicService.findById(topicId).getName());

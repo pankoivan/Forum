@@ -98,6 +98,7 @@
             </div>
             <!-- Форма отправки сообщения -->
             <div
+                th:if="${!isForUserContributions}"
                 sec:authorize="hasAuthority('WORK_WITH_OWN_MESSAGES')"
                 class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2 mb-5"
             >

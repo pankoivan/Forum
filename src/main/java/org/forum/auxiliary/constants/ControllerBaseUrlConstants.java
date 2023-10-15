@@ -3,7 +3,7 @@ package org.forum.auxiliary.constants;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class ControllerBaseUrlConstants {
+public final class ControllerBaseUrlConstants {
 
     public static final String FOR_INDEX_CONTROLLER = "/";
 
@@ -11,9 +11,9 @@ public class ControllerBaseUrlConstants {
 
     public static final String FOR_ROLES_AUTHORITIES_CONTROLLER = "/roles-authorities";
 
-    public static final String FOR_ROLES_CONTROLLER = "/roles-authorities/roles";
+    public static final String FOR_ROLES_CONTROLLER = FOR_ROLES_AUTHORITIES_CONTROLLER + "/roles";
 
-    public static final String FOR_AUTHORITIES_CONTROLLER = "/roles-authorities/authorities";
+    public static final String FOR_AUTHORITIES_CONTROLLER = FOR_ROLES_AUTHORITIES_CONTROLLER + "/authorities";
 
     public static final String FOR_USERS_CONTROLLER = "/users";
 
