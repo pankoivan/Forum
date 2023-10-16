@@ -105,6 +105,11 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
     }
 
     @Override
+    public List<Message> findAllByUserId(Integer userId) {
+        return filterPostedByUserId(repository.findAll(), userId);
+    }
+
+    @Override
     public List<Message> findAllByUserIdSorted(Integer userId, MessageSortingOption option) {
         return mySwitch(option,
                 () -> filterPostedByUserId(repository.findAll(Sort.by(option.getDirection(), "creationDate")),
@@ -124,6 +129,11 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
     }
 
     @Override
+    public List<Message> findAllLikedByUserId(Integer userId) {
+        return filterLikedByUserId(repository.findAll(), userId);
+    }
+
+    @Override
     public List<Message> findAllLikedByUserIdSorted(Integer userId, MessageSortingOption option) {
         return mySwitch(option,
                 () -> filterLikedByUserId(repository.findAll(Sort.by(option.getDirection(), "creationDate")),
@@ -140,6 +150,11 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
     @Override
     public List<Message> findAllLikedByUserIdSortedByDefault(Integer userId) {
         return findAllLikedByUserIdSorted(userId, DefaultSortingOptionConstants.FOR_MESSAGES);
+    }
+
+    @Override
+    public List<Message> findAllDislikedByUserId(Integer userId) {
+        return filterLikedByUserId(repository.findAll(), userId);
     }
 
     @Override

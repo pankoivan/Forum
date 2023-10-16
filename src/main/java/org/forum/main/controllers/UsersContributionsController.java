@@ -80,18 +80,20 @@ public class UsersContributionsController extends ConvenientController {
         Integer userId = toNonNegativeInteger(pathUserId);
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
+        List<Message> messages = mySwitch(whichMessages, sortingOption, userId);
+
         addForHeader(model, authentication, sectionService);
 
         add(model, "isForUserContributions", true);
-        add(model, "messages", mySwitch(whichMessages, sortingOption, userId, pageNumber));
-        add(model, "pagesCount", messageService.pagesCount(service.findById(userId).getPostedMessages()));
+        add(model, "messages", messageService.onPage(messages, pageNumber));
+        add(model, "pagesCount", messageService.pagesCount(messages));
         add(model, "currentPage", pageNumber);
         add(model, "paginationUrl", replacePatternParts(
                 ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER + UrlPartConstants.MESSAGES +
                     "/" + whichMessages,
                 userId
         ));
-        add(model, "sortingObject", service.emptySortingOption());
+        add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", MessageSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
         add(model, "sortingOptionName", SortingOptionNameConstants.FOR_MESSAGE_SORTING_OPTION);
@@ -99,14 +101,14 @@ public class UsersContributionsController extends ConvenientController {
                 UrlPartConstants.MESSAGES);
         add(model, "sortingSourcePageUrl", replacePatternParts(
                 ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER + UrlPartConstants.MESSAGES
-                        + whichMessages,
+                        + addFirstSlash(whichMessages),
                 userId
         ));
 
         return "messages";
     }
 
-    private List<Message> mySwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId,
+    /*private List<Message> mySwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId,
                                    Integer pageNumber) {
 
         return switch (addFirstSlash(whichMessages)) {
@@ -116,24 +118,34 @@ public class UsersContributionsController extends ConvenientController {
             default -> throw new ControllerException("Unknown URL part: \"%s\""
                             .formatted(whichMessages));
         };
+    }*/
+
+    private List<Message> mySwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId) {
+        return switch (addFirstSlash(whichMessages)) {
+            case UrlPartConstants.POSTED -> sortedPostedMessages(sortingOption, userId);
+            case UrlPartConstants.LIKED -> sortedLikedMessages(sortingOption, userId);
+            case UrlPartConstants.DISLIKED -> sortedDislikedMessages(sortingOption, userId);
+            default -> throw new ControllerException("Unknown URL part: \"%s\""
+                    .formatted(whichMessages));
+        };
     }
 
-    private List<Message> sortedPostedMessages(MessageSortingOption sortingOption, Integer userId, Integer pageNumber) {
+    private List<Message> sortedPostedMessages(MessageSortingOption sortingOption, Integer userId) {
         return sortingOption != null
-                ? messageService.onPage(messageService.findAllByUserIdSorted(userId, sortingOption), pageNumber)
-                : messageService.onPage(messageService.findAllByUserIdSortedByDefault(userId), pageNumber);
+                ? messageService.findAllByUserIdSorted(userId, sortingOption)
+                : messageService.findAllByUserIdSortedByDefault(userId);
     }
 
-    private List<Message> sortedLikedMessages(MessageSortingOption sortingOption, Integer userId, Integer pageNumber) {
+    private List<Message> sortedLikedMessages(MessageSortingOption sortingOption, Integer userId) {
         return sortingOption != null
-                ? messageService.onPage(messageService.findAllLikedByUserIdSorted(userId, sortingOption), pageNumber)
-                : messageService.onPage(messageService.findAllLikedByUserIdSortedByDefault(userId), pageNumber);
+                ? messageService.findAllLikedByUserIdSorted(userId, sortingOption)
+                : messageService.findAllLikedByUserIdSortedByDefault(userId);
     }
 
-    private List<Message> sortedDislikedMessages(MessageSortingOption sortingOption, Integer userId, Integer pageNumber) {
+    private List<Message> sortedDislikedMessages(MessageSortingOption sortingOption, Integer userId) {
         return sortingOption != null
-                ? messageService.onPage(messageService.findAllDislikedByUserIdSorted(userId, sortingOption), pageNumber)
-                : messageService.onPage(messageService.findAllDislikedByUserIdSortedByDefault(userId), pageNumber);
+                ? messageService.findAllDislikedByUserIdSorted(userId, sortingOption)
+                : messageService.findAllDislikedByUserIdSortedByDefault(userId);
     }
 
 }
