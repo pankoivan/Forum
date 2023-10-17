@@ -1,8 +1,9 @@
 package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
+import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
-import org.forum.auxiliary.constants.SortingOptionNameConstants;
+import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
@@ -68,10 +69,10 @@ public class TopicsController extends ConvenientController {
         add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", TopicSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
-        add(model, "sortingOptionName", SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION);
-        add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
+        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME, SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION);
+        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL, ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
                 addStartSlash(UrlPartConstants.TOPICS));
-        add(model, "sortingSourcePageUrl", replacePatternParts(
+        add(model, SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL, replacePatternParts(
                 ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
                 sectionId
         ));
@@ -168,10 +169,10 @@ public class TopicsController extends ConvenientController {
             add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
             add(model, "properties", TopicSortingProperties.values());
             add(model, "directions", Sort.Direction.values());
-            add(model, "sortingOptionName", SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION);
-            add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
+            add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME, SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION);
+            add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL, ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
                     addStartSlash(UrlPartConstants.TOPICS));
-            add(model, "sortingSourcePageUrl", replacePatternParts(
+            add(model, SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL, replacePatternParts(
                     ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
                     sectionId
             ));

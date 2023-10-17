@@ -1,7 +1,8 @@
 package org.forum.main.controllers;
 
+import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
-import org.forum.auxiliary.constants.SortingOptionNameConstants;
+import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.exceptions.ControllerException;
 import org.forum.auxiliary.sorting.enums.UserSortingProperties;
@@ -90,10 +91,10 @@ public class UsersController extends ConvenientController {
         add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
         add(model, "properties", UserSortingProperties.values());
         add(model, "directions", Sort.Direction.values());
-        add(model, "sortingOptionName", SortingOptionNameConstants.FOR_USER_SORTING_OPTION);
-        add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
+        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME, SortingOptionNameConstants.FOR_USER_SORTING_OPTION);
+        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL, ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
                 addStartSlash(UrlPartConstants.USERS));
-        add(model, "sortingSourcePageUrl", ControllerBaseUrlConstants.FOR_USERS_CONTROLLER +
+        add(model, SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL, ControllerBaseUrlConstants.FOR_USERS_CONTROLLER +
                 (userUrlRole.isPresent() ? addStartSlash(userUrlRole.get()) : ""));
 
         return "users";
