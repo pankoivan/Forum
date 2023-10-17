@@ -1,7 +1,7 @@
 package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
-import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Authority;
 import org.forum.main.services.interfaces.AuthorityService;
@@ -27,8 +27,7 @@ public class AuthoritiesController extends ConvenientController {
     private final AuthorityService authorityService;
 
     @Autowired
-    public AuthoritiesController(SectionService sectionService, RoleService roleService,
-                                 AuthorityService authorityService) {
+    public AuthoritiesController(SectionService sectionService, RoleService roleService, AuthorityService authorityService) {
         this.sectionService = sectionService;
         this.roleService = roleService;
         this.authorityService = authorityService;

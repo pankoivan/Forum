@@ -1,7 +1,7 @@
 package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
-import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Ban;
 import org.forum.main.services.interfaces.*;

@@ -119,12 +119,12 @@ public class SectionServiceImpl extends AbstractPaginationServiceImpl<Section> i
 
     @Override
     public List<Section> onPage(List<Section> foundItems, int pageNumber) {
-        return onPageImpl(foundItems, pageNumber, PaginationConstants.SECTIONS);
+        return onPageImpl(foundItems, pageNumber, PaginationConstants.FOR_SECTIONS);
     }
 
     @Override
     public int pagesCount(List<Section> foundItems) {
-        return pagesCountImpl(foundItems, PaginationConstants.SECTIONS);
+        return pagesCountImpl(foundItems, PaginationConstants.FOR_SECTIONS);
     }
 
     private boolean savingValidationByName(Section section) {

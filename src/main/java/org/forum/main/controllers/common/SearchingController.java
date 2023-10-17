@@ -1,6 +1,6 @@
 package org.forum.main.controllers.common;
 
-import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

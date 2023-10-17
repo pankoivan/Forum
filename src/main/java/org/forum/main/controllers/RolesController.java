@@ -1,7 +1,7 @@
 package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
-import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Role;
 import org.forum.main.services.interfaces.AuthorityService;
@@ -46,7 +46,8 @@ public class RolesController extends ConvenientController {
             add(model, "authorities", authorityService.findAll());
             add(model, "role", role);
             add(model, "authority", authorityService.empty());
-            add(model, "roleFormSubmitButtonText", roleService.isNew(role) ? "Создать роль" : "Сохранить");
+            add(model, "roleFormSubmitButtonText", roleService.isNew(role)
+                    ? "Создать роль" : "Сохранить");
             add(model, "authorityFormSubmitButtonText", "Создать право");
             add(model, "roleError", roleService.extractAnySingleError(bindingResult));
 

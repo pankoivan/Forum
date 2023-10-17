@@ -1,9 +1,9 @@
 package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
-import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.SortingOptionNameConstants;
-import org.forum.auxiliary.constants.UrlPartConstants;
+import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
 import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
@@ -33,25 +33,26 @@ public class SectionsController extends ConvenientController {
 
     @GetMapping
     public String redirectSectionsPageWithPagination() {
-        return "redirect:%s/page1"
-                .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
+        return "redirect:%s/%s1"
+                .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER, UrlPartConstants.PAGE);
     }
 
-    @GetMapping("/page{pageNumber}")
+    @GetMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
     public String returnSectionsPage(Model model,
                                      Authentication authentication,
                                      @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTION_SORTING_OPTION,
                                              required = false)
                                          SectionSortingOption sortingOption,
-                                     @PathVariable("pageNumber") String pathPageNumber) {
+                                     @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        addForHeader(model, authentication, service);
+        List<Section> sections = sorted(sortingOption);
 
+        addForHeader(model, authentication, service);
         add(model, "page", "sections");
-        add(model, "sections", sorted(sortingOption, pageNumber));
-        add(model, "pagesCount", service.pagesCount(service.findAll()));
+        add(model, "sections", service.onPage(sections, pageNumber));
+        add(model, "pagesCount", service.pagesCount(sections));
         add(model, "currentPage", pageNumber);
         add(model, "paginationUrl", ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
         add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
@@ -59,7 +60,7 @@ public class SectionsController extends ConvenientController {
         add(model, "directions", Sort.Direction.values());
         add(model, "sortingOptionName", SortingOptionNameConstants.FOR_SECTION_SORTING_OPTION);
         add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
-                UrlPartConstants.SECTIONS);
+                addStartSlash(UrlPartConstants.SECTIONS));
         add(model, "sortingSourcePageUrl", ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
 
         return "sections";
@@ -69,7 +70,6 @@ public class SectionsController extends ConvenientController {
     public String returnSectionFormPageForCreating(Model model, Authentication authentication) {
 
         addForHeader(model, authentication, service);
-
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать раздел");
 
@@ -85,7 +85,6 @@ public class SectionsController extends ConvenientController {
         if (service.savingValidation(section, bindingResult)) {
 
             addForHeader(model, authentication, service);
-
             add(model, "object", section);
             add(model, "formSubmitButtonText", service.isNew(section) ? "Создать раздел" : "Сохранить");
             add(model, "error", service.extractAnySingleError(bindingResult));
@@ -107,7 +106,6 @@ public class SectionsController extends ConvenientController {
         Integer id = toNonNegativeInteger(pathId);
 
         addForHeader(model, authentication, service);
-
         add(model, "object", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить");
 
@@ -127,11 +125,12 @@ public class SectionsController extends ConvenientController {
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
 
-            addForHeader(model, authentication, service);
+            List<Section> sections = sorted(sortingOption);
 
-            add(model, "sections", sorted(sortingOption, 1));
+            addForHeader(model, authentication, service);
             add(model, "page", "sections");
-            add(model, "pagesCount", service.pagesCount(service.findAll()));
+            add(model, "sections", service.onPage(sections, 1));
+            add(model, "pagesCount", service.pagesCount(sections));
             add(model, "currentPage", 1);
             add(model, "paginationUrl", ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
             add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
@@ -139,7 +138,7 @@ public class SectionsController extends ConvenientController {
             add(model, "directions", Sort.Direction.values());
             add(model, "sortingOptionName", SortingOptionNameConstants.FOR_SECTION_SORTING_OPTION);
             add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
-                    UrlPartConstants.SECTIONS);
+                    addStartSlash(UrlPartConstants.SECTIONS));
             add(model, "sortingSourcePageUrl", ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
             add(model, "error", msg);
 
@@ -152,10 +151,10 @@ public class SectionsController extends ConvenientController {
                 .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
     }
 
-    private List<Section> sorted(SectionSortingOption sortingOption, Integer pageNumber) {
+    private List<Section> sorted(SectionSortingOption sortingOption) {
         return sortingOption != null
-                ? service.onPage(service.findAllSorted(sortingOption), pageNumber)
-                : service.onPage(service.findAllSortedByDefault(), pageNumber);
+                ? service.findAllSorted(sortingOption)
+                : service.findAllSortedByDefault();
     }
 
 }

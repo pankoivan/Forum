@@ -1,6 +1,6 @@
 package org.forum.main.controllers;
 
-import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.enums.Gender;
 import org.forum.main.services.interfaces.SectionService;

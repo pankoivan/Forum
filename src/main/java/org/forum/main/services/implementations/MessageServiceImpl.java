@@ -202,12 +202,12 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
 
     @Override
     public List<Message> onPage(List<Message> messages, int pageNumber) {
-        return onPageImpl(messages, pageNumber, PaginationConstants.MESSAGES);
+        return onPageImpl(messages, pageNumber, PaginationConstants.FOR_MESSAGES);
     }
 
     @Override
     public int pagesCount(List<Message> messages) {
-        return pagesCountImpl(messages, PaginationConstants.MESSAGES);
+        return pagesCountImpl(messages, PaginationConstants.FOR_MESSAGES);
     }
 
     @SafeVarargs

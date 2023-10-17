@@ -109,12 +109,12 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
 
     @Override
     public List<User> onPage(List<User> users, int pageNumber) {
-        return onPageImpl(users, pageNumber, PaginationConstants.USERS);
+        return onPageImpl(users, pageNumber, PaginationConstants.FOR_USERS);
     }
 
     @Override
     public int pagesCount(List<User> users) {
-        return pagesCountImpl(users, PaginationConstants.USERS);
+        return pagesCountImpl(users, PaginationConstants.FOR_USERS);
     }
 
     @Override

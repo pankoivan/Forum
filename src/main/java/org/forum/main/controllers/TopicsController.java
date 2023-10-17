@@ -1,10 +1,9 @@
 package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
-import org.forum.auxiliary.constants.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.SortingOptionNameConstants;
-import org.forum.auxiliary.constants.UrlPartConstants;
-import org.forum.auxiliary.exceptions.PathVariableUtilsException;
+import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
 import org.forum.main.controllers.common.ConvenientController;
@@ -37,29 +36,30 @@ public class TopicsController extends ConvenientController {
 
     @GetMapping
     public String redirectTopicsPageWithPagination() {
-        return "redirect:%s/page1"
-                .formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
+        return "redirect:%s/%s1"
+                .formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER, UrlPartConstants.PAGE);
     }
 
-    @GetMapping("/page{pageNumber}")
+    @GetMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
     public String returnTopicsPage(Model model,
                                    Authentication authentication,
                                    @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION,
                                            required = false)
                                        TopicSortingOption sortingOption,
-                                   @PathVariable("sectionId") String pathSectionId,
-                                   @PathVariable("pageNumber") String pathPageNumber) {
+                                   @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
+                                   @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
         Integer sectionId = toNonNegativeInteger(pathSectionId);
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        addForHeader(model, authentication, sectionService);
+        List<Topic> topics = sorted(sortingOption, sectionId);
 
+        addForHeader(model, authentication, sectionService);
         add(model, "page", "topics");
-        add(model, "topics", sorted(sortingOption, sectionId, pageNumber));
+        add(model, "topics", service.onPage(topics, pageNumber));
         add(model, "sectionId", sectionId);
         add(model, "sectionName", sectionService.findById(sectionId).getName());
-        add(model, "pagesCount", service.pagesCount(service.findAllBySectionId(sectionId)));
+        add(model, "pagesCount", service.pagesCount(topics));
         add(model, "currentPage", pageNumber);
         add(model, "paginationUrl", replacePatternParts(
                 ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
@@ -70,7 +70,7 @@ public class TopicsController extends ConvenientController {
         add(model, "directions", Sort.Direction.values());
         add(model, "sortingOptionName", SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION);
         add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
-                UrlPartConstants.TOPICS);
+                addStartSlash(UrlPartConstants.TOPICS));
         add(model, "sortingSourcePageUrl", replacePatternParts(
                 ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
                 sectionId
@@ -82,12 +82,11 @@ public class TopicsController extends ConvenientController {
     @GetMapping("/create")
     public String returnTopicFormPageForCreating(Model model,
                                                  Authentication authentication,
-                                                 @PathVariable("sectionId") String pathSectionId) {
+                                                 @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId) {
 
         Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         addForHeader(model, authentication, sectionService);
-
         add(model, "sectionId", sectionId);
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать тему");
@@ -100,14 +99,13 @@ public class TopicsController extends ConvenientController {
                                                 Authentication authentication,
                                                 @Valid Topic topic,
                                                 BindingResult bindingResult,
-                                                @PathVariable("sectionId") String pathSectionId) {
+                                                @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId) {
 
         Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         if (service.savingValidation(topic, bindingResult)) {
 
             addForHeader(model, authentication, sectionService);
-
             add(model, "object", topic);
             add(model, "sectionId", sectionId);
             add(model, "formSubmitButtonText", service.isNew(topic) ? "Создать тему" : "Сохранить");
@@ -126,13 +124,12 @@ public class TopicsController extends ConvenientController {
     public String returnTopicFormPageForEditing(Model model,
                                                 Authentication authentication,
                                                 @PathVariable("id") String pathId,
-                                                @PathVariable("sectionId") String pathSectionId) {
+                                                @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId) {
 
         Integer id = toNonNegativeInteger(pathId);
         Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         addForHeader(model, authentication, sectionService);
-
         add(model, "object", service.findById(id));
         add(model, "sectionId", sectionId);
         add(model, "formSubmitButtonText", "Сохранить");
@@ -147,7 +144,7 @@ public class TopicsController extends ConvenientController {
                                                           required = false)
                                                       TopicSortingOption sortingOption,
                                                   @PathVariable("id") String pathId,
-                                                  @PathVariable("sectionId") String pathSectionId) {
+                                                  @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId) {
 
         Integer id = toNonNegativeInteger(pathId);
         Integer sectionId = toNonNegativeInteger(pathSectionId);
@@ -155,13 +152,14 @@ public class TopicsController extends ConvenientController {
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
 
-            addForHeader(model, authentication, sectionService);
+            List<Topic> topics = sorted(sortingOption, sectionId);
 
+            addForHeader(model, authentication, sectionService);
             add(model, "page", "topics");
-            add(model, "topics", sorted(sortingOption, sectionId, 1));
+            add(model, "topics", service.onPage(topics, 1));
             add(model, "sectionId", sectionId);
             add(model, "sectionName", sectionService.findById(sectionId).getName());
-            add(model, "pagesCount", service.pagesCount(service.findAllBySectionId(sectionId)));
+            add(model, "pagesCount", service.pagesCount(topics));
             add(model, "currentPage", 1);
             add(model, "paginationUrl", replacePatternParts(
                     ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
@@ -172,7 +170,7 @@ public class TopicsController extends ConvenientController {
             add(model, "directions", Sort.Direction.values());
             add(model, "sortingOptionName", SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION);
             add(model, "sortingSubmitUrl", ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
-                    UrlPartConstants.TOPICS);
+                    addStartSlash(UrlPartConstants.TOPICS));
             add(model, "sortingSourcePageUrl", replacePatternParts(
                     ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
                     sectionId
@@ -188,10 +186,10 @@ public class TopicsController extends ConvenientController {
                 .formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
     }
 
-    private List<Topic> sorted(TopicSortingOption sortingOption, Integer sectionId, Integer pageNumber) {
+    private List<Topic> sorted(TopicSortingOption sortingOption, Integer sectionId) {
         return sortingOption != null
-                ? service.onPage(service.findAllBySectionIdSorted(sectionId, sortingOption), pageNumber)
-                : service.onPage(service.findAllBySectionIdSortedByDefault(sectionId), pageNumber);
+                ? service.findAllBySectionIdSorted(sectionId, sortingOption)
+                : service.findAllBySectionIdSortedByDefault(sectionId);
     }
 
 }

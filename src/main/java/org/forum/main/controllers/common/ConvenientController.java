@@ -52,12 +52,12 @@ public abstract class ConvenientController {
         }
     }
 
-    protected String addFirstSlash(String urlPart) {
-        return UrlUtils.addFirstSlash(urlPart);
+    protected String addStartSlash(String urlPart) {
+        return UrlUtils.addStartSlash(urlPart);
     }
 
-    protected String removeFirstSlash(String urlPart) {
-        return UrlUtils.removeFirstSlash(urlPart);
+    protected String removeStartSlash(String urlPart) {
+        return UrlUtils.removeStartSlash(urlPart);
     }
 
 }

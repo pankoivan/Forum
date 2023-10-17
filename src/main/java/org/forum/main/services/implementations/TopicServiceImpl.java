@@ -148,12 +148,12 @@ public class TopicServiceImpl extends AbstractPaginationServiceImpl<Topic> imple
 
     @Override
     public List<Topic> onPage(List<Topic> foundItems, int pageNumber) {
-        return onPageImpl(foundItems, pageNumber, PaginationConstants.TOPICS);
+        return onPageImpl(foundItems, pageNumber, PaginationConstants.FOR_TOPICS);
     }
 
     @Override
     public int pagesCount(List<Topic> foundItems) {
-        return pagesCountImpl(foundItems, PaginationConstants.TOPICS);
+        return pagesCountImpl(foundItems, PaginationConstants.FOR_TOPICS);
     }
 
     @SafeVarargs
