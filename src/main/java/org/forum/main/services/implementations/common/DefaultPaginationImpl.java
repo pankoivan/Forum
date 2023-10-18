@@ -2,7 +2,7 @@ package org.forum.main.services.implementations.common;
 
 import java.util.List;
 
-public abstract class AbstractPaginationServiceImpl<T> {
+public abstract class DefaultPaginationImpl<T> {
 
     public List<T> onPageImpl(List<T> foundItems, int pageNumber, int paginationConstant) {
         return foundItems.stream()

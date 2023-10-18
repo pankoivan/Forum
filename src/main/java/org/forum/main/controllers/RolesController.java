@@ -49,7 +49,7 @@ public class RolesController extends ConvenientController {
             add(model, "roleFormSubmitButtonText", roleService.isNew(role)
                     ? "Создать роль" : "Сохранить");
             add(model, "authorityFormSubmitButtonText", "Создать право");
-            add(model, "roleError", roleService.extractAnySingleError(bindingResult));
+            add(model, "roleError", roleService.anyError(bindingResult));
 
             return "roles-authorities-panel";
         }

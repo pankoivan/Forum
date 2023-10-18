@@ -8,6 +8,6 @@ public interface SortingService<T, M> {
 
     List<T> findAllSorted(M sortingOption);
 
-    List<T> findAllSortedByDefault();
+    List<T> findAllSorted();
 
 }

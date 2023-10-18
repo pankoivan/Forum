@@ -1,5 +1,6 @@
 package org.forum.main.controllers;
 
+import org.forum.auxiliary.constants.pagination.PaginationAttributeNameConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
@@ -71,7 +72,7 @@ public class UsersController extends ConvenientController {
     })
     public String returnUsersPage(Model model,
                                   Authentication authentication,
-                                  @SessionAttribute(value = SortingOptionNameConstants.FOR_USER_SORTING_OPTION,
+                                  @SessionAttribute(value = SortingOptionNameConstants.FOR_USERS_SORTING_OPTION,
                                           required = false)
                                       UserSortingOption sortingOption,
                                   @PathVariable("userUrlRole") Optional<String> userUrlRole,
@@ -85,17 +86,8 @@ public class UsersController extends ConvenientController {
         add(model, "page", userUrlRole.orElse("users"));
         add(model, "users", service.onPage(users, pageNumber));
         add(model, "pagesCount", service.pagesCount(users));
-        add(model, "currentPage", pageNumber);
-        add(model, "paginationUrl", ControllerBaseUrlConstants.FOR_USERS_CONTROLLER +
-                addStartSlash(userUrlRole.orElse("")));
-        add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
-        add(model, "properties", UserSortingProperties.values());
-        add(model, "directions", Sort.Direction.values());
-        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME, SortingOptionNameConstants.FOR_USER_SORTING_OPTION);
-        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL, ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
-                addStartSlash(UrlPartConstants.USERS));
-        add(model, SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL, ControllerBaseUrlConstants.FOR_USERS_CONTROLLER +
-                (userUrlRole.isPresent() ? addStartSlash(userUrlRole.get()) : ""));
+        pagination(model, service.pagesCount(users), pageNumber);
+        sorting(model, sortingOption, userUrlRole);
 
         return "users";
     }
@@ -110,6 +102,34 @@ public class UsersController extends ConvenientController {
         add(model, "userForProfile", service.findById(userId));
 
         return "profile";
+    }
+
+    private void pagination(Model model, Integer pagesCount, Integer currentPage) {
+        add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
+        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
+        add(model, PaginationAttributeNameConstants.PAGINATION_URL, ControllerBaseUrlConstants.FOR_USERS_CONTROLLER);
+    }
+
+    private void sorting(Model model, UserSortingOption sortingOption, Optional<String> userUrlRole) {
+
+        add(model, SortingAttributeNameConstants.SORTING_OBJECT,
+                sortingOption == null ? service.emptySortingOption() : sortingOption);
+
+        add(model, SortingAttributeNameConstants.PROPERTIES,
+                UserSortingProperties.values());
+
+        add(model, SortingAttributeNameConstants.DIRECTIONS,
+                Sort.Direction.values());
+
+        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME,
+                SortingOptionNameConstants.FOR_USERS_SORTING_OPTION);
+
+        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
+                ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + addStartSlash(UrlPartConstants.USERS));
+
+        add(model, SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL,
+                ControllerBaseUrlConstants.FOR_USERS_CONTROLLER +
+                        (userUrlRole.isPresent() ? addStartSlash(userUrlRole.get()) : ""));
     }
 
     private String mySwitch(String userUrlRoleName) {
@@ -135,8 +155,8 @@ public class UsersController extends ConvenientController {
 
     private List<User> byDefault(Optional<String> userUrlRole) {
         return userUrlRole.isPresent()
-                ? service.findAllByRoleNameSortedByDefault(mySwitch(userUrlRole.get()))
-                : service.findAllSortedByDefault();
+                ? service.findAllByRoleNameSorted(mySwitch(userUrlRole.get()))
+                : service.findAllSorted();
     }
 
 }

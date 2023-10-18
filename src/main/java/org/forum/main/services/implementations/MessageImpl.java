@@ -6,11 +6,11 @@ import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.Topic;
 import org.forum.auxiliary.exceptions.ServiceException;
-import org.forum.main.services.implementations.common.AbstractPaginationServiceImpl;
+import org.forum.main.services.implementations.common.DefaultPaginationImpl;
 import org.forum.main.services.interfaces.MessageService;
 import org.forum.main.repositories.MessageRepository;
 import org.forum.auxiliary.utils.AuthenticationUtils;
-import org.forum.auxiliary.constants.PaginationConstants;
+import org.forum.auxiliary.constants.pagination.PaginationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
@@ -22,25 +22,32 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Service
-public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> implements MessageService {
+public class MessageImpl extends DefaultPaginationImpl<Message> implements MessageService {
 
     private final MessageRepository repository;
 
     @Autowired
-    public MessageServiceImpl(MessageRepository repository) {
+    public MessageImpl(MessageRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public boolean savingValidation(Message message, BindingResult bindingResult) {
-        return bindingResult.hasErrors();
-    }
-
-    @Override
-    public String deletingValidation(Message message) {
-        return message.likesCount() - message.dislikesCount() > 0
-                ? "Вы не можете удалить ваше сообщение, так как его репутация не отрицательна"
-                : null;
+    public void save(Message message, Authentication authentication, Topic topic) throws ServiceException {
+        try {
+            if (isNew(message)) {
+                message.setCreationDate(LocalDateTime.now());
+                message.setUserWhoPosted(AuthenticationUtils.extractCurrentUser(authentication));
+                message.setTopic(topic);
+                repository.save(message);
+            } else {
+                Message oldMessage = findById(message.getId());
+                oldMessage.setEditingDate(LocalDateTime.now());
+                oldMessage.setText(message.getText());
+                repository.save(oldMessage);
+            }
+        } catch (AuxiliaryInstrumentsException e) {
+            throw new ServiceException("Author cannot be set to message", e);
+        }
     }
 
     @Override
@@ -56,12 +63,39 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
     @Override
     public Message findById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ServiceException("Message with id \"" + id + "\" doesn't exists"));
+                .orElseThrow(() -> new ServiceException("Message with id \"%s\" doesn't exists".formatted(id)));
     }
 
     @Override
     public List<Message> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public boolean savingValidation(Message message, BindingResult bindingResult) {
+        return bindingResult.hasErrors();
+    }
+
+    @Override
+    public String deletingValidation(Message message) {
+        return message.likesCount() - message.dislikesCount() > 0
+                ? "Вы не можете удалить сообщение, так как его репутация не отрицательна"
+                : null;
+    }
+
+    @Override
+    public List<Message> onPage(List<Message> messages, int pageNumber) {
+        return onPageImpl(messages, pageNumber, PaginationConstants.FOR_MESSAGES);
+    }
+
+    @Override
+    public int pagesCount(List<Message> messages) {
+        return pagesCountImpl(messages, PaginationConstants.FOR_MESSAGES);
     }
 
     @Override
@@ -80,7 +114,7 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
     }
 
     @Override
-    public List<Message> findAllSortedByDefault() {
+    public List<Message> findAllSorted() {
         return findAllSorted(DefaultSortingOptionConstants.FOR_MESSAGES);
     }
 
@@ -100,31 +134,31 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
     }
 
     @Override
-    public List<Message> findAllByTopicIdSortedByDefault(Integer topicId) {
+    public List<Message> findAllByTopicIdSorted(Integer topicId) {
         return findAllByTopicIdSorted(topicId, DefaultSortingOptionConstants.FOR_MESSAGES);
     }
 
     @Override
     public List<Message> findAllByUserId(Integer userId) {
-        return filterPostedByUserId(repository.findAll(), userId);
+        return filterByUserId(repository.findAll(), userId);
     }
 
     @Override
     public List<Message> findAllByUserIdSorted(Integer userId, MessageSortingOption option) {
         return mySwitch(option,
-                () -> filterPostedByUserId(repository.findAll(Sort.by(option.getDirection(), "creationDate")),
+                () -> filterByUserId(repository.findAll(Sort.by(option.getDirection(), "creationDate")),
                         userId),
-                () -> filterPostedByUserId(repository.findAll(Sort.by(option.getDirection(), "editingDate")),
+                () -> filterByUserId(repository.findAll(Sort.by(option.getDirection(), "editingDate")),
                         userId),
-                () -> filterPostedByUserId(repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name()),
+                () -> filterByUserId(repository.findAllByOrderByLikesCountWithDirection(option.getDirection().name()),
                         userId),
-                () -> filterPostedByUserId(repository.findAllByOrderByDislikesCountWithDirection(option.getDirection().name()),
+                () -> filterByUserId(repository.findAllByOrderByDislikesCountWithDirection(option.getDirection().name()),
                         userId)
         );
     }
 
     @Override
-    public List<Message> findAllByUserIdSortedByDefault(Integer userId) {
+    public List<Message> findAllByUserIdSorted(Integer userId) {
         return findAllByUserIdSorted(userId, DefaultSortingOptionConstants.FOR_MESSAGES);
     }
 
@@ -148,7 +182,7 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
     }
 
     @Override
-    public List<Message> findAllLikedByUserIdSortedByDefault(Integer userId) {
+    public List<Message> findAllLikedByUserIdSorted(Integer userId) {
         return findAllLikedByUserIdSorted(userId, DefaultSortingOptionConstants.FOR_MESSAGES);
     }
 
@@ -172,42 +206,8 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
     }
 
     @Override
-    public List<Message> findAllDislikedByUserIdSortedByDefault(Integer userId) {
+    public List<Message> findAllDislikedByUserIdSorted(Integer userId) {
         return findAllDislikedByUserIdSorted(userId, DefaultSortingOptionConstants.FOR_MESSAGES);
-    }
-
-    @Override
-    public void save(Message message, Authentication authentication, Topic topic) throws ServiceException {
-        try {
-            if (isNew(message)) {
-                message.setCreationDate(LocalDateTime.now());
-                message.setUserWhoPosted(AuthenticationUtils.extractCurrentUser(authentication));
-                message.setTopic(topic);
-                repository.save(message);
-            } else {
-                Message oldMessage = findById(message.getId());
-                oldMessage.setEditingDate(LocalDateTime.now());
-                oldMessage.setText(message.getText());
-                repository.save(oldMessage);
-            }
-        } catch (AuxiliaryInstrumentsException e) {
-            throw new ServiceException("Author cannot be set to message", e);
-        }
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
-    }
-
-    @Override
-    public List<Message> onPage(List<Message> messages, int pageNumber) {
-        return onPageImpl(messages, pageNumber, PaginationConstants.FOR_MESSAGES);
-    }
-
-    @Override
-    public int pagesCount(List<Message> messages) {
-        return pagesCountImpl(messages, PaginationConstants.FOR_MESSAGES);
     }
 
     @SafeVarargs
@@ -220,7 +220,7 @@ public class MessageServiceImpl extends AbstractPaginationServiceImpl<Message> i
         };
     }
 
-    private List<Message> filterPostedByUserId(List<Message> messages, Integer userId) {
+    private List<Message> filterByUserId(List<Message> messages, Integer userId) {
         return messages.stream()
                 .filter(message -> message.getUserWhoPosted().getId().equals(userId))
                 .toList();

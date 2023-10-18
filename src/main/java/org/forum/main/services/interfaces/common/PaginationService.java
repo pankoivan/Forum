@@ -4,8 +4,8 @@ import java.util.List;
 
 public interface PaginationService<T> {
 
-    List<T> onPage(List<T> foundItems, int pageNumber);
+    List<T> onPage(List<T> items, int pageNumber);
 
-    int pagesCount(List<T> foundItems);
+    int pagesCount(List<T> items);
 
 }

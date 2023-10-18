@@ -1,6 +1,5 @@
 package org.forum.main.services.implementations;
 
-import org.forum.auxiliary.exceptions.common.MainInstrumentsException;
 import org.forum.main.entities.Role;
 import org.forum.auxiliary.exceptions.ServiceException;
 import org.forum.main.services.interfaces.RoleService;
@@ -24,20 +23,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public boolean savingValidation(Role role, BindingResult bindingResult) {
-        if (isNew(role) && repository.existsByName(role.getName())) {
-            bindingResult.addError(new ObjectError("existsByName",
-                    "Роль с таким названием уже существует"));
-            return true;
-        }
-        return bindingResult.hasErrors();
-    }
-
-    @Override
-    public String deletingValidation(Role role) {
-        return role.hasUsers()
-                ? "Роль \"" + role.getName() + "\" нельзя удалять, так как она присвоена каким-то пользователям"
-                : null;
+    public void save(Role role) {
+        repository.save(role);
     }
 
     @Override
@@ -53,7 +40,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findById(Integer id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ServiceException("Role with id \"" + id + "\" doesn't exists"));
+                .orElseThrow(() -> new ServiceException("Role with id \"%s\" doesn't exists".formatted(id)));
     }
 
     @Override
@@ -62,20 +49,31 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void save(Role role) {
-        repository.save(role);
-    }
-
-    @Override
     public void deleteById(Integer id) {
         repository.deleteById(id);
     }
 
     @Override
+    public boolean savingValidation(Role role, BindingResult bindingResult) {
+        if (isNew(role) && repository.existsByName(role.getName())) {
+            bindingResult.addError(new ObjectError("existsByName",
+                    "Роль с таким названием уже существует"));
+            return true;
+        }
+        return bindingResult.hasErrors();
+    }
+
+    @Override
+    public String deletingValidation(Role role) {
+        return role.hasUsers()
+                ? "Роль \"%s\" нельзя удалять, так как она присвоена каким-то пользователям".formatted(role.getName())
+                : null;
+    }
+
+    @Override
     public Role findByName(String name) {
         return repository.findByName(name)
-                .orElseThrow(() -> new MainInstrumentsException("Role with name \"%s\" doesn't exists"
-                        .formatted(name)));
+                .orElseThrow(() -> new ServiceException("Role with name \"%s\" doesn't exists".formatted(name)));
     }
 
 }

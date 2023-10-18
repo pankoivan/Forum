@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface UserService extends GeneralService<User, Integer>, ValidationService<User>,
-        SortingService<User, UserSortingOption>, PaginationService<User> {
+        PaginationService<User>, SortingService<User, UserSortingOption> {
 
     void save(User user, MultipartFile file);
 
@@ -20,7 +20,7 @@ public interface UserService extends GeneralService<User, Integer>, ValidationSe
 
     List<User> findAllByRoleNameSorted(String roleName, UserSortingOption sortingOption);
 
-    List<User> findAllByRoleNameSortedByDefault(String roleName);
+    List<User> findAllByRoleNameSorted(String roleName);
 
     void changeRole(User user, Role role);
 

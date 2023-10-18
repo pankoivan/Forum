@@ -1,5 +1,6 @@
 package org.forum.main.services.interfaces.common;
 
+import org.forum.auxiliary.exceptions.ServiceException;
 import org.springframework.validation.BindingResult;
 
 public interface ValidationService<T> {
@@ -8,10 +9,10 @@ public interface ValidationService<T> {
 
     String deletingValidation(T validatedObject);
 
-    default String extractAnySingleError(BindingResult bindingResult) {
+    default String anyError(BindingResult bindingResult) {
         return bindingResult.getAllErrors().stream()
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("There was no errors in BindingResult"))
+                .orElseThrow(() -> new ServiceException("There was no errors in BindingResult"))
                 .getDefaultMessage();
     }
 

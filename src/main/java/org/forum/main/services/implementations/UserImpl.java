@@ -1,13 +1,13 @@
 package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
-import org.forum.auxiliary.constants.PaginationConstants;
+import org.forum.auxiliary.constants.pagination.PaginationConstants;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.main.entities.Role;
 import org.forum.main.entities.User;
 import org.forum.auxiliary.exceptions.ServiceException;
 import org.forum.main.repositories.UserRepository;
-import org.forum.main.services.implementations.common.AbstractPaginationServiceImpl;
+import org.forum.main.services.implementations.common.DefaultPaginationImpl;
 import org.forum.main.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -19,23 +19,18 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Service
-public class UserServiceImpl extends AbstractPaginationServiceImpl<User> implements UserService {
+public class UserImpl extends DefaultPaginationImpl<User> implements UserService {
 
     private final UserRepository repository;
 
     @Autowired
-    public UserServiceImpl(UserRepository repository) {
+    public UserImpl(UserRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public boolean savingValidation(User user, BindingResult bindingResult) {
-        return false;
-    }
+    public void save(User user, MultipartFile file) {
 
-    @Override
-    public String deletingValidation(User user) {
-        return null;
     }
 
     @Override
@@ -51,7 +46,7 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
     @Override
     public User findById(Integer id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ServiceException("User with id \"" + id + "\" doesn't exists"));
+                .orElseThrow(() -> new ServiceException("User with id \"%s\" doesn't exists".formatted(id)));
     }
 
     @Override
@@ -60,8 +55,33 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
     }
 
     @Override
+    public void deleteById(Integer id) {
+        repository.deleteById(id);
+    }
+
+    @Override
     public UserSortingOption emptySortingOption() {
         return new UserSortingOption();
+    }
+
+    @Override
+    public boolean savingValidation(User user, BindingResult bindingResult) {
+        return false;
+    }
+
+    @Override
+    public String deletingValidation(User user) {
+        return null;
+    }
+
+    @Override
+    public List<User> onPage(List<User> users, int pageNumber) {
+        return onPageImpl(users, pageNumber, PaginationConstants.FOR_USERS);
+    }
+
+    @Override
+    public int pagesCount(List<User> users) {
+        return pagesCountImpl(users, PaginationConstants.FOR_USERS);
     }
 
     @Override
@@ -74,7 +94,7 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
     }
 
     @Override
-    public List<User> findAllSortedByDefault() {
+    public List<User> findAllSorted() {
         return findAllSorted(DefaultSortingOptionConstants.FOR_USERS);
     }
 
@@ -93,28 +113,8 @@ public class UserServiceImpl extends AbstractPaginationServiceImpl<User> impleme
     }
 
     @Override
-    public List<User> findAllByRoleNameSortedByDefault(String roleName) {
+    public List<User> findAllByRoleNameSorted(String roleName) {
         return findAllByRoleNameSorted(roleName, DefaultSortingOptionConstants.FOR_USERS);
-    }
-
-    @Override
-    public void save(User user, MultipartFile file) {
-
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        repository.deleteById(id);
-    }
-
-    @Override
-    public List<User> onPage(List<User> users, int pageNumber) {
-        return onPageImpl(users, pageNumber, PaginationConstants.FOR_USERS);
-    }
-
-    @Override
-    public int pagesCount(List<User> users) {
-        return pagesCountImpl(users, PaginationConstants.FOR_USERS);
     }
 
     @Override

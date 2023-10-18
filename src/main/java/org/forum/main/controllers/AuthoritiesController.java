@@ -49,7 +49,7 @@ public class AuthoritiesController extends ConvenientController {
             add(model, "roleFormSubmitButtonText", "Создать роль");
             add(model, "authorityFormSubmitButtonText", authorityService.isNew(authority)
                     ? "Создать право" : "Сохранить");
-            add(model, "authorityError", authorityService.extractAnySingleError(bindingResult));
+            add(model, "authorityError", authorityService.anyError(bindingResult));
 
             return "roles-authorities-panel";
         }

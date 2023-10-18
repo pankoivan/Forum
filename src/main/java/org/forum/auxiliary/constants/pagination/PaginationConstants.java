@@ -1,4 +1,4 @@
-package org.forum.auxiliary.constants;
+package org.forum.auxiliary.constants.pagination;
 
 import lombok.experimental.UtilityClass;
 

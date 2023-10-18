@@ -44,7 +44,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public List<User> topUsers() {
-        return userRepository.findAllByOrderByReputationWithDirection("DESC");
+        return userRepository.findAllByOrderByReputationWithDirection(Sort.Direction.DESC.name());
     }
 
     @Override

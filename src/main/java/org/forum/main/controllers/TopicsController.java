@@ -1,6 +1,7 @@
 package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
+import org.forum.auxiliary.constants.pagination.PaginationAttributeNameConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
@@ -44,7 +45,7 @@ public class TopicsController extends ConvenientController {
     @GetMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
     public String returnTopicsPage(Model model,
                                    Authentication authentication,
-                                   @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION,
+                                   @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION,
                                            required = false)
                                        TopicSortingOption sortingOption,
                                    @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
@@ -60,22 +61,8 @@ public class TopicsController extends ConvenientController {
         add(model, "topics", service.onPage(topics, pageNumber));
         add(model, "sectionId", sectionId);
         add(model, "sectionName", sectionService.findById(sectionId).getName());
-        add(model, "pagesCount", service.pagesCount(topics));
-        add(model, "currentPage", pageNumber);
-        add(model, "paginationUrl", replacePatternParts(
-                ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
-                sectionId
-        ));
-        add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
-        add(model, "properties", TopicSortingProperties.values());
-        add(model, "directions", Sort.Direction.values());
-        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME, SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION);
-        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL, ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
-                addStartSlash(UrlPartConstants.TOPICS));
-        add(model, SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL, replacePatternParts(
-                ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
-                sectionId
-        ));
+        pagination(model, service.pagesCount(topics), 1, sectionId);
+        sorting(model, sortingOption, sectionId);
 
         return "topics";
     }
@@ -110,7 +97,7 @@ public class TopicsController extends ConvenientController {
             add(model, "object", topic);
             add(model, "sectionId", sectionId);
             add(model, "formSubmitButtonText", service.isNew(topic) ? "Создать тему" : "Сохранить");
-            add(model, "error", service.extractAnySingleError(bindingResult));
+            add(model, "error", service.anyError(bindingResult));
 
             return "topic-form";
         }
@@ -141,7 +128,7 @@ public class TopicsController extends ConvenientController {
     @PostMapping("/inner/delete/{id}")
     public String redirectTopicsPageAfterDeleting(Model model,
                                                   Authentication authentication,
-                                                  @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION,
+                                                  @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION,
                                                           required = false)
                                                       TopicSortingOption sortingOption,
                                                   @PathVariable("id") String pathId,
@@ -160,22 +147,8 @@ public class TopicsController extends ConvenientController {
             add(model, "topics", service.onPage(topics, 1));
             add(model, "sectionId", sectionId);
             add(model, "sectionName", sectionService.findById(sectionId).getName());
-            add(model, "pagesCount", service.pagesCount(topics));
-            add(model, "currentPage", 1);
-            add(model, "paginationUrl", replacePatternParts(
-                    ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
-                    sectionId
-            ));
-            add(model, "sortingObject", sortingOption == null ? service.emptySortingOption() : sortingOption);
-            add(model, "properties", TopicSortingProperties.values());
-            add(model, "directions", Sort.Direction.values());
-            add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME, SortingOptionNameConstants.FOR_TOPIC_SORTING_OPTION);
-            add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL, ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER +
-                    addStartSlash(UrlPartConstants.TOPICS));
-            add(model, SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL, replacePatternParts(
-                    ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
-                    sectionId
-            ));
+            pagination(model, service.pagesCount(topics), 1, sectionId);
+            sorting(model, sortingOption, sectionId);
             add(model, "error", msg);
 
             return "topics";
@@ -187,10 +160,42 @@ public class TopicsController extends ConvenientController {
                 .formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
     }
 
+    private void pagination(Model model, Integer pagesCount, Integer currentPage, Integer sectionId) {
+        add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
+        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
+        add(model, PaginationAttributeNameConstants.PAGINATION_URL, replacePatternParts(
+                ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
+                sectionId
+        ));
+    }
+
+    private void sorting(Model model, TopicSortingOption sortingOption, Integer sectionId) {
+
+        add(model, SortingAttributeNameConstants.SORTING_OBJECT,
+                sortingOption == null ? service.emptySortingOption() : sortingOption);
+
+        add(model, SortingAttributeNameConstants.PROPERTIES,
+                TopicSortingProperties.values());
+
+        add(model, SortingAttributeNameConstants.DIRECTIONS,
+                Sort.Direction.values());
+
+        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME,
+                SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION);
+
+        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
+                ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + addStartSlash(UrlPartConstants.TOPICS));
+
+        add(model, SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL, replacePatternParts(
+                ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
+                sectionId
+        ));
+    }
+
     private List<Topic> sorted(TopicSortingOption sortingOption, Integer sectionId) {
         return sortingOption != null
                 ? service.findAllBySectionIdSorted(sectionId, sortingOption)
-                : service.findAllBySectionIdSortedByDefault(sectionId);
+                : service.findAllBySectionIdSorted(sectionId);
     }
 
 }

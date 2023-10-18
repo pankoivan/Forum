@@ -20,23 +20,24 @@ public interface MessageService extends GeneralService<Message, Long>, Validatio
 
     List<Message> findAllByTopicIdSorted(Integer topicId, MessageSortingOption sortingOption);
 
-    List<Message> findAllByTopicIdSortedByDefault(Integer topicId);
+    List<Message> findAllByTopicIdSorted(Integer topicId);
 
     List<Message> findAllByUserId(Integer userId);
 
     List<Message> findAllByUserIdSorted(Integer userId, MessageSortingOption sortingOption);
 
-    List<Message> findAllByUserIdSortedByDefault(Integer userId);
+    List<Message> findAllByUserIdSorted(Integer userId);
 
     List<Message> findAllLikedByUserId(Integer userId);
 
     List<Message> findAllLikedByUserIdSorted(Integer userId, MessageSortingOption sortingOption);
 
-    List<Message> findAllLikedByUserIdSortedByDefault(Integer userId);
+    List<Message> findAllLikedByUserIdSorted(Integer userId);
 
     List<Message> findAllDislikedByUserId(Integer userId);
 
     List<Message> findAllDislikedByUserIdSorted(Integer userId, MessageSortingOption sortingOption);
 
-    List<Message> findAllDislikedByUserIdSortedByDefault(Integer userId);
+    List<Message> findAllDislikedByUserIdSorted(Integer userId);
+
 }

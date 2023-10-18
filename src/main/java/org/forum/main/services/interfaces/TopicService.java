@@ -12,7 +12,7 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 public interface TopicService extends GeneralService<Topic, Integer>, ValidationService<Topic>,
-        SortingService<Topic, TopicSortingOption>, PaginationService<Topic> {
+        PaginationService<Topic>, SortingService<Topic, TopicSortingOption> {
 
     void save(Topic topic, Authentication authentication, Section section);
 
@@ -20,6 +20,6 @@ public interface TopicService extends GeneralService<Topic, Integer>, Validation
 
     List<Topic> findAllBySectionIdSorted(Integer sectionId, TopicSortingOption sortingOption);
 
-    List<Topic> findAllBySectionIdSortedByDefault(Integer sectionId);
+    List<Topic> findAllBySectionIdSorted(Integer sectionId);
 
 }
