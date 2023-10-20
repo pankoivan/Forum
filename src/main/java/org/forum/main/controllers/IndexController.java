@@ -1,5 +1,7 @@
 package org.forum.main.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.services.interfaces.StatisticsService;
@@ -26,13 +28,24 @@ public class IndexController extends ConvenientController {
     }
 
     @GetMapping
-    public String returnIndexPage(Authentication authentication, Model model) {
+    public String returnIndexPage(HttpServletRequest request,
+                                  Model model,
+                                  Authentication authentication) {
+
         addForHeader(model, authentication, sectionService);
+
         add(model, "page", "index");
         add(model, "topUsers", service.topUsers());
         add(model, "recentMessages", service.recentMessages());
+        currentPage(model, request.getRequestURI());
         statistics(model);
+
         return "index";
+    }
+
+    private void currentPage(Model model, String currentUrl) {
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(currentUrl));
     }
 
     private void statistics(Model model) {

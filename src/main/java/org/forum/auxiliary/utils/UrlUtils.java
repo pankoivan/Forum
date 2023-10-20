@@ -21,4 +21,10 @@ public final class UrlUtils {
         return url.replaceFirst("/", "");
     }
 
+    public static String removePage(String url) {
+        return url.contains("/page")
+                ? url.substring(0, url.lastIndexOf("/"))
+                : url;
+    }
+
 }

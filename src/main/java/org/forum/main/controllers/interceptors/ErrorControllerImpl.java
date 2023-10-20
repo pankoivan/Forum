@@ -22,8 +22,7 @@ public class ErrorControllerImpl implements ErrorController {
                     case "404" -> "errors/404";
                     case "500" -> "unexpected-server-error";
                     default -> throw new NotHandledErrorStatusCodeException(
-                            "There were no explicit mappings for error with status code %s"
-                                    .formatted(status)
+                            "There were no explicit mappings for error with status code %s".formatted(status)
                     );
         };
     }

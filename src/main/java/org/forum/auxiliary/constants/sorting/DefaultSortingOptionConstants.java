@@ -1,4 +1,4 @@
-package org.forum.auxiliary.constants;
+package org.forum.auxiliary.constants.sorting;
 
 import lombok.experimental.UtilityClass;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;

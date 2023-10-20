@@ -7,7 +7,6 @@ import org.forum.main.entities.User;
 import org.forum.main.repositories.DislikeRepository;
 import org.forum.main.repositories.LikeRepository;
 import org.forum.main.services.interfaces.DislikeService;
-import org.forum.main.services.interfaces.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,18 +26,22 @@ public class DislikeServiceImpl implements DislikeService {
     }
 
     @Override
-    public Dislike findByMessageIdAndUserId(Long messageId, Integer userId) {
-        return repository.findByMessageIdAndUserId(messageId, userId)
-                .orElseThrow(() -> new ServiceException("Dislike with message id \"%s\" and user id \"%s\" doesn't exists"
-                        .formatted(messageId, userId)));
+    public Dislike findByMessageAndUser(Message dislikedMessage, User userWhoDisliked) {
+        return repository.findByMessageIdAndUserId(dislikedMessage.getId(), userWhoDisliked.getId())
+                .orElseThrow(
+                        () -> new ServiceException("Dislike with message id \"%s\" and user id \"%s\" doesn't exists"
+                                .formatted(dislikedMessage.getId(), userWhoDisliked.getId()))
+                );
     }
 
     @Override
     public void save(Message dislikedMessage, User userWhoDisliked) {
         if (dislikedMessage.containsLikedUserById(userWhoDisliked.getId())) {
             likeRepository.delete(likeRepository.findByMessageIdAndUserId(dislikedMessage.getId(), userWhoDisliked.getId())
-                    .orElseThrow(() -> new ServiceException("Like with message id \"%s\" and user id \"%s\" doesn't exists"
-                            .formatted(dislikedMessage.getId(), userWhoDisliked.getId()))));
+                    .orElseThrow(
+                            () -> new ServiceException("Like with message id \"%s\" and user id \"%s\" doesn't exists"
+                                    .formatted(dislikedMessage.getId(), userWhoDisliked.getId())))
+            );
         }
         repository.save(
                 Dislike.builder()
@@ -50,16 +53,16 @@ public class DislikeServiceImpl implements DislikeService {
     }
 
     @Override
-    public void cancel(Message dislikedMessage, User userWhoDisliked) {
-        repository.delete(findByMessageIdAndUserId(dislikedMessage.getId(), userWhoDisliked.getId()));
+    public void delete(Message dislikedMessage, User userWhoDisliked) {
+        repository.delete(findByMessageAndUser(dislikedMessage, userWhoDisliked));
     }
 
     @Override
-    public void saveOrCancel(Message dislikedMessage, User userWhoDisliked, boolean isCancellation) {
+    public void saveOrDelete(Message dislikedMessage, User userWhoDisliked, boolean isCancellation) {
         if (!isCancellation) {
             save(dislikedMessage, userWhoDisliked);
         } else {
-            cancel(dislikedMessage, userWhoDisliked);
+            delete(dislikedMessage, userWhoDisliked);
         }
     }
 

@@ -2,41 +2,34 @@
 
 <html
     lang="en"
-    xmlns:th="https://www.thymeleaf.org"
     xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+    xmlns:th="https://www.thymeleaf.org"
 >
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <title>Пользователь</title>
         <link
             href="../../static/css/bootstrap.min.css"
-            th:href="@{/css/bootstrap.min.css}"
             rel="stylesheet"
+            th:href="@{/css/bootstrap.min.css}"
         />
         <link
             href="../../static/css/style.css"
-            th:href="@{/css/style.css}"
             rel="stylesheet"
+            th:href="@{/css/style.css}"
         />
     </head>
 
     <body
-        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-center"
     >
-        <!-- ---------------------------------------- Статический заголовок ---------------------------------------- -->
-        <div
-            class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
-        >
-            <h3>Статический заголовок для просмотра в браузере</h3>
-        </div>
-
         <!-- Контейнер для фрагмента -->
         <div class="container">
             <!-- ---------------------------------------- Сам фрагмент: пользователь ---------------------------------------- -->
             <div
-                class="bg-dark text-white rounded d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-center justify-content-lg-between p-1"
-                th:fragment="user-header (user)"
+                class="bg-dark text-white rounded d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-lg-between p-1"
+                th:fragment="user (user)"
             >
                 <!-- Аватарка с именем -->
                 <div class="mx-4 my-2">
@@ -79,26 +72,31 @@
                 </div>
                 <!-- Кнопки присвоения/снятия модераторства, присвоения/снятия администраторства, бана и удаления -->
                 <div
-                    th:if="${currentUser != null
-                                AND currentUser.id != user.id
+                    class="d-flex flex-row align-items-center justify-content-between mx-4 my-2"
+                    th:if="${
+                                currentUser != null AND currentUser.id != user.id
                                 AND !user.hasRole('ROLE_OWNER')
                                 AND #authorization.expression('hasAnyAuthority(''BAN_AND_UNBAN'', ''DELETE_USERS'',
                                     ''ASSIGN_AND_REMOVE_MODERS'', ''ASSIGN_AND_REMOVE_ADMINS'')')
                     }"
-                    class="d-flex flex-row align-items-center justify-content-between mx-4 my-2"
                 >
                     <!-- Кнопка присвоения/снятия модераторства -->
                     <form
-                        class="mx-1"
                         action="#"
-                        th:action="${user.hasRole('ROLE_MODER')} ? '/users/activities/assign-user/__${user.id}__'
-                                                                 : '/users/activities/assign-moder/__${user.id}__'"
+                        class="mx-1"
                         method="post"
+                        th:action="${user.hasRole('ROLE_MODER')} ? '/users/actions/assign-user/__${user.id}__'
+                                                                 : '/users/actions/assign-moder/__${user.id}__'"
                         th:if="${!user.hasRole('ROLE_ADMIN') AND #authorization.expression('hasAuthority(''ASSIGN_AND_REMOVE_MODERS'')')}"
                     >
-                        <input
+                        <!--<input
+                            type="hidden"
                             name="sourcePage"
                             th:value="${#ctx.springRequestContext.requestUri}"
+                        />-->
+                        <input
+                            name="sourcePage"
+                            th:value="${sourcePageUrlWithPage}"
                             type="hidden"
                         />
                         <button
@@ -108,9 +106,9 @@
                         >
                             <img
                                 alt="Назначить модератором"
-                                th:alt="${user.hasRole('ROLE_MODER')} ? 'Снять модераторство' : 'Назначить модератором'"
                                 class="mb-1"
                                 src="../../static/img/moder.png"
+                                th:alt="${user.hasRole('ROLE_MODER')} ? 'Снять модераторство' : 'Назначить модератором'"
                                 th:src="@{/img/moder.png}"
                                 width="16"
                             />
@@ -118,16 +116,16 @@
                     </form>
                     <!-- Кнопка присвоения/снятия администраторства -->
                     <form
-                        sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_ADMINS')"
                         action="#"
                         class="mx-1"
                         method="post"
-                        th:action="${user.hasRole('ROLE_ADMIN')} ? '/users/activities/assign-user/__${user.id}__'
-                                                                 : '/users/activities/assign-admin/__${user.id}__'"
+                        sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_ADMINS')"
+                        th:action="${user.hasRole('ROLE_ADMIN')} ? '/users/actions/assign-user/__${user.id}__'
+                                                                 : '/users/actions/assign-admin/__${user.id}__'"
                     >
                         <input
                             name="sourcePage"
-                            th:value="${#ctx.springRequestContext.requestUri}"
+                            th:value="${sourcePageUrlWithPage}"
                             type="hidden"
                         />
                         <button
@@ -147,18 +145,13 @@
                     </form>
                     <!-- Кнопка бана/разбана -->
                     <form
-                        sec:authorize="hasAuthority('BAN_AND_UNBAN')"
                         action="#"
                         class="mx-1"
                         method="post"
-                        th:action="${user.isActive()} ? '/users/activities/ban'
-                                                      : '/users/activities/unban'"
+                        sec:authorize="hasAuthority('BAN_AND_UNBAN')"
+                        th:action="${user.isActive()} ? '/users/actions/ban/__${user.id}__'
+                                                      : '/users/actions/unban/__${user.id}__'"
                     >
-                        <input
-                            name="userId"
-                            type="hidden"
-                            th:value="${user.id}"
-                        />
                         <button
                             class="btn btn-sm"
                             th:classappend="${user.isActive()} ? 'btn-danger' : 'btn-primary'"
@@ -176,11 +169,11 @@
                     </form>
                     <!-- Кнопка удаления -->
                     <form
-                        sec:authorize="hasAuthority('DELETE_USERS')"
                         action="#"
                         class="mx-1"
                         method="post"
-                        th:action="@{/users/activities/delete/__${user.id}__}"
+                        sec:authorize="hasAuthority('DELETE_USERS')"
+                        th:action="@{/users/actions/delete/__${user.id}__}"
                     >
                         <button class="btn btn-sm btn-danger" type="submit">
                             <img
@@ -194,13 +187,6 @@
                     </form>
                 </div>
             </div>
-        </div>
-
-        <!-- ---------------------------------------- Статический футер ---------------------------------------- -->
-        <div
-            class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5"
-        >
-            <h3>Статический футер для просмотра в браузере</h3>
         </div>
     </body>
 </html>

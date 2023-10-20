@@ -1,6 +1,7 @@
 package org.forum.main.controllers.common;
 
 import jakarta.servlet.http.HttpSession;
+import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
@@ -20,7 +21,7 @@ public class SortingController {
                                                       UserSortingOption sortingOption,
                                                       @RequestParam(SortingAttributeNameConstants.SORTING_OPTION_NAME)
                                                           String sortingOptionName,
-                                                      @RequestParam(SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL)
+                                                      @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE)
                                                           String sortingSourcePageUrl) {
 
         session.setAttribute(sortingOptionName, sortingOption);
@@ -33,7 +34,7 @@ public class SortingController {
                                                          SectionSortingOption sortingOption,
                                                          @RequestParam(SortingAttributeNameConstants.SORTING_OPTION_NAME)
                                                              String sortingOptionName,
-                                                         @RequestParam(SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL)
+                                                         @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE)
                                                              String sortingSourcePageUrl) {
 
         session.setAttribute(sortingOptionName, sortingOption);
@@ -46,7 +47,7 @@ public class SortingController {
                                                        TopicSortingOption sortingOption,
                                                        @RequestParam(SortingAttributeNameConstants.SORTING_OPTION_NAME)
                                                            String sortingOptionName,
-                                                       @RequestParam(SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL)
+                                                       @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE)
                                                            String sortingSourcePageUrl) {
 
         session.setAttribute(sortingOptionName, sortingOption);
@@ -59,7 +60,7 @@ public class SortingController {
                                                          MessageSortingOption sortingOption,
                                                          @RequestParam(SortingAttributeNameConstants.SORTING_OPTION_NAME)
                                                              String sortingOptionName,
-                                                         @RequestParam(SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL)
+                                                         @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE)
                                                              String sortingSourcePageUrl) {
 
         session.setAttribute(sortingOptionName, sortingOption);

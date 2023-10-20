@@ -7,18 +7,18 @@
         <title>Поиск</title>
         <link
             href="../../static/css/bootstrap.min.css"
-            rel="stylesheet"
             th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
         />
         <link
             href="../../static/css/style.css"
-            rel="stylesheet"
             th:href="@{/css/style.css}"
+            rel="stylesheet"
         />
     </head>
 
     <body
-        class="min-vh-100 bg-lightgray d-flex flex-column align-items-center justify-content-center"
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-center"
     >
         <!-- Контейнер для фрагмента -->
         <div class="container">
@@ -26,24 +26,24 @@
                 <div class="col-12 col-md-8 col-lg-6 mx-auto">
                     <!-- ---------------------------------------- Сам фрагмент: форма поиска ---------------------------------------- -->
                     <form
-                        action="#"
                         class="d-flex flex-row align-items-center justify-content-between bg-dark rounded text-white px-1 py-3"
+                        action="#"
+                        th:action="${searchingSubmitUrl}"
                         method="post"
-                        th:action="${submitUrl}"
                         th:fragment="search"
                     >
                         <input
-                            name="searchingSourcePageUrl"
-                            th:value="${searchingSourcePageUrl}"
                             type="hidden"
+                            name="searchingSourcePageUrl"
+                            th:value="${sourcePageUrlWithoutPagination}"
                         />
                         <!-- Искомый текст -->
                         <div class="mx-2">
                             <input
+                                type="search"
                                 class="form-control"
                                 name="searchedText"
                                 placeholder="Поиск..."
-                                type="search"
                             />
                         </div>
                         <!-- Кнопка применения поиска -->

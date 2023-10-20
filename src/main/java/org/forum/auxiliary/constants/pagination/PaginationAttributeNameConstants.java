@@ -9,6 +9,4 @@ public final class PaginationAttributeNameConstants {
 
     public static final String CURRENT_PAGE = "currentPage";
 
-    public static final String PAGINATION_URL = "paginationUrl";
-
 }

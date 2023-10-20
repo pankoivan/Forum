@@ -18,7 +18,7 @@
     </head>
 
     <body
-        class="min-vh-100 bg-lightgray d-flex flex-column align-items-center justify-content-center"
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-center"
     >
         <!-- Контейнер для фрагмента -->
         <div class="container">
@@ -34,21 +34,21 @@
                         th:object="${sortingObject}"
                     >
                         <input
+                            type="hidden"
                             name="sortingOptionName"
                             th:value="${sortingOptionName}"
-                            type="hidden"
                         />
                         <input
-                            name="sortingSourcePageUrl"
-                            th:value="${sortingSourcePageUrl}"
                             type="hidden"
+                            name="sourcePageUrlWithoutPage"
+                            th:value="${sourcePageUrlWithoutPage}"
                         />
                         <!-- Критерий сортировки -->
                         <div class="mx-2">
                             <select class="form-select" th:field="*{property}">
                                 <!-- Статический и динамический просмотр -->
                                 <option
-                                    th:each="each : ${properties}"
+                                    th:each="each : ${sortingProperties}"
                                     th:value="${each}"
                                     th:text="${each.alias}"
                                 >
@@ -64,7 +64,7 @@
                             <select class="form-select" th:field="*{direction}">
                                 <!-- Статический и динамический просмотр -->
                                 <option
-                                    th:each="each : ${directions}"
+                                    th:each="each : ${sortingDirections}"
                                     th:value="${each}"
                                     th:text="${#strings.equals(each.name, 'ASC')} ? 'По возрастанию' : 'По убыванию'"
                                 >

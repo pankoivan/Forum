@@ -23,7 +23,7 @@ public final class ControllerBaseUrlConstants {
 
     public static final String FOR_USERS_ACTIONS_CONTROLLER =
             FOR_USERS_CONTROLLER +
-            "/activities";
+            "/actions";
 
     public static final String FOR_USERS_CONTRIBUTIONS_CONTROLLER =
             FOR_USERS_CONTROLLER +

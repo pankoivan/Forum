@@ -1,5 +1,7 @@
 package org.forum.main.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.pagination.PaginationAttributeNameConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
@@ -82,7 +84,8 @@ public class UsersContributionsController extends ConvenientController {
     }
 
     @GetMapping("/" + UrlPartConstants.MESSAGES + "/{whichMessages}/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
-    public String returnPostedMessagesPage(Model model,
+    public String returnPostedMessagesPage(HttpServletRequest request,
+                                           Model model,
                                            Authentication authentication,
                                            @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION,
                                                    required = false)
@@ -99,35 +102,32 @@ public class UsersContributionsController extends ConvenientController {
         addForHeader(model, authentication, sectionService);
         add(model, "isForUserContributions", true);
         add(model, "messages", messageService.onPage(messages, pageNumber));
-        pagination(model, messageService.pagesCount(messages), pageNumber, whichMessages, userId);
-        messagesSorting(model, sortingOption, whichMessages, userId);
+        currentPage(model, request.getRequestURI());
+        pagination(model, messageService.pagesCount(messages), pageNumber);
+        messagesSorting(model, sortingOption);
 
         return "messages";
     }
 
-    private void pagination(Model model, Integer pagesCount, Integer currentPage, String whichMessages, Integer userId) {
-
-        add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
-
-        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
-
-        add(model, PaginationAttributeNameConstants.PAGINATION_URL, replacePatternParts(
-                ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER +
-                        addStartSlash(UrlPartConstants.MESSAGES) +
-                        addStartSlash(whichMessages),
-                userId
-        ));
+    private void currentPage(Model model, String currentUrl) {
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(currentUrl));
     }
 
-    private void messagesSorting(Model model, MessageSortingOption sortingOption, String whichMessages, Integer userId) {
+    private void pagination(Model model, Integer pagesCount, Integer currentPage) {
+        add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
+        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
+    }
+
+    private void messagesSorting(Model model, MessageSortingOption sortingOption) {
 
         add(model, SortingAttributeNameConstants.SORTING_OBJECT,
                 sortingOption == null ? messageService.emptySortingOption() : sortingOption);
 
-        add(model, SortingAttributeNameConstants.PROPERTIES,
+        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES,
                 MessageSortingProperties.values());
 
-        add(model, SortingAttributeNameConstants.DIRECTIONS,
+        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS,
                 Sort.Direction.values());
 
         add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME,
@@ -135,13 +135,6 @@ public class UsersContributionsController extends ConvenientController {
 
         add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
                 ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + addStartSlash(UrlPartConstants.MESSAGES));
-
-        add(model, SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL, replacePatternParts(
-                ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER +
-                        addStartSlash(UrlPartConstants.MESSAGES)
-                        + addStartSlash(whichMessages),
-                userId
-        ));
     }
 
     private List<Message> mySwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId) {

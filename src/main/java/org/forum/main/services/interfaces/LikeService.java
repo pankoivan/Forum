@@ -6,12 +6,12 @@ import org.forum.main.entities.User;
 
 public interface LikeService {
 
-    Like findByMessageIdAndUserId(Long messageId, Integer userId);
+    Like findByMessageAndUser(Message likedMessage, User userWhoLiked);
 
     void save(Message likedMessage, User userWhoLiked);
 
-    void cancel(Message likedMessage, User userWhoLiked);
+    void delete(Message likedMessage, User userWhoLiked);
 
-    void saveOrCancel(Message likedMessage, User userWhoLiked, boolean isCancellation);
+    void saveOrDelete(Message likedMessage, User userWhoLiked, boolean isCancellation);
 
 }

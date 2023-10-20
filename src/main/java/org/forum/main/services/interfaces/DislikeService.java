@@ -6,12 +6,12 @@ import org.forum.main.entities.User;
 
 public interface DislikeService {
 
-    Dislike findByMessageIdAndUserId(Long messageId, Integer userId);
+    Dislike findByMessageAndUser(Message dislikedMessage, User userWhoDisliked);
 
     void save(Message dislikedMessage, User userWhoDisliked);
 
-    void cancel(Message dislikedMessage, User userWhoDisliked);
+    void delete(Message dislikedMessage, User userWhoDisliked);
 
-    void saveOrCancel(Message dislikedMessage, User userWhoDisliked, boolean isCancellation);
+    void saveOrDelete(Message dislikedMessage, User userWhoDisliked, boolean isCancellation);
 
 }

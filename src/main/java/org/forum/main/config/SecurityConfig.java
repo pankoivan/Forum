@@ -49,7 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("/profiles/**").authenticated()
                         .requestMatchers("/roles-authorities/**").hasRole("OWNER")
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/favicon/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")

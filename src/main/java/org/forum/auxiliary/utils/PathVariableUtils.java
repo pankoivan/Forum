@@ -28,12 +28,12 @@ public final class PathVariableUtils {
         try {
             result = supplier.get();
         } catch (NumberFormatException e) {
-            throw new PathVariableUtilsException("Path variable \"" + pathVariable + "\" is not an non-negative " +
-                    exceptionMessagePart);
+            throw new PathVariableUtilsException("Path variable \"%s\" is not an non-negative %s"
+                    .formatted(pathVariable, exceptionMessagePart));
         }
         if (result.doubleValue() < 0) {
-            throw new PathVariableUtilsException("Path variable \"" + pathVariable + "\" is not an non-negative " +
-                    exceptionMessagePart);
+            throw new PathVariableUtilsException("Path variable \"%s\" is not an non-negative %s"
+                    .formatted(pathVariable, exceptionMessagePart));
         }
         return result;
     }
@@ -51,7 +51,7 @@ public final class PathVariableUtils {
                 sourceUrl = replacePatternPart(sourceUrl, replacementParts[i]);
             } catch (ArrayIndexOutOfBoundsException e) {
                 throw new PathVariableUtilsException(
-                        "Number of pattern parts in string \"%s\" greater then number of replacement parts (%s)"
+                        "Number of pattern parts in string \"%s\" greater then number of replacement parts: (%s)"
                                 .formatted(sourceUrl, replacementParts.length),
                         e
                 );

@@ -6,7 +6,6 @@ import org.forum.main.entities.Message;
 import org.forum.main.entities.User;
 import org.forum.main.repositories.DislikeRepository;
 import org.forum.main.repositories.LikeRepository;
-import org.forum.main.services.interfaces.DislikeService;
 import org.forum.main.services.interfaces.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,18 +26,22 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public Like findByMessageIdAndUserId(Long messageId, Integer userId) {
-        return repository.findByMessageIdAndUserId(messageId, userId)
-                .orElseThrow(() -> new ServiceException("Like with message id \"%s\" and user id \"%s\" doesn't exists"
-                        .formatted(messageId, userId)));
+    public Like findByMessageAndUser(Message likedMessage, User userWhoLiked) {
+        return repository.findByMessageIdAndUserId(likedMessage.getId(), userWhoLiked.getId())
+                .orElseThrow(
+                        () -> new ServiceException("Like with message id \"%s\" and user id \"%s\" doesn't exists"
+                                .formatted(likedMessage.getId(), userWhoLiked.getId()))
+                );
     }
 
     @Override
     public void save(Message likedMessage, User userWhoLiked) {
         if (likedMessage.containsDislikedUserById(userWhoLiked.getId())) {
             dislikeRepository.delete(dislikeRepository.findByMessageIdAndUserId(likedMessage.getId(), userWhoLiked.getId())
-                    .orElseThrow(() -> new ServiceException("Dislike with message id \"%s\" and user id \"%s\" doesn't exists"
-                            .formatted(likedMessage.getId(), userWhoLiked.getId()))));
+                    .orElseThrow(
+                            () -> new ServiceException("Dislike with message id \"%s\" and user id \"%s\" doesn't exists"
+                                    .formatted(likedMessage.getId(), userWhoLiked.getId())))
+            );
         }
         repository.save(
                 Like.builder()
@@ -50,16 +53,16 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public void cancel(Message likedMessage, User userWhoLiked) {
-        repository.delete(findByMessageIdAndUserId(likedMessage.getId(), userWhoLiked.getId()));
+    public void delete(Message likedMessage, User userWhoLiked) {
+        repository.delete(findByMessageAndUser(likedMessage, userWhoLiked));
     }
 
     @Override
-    public void saveOrCancel(Message likedMessage, User userWhoLiked, boolean isCancellation) {
+    public void saveOrDelete(Message likedMessage, User userWhoLiked, boolean isCancellation) {
         if (!isCancellation) {
             save(likedMessage, userWhoLiked);
         } else {
-            cancel(likedMessage, userWhoLiked);
+            delete(likedMessage, userWhoLiked);
         }
     }
 

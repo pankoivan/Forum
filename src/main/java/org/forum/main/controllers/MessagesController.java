@@ -1,6 +1,8 @@
 package org.forum.main.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.pagination.PaginationAttributeNameConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
@@ -47,7 +49,8 @@ public class MessagesController extends ConvenientController {
     }
 
     @GetMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
-    public String returnMessagesPage(Model model,
+    public String returnMessagesPage(HttpServletRequest request,
+                                     Model model,
                                      Authentication authentication,
                                      @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION,
                                              required = false)
@@ -70,14 +73,16 @@ public class MessagesController extends ConvenientController {
         add(model, "topicName", topicService.findById(topicId).getName());
         add(model, "message", service.empty());
         add(model, "formSubmitButtonText", "Отправить сообщение");
-        pagination(model, service.pagesCount(messages), pageNumber, sectionId, topicId);
-        sorting(model, sortingOption, sectionId, topicId);
+        currentPage(model, request.getRequestURI());
+        pagination(model, service.pagesCount(messages), pageNumber);
+        sorting(model, sortingOption);
 
         return "messages";
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/inner/save")
-    public String redirectMessagesPageAfterSaving(Model model,
+    public String redirectMessagesPageAfterSaving(HttpServletRequest request,
+                                                  Model model,
                                                   Authentication authentication,
                                                   @Valid Message message,
                                                   BindingResult bindingResult,
@@ -106,8 +111,9 @@ public class MessagesController extends ConvenientController {
             add(model, "topicName", topicService.findById(topicId).getName());
             add(model, "message", message);
             add(model, "formSubmitButtonText", isNew ? "Отправить сообщение" : "Сохранить изменения");
-            pagination(model, service.pagesCount(messages), pageNumber, sectionId, topicId);
-            sorting(model, sortingOption, sectionId, topicId);
+            currentPage(model, request.getRequestURI());
+            pagination(model, service.pagesCount(messages), pageNumber);
+            sorting(model, sortingOption);
             add(model, "formError", service.anyError(bindingResult));
 
             return "messages";
@@ -128,7 +134,8 @@ public class MessagesController extends ConvenientController {
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/inner/edit/{id}")
-    public String returnMessagesPageForEditing(Model model,
+    public String returnMessagesPageForEditing(HttpServletRequest request,
+                                               Model model,
                                                Authentication authentication,
                                                @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION,
                                                        required = false)
@@ -153,14 +160,16 @@ public class MessagesController extends ConvenientController {
         add(model, "topicName", topicService.findById(topicId).getName());
         add(model, "message", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить изменения");
-        pagination(model, service.pagesCount(messages), pageNumber, sectionId, topicId);
-        sorting(model, sortingOption, sectionId, topicId);
+        currentPage(model, request.getRequestURI());
+        pagination(model, service.pagesCount(messages), pageNumber);
+        sorting(model, sortingOption);
 
         return "messages";
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/inner/delete/{id}")
-    public String redirectMessagesPageAfterDeleting(Model model,
+    public String redirectMessagesPageAfterDeleting(HttpServletRequest request,
+                                                    Model model,
                                                     Authentication authentication,
                                                     @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION,
                                                             required = false)
@@ -189,8 +198,9 @@ public class MessagesController extends ConvenientController {
             add(model, "messages", service.onPage(messages, pageNumber));
             add(model, "message", service.empty());
             add(model, "formSubmitButtonText", "Отправить сообщение");
-            pagination(model, service.pagesCount(messages), pageNumber, sectionId, topicId);
-            sorting(model, sortingOption, sectionId, topicId);
+            currentPage(model, request.getRequestURI());
+            pagination(model, service.pagesCount(messages), pageNumber);
+            sorting(model, sortingOption);
             add(model, "error", msg);
 
             return "messages";
@@ -211,25 +221,25 @@ public class MessagesController extends ConvenientController {
                     .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
     }
 
-    private void pagination(Model model, Integer pagesCount, Integer currentPage, Integer sectionId, Integer topicId) {
-        add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
-        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
-        add(model, PaginationAttributeNameConstants.PAGINATION_URL, replacePatternParts(
-                ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
-                sectionId,
-                topicId
-        ));
+    private void currentPage(Model model, String currentUrl) {
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(currentUrl));
     }
 
-    private void sorting(Model model, MessageSortingOption sortingOption, Integer sectionId, Integer topicId) {
+    private void pagination(Model model, Integer pagesCount, Integer currentPage) {
+        add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
+        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
+    }
+
+    private void sorting(Model model, MessageSortingOption sortingOption) {
 
         add(model, SortingAttributeNameConstants.SORTING_OBJECT,
                 sortingOption == null ? service.emptySortingOption() : sortingOption);
 
-        add(model, SortingAttributeNameConstants.PROPERTIES,
+        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES,
                 MessageSortingProperties.values());
 
-        add(model, SortingAttributeNameConstants.DIRECTIONS,
+        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS,
                 Sort.Direction.values());
 
         add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME,
@@ -237,12 +247,6 @@ public class MessagesController extends ConvenientController {
 
         add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
                 ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + addStartSlash(UrlPartConstants.MESSAGES));
-
-        add(model, SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL, replacePatternParts(
-                ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
-                sectionId,
-                topicId
-        ));
     }
 
     private List<Message> sorted(MessageSortingOption sortingOption, Integer topicId) {

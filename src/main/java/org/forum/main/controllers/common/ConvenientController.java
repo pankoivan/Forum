@@ -4,6 +4,7 @@ import org.forum.auxiliary.exceptions.ControllerException;
 import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
 import org.forum.auxiliary.utils.PathVariableUtils;
 import org.forum.auxiliary.utils.UrlUtils;
+import org.forum.main.entities.User;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.springframework.security.core.Authentication;
@@ -24,6 +25,14 @@ public abstract class ConvenientController {
         }
     }
 
+    protected User extractCurrentUser(Authentication authentication) {
+        try {
+            return AuthenticationUtils.extractCurrentUser(authentication);
+        } catch (AuxiliaryInstrumentsException e) {
+            throw new ControllerException(e.getMessage(), e);
+        }
+    }
+
     protected Integer toNonNegativeInteger(String pathVariable) {
         try {
             return PathVariableUtils.toNonNegativeInteger(pathVariable);
@@ -40,24 +49,16 @@ public abstract class ConvenientController {
         }
     }
 
-    protected String replacePatternPart(String sourceUrl, Object replacePart) {
-        return PathVariableUtils.replacePatternPart(sourceUrl, replacePart);
-    }
-
-    protected String replacePatternParts(String sourceUrl, Object ... replaceParts) throws ControllerException {
-        try {
-            return PathVariableUtils.replacePatternParts(sourceUrl, replaceParts);
-        } catch (AuxiliaryInstrumentsException e) {
-            throw new ControllerException(e.getMessage(), e);
-        }
+    protected String concat(String ... urlParts) {
+        return UrlUtils.concat(urlParts);
     }
 
     protected String addStartSlash(String urlPart) {
         return UrlUtils.addStartSlash(urlPart);
     }
 
-    protected String removeStartSlash(String urlPart) {
-        return UrlUtils.removeStartSlash(urlPart);
+    protected String removePage(String url) {
+        return UrlUtils.removePage(url);
     }
 
 }

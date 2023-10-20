@@ -1,6 +1,6 @@
 package org.forum.main.services.implementations;
 
-import org.forum.auxiliary.constants.DefaultSortingOptionConstants;
+import org.forum.auxiliary.constants.sorting.DefaultSortingOptionConstants;
 import org.forum.auxiliary.constants.pagination.PaginationConstants;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.main.entities.Role;

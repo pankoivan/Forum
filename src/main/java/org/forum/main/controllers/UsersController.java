@@ -1,5 +1,6 @@
 package org.forum.main.controllers;
 
+import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.pagination.PaginationAttributeNameConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
@@ -85,9 +86,8 @@ public class UsersController extends ConvenientController {
         addForHeader(model, authentication, sectionService);
         add(model, "page", userUrlRole.orElse("users"));
         add(model, "users", service.onPage(users, pageNumber));
-        add(model, "pagesCount", service.pagesCount(users));
         pagination(model, service.pagesCount(users), pageNumber);
-        sorting(model, sortingOption, userUrlRole);
+        sorting(model, sortingOption);
 
         return "users";
     }
@@ -104,21 +104,25 @@ public class UsersController extends ConvenientController {
         return "profile";
     }
 
+    private void currentPage(Model model, String currentUrl) {
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(currentUrl));
+    }
+
     private void pagination(Model model, Integer pagesCount, Integer currentPage) {
         add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
         add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
-        add(model, PaginationAttributeNameConstants.PAGINATION_URL, ControllerBaseUrlConstants.FOR_USERS_CONTROLLER);
     }
 
-    private void sorting(Model model, UserSortingOption sortingOption, Optional<String> userUrlRole) {
+    private void sorting(Model model, UserSortingOption sortingOption) {
 
         add(model, SortingAttributeNameConstants.SORTING_OBJECT,
                 sortingOption == null ? service.emptySortingOption() : sortingOption);
 
-        add(model, SortingAttributeNameConstants.PROPERTIES,
+        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES,
                 UserSortingProperties.values());
 
-        add(model, SortingAttributeNameConstants.DIRECTIONS,
+        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS,
                 Sort.Direction.values());
 
         add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME,
@@ -126,10 +130,6 @@ public class UsersController extends ConvenientController {
 
         add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
                 ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + addStartSlash(UrlPartConstants.USERS));
-
-        add(model, SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL,
-                ControllerBaseUrlConstants.FOR_USERS_CONTROLLER +
-                        (userUrlRole.isPresent() ? addStartSlash(userUrlRole.get()) : ""));
     }
 
     private String mySwitch(String userUrlRoleName) {

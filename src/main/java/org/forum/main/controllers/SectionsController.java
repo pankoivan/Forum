@@ -1,6 +1,8 @@
 package org.forum.main.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.pagination.PaginationAttributeNameConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
@@ -39,7 +41,8 @@ public class SectionsController extends ConvenientController {
     }
 
     @GetMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
-    public String returnSectionsPage(Model model,
+    public String returnSectionsPage(HttpServletRequest request,
+                                     Model model,
                                      Authentication authentication,
                                      @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION,
                                              required = false)
@@ -53,7 +56,8 @@ public class SectionsController extends ConvenientController {
         addForHeader(model, authentication, service);
         add(model, "page", "sections");
         add(model, "sections", service.onPage(sections, pageNumber));
-        pagination(model, service.pagesCount(sections), 1);
+        currentPage(model, request.getRequestURI());
+        pagination(model, service.pagesCount(sections), pageNumber);
         sorting(model, sortingOption);
 
         return "sections";
@@ -106,7 +110,8 @@ public class SectionsController extends ConvenientController {
     }
 
     @PostMapping("/inner/delete/{id}")
-    public String redirectSectionsPageAfterDeleting(Model model,
+    public String redirectSectionsPageAfterDeleting(HttpServletRequest request,
+                                                    Model model,
                                                     Authentication authentication,
                                                     @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION,
                                                             required = false)
@@ -123,6 +128,7 @@ public class SectionsController extends ConvenientController {
             addForHeader(model, authentication, service);
             add(model, "page", "sections");
             add(model, "sections", service.onPage(sections, 1));
+            currentPage(model, request.getRequestURI());
             pagination(model, service.pagesCount(sections), 1);
             sorting(model, sortingOption);
             add(model, "error", msg);
@@ -136,10 +142,14 @@ public class SectionsController extends ConvenientController {
                 .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
     }
 
+    private void currentPage(Model model, String currentUrl) {
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(currentUrl));
+    }
+
     private void pagination(Model model, Integer pagesCount, Integer currentPage) {
         add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
         add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
-        add(model, PaginationAttributeNameConstants.PAGINATION_URL, ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
     }
 
     private void sorting(Model model, SectionSortingOption sortingOption) {
@@ -147,10 +157,10 @@ public class SectionsController extends ConvenientController {
         add(model, SortingAttributeNameConstants.SORTING_OBJECT,
                 sortingOption == null ? service.emptySortingOption() : sortingOption);
 
-        add(model, SortingAttributeNameConstants.PROPERTIES,
+        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES,
                 SectionSortingProperties.values());
 
-        add(model, SortingAttributeNameConstants.DIRECTIONS,
+        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS,
                 Sort.Direction.values());
 
         add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME,
@@ -158,9 +168,6 @@ public class SectionsController extends ConvenientController {
 
         add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
                 ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + addStartSlash(UrlPartConstants.SECTIONS));
-
-        add(model, SortingAttributeNameConstants.SORTING_SOURCE_PAGE_URL,
-                ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
     }
 
     private List<Section> sorted(SectionSortingOption sortingOption) {
