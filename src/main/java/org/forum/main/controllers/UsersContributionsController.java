@@ -82,8 +82,9 @@ public class UsersContributionsController extends ConvenientController {
         List<Section> sections = sortedCreatedSections(sortingOption, userId);
 
         addForHeader(model, authentication, sectionService);
+        add(model, "isForUserContributions", true);
         add(model, "sections", sectionService.onPage(sections, pageNumber));
-        add(model, "isEditDeleteButtonsEnabled", false);
+        add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
         currentPage(model, request.getRequestURI());
         pagination(model, sectionService.pagesCount(sections), pageNumber);
         sectionsSorting(model, sortingOption);
@@ -113,8 +114,9 @@ public class UsersContributionsController extends ConvenientController {
         List<Topic> topics = sortedCreatedTopics(sortingOption, userId);
 
         addForHeader(model, authentication, sectionService);
+        add(model, "isForUserContributions", true);
         add(model, "topics", topicService.onPage(topics, pageNumber));
-        add(model, "isEditDeleteButtonsEnabled", false);
+        add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
         currentPage(model, request.getRequestURI());
         pagination(model, topicService.pagesCount(topics), pageNumber);
         topicsSorting(model, sortingOption);
@@ -123,36 +125,21 @@ public class UsersContributionsController extends ConvenientController {
     }
 
     @GetMapping("/" + UrlPartConstants.MESSAGES + "/" + POSTED)
-    public String redirectPostedMessagesPageWithPagination() {
-        return "redirect:%s/%s/%s/%s1"
-                .formatted(
-                        ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER,
-                        UrlPartConstants.MESSAGES,
-                        POSTED,
-                        UrlPartConstants.PAGE
-                );
+    public String redirectPostedMessagesPageWithPagination(HttpServletRequest request) {
+        return "redirect:%s/%s1"
+                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.MESSAGES + "/" + LIKED)
-    public String redirectLikedMessagesPageWithPagination() {
-        return "redirect:%s/%s/%s/%s1"
-                .formatted(
-                        ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER,
-                        UrlPartConstants.MESSAGES,
-                        LIKED,
-                        UrlPartConstants.PAGE
-                );
+    public String redirectLikedMessagesPageWithPagination(HttpServletRequest request) {
+        return "redirect:%s/%s1"
+                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.MESSAGES + "/" + DISLIKED)
-    public String redirectDislikedMessagesPageWithPagination() {
-        return "redirect:%s/%s/%s/%s1"
-                .formatted(
-                        ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER,
-                        UrlPartConstants.MESSAGES,
-                        DISLIKED,
-                        UrlPartConstants.PAGE
-                );
+    public String redirectDislikedMessagesPageWithPagination(HttpServletRequest request) {
+        return "redirect:%s/%s1"
+                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.MESSAGES + "/{whichMessages}/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
@@ -174,8 +161,8 @@ public class UsersContributionsController extends ConvenientController {
         addForHeader(model, authentication, sectionService);
         add(model, "isForUserContributions", true);
         add(model, "messages", messageService.onPage(messages, pageNumber));
-        add(model, "isEditDeleteButtonsEnabled", false);
-        add(model, "isLikeDislikeButtonsEnabled", false);
+        add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, false);
+        add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
         currentPage(model, request.getRequestURI());
         pagination(model, messageService.pagesCount(messages), pageNumber);
         messagesSorting(model, sortingOption);
@@ -186,7 +173,6 @@ public class UsersContributionsController extends ConvenientController {
     private void currentPage(Model model, String currentUrl) {
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(currentUrl));
-        System.out.println(removePage(currentUrl));
     }
 
     private void pagination(Model model, Integer pagesCount, Integer currentPage) {

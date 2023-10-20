@@ -1,6 +1,7 @@
 package org.forum.main.controllers;
 
 import jakarta.validation.Valid;
+import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Ban;
@@ -45,7 +46,8 @@ public class UsersActionsController extends ConvenientController {
 
     @PostMapping("/assign-user/{id}")
     public String redirectSourcePageAfterAssigningUser(@PathVariable("id") String pathId,
-                                                       @RequestParam("sourcePage") String sourcePage) {
+                                                       @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE)
+                                                           String sourcePage) {
 
         Integer id = toNonNegativeInteger(pathId);
         service.changeRole(service.findById(id), roleService.findByName("ROLE_USER"));
@@ -55,7 +57,8 @@ public class UsersActionsController extends ConvenientController {
 
     @PostMapping("/assign-moder/{id}")
     public String redirectSourcePageAfterAssigningModer(@PathVariable("id") String pathId,
-                                                        @RequestParam("sourcePage") String sourcePage) {
+                                                        @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE)
+                                                            String sourcePage) {
 
         Integer id = toNonNegativeInteger(pathId);
         service.changeRole(service.findById(id), roleService.findByName("ROLE_MODER"));
@@ -65,7 +68,8 @@ public class UsersActionsController extends ConvenientController {
 
     @PostMapping("/assign-admin/{id}")
     public String redirectSourcePageAfterAssigningAdmin(@PathVariable("id") String pathId,
-                                                        @RequestParam("sourcePage") String sourcePage) {
+                                                        @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE)
+                                                            String sourcePage) {
 
         Integer id = toNonNegativeInteger(pathId);
         service.changeRole(service.findById(id), roleService.findByName("ROLE_ADMIN"));
@@ -77,7 +81,8 @@ public class UsersActionsController extends ConvenientController {
     public String redirectSourcePageAfterLike(Authentication authentication,
                                               @PathVariable("messageId") Long messageId,
                                               @RequestParam("isCancellation") boolean isCancellation,
-                                              @RequestParam("sourcePage") String sourcePage) {
+                                              @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE)
+                                                  String sourcePage) {
 
         likeService.saveOrDelete(messageService.findById(messageId), extractCurrentUser(authentication), isCancellation);
         return "redirect:%s"
@@ -88,23 +93,27 @@ public class UsersActionsController extends ConvenientController {
     public String redirectSourcePageAfterDislike(Authentication authentication,
                                                  @PathVariable("messageId") Long messageId,
                                                  @RequestParam("isCancellation") boolean isCancellation,
-                                                 @RequestParam("sourcePage") String sourcePage) {
+                                                 @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE)
+                                                     String sourcePage) {
 
         dislikeService.saveOrDelete(messageService.findById(messageId), extractCurrentUser(authentication), isCancellation);
         return "redirect:%s"
                 .formatted(sourcePage);
     }
 
-    @GetMapping("/ban/{id}")
+    @PostMapping("/ban/{id}")
     public String returnBanFormPage(Model model,
                                     Authentication authentication,
-                                    @PathVariable("id") String pathUserId) {
+                                    @PathVariable("id") String pathUserId,
+                                    @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE)
+                                        String sourcePage) {
 
         Integer userId = toNonNegativeInteger(pathUserId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "ban", banService.empty());
         add(model, "userId", userId);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, sourcePage);
 
         return "ban-form";
     }
@@ -114,6 +123,8 @@ public class UsersActionsController extends ConvenientController {
                                                   Authentication authentication,
                                                   @RequestParam("userId") String pathUserId,
                                                   @RequestParam("userWhoAssignedId") String pathUserWhoAssignedId,
+                                                  @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE)
+                                                      String sourcePage,
                                                   @Valid Ban ban,
                                                   BindingResult bindingResult) {
 
@@ -130,18 +141,21 @@ public class UsersActionsController extends ConvenientController {
 
         banService.save(ban, service.findById(userId), service.findById(userWhoAssignedId));
 
-        return "redirect:/users/" + ban.getUser().getId();
+        return "redirect:%s"
+                .formatted(sourcePage);
     }
 
     @PostMapping("/unban/{id}")
-    public String redirectUserProfilePageAfterUnban(@PathVariable("id") String pathUserId) {
+    public String redirectUserProfilePageAfterUnban(@PathVariable("id") String pathUserId,
+                                                    @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE)
+                                                        String sourcePage) {
 
         Integer userId = toNonNegativeInteger(pathUserId);
 
         banService.unban(service.findById(userId));
 
-        return "redirect:%s/%s"
-                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER, userId);
+        return "redirect:%s"
+                .formatted(sourcePage);
     }
 
 }

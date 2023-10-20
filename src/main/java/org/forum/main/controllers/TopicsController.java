@@ -39,9 +39,9 @@ public class TopicsController extends ConvenientController {
     }
 
     @GetMapping
-    public String redirectTopicsPageWithPagination() {
+    public String redirectTopicsPageWithPagination(HttpServletRequest request) {
         return "redirect:%s/%s1"
-                .formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER, UrlPartConstants.PAGE);
+                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
@@ -60,11 +60,12 @@ public class TopicsController extends ConvenientController {
         List<Topic> topics = sorted(sortingOption, sectionId);
 
         addForHeader(model, authentication, sectionService);
+        add(model, "isForUserContributions", false);
         add(model, "page", "topics");
         add(model, "topics", service.onPage(topics, pageNumber));
         add(model, "sectionId", sectionId);
         add(model, "sectionName", sectionService.findById(sectionId).getName());
-        add(model, "isEditDeleteButtonsEnabled", true);
+        add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
         currentPage(model, request.getRequestURI());
         pagination(model, service.pagesCount(topics), pageNumber);
         sorting(model, sortingOption);
@@ -87,7 +88,7 @@ public class TopicsController extends ConvenientController {
         return "topic-form";
     }
 
-    @PostMapping("/inner/save")
+    @PostMapping("/save")
     public String redirectTopicsPageAfterSaving(Model model,
                                                 Authentication authentication,
                                                 @Valid Topic topic,
@@ -113,11 +114,11 @@ public class TopicsController extends ConvenientController {
                 .formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
     }
 
-    @PostMapping("/inner/edit/{id}")
+    @PostMapping("/edit/{id}")
     public String returnTopicFormPageForEditing(Model model,
                                                 Authentication authentication,
-                                                @PathVariable("id") String pathId,
-                                                @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId) {
+                                                @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
+                                                @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
         Integer sectionId = toNonNegativeInteger(pathSectionId);
@@ -130,15 +131,15 @@ public class TopicsController extends ConvenientController {
         return "topic-form";
     }
 
-    @PostMapping("/inner/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String redirectTopicsPageAfterDeleting(HttpServletRequest request,
                                                   Model model,
                                                   Authentication authentication,
                                                   @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION,
                                                           required = false)
                                                       TopicSortingOption sortingOption,
-                                                  @PathVariable("id") String pathId,
-                                                  @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId) {
+                                                  @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
+                                                  @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
         Integer sectionId = toNonNegativeInteger(pathSectionId);
@@ -149,11 +150,12 @@ public class TopicsController extends ConvenientController {
             List<Topic> topics = sorted(sortingOption, sectionId);
 
             addForHeader(model, authentication, sectionService);
+            add(model, "isForUserContributions", false);
             add(model, "page", "topics");
             add(model, "topics", service.onPage(topics, 1));
             add(model, "sectionId", sectionId);
             add(model, "sectionName", sectionService.findById(sectionId).getName());
-            add(model, "isEditDeleteButtonsEnabled", true);
+            add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
             currentPage(model, request.getRequestURI());
             pagination(model, service.pagesCount(topics), 1);
             sorting(model, sortingOption);

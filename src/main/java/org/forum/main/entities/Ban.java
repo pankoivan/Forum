@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.forum.auxiliary.constants.DateTimeFormatConstants;
 
 import java.time.LocalDate;
 
@@ -37,5 +38,9 @@ public class Ban {
 
     @Column(name = "end_date")
     private LocalDate endDate;
+
+    public String getFormattedEndDate() {
+        return endDate.format(DateTimeFormatConstants.DAY_MONTH_YEAR);
+    }
 
 }

@@ -35,9 +35,9 @@ public class SectionsController extends ConvenientController {
     }
 
     @GetMapping
-    public String redirectSectionsPageWithPagination() {
+    public String redirectSectionsPageWithPagination(HttpServletRequest request) {
         return "redirect:%s/%s1"
-                .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER, UrlPartConstants.PAGE);
+                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
@@ -54,9 +54,10 @@ public class SectionsController extends ConvenientController {
         List<Section> sections = sorted(sortingOption);
 
         addForHeader(model, authentication, service);
+        add(model, "isForUserContributions", false);
         add(model, "page", "sections");
         add(model, "sections", service.onPage(sections, pageNumber));
-        add(model, "isEditDeleteButtonsEnabled", true);
+        add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
         currentPage(model, request.getRequestURI());
         pagination(model, service.pagesCount(sections), pageNumber);
         sorting(model, sortingOption);
@@ -74,7 +75,7 @@ public class SectionsController extends ConvenientController {
         return "section-form";
     }
 
-    @PostMapping("/inner/save")
+    @PostMapping("/save")
     public String redirectSectionsPageAfterSaving(Model model,
                                                   Authentication authentication,
                                                   @Valid Section section,
@@ -96,7 +97,7 @@ public class SectionsController extends ConvenientController {
                 .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
     }
 
-    @PostMapping("/inner/edit/{id}")
+    @PostMapping("/edit/{id}")
     public String returnSectionFormPageForEditing(Model model,
                                                   Authentication authentication,
                                                   @PathVariable("id") String pathId) {
@@ -110,7 +111,7 @@ public class SectionsController extends ConvenientController {
         return "section-form";
     }
 
-    @PostMapping("/inner/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String redirectSectionsPageAfterDeleting(HttpServletRequest request,
                                                     Model model,
                                                     Authentication authentication,
@@ -127,9 +128,10 @@ public class SectionsController extends ConvenientController {
             List<Section> sections = sorted(sortingOption);
 
             addForHeader(model, authentication, service);
+            add(model, "isForUserContributions", false);
             add(model, "page", "sections");
             add(model, "sections", service.onPage(sections, 1));
-            add(model, "isEditDeleteButtonsEnabled", true);
+            add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
             currentPage(model, request.getRequestURI());
             pagination(model, service.pagesCount(sections), 1);
             sorting(model, sortingOption);

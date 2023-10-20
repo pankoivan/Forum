@@ -9,4 +9,8 @@ public final class CommonAttributeNameConstants {
 
     public static final String SOURCE_PAGE_URL_WITHOUT_PAGE = "sourcePageUrlWithoutPage";
 
+    public static final String IS_EDIT_DELETE_BUTTONS_ENABLED = "isEditDeleteButtonsEnabled";
+
+    public static final String IS_LIKE_DISLIKE_BUTTONS_ENABLED = "isLikeDislikeButtonsEnabled";
+
 }

@@ -24,29 +24,29 @@
         <div class="d-flex align-items-center justify-content-center">
             <!-- ---------------------------------------- Сам фрагмент: кнопка редактирования и кнопка удаления ---------------------------------------- -->
             <div
-                th:fragment="edit-delete (editFormUrl, deleteFormUrl)"
+                th:fragment="edit-delete-buttons (editUrl, deleteUrl)"
                 class="d-flex flex-row align-items-center justify-content-between"
             >
                 <!-- Кнопка редактирования -->
-                <form action="#" method="post" th:action="${editFormUrl}">
+                <form action="#" method="post" th:action="${editUrl}">
                     <button class="btn btn-sm btn-success rounded-circle m-1">
                         <img
                             alt="Редактировать"
-                            class="mb-1"
                             src="../../static/img/edit.png"
                             th:src="@{/img/edit.png}"
+                            class="mb-1"
                             width="16"
                         />
                     </button>
                 </form>
                 <!-- Кнопка удаления -->
-                <form action="#" method="post" th:action="${deleteFormUrl}">
+                <form action="#" method="post" th:action="${deleteUrl}">
                     <button class="btn btn-sm btn-danger rounded-circle m-1">
                         <img
                             alt="Удалить"
-                            class="mb-1"
                             src="../../static/img/delete.png"
                             th:src="@{/img/delete.png}"
+                            class="mb-1"
                             width="16"
                         />
                     </button>

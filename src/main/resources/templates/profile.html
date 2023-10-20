@@ -16,24 +16,24 @@
             rel="stylesheet"
         />
         <link
-            rel="apple-touch-icon"
-            sizes="180x180"
             href="../static/favicon/apple-touch-icon.png"
             th:href="@{/favicon/apple-touch-icon.png}"
+            rel="apple-touch-icon"
+            sizes="180x180"
         />
         <link
+            href="../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href="../static/favicon/favicon-32x32.png"
-            th:href="@{/favicon/favicon-32x32.png}"
         />
         <link
+            href="../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href="../static/favicon/favicon-16x16.png"
-            th:href="@{/favicon/favicon-16x16.png}"
         />
     </head>
 
@@ -146,48 +146,48 @@
                         <!-- Все отправленные сообщения -->
                         <div class="mb-2">
                             <a
-                                class="btn btn-primary"
                                 href="#"
                                 th:href="@{/users/__${userForProfile.id}__/contributions/messages/posted}"
+                                class="btn btn-primary"
                                 >Все отправленные сообщения</a
                             >
                         </div>
                         <!-- Все понравившиеся сообщения -->
                         <div class="mb-2">
                             <a
-                                class="btn btn-primary"
                                 href="#"
                                 th:href="@{/users/__${userForProfile.id}__/contributions/messages/liked}"
+                                class="btn btn-primary"
                                 >Все понравившиеся сообщения</a
                             >
                         </div>
                         <!-- Все не понравившиеся сообщения -->
                         <div class="mb-2">
                             <a
-                                class="btn btn-primary"
                                 href="#"
                                 th:href="@{/users/__${userForProfile.id}__/contributions/messages/disliked}"
+                                class="btn btn-primary"
                                 >Все не понравившиеся сообщения</a
                             >
                         </div>
                         <!-- Все созданные темы -->
                         <div class="mb-2">
                             <a
-                                class="btn btn-primary"
                                 href="#"
                                 th:href="@{/users/__${userForProfile.id}__/contributions/topics/created}"
+                                class="btn btn-primary"
                                 >Все созданные темы</a
                             >
                         </div>
                         <!-- Все созданные разделы -->
                         <div
-                            class="mb-2"
                             th:if="${userForProfile.hasAuthority('WORK_WITH_SECTIONS')}"
+                            class="mb-2"
                         >
                             <a
-                                class="btn btn-primary"
                                 href="#"
                                 th:href="@{/users/__${userForProfile.id}__/contributions/sections/created}"
+                                class="btn btn-primary"
                                 >Все созданные разделы</a
                             >
                         </div>

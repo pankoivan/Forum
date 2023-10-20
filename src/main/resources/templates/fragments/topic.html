@@ -18,7 +18,7 @@
     </head>
 
     <body
-        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-center"
     >
         <!-- Контейнер для фрагмента -->
         <div class="container">
@@ -31,22 +31,21 @@
                 <div
                     class="border-bottom border-white pb-1"
                     th:if="${
-                                isEditDeleteButtonsEnabled AND currentUser != null
+                                currentUser != null
                                 AND (
                                     currentUser.id == topic.userWhoCreated.id
                                     AND #authorization.expression('hasAuthority(''WORK_WITH_OWN_TOPICS'')')
                                     OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_TOPICS'')')
                                 )
+                                AND isEditDeleteButtonsEnabled
                     }"
                 >
                     <!-- Кнопки редактирования и удаления -->
                     <div
-                        th:replace="~{fragments/edit-delete-buttons :: edit-delete (
-                                        editFormUrl =
-                                            '/sections/__${topic.section.id}__/topics/inner/edit/__${topic.id}__',
-                                        deleteFormUrl =
-                                            '/sections/__${topic.section.id}__/topics/inner/delete/__${topic.id}__'
-                                    )
+                        th:replace="~{fragments/edit-delete-buttons :: edit-delete-buttons (
+                                editUrl = '/sections/__${sectionId}__/topics/edit/__${topic.id}__',
+                                deleteUrl = '/sections/__${sectionId}__/topics/delete/__${topic.id}__'
+                            )
                         }"
                         class="d-flex flex-row align-items-center justify-content-between"
                     >
@@ -100,9 +99,9 @@
                                 <div class="me-1">
                                     <img
                                         alt="Пользователь"
-                                        class="rounded-circle"
                                         src="../../static/img/природа.png"
                                         th:src="@{/img/природа.png}"
+                                        class="rounded-circle"
                                         width="42"
                                     />
                                 </div>
@@ -133,14 +132,14 @@
                         </div>
                         <!-- Недавнее сообщение -->
                         <div
-                            class="text-center mx-5 my-1"
                             th:if="${topic.recentMessage}"
+                            class="text-center mx-5 my-1"
                         >
                             <p class="mb-1">
                                 <a
-                                    class="text-white"
                                     href="#"
                                     th:href="@{/sections/__${topic.section.id}__/topics/__${topic.id}__/messages}"
+                                    class="text-white"
                                     >Недавнее сообщение</a
                                 >
                             </p>

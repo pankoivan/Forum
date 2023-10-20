@@ -16,24 +16,24 @@
             rel="stylesheet"
         />
         <link
-            rel="apple-touch-icon"
-            sizes="180x180"
             href="../static/favicon/apple-touch-icon.png"
             th:href="@{/favicon/apple-touch-icon.png}"
+            rel="apple-touch-icon"
+            sizes="180x180"
         />
         <link
+            href="../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href="../static/favicon/favicon-32x32.png"
-            th:href="@{/favicon/favicon-32x32.png}"
         />
         <link
+            href="../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href="../static/favicon/favicon-16x16.png"
-            th:href="@{/favicon/favicon-16x16.png}"
         />
     </head>
 
@@ -70,9 +70,9 @@
                             <div>
                                 <a href="/index.html" th:href="@{/}">
                                     <img
+                                        alt="На главную"
                                         src="../static/img/волк.png"
                                         th:src="@{/img/волк.png}"
-                                        alt="На главную"
                                         width="48"
                                         class="mb-2"
                                     />
@@ -98,9 +98,9 @@
                                     >
                                     <input
                                         id="username"
+                                        type="text"
                                         name="username"
                                         class="form-control"
-                                        type="text"
                                         placeholder="Byb"
                                         th:field="*{nickname}"
                                     />
@@ -112,9 +112,9 @@
                                     >
                                     <input
                                         id="email"
+                                        type="text"
                                         name="email"
                                         class="form-control"
-                                        type="text"
                                         placeholder="example@yandex.ru"
                                         th:field="*{email}"
                                     />
@@ -127,9 +127,9 @@
                                 >
                                 <input
                                     id="password"
+                                    type="password"
                                     name="password"
                                     class="form-control"
-                                    type="password"
                                     placeholder="Jdk37#@anxndfjr87la"
                                     th:field="*{password}"
                                 />
@@ -145,8 +145,8 @@
                             </div>
                             <!-- Аккордеон: показать/скрыть необязательные поля -->
                             <div
-                                class="accordion accordion-flush"
                                 id="optionalFields"
+                                class="accordion accordion-flush"
                             >
                                 <div class="accordion-item">
                                     <div>
@@ -181,9 +181,9 @@
                                                     >
                                                     <input
                                                         id="name"
+                                                        type="text"
                                                         name="name"
                                                         class="form-control"
-                                                        type="text"
                                                         placeholder="Иванов Иван"
                                                         th:field="*{userInformation.name}"
                                                     />

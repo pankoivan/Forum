@@ -16,24 +16,24 @@
             rel="stylesheet"
         />
         <link
-            rel="apple-touch-icon"
-            sizes="180x180"
             href="../static/favicon/apple-touch-icon.png"
             th:href="@{/favicon/apple-touch-icon.png}"
+            rel="apple-touch-icon"
+            sizes="180x180"
         />
         <link
+            href="../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href="../static/favicon/favicon-32x32.png"
-            th:href="@{/favicon/favicon-32x32.png}"
         />
         <link
+            href="../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href="../static/favicon/favicon-16x16.png"
-            th:href="@{/favicon/favicon-16x16.png}"
         />
     </head>
 
@@ -53,8 +53,8 @@
 
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div
+            th:replace="~{fragments/section-topic-form :: form (titlePart = 'темы', submitUrl = '/sections/__${sectionId}__/topics/save')}"
             class="container bg-dark d-flex align-items-center justify-content-center text-center text-white static-block mb-5"
-            th:replace="~{fragments/section-topic-form :: form (titlePart = 'темы', submitUrl = '/sections/__${sectionId}__/topics/inner/save')}"
         >
             <h3>
                 Статический блок основной части страницы для просмотра в

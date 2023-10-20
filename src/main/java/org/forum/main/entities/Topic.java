@@ -57,7 +57,7 @@ public class Topic {
     private List<Message> messages;
 
     public String getFormattedCreationDate() {
-        return creationDate.format(DateTimeFormatConstants.SEPARATED_DATE_TIME);
+        return creationDate.format(DateTimeFormatConstants.DAY_MONTH_YEAR_IN_HOUR_MINUTE_SECOND);
     }
 
     public boolean hasMessages() {

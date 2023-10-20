@@ -56,11 +56,11 @@ public class Message {
     private Topic topic;
 
     public String getFormattedCreationDate() {
-        return creationDate.format(DateTimeFormatConstants.SEPARATED_DATE_TIME);
+        return creationDate.format(DateTimeFormatConstants.DAY_MONTH_YEAR_IN_HOUR_MINUTE_SECOND);
     }
 
     public String getFormattedEditingDate() {
-        return editingDate.format(DateTimeFormatConstants.SEPARATED_DATE_TIME);
+        return editingDate.format(DateTimeFormatConstants.DAY_MONTH_YEAR_IN_HOUR_MINUTE_SECOND);
     }
 
     public boolean hasLikes() {

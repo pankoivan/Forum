@@ -124,7 +124,7 @@ public class User implements UserDetails {
     }
 
     public String getFormattedRegistrationDate() {
-        return registrationDate.format(DateTimeFormatConstants.SEPARATED_DATE_TIME);
+        return registrationDate.format(DateTimeFormatConstants.DAY_MONTH_YEAR_IN_HOUR_MINUTE_SECOND);
     }
 
     public int getMessagesCount() {

@@ -38,24 +38,26 @@
     </head>
 
     <body
-        class="min-vh-100 bg-lightgray d-flex flex-column align-items-center justify-content-center"
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-center"
     >
         <div class="container">
-            <div
-                class="col-12 col-md-8 col-lg-6 text-center text-white mx-auto"
-            >
-                <div class="bg-dark rounded px-3 py-2">
-                    <p class="fs-20 fw-bold">Неожиданная ошибка сервера!</p>
-                    <p th:text="${error}">
-                        Текст ошибки, передаваемый с сервера
-                    </p>
-                    <p>
-                        Ошибка неожиданная, а это значит, что она не связана с
-                        вашей некорректной работой. Значит, в пору бить тревогу
-                        относительно состояния процессов, происходящих на
-                        сервере
-                    </p>
-                    <p><a href="#" th:href="@{/}">На главную</a></p>
+            <div class="row">
+                <div
+                    class="col-12 col-md-8 col-lg-6 text-center break-all text-white mx-auto"
+                >
+                    <div class="bg-dark rounded px-3 py-2">
+                        <p class="fs-20 fw-bold">Неожиданная ошибка сервера!</p>
+                        <p th:text="${error}">
+                            Текст ошибки, передаваемый с сервера
+                        </p>
+                        <p>
+                            Ошибка неожиданная, а это значит, что она не связана
+                            с вашей некорректной работой. Значит, в пору бить
+                            тревогу относительно состояния процессов,
+                            происходящих на сервере
+                        </p>
+                        <p><a href="#" th:href="@{/}">На главную</a></p>
+                    </div>
                 </div>
             </div>
         </div>

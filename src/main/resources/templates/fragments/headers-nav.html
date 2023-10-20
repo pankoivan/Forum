@@ -22,8 +22,8 @@
     >
         <!-- ---------------------------------------- Фрагмент: навигационная панель заголовков ---------------------------------------- -->
         <div
-            class="bg-dark d-flex flex-row flex-wrap align-items-center justify-content-center"
             th:fragment="headers-nav"
+            class="bg-dark d-flex flex-row flex-wrap align-items-center justify-content-center"
         >
             <!-- Главная картинка -->
             <div class="m-2">
@@ -43,8 +43,8 @@
                     <li>
                         <a
                             href="#"
-                            class="nav-link text-wheat"
                             th:href="@{/}"
+                            class="nav-link text-wheat"
                             th:classappend="${#strings.equals(page, 'index')} ? text-secondary"
                             >Главная</a
                         >
@@ -66,9 +66,9 @@
                             <a
                                 aria-expanded="false"
                                 href="#"
+                                id="topics"
                                 class="nav-link text-wheat d-block"
                                 data-bs-toggle="dropdown"
-                                id="topics"
                                 th:classappend="${#strings.equals(page, 'topics')} ? text-secondary"
                                 >Темы</a
                             >
@@ -77,7 +77,7 @@
                                 aria-labelledby="topics"
                                 class="dropdown-menu text-small"
                             >
-                                <!-- Динамический и статический просмотр -->
+                                <!-- Статический и динамический просмотр -->
                                 <li th:each="each, status : ${headerSections}">
                                     <a
                                         href="#"

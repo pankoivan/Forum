@@ -22,7 +22,7 @@
     </head>
 
     <body
-        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-center"
     >
         <!-- Контейнер для фрагмента -->
         <div class="container">
@@ -39,10 +39,10 @@
                 >
                     <!-- Кнопки редактирования и удаления -->
                     <div
-                        th:replace="~{fragments/edit-delete-buttons :: edit-delete (
-                                        editFormUrl = '/sections/inner/edit/__${section.id}__',
-                                        deleteFormUrl = '/sections/inner/delete/__${section.id}__'
-                                    )
+                        th:replace="~{fragments/edit-delete-buttons :: edit-delete-buttons (
+                                editUrl = '/sections/edit/__${section.id}__',
+                                deleteUrl = '/sections/delete/__${section.id}__'
+                            )
                         }"
                         class="d-flex flex-row align-items-center justify-content-between"
                     >
@@ -96,9 +96,9 @@
                                 <div class="me-1">
                                     <img
                                         alt="Пользователь"
-                                        class="rounded-circle"
                                         src="../../static/img/природа.png"
                                         th:src="@{/img/природа.png}"
+                                        class="rounded-circle"
                                         width="42"
                                     />
                                 </div>

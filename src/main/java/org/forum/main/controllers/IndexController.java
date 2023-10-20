@@ -33,12 +33,11 @@ public class IndexController extends ConvenientController {
                                   Authentication authentication) {
 
         addForHeader(model, authentication, sectionService);
-
         add(model, "page", "index");
         add(model, "topUsers", service.topUsers());
         add(model, "recentMessages", service.recentMessages());
-        add(model, "isEditDeleteButtonsEnabled", false);
-        add(model, "isLikeDislikeButtonsEnabled", true);
+        add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
+        add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
         currentPage(model, request.getRequestURI());
         statistics(model);
 

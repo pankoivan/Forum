@@ -43,9 +43,9 @@ public class MessagesController extends ConvenientController {
     }
 
     @GetMapping
-    public String redirectMessagesPageWithPagination() {
+    public String redirectMessagesPageWithPagination(HttpServletRequest request) {
         return "redirect:%s/%s1"
-                .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE);
+                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
@@ -73,8 +73,8 @@ public class MessagesController extends ConvenientController {
         add(model, "topicName", topicService.findById(topicId).getName());
         add(model, "message", service.empty());
         add(model, "formSubmitButtonText", "Отправить сообщение");
-        add(model, "isEditDeleteButtonsEnabled", true);
-        add(model, "isLikeDislikeButtonsEnabled", true);
+        add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
+        add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
         currentPage(model, request.getRequestURI());
         pagination(model, service.pagesCount(messages), pageNumber);
         sorting(model, sortingOption);
@@ -82,7 +82,7 @@ public class MessagesController extends ConvenientController {
         return "messages";
     }
 
-    @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/inner/save")
+    @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/save")
     public String redirectMessagesPageAfterSaving(HttpServletRequest request,
                                                   Model model,
                                                   Authentication authentication,
@@ -113,8 +113,8 @@ public class MessagesController extends ConvenientController {
             add(model, "topicName", topicService.findById(topicId).getName());
             add(model, "message", message);
             add(model, "formSubmitButtonText", isNew ? "Отправить сообщение" : "Сохранить изменения");
-            add(model, "isEditDeleteButtonsEnabled", true);
-            add(model, "isLikeDislikeButtonsEnabled", true);
+            add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
+            add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
             currentPage(model, request.getRequestURI());
             pagination(model, service.pagesCount(messages), pageNumber);
             sorting(model, sortingOption);
@@ -137,7 +137,7 @@ public class MessagesController extends ConvenientController {
 
     }
 
-    @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/inner/edit/{id}")
+    @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/edit/{id}")
     public String returnMessagesPageForEditing(HttpServletRequest request,
                                                Model model,
                                                Authentication authentication,
@@ -164,8 +164,8 @@ public class MessagesController extends ConvenientController {
         add(model, "topicName", topicService.findById(topicId).getName());
         add(model, "message", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить изменения");
-        add(model, "isEditDeleteButtonsEnabled", true);
-        add(model, "isLikeDislikeButtonsEnabled", true);
+        add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
+        add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
         currentPage(model, request.getRequestURI());
         pagination(model, service.pagesCount(messages), pageNumber);
         sorting(model, sortingOption);
@@ -173,7 +173,7 @@ public class MessagesController extends ConvenientController {
         return "messages";
     }
 
-    @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/inner/delete/{id}")
+    @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/delete/{id}")
     public String redirectMessagesPageAfterDeleting(HttpServletRequest request,
                                                     Model model,
                                                     Authentication authentication,
@@ -204,8 +204,8 @@ public class MessagesController extends ConvenientController {
             add(model, "messages", service.onPage(messages, pageNumber));
             add(model, "message", service.empty());
             add(model, "formSubmitButtonText", "Отправить сообщение");
-            add(model, "isEditDeleteButtonsEnabled", true);
-            add(model, "isLikeDislikeButtonsEnabled", true);
+            add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
+            add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
             currentPage(model, request.getRequestURI());
             pagination(model, service.pagesCount(messages), pageNumber);
             sorting(model, sortingOption);

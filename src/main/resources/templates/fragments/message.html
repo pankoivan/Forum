@@ -22,7 +22,7 @@
     </head>
 
     <body
-        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-center"
     >
         <!-- Контейнер для фрагмента -->
         <div class="container">
@@ -49,9 +49,9 @@
                     <div class="mb-1">
                         <img
                             alt="Пользователь"
-                            class="rounded-circle"
                             src="../../static/img/природа.png"
                             th:src="@{/img/природа.png}"
+                            class="rounded-circle"
                             width="72"
                         />
                     </div>
@@ -62,7 +62,7 @@
                     >
                         <p class="mb-1">Забанен до</p>
                         <span
-                            th:text="${message.userWhoPosted.currentBan.endDate}"
+                            th:text="${message.userWhoPosted.currentBan.formattedEndDate}"
                             >09.11.2025</span
                         >
                     </div>
@@ -81,15 +81,12 @@
                                 >18.07.2021 в 15:34:48</span
                             >
                         </div>
-                        <!-- Кнопка лайка, опция "кому понравилось", кнопка дизлайка, опция "кому не понравилось" -->
+                        <!-- Кнопка лайка, dropdown-опция "кому понравилось", кнопка дизлайка, dropdown-опция "кому не понравилось" -->
                         <div
                             class="d-flex flex-row align-items-center justify-content-center mx-2 my-1"
                         >
                             <!-- Кнопка лайка -->
-                            <div
-                                th:if="${currentUser != null AND #authorization.expression('hasAuthority(''LIKE'')')}"
-                                class="m-1"
-                            >
+                            <div class="m-1">
                                 <form
                                     action="#"
                                     th:action="@{/users/actions/like/to__${message.id}__}"
@@ -98,13 +95,23 @@
                                     <input
                                         type="hidden"
                                         name="isCancellation"
-                                        th:value="${message.containsLikedUserById(currentUser.id)} ? true : false"
+                                        th:value="${currentUser != null AND message.containsLikedUserById(currentUser.id)} ? true : false"
+                                    />
+                                    <input
+                                        name="sourcePageUrlWithPage"
+                                        th:value="${sourcePageUrlWithPage}"
+                                        type="hidden"
                                     />
                                     <button
                                         type="submit"
                                         class="btn btn-sm btn-success"
                                         th:text="${message.likesCount}"
-                                        th:classappend="${currentUser.id == message.userWhoPosted.id AND !isLikeDislikeButtonsEnabled} ? 'disabled'"
+                                        th:classappend="${
+                                                            currentUser == null
+                                                            OR currentUser.id == message.userWhoPosted.id
+                                                            OR !#authorization.expression('hasAuthority(''LIKE'')')
+                                                            OR !isLikeDislikeButtonsEnabled
+                                        } ? 'disabled'"
                                     >
                                         2
                                     </button>
@@ -114,11 +121,11 @@
                             <div class="m-1">
                                 <!-- "Кому понравилось" -->
                                 <a
+                                    href="#"
+                                    id="whoLiked"
                                     aria-expanded="false"
                                     class="d-block text-decoration-none text-white fs-12"
                                     data-bs-toggle="dropdown"
-                                    href="#"
-                                    id="whoLiked"
                                     >Кому</a
                                 >
                                 <!-- Dropdown-список -->
@@ -126,20 +133,20 @@
                                     aria-labelledby="whoLiked"
                                     class="dropdown-menu text-small"
                                 >
-                                    <!-- Динамический и статический просмотр -->
+                                    <!-- Статический и динамический просмотр -->
                                     <li
                                         th:each="each, status : ${message.likedUsers}"
                                     >
                                         <a
-                                            class="dropdown-item"
                                             href="#"
                                             th:href="@{/users/__${each.id}__}"
+                                            class="dropdown-item"
                                             th:text="${each.nickname}"
                                             >SomeNICkn4me1</a
                                         >
                                         <hr
-                                            class="dropdown-divider"
                                             th:if="${!status.last}"
+                                            class="dropdown-divider"
                                         />
                                     </li>
                                     <!-- Статический просмотр -->
@@ -157,25 +164,32 @@
                                 </ul>
                             </div>
                             <!-- Кнопка дизлайка -->
-                            <div
-                                th:if="${currentUser != null AND #authorization.expression('hasAuthority(''DISLIKE'')')}"
-                                class="m-1"
-                            >
+                            <div class="m-1">
                                 <form
                                     action="#"
                                     th:action="@{/users/actions/dislike/to__${message.id}__}"
                                     method="post"
                                 >
                                     <input
+                                        th:value="${currentUser != null AND message.containsDislikedUserById(currentUser.id)} ? true : false"
                                         name="isCancellation"
-                                        th:value="${message.containsDislikedUserById(currentUser.id)} ? true : false"
                                         type="hidden"
+                                    />
+                                    <input
+                                        type="hidden"
+                                        name="sourcePageUrlWithPage"
+                                        th:value="${sourcePageUrlWithPage}"
                                     />
                                     <button
                                         type="submit"
                                         class="btn btn-sm btn-danger"
                                         th:text="${message.dislikesCount}"
-                                        th:classappend="${currentUser.id == message.userWhoPosted.id AND !isLikeDislikeButtonsEnabled} ? 'disabled'"
+                                        th:classappend="${
+                                                            currentUser == null
+                                                            OR currentUser.id == message.userWhoPosted.id
+                                                            OR !#authorization.expression('hasAuthority(''LIKE'')')
+                                                            OR !isLikeDislikeButtonsEnabled
+                                        } ? 'disabled'"
                                     >
                                         1
                                     </button>
@@ -185,11 +199,11 @@
                             <div class="m-1">
                                 <!-- "Кому не понравилось" -->
                                 <a
+                                    href="#"
+                                    id="whoDisliked"
                                     aria-expanded="false"
                                     class="d-block text-decoration-none text-white fs-12"
                                     data-bs-toggle="dropdown"
-                                    href="#"
-                                    id="whoDisliked"
                                     >Кому</a
                                 >
                                 <!-- Dropdown-список -->
@@ -197,20 +211,20 @@
                                     aria-labelledby="whoDisliked"
                                     class="dropdown-menu text-small"
                                 >
-                                    <!-- Динамический и статический просмотр -->
+                                    <!-- Статический и динамический просмотр -->
                                     <li
                                         th:each="each, status : ${message.dislikedUsers}"
                                     >
                                         <a
-                                            class="dropdown-item"
                                             href="#"
                                             th:href="@{/users/__${each.id}__}"
+                                            class="dropdown-item"
                                             th:text="${each.nickname}"
                                             >SomeNICkn4me1</a
                                         >
                                         <hr
-                                            class="dropdown-divider"
                                             th:if="${!status.last}"
+                                            class="dropdown-divider"
                                         />
                                     </li>
                                     <!-- Статический просмотр -->
@@ -231,23 +245,24 @@
                         <!-- Кнопки редактирования и удаления -->
                         <div
                             th:if="${
-                                        isEditDeleteButtonsEnabled AND currentUser != null
+                                        currentUser != null
                                         AND (
                                             currentUser.id == message.userWhoPosted.id
                                             AND #authorization.expression('hasAuthority(''WORK_WITH_OWN_MESSAGES'')')
                                             OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_MESSAGES'')')
                                         )
+                                        AND isEditDeleteButtonsEnabled
                             }"
                             class="d-flex flex-fill align-items-center justify-content-center mx-2 my-1"
                         >
                             <!-- Статический и динамический просмотр -->
                             <div
-                                th:replace="~{fragments/edit-delete-buttons :: edit-delete (
-                                                editFormUrl =
-                                                    '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/edit/__${message.id}__',
-                                                deleteFormUrl =
-                                                    '/sections/__${message.topic.section.id}__/topics/__${message.topic.id}__/messages/page__${currentPage}__/inner/delete/__${message.id}__'
-                                            )
+                                th:replace="~{fragments/edit-delete-buttons :: edit-delete-buttons (
+                                        editUrl =
+                                            '/sections/__${sectionId}__/topics/__${topicId}__/messages/page__${currentPage}__/edit/__${message.id}__',
+                                        deleteUrl =
+                                            '/sections/__${sectionId}__/topics/__${topicId}__/messages/page__${currentPage}__/delete/__${message.id}__'
+                                    )
                                 }"
                                 class="d-flex flex-row align-items-center justify-content-center"
                             >
@@ -284,8 +299,8 @@
                     </div>
                     <!-- Дата изменения -->
                     <div
-                        class="text-end fs-10 fst-italic"
                         th:if="${message.editingDate}"
+                        class="text-end fs-10 fst-italic"
                     >
                         <span
                             th:text="'Отредактировано: ' + ${message.formattedEditingDate}"

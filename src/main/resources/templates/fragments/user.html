@@ -11,13 +11,13 @@
         <title>Пользователь</title>
         <link
             href="../../static/css/bootstrap.min.css"
-            rel="stylesheet"
             th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
         />
         <link
             href="../../static/css/style.css"
-            rel="stylesheet"
             th:href="@{/css/style.css}"
+            rel="stylesheet"
         />
     </head>
 
@@ -28,8 +28,8 @@
         <div class="container">
             <!-- ---------------------------------------- Сам фрагмент: пользователь ---------------------------------------- -->
             <div
-                class="bg-dark text-white rounded d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-lg-between p-1"
                 th:fragment="user (user)"
+                class="bg-dark text-white rounded d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-lg-between p-1"
             >
                 <!-- Аватарка с именем -->
                 <div class="mx-4 my-2">
@@ -39,17 +39,17 @@
                         <div class="me-1">
                             <img
                                 alt="Пользователь"
-                                class="rounded-circle"
                                 src="../../static/img/природа.png"
                                 th:src="@{/img/природа.png}"
+                                class="rounded-circle"
                                 width="32"
                             />
                         </div>
                         <div class="my-auto">
                             <a
-                                class="text-white"
                                 href="#"
                                 th:href="@{/users/__${user.id}__}"
+                                class="text-white"
                                 th:text="${user.nickname}"
                                 >Имя пользователя</a
                             >
@@ -72,115 +72,125 @@
                 </div>
                 <!-- Кнопки присвоения/снятия модераторства, присвоения/снятия администраторства, бана и удаления -->
                 <div
-                    class="d-flex flex-row align-items-center justify-content-between mx-4 my-2"
                     th:if="${
                                 currentUser != null AND currentUser.id != user.id
                                 AND !user.hasRole('ROLE_OWNER')
                                 AND #authorization.expression('hasAnyAuthority(''BAN_AND_UNBAN'', ''DELETE_USERS'',
                                     ''ASSIGN_AND_REMOVE_MODERS'', ''ASSIGN_AND_REMOVE_ADMINS'')')
                     }"
+                    class="d-flex flex-row align-items-center justify-content-between mx-4 my-2"
                 >
                     <!-- Кнопка присвоения/снятия модераторства -->
                     <form
-                        action="#"
                         class="mx-1"
-                        method="post"
+                        action="#"
                         th:action="${user.hasRole('ROLE_MODER')} ? '/users/actions/assign-user/__${user.id}__'
                                                                  : '/users/actions/assign-moder/__${user.id}__'"
+                        method="post"
                         th:if="${!user.hasRole('ROLE_ADMIN') AND #authorization.expression('hasAuthority(''ASSIGN_AND_REMOVE_MODERS'')')}"
                     >
-                        <!--<input
-                            type="hidden"
-                            name="sourcePage"
-                            th:value="${#ctx.springRequestContext.requestUri}"
-                        />-->
                         <input
+                            type="hidden"
                             name="sourcePage"
                             th:value="${sourcePageUrlWithPage}"
+                        />
+                        <input
                             type="hidden"
+                            name="sourcePageUrlWithPage"
+                            th:value="${sourcePageUrlWithPage}"
                         />
                         <button
+                            type="submit"
                             class="btn btn-sm"
                             th:classappend="${user.hasRole('ROLE_MODER')} ? 'btn-danger' : 'btn-primary'"
-                            type="submit"
                         >
                             <img
                                 alt="Назначить модератором"
                                 class="mb-1"
                                 src="../../static/img/moder.png"
-                                th:alt="${user.hasRole('ROLE_MODER')} ? 'Снять модераторство' : 'Назначить модератором'"
                                 th:src="@{/img/moder.png}"
+                                th:alt="${user.hasRole('ROLE_MODER')} ? 'Снять модераторство' : 'Назначить модератором'"
                                 width="16"
                             />
                         </button>
                     </form>
                     <!-- Кнопка присвоения/снятия администраторства -->
                     <form
-                        action="#"
-                        class="mx-1"
-                        method="post"
                         sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_ADMINS')"
                         th:action="${user.hasRole('ROLE_ADMIN')} ? '/users/actions/assign-user/__${user.id}__'
                                                                  : '/users/actions/assign-admin/__${user.id}__'"
+                        action="#"
+                        class="mx-1"
+                        method="post"
                     >
                         <input
+                            type="hidden"
                             name="sourcePage"
                             th:value="${sourcePageUrlWithPage}"
+                        />
+                        <input
                             type="hidden"
+                            name="sourcePageUrlWithPage"
+                            th:value="${sourcePageUrlWithPage}"
                         />
                         <button
+                            type="submit"
                             class="btn btn-sm"
                             th:classappend="${user.hasRole('ROLE_ADMIN')} ? 'btn-danger' : 'btn-primary'"
-                            type="submit"
                         >
                             <img
                                 alt="Назначить администратором"
-                                class="mb-1"
-                                src="../../static/img/admin.png"
                                 th:alt="${user.hasRole('ROLE_ADMIN')} ? 'Снять администраторство' : 'Назначить администратором'"
+                                class="mb-1"
                                 th:src="@{/img/admin.png}"
+                                src="../../static/img/admin.png"
                                 width="16"
                             />
                         </button>
                     </form>
                     <!-- Кнопка бана/разбана -->
                     <form
-                        action="#"
-                        class="mx-1"
-                        method="post"
                         sec:authorize="hasAuthority('BAN_AND_UNBAN')"
+                        action="#"
                         th:action="${user.isActive()} ? '/users/actions/ban/__${user.id}__'
                                                       : '/users/actions/unban/__${user.id}__'"
+                        class="mx-1"
+                        method="post"
                     >
+                        <input
+                            name="sourcePageUrlWithPage"
+                            th:value="${sourcePageUrlWithPage}"
+                            type="hidden"
+                        />
                         <button
+                            type="submit"
                             class="btn btn-sm"
                             th:classappend="${user.isActive()} ? 'btn-danger' : 'btn-primary'"
-                            type="submit"
                         >
                             <img
                                 alt="Забанить"
-                                class="mb-1"
-                                src="../../static/img/ban.png"
                                 th:alt="${user.isActive()} ? 'Забанить' : 'Разбанить'"
+                                class="mb-1"
                                 th:src="@{/img/ban.png}"
+                                src="../../static/img/ban.png"
                                 width="16"
                             />
                         </button>
                     </form>
                     <!-- Кнопка удаления -->
                     <form
+                        sec:authorize="hasAuthority('DELETE_USERS')"
                         action="#"
+                        th:action="@{/users/actions/delete/__${user.id}__}"
                         class="mx-1"
                         method="post"
-                        sec:authorize="hasAuthority('DELETE_USERS')"
-                        th:action="@{/users/actions/delete/__${user.id}__}"
                     >
                         <button class="btn btn-sm btn-danger" type="submit">
                             <img
                                 alt="Удалить"
-                                class="mb-1"
                                 src="../../static/img/delete.png"
                                 th:src="@{/img/delete.png}"
+                                class="mb-1"
                                 width="16"
                             />
                         </button>

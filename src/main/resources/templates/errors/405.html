@@ -38,21 +38,23 @@
     </head>
 
     <body
-        class="min-vh-100 bg-lightgray d-flex flex-column align-items-center justify-content-center"
+        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-center"
     >
         <div class="container">
-            <div
-                class="col-12 col-md-8 col-lg-6 text-center text-white mx-auto"
-            >
-                <div class="bg-dark rounded px-3 py-2">
-                    <p class="fs-20 fw-bold">Ошибка 405!</p>
-                    <p>
-                        Ошибка с кодом 405 означает, что вы обратились по
-                        данному URL-адресу неподходящим HTTP-методом. Адрес
-                        существует, но обращение к нему таким HTTP-методом не
-                        предполагается
-                    </p>
-                    <p><a href="#" th:href="@{/}">На главную</a></p>
+            <div class="row">
+                <div
+                    class="col-12 col-md-8 col-lg-6 text-center text-white mx-auto"
+                >
+                    <div class="bg-dark rounded px-3 py-2">
+                        <p class="fs-20 fw-bold">Ошибка 405!</p>
+                        <p>
+                            Ошибка с кодом 405 означает, что вы обратились по
+                            данному URL-адресу неподходящим HTTP-методом. Адрес
+                            существует, но обращение к нему таким HTTP-методом
+                            не предполагается
+                        </p>
+                        <p><a href="#" th:href="@{/}">На главную</a></p>
+                    </div>
                 </div>
             </div>
         </div>

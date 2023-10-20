@@ -20,24 +20,24 @@
             rel="stylesheet"
         />
         <link
-            rel="apple-touch-icon"
-            sizes="180x180"
             href="../static/favicon/apple-touch-icon.png"
             th:href="@{/favicon/apple-touch-icon.png}"
+            rel="apple-touch-icon"
+            sizes="180x180"
         />
         <link
+            href="../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href="../static/favicon/favicon-32x32.png"
-            th:href="@{/favicon/favicon-32x32.png}"
         />
         <link
+            href="../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href="../static/favicon/favicon-16x16.png"
-            th:href="@{/favicon/favicon-16x16.png}"
         />
     </head>
 
@@ -64,7 +64,7 @@
                 <!-- Текущий раздел -->
                 <div class="text-center m-2">
                     <h2
-                        th:text="'Текущий раздел: ' + '&quot;' + ${sectionName} + '&quot;'"
+                        th:text="${sectionName != null} ? 'Текущий раздел: ' + '&quot;' + ${sectionName} + '&quot;' : 'Темы'"
                     >
                         Текущий раздел: "Главный"
                     </h2>

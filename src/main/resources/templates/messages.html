@@ -20,24 +20,24 @@
             rel="stylesheet"
         />
         <link
-            rel="apple-touch-icon"
-            sizes="180x180"
             href="../static/favicon/apple-touch-icon.png"
             th:href="@{/favicon/apple-touch-icon.png}"
+            rel="apple-touch-icon"
+            sizes="180x180"
         />
         <link
+            href="../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href="../static/favicon/favicon-32x32.png"
-            th:href="@{/favicon/favicon-32x32.png}"
         />
         <link
+            href="../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href="../static/favicon/favicon-16x16.png"
-            th:href="@{/favicon/favicon-16x16.png}"
         />
     </head>
 
@@ -64,9 +64,9 @@
                 <!-- Текущая тема -->
                 <div class="text-center m-2">
                     <h2
-                        th:text="'Текущая тема: ' + '&quot;' + ${topicName} + '&quot;'"
+                        th:text="${topicName != null} ? 'Текущая тема: ' + '&quot;' + ${topicName} + '&quot;' : 'Сообщения'"
                     >
-                        Текущая тема: "Главная"
+                        Текущая тема: "Обсуждение Java"
                     </h2>
                 </div>
                 <!-- Поиск -->
@@ -119,9 +119,9 @@
                     <!-- Аватарка -->
                     <div>
                         <img
+                            alt="Пользователь"
                             src="../static/img/природа.png"
                             th:src="@{/img/природа.png}"
-                            alt="Пользователь"
                             class="rounded-circle"
                             width="72"
                         />
@@ -130,7 +130,7 @@
                 <!-- Сама форма -->
                 <form
                     action="#"
-                    th:action="@{/sections/__${sectionId}__/topics/__${topicId}__/messages/page__${currentPage}__/inner/save}"
+                    th:action="@{/sections/__${sectionId}__/topics/__${topicId}__/messages/page__${currentPage}__/save}"
                     method="post"
                     class="text-center flex-fill px-2 mt-1"
                     th:object="${message}"
