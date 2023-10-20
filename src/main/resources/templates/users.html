@@ -79,7 +79,7 @@
                 <div th:each="each, status : ${users}">
                     <!-- Динамический просмотр -->
                     <div
-                        th:insert="~{fragments/user-header :: user-header (user = ${each})}"
+                        th:insert="~{fragments/user :: user (user = ${each})}"
                         th:classappend="${!status.last} ? mb-2"
                     ></div>
                     <!-- Статический просмотр -->

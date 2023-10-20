@@ -20,33 +20,27 @@
     <body
         class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
     >
-        <!-- ---------------------------------------- Статический заголовок ---------------------------------------- -->
-        <div
-            class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
-        >
-            <h3>Статический заголовок для просмотра в браузере</h3>
-        </div>
-
         <!-- Контейнер для фрагмента -->
         <div class="container">
-            <!-- Сам фрагмент: тема -->
+            <!-- ---------------------------------------- Сам фрагмент: тема ---------------------------------------- -->
             <div
-                class="bg-dark text-white rounded px-2 py-1"
                 th:fragment="topic (topic)"
+                class="bg-dark text-white rounded px-2 py-1"
             >
                 <!-- Верхняя панель темы -->
                 <div
                     class="border-bottom border-white pb-1"
-                    th:if="${currentUser != null
-                                AND (currentUser.id == topic.userWhoCreated.id
+                    th:if="${
+                                isEditDeleteButtonsEnabled AND currentUser != null
+                                AND (
+                                    currentUser.id == topic.userWhoCreated.id
                                     AND #authorization.expression('hasAuthority(''WORK_WITH_OWN_TOPICS'')')
                                     OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_TOPICS'')')
-                            )
+                                )
                     }"
                 >
                     <!-- Кнопки редактирования и удаления -->
                     <div
-                        class="d-flex flex-row align-items-center justify-content-between"
                         th:replace="~{fragments/edit-delete-buttons :: edit-delete (
                                         editFormUrl =
                                             '/sections/__${topic.section.id}__/topics/inner/edit/__${topic.id}__',
@@ -54,6 +48,7 @@
                                             '/sections/__${topic.section.id}__/topics/inner/delete/__${topic.id}__'
                                     )
                         }"
+                        class="d-flex flex-row align-items-center justify-content-between"
                     >
                         <!-- Статический просмотр -->
                         <div>
@@ -79,9 +74,9 @@
                         <!-- Заголовок -->
                         <h5 class="mb-1">
                             <a
-                                class="text-white link-offset-2"
                                 href="#"
                                 th:href="@{/sections/__${topic.section.id}__/topics/__${topic.id}__/messages}"
+                                class="text-white link-offset-2"
                                 th:text="${topic.name}"
                                 >Флуд</a
                             >
@@ -113,9 +108,9 @@
                                 </div>
                                 <div class="my-auto">
                                     <a
-                                        class="text-white"
                                         href="#"
                                         th:href="@{/users/__${topic.userWhoCreated.id}__}"
+                                        class="text-white"
                                         th:text="${topic.userWhoCreated.nickname}"
                                         >Имя пользователя</a
                                     >
@@ -165,13 +160,6 @@
                     >
                 </div>
             </div>
-        </div>
-
-        <!-- ---------------------------------------- Статический футер ---------------------------------------- -->
-        <div
-            class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5"
-        >
-            <h3>Статический футер для просмотра в браузере</h3>
         </div>
     </body>
 </html>

@@ -22,10 +22,10 @@
     >
         <!-- Контейнер для фрагмента -->
         <div class="d-flex align-items-center justify-content-center">
-            <!-- ---------------------------------------- Сам фрагмент: кнопки редактирования и удаления ---------------------------------------- -->
+            <!-- ---------------------------------------- Сам фрагмент: кнопка редактирования и кнопка удаления ---------------------------------------- -->
             <div
-                class="d-flex flex-row align-items-center justify-content-between"
                 th:fragment="edit-delete (editFormUrl, deleteFormUrl)"
+                class="d-flex flex-row align-items-center justify-content-between"
             >
                 <!-- Кнопка редактирования -->
                 <form action="#" method="post" th:action="${editFormUrl}">

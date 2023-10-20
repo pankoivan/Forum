@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Service
-public class MessageImpl extends DefaultPaginationImpl<Message> implements MessageService {
+public class MessageServiceImpl extends DefaultPaginationImpl<Message> implements MessageService {
 
     private final MessageRepository repository;
 
     @Autowired
-    public MessageImpl(MessageRepository repository) {
+    public MessageServiceImpl(MessageRepository repository) {
         this.repository = repository;
     }
 

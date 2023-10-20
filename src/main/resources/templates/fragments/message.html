@@ -24,19 +24,12 @@
     <body
         class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
     >
-        <!-- ---------------------------------------- Статический заголовок ---------------------------------------- -->
-        <div
-            class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
-        >
-            <h3>Статический заголовок для просмотра в браузере</h3>
-        </div>
-
         <!-- Контейнер для фрагмента -->
         <div class="container">
             <!-- ---------------------------------------- Сам фрагмент: сообщение ---------------------------------------- -->
             <div
-                class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2"
                 th:fragment="message (message)"
+                class="bg-dark text-white fs-14 rounded d-flex flex-row justify-content-between p-2"
             >
                 <!-- Имя пользователя, аватарка и информация и бане -->
                 <div
@@ -45,9 +38,9 @@
                     <!-- Имя пользователя -->
                     <div class="border-bottom border-white pb-1 mb-2">
                         <a
-                            class="text-white text-decoration-none"
                             href="#"
                             th:href="@{/users/__${message.userWhoPosted.id}__}"
+                            class="text-white text-decoration-none"
                             th:text="${message.userWhoPosted.nickname}"
                             >Имя пользователя</a
                         >
@@ -64,8 +57,8 @@
                     </div>
                     <!-- Информация о бане -->
                     <div
-                        class="text-red fs-14 fst-italic"
                         th:if="${message.userWhoPosted.currentBan}"
+                        class="text-red fs-14 fst-italic"
                     >
                         <p class="mb-1">Забанен до</p>
                         <span
@@ -94,36 +87,24 @@
                         >
                             <!-- Кнопка лайка -->
                             <div
+                                th:if="${currentUser != null AND #authorization.expression('hasAuthority(''LIKE'')')}"
                                 class="m-1"
-                                th:if="${currentUser != null
-                                            AND #authorization.expression('hasAuthority(''LIKE'')')
-                                }"
                             >
                                 <form
                                     action="#"
-                                    th:action="@{/users/activities/like/by__${currentUser.id}__}"
+                                    th:action="@{/users/actions/like/to__${message.id}__}"
                                     method="post"
                                 >
                                     <input
                                         type="hidden"
-                                        name="messageId"
-                                        th:value="${message.id}"
-                                    />
-                                    <input
                                         name="isCancellation"
                                         th:value="${message.containsLikedUserById(currentUser.id)} ? true : false"
-                                        type="hidden"
-                                    />
-                                    <input
-                                        type="hidden"
-                                        name="sourcePage"
-                                        th:value="${#ctx.springRequestContext.requestUri}"
                                     />
                                     <button
                                         type="submit"
                                         class="btn btn-sm btn-success"
                                         th:text="${message.likesCount}"
-                                        th:classappend="${currentUser.id == message.userWhoPosted.id} ? 'disabled'"
+                                        th:classappend="${currentUser.id == message.userWhoPosted.id AND !isLikeDislikeButtonsEnabled} ? 'disabled'"
                                     >
                                         2
                                     </button>
@@ -177,36 +158,24 @@
                             </div>
                             <!-- Кнопка дизлайка -->
                             <div
+                                th:if="${currentUser != null AND #authorization.expression('hasAuthority(''DISLIKE'')')}"
                                 class="m-1"
-                                th:if="${currentUser != null
-                                            AND #authorization.expression('hasAuthority(''DISLIKE'')')
-                                }"
                             >
                                 <form
                                     action="#"
-                                    th:action="@{/users/activities/dislike/by__${currentUser.id}__}"
+                                    th:action="@{/users/actions/dislike/to__${message.id}__}"
                                     method="post"
                                 >
-                                    <input
-                                        type="hidden"
-                                        name="messageId"
-                                        th:value="${message.id}"
-                                    />
                                     <input
                                         name="isCancellation"
                                         th:value="${message.containsDislikedUserById(currentUser.id)} ? true : false"
                                         type="hidden"
                                     />
-                                    <input
-                                        type="hidden"
-                                        name="sourcePage"
-                                        th:value="${#ctx.springRequestContext.requestUri}"
-                                    />
                                     <button
                                         type="submit"
                                         class="btn btn-sm btn-danger"
                                         th:text="${message.dislikesCount}"
-                                        th:classappend="${currentUser.id == message.userWhoPosted.id} ? 'disabled'"
+                                        th:classappend="${currentUser.id == message.userWhoPosted.id AND !isLikeDislikeButtonsEnabled} ? 'disabled'"
                                     >
                                         1
                                     </button>
@@ -261,8 +230,10 @@
                         </div>
                         <!-- Кнопки редактирования и удаления -->
                         <div
-                            th:if="${currentUser != null
-                                        AND (currentUser.id == message.userWhoPosted.id
+                            th:if="${
+                                        isEditDeleteButtonsEnabled AND currentUser != null
+                                        AND (
+                                            currentUser.id == message.userWhoPosted.id
                                             AND #authorization.expression('hasAuthority(''WORK_WITH_OWN_MESSAGES'')')
                                             OR #authorization.expression('hasAuthority(''WORK_WITH_OTHER_MESSAGES'')')
                                         )
@@ -324,17 +295,5 @@
                 </div>
             </div>
         </div>
-
-        <!-- ---------------------------------------- Статический футер ---------------------------------------- -->
-        <div
-            class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5"
-        >
-            <h3>Статический футер для просмотра в браузере</h3>
-        </div>
-
-        <script
-            src="../../static/js/bootstrap.bundle.min.js"
-            th:src="@{/js/bootstrap.bundle.min.js}"
-        ></script>
     </body>
 </html>

@@ -4,6 +4,7 @@ import org.forum.auxiliary.constants.sorting.DefaultSortingOptionConstants;
 import org.forum.auxiliary.constants.pagination.PaginationConstants;
 import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
+import org.forum.main.entities.Message;
 import org.forum.main.entities.Section;
 import org.forum.main.entities.Topic;
 import org.forum.auxiliary.exceptions.ServiceException;
@@ -24,12 +25,12 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 @Service
-public class TopicImpl extends DefaultPaginationImpl<Topic> implements TopicService {
+public class TopicServiceImpl extends DefaultPaginationImpl<Topic> implements TopicService {
 
     private final TopicRepository repository;
 
     @Autowired
-    public TopicImpl(TopicRepository repository) {
+    public TopicServiceImpl(TopicRepository repository) {
         this.repository = repository;
     }
 
@@ -138,12 +139,27 @@ public class TopicImpl extends DefaultPaginationImpl<Topic> implements TopicServ
         return mySwitch(option,
                 () -> repository.findAllBySectionId(sectionId, Sort.by(option.getDirection(), "name")),
                 () -> repository.findAllBySectionId(sectionId, Sort.by(option.getDirection(), "creationDate")),
-                () -> repository.findAllBySectionIdOrderByMessagesCountWithDirection(sectionId, option.getDirection().name()));
+                () -> repository.findAllBySectionIdOrderByMessagesCountWithDirection(sectionId, option.getDirection().name())
+        );
     }
 
     @Override
     public List<Topic> findAllBySectionIdSorted(Integer sectionId) {
         return findAllBySectionIdSorted(sectionId, DefaultSortingOptionConstants.FOR_TOPICS);
+    }
+
+    @Override
+    public List<Topic> findAllByUserIdSorted(Integer userId, TopicSortingOption option) {
+        return mySwitch(option,
+                () -> filterByUserId(repository.findAll(Sort.by(option.getDirection(), "name")), userId),
+                () -> filterByUserId(repository.findAll(Sort.by(option.getDirection(), "creationDate")), userId),
+                () -> filterByUserId(repository.findAllByOrderByMessagesCountWithDirection(option.getDirection().name()), userId)
+        );
+    }
+
+    @Override
+    public List<Topic> findAllByUserIdSorted(Integer userId) {
+        return findAllByUserIdSorted(userId, DefaultSortingOptionConstants.FOR_TOPICS);
     }
 
     @SafeVarargs
@@ -163,6 +179,12 @@ public class TopicImpl extends DefaultPaginationImpl<Topic> implements TopicServ
     private boolean savingValidationByDescription(Topic topic) {
         Optional<Topic> foundSection = repository.findByDescription(topic.getName());
         return foundSection.isPresent() && !foundSection.get().getId().equals(topic.getId());
+    }
+
+    private List<Topic> filterByUserId(List<Topic> topics, Integer userId) {
+        return topics.stream()
+                .filter(topic -> topic.getUserWhoCreated().getId().equals(userId))
+                .toList();
     }
 
 }

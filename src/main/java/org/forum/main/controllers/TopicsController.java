@@ -64,6 +64,7 @@ public class TopicsController extends ConvenientController {
         add(model, "topics", service.onPage(topics, pageNumber));
         add(model, "sectionId", sectionId);
         add(model, "sectionName", sectionService.findById(sectionId).getName());
+        add(model, "isEditDeleteButtonsEnabled", true);
         currentPage(model, request.getRequestURI());
         pagination(model, service.pagesCount(topics), pageNumber);
         sorting(model, sortingOption);
@@ -152,6 +153,7 @@ public class TopicsController extends ConvenientController {
             add(model, "topics", service.onPage(topics, 1));
             add(model, "sectionId", sectionId);
             add(model, "sectionName", sectionService.findById(sectionId).getName());
+            add(model, "isEditDeleteButtonsEnabled", true);
             currentPage(model, request.getRequestURI());
             pagination(model, service.pagesCount(topics), 1);
             sorting(model, sortingOption);
@@ -191,7 +193,7 @@ public class TopicsController extends ConvenientController {
                 SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION);
 
         add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
-                ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + addStartSlash(UrlPartConstants.TOPICS));
+                concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER, UrlPartConstants.TOPICS));
     }
 
     private List<Topic> sorted(TopicSortingOption sortingOption, Integer sectionId) {

@@ -37,6 +37,8 @@ public class IndexController extends ConvenientController {
         add(model, "page", "index");
         add(model, "topUsers", service.topUsers());
         add(model, "recentMessages", service.recentMessages());
+        add(model, "isEditDeleteButtonsEnabled", false);
+        add(model, "isLikeDislikeButtonsEnabled", true);
         currentPage(model, request.getRequestURI());
         statistics(model);
 

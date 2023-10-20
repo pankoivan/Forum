@@ -73,6 +73,8 @@ public class MessagesController extends ConvenientController {
         add(model, "topicName", topicService.findById(topicId).getName());
         add(model, "message", service.empty());
         add(model, "formSubmitButtonText", "Отправить сообщение");
+        add(model, "isEditDeleteButtonsEnabled", true);
+        add(model, "isLikeDislikeButtonsEnabled", true);
         currentPage(model, request.getRequestURI());
         pagination(model, service.pagesCount(messages), pageNumber);
         sorting(model, sortingOption);
@@ -111,6 +113,8 @@ public class MessagesController extends ConvenientController {
             add(model, "topicName", topicService.findById(topicId).getName());
             add(model, "message", message);
             add(model, "formSubmitButtonText", isNew ? "Отправить сообщение" : "Сохранить изменения");
+            add(model, "isEditDeleteButtonsEnabled", true);
+            add(model, "isLikeDislikeButtonsEnabled", true);
             currentPage(model, request.getRequestURI());
             pagination(model, service.pagesCount(messages), pageNumber);
             sorting(model, sortingOption);
@@ -160,6 +164,8 @@ public class MessagesController extends ConvenientController {
         add(model, "topicName", topicService.findById(topicId).getName());
         add(model, "message", service.findById(id));
         add(model, "formSubmitButtonText", "Сохранить изменения");
+        add(model, "isEditDeleteButtonsEnabled", true);
+        add(model, "isLikeDislikeButtonsEnabled", true);
         currentPage(model, request.getRequestURI());
         pagination(model, service.pagesCount(messages), pageNumber);
         sorting(model, sortingOption);
@@ -198,6 +204,8 @@ public class MessagesController extends ConvenientController {
             add(model, "messages", service.onPage(messages, pageNumber));
             add(model, "message", service.empty());
             add(model, "formSubmitButtonText", "Отправить сообщение");
+            add(model, "isEditDeleteButtonsEnabled", true);
+            add(model, "isLikeDislikeButtonsEnabled", true);
             currentPage(model, request.getRequestURI());
             pagination(model, service.pagesCount(messages), pageNumber);
             sorting(model, sortingOption);
@@ -246,7 +254,7 @@ public class MessagesController extends ConvenientController {
                 SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION);
 
         add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
-                ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + addStartSlash(UrlPartConstants.MESSAGES));
+                concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER, UrlPartConstants.MESSAGES));
     }
 
     private List<Message> sorted(MessageSortingOption sortingOption, Integer topicId) {

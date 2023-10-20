@@ -24,33 +24,27 @@
     <body
         class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
     >
-        <!-- ---------------------------------------- Статический заголовок ---------------------------------------- -->
-        <div
-            class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
-        >
-            <h3>Статический заголовок для просмотра в браузере</h3>
-        </div>
-
         <!-- Контейнер для фрагмента -->
         <div class="container">
             <!-- ---------------------------------------- Сам фрагмент: раздел ---------------------------------------- -->
             <div
-                class="bg-dark text-white rounded px-2 py-1"
                 th:fragment="section (section)"
+                class="bg-dark text-white rounded px-2 py-1"
             >
                 <!-- Верхняя панель раздела -->
                 <div
-                    class="border-bottom border-white pb-1"
                     sec:authorize="hasAuthority('WORK_WITH_SECTIONS')"
+                    th:if="${isEditDeleteButtonsEnabled}"
+                    class="border-bottom border-white pb-1"
                 >
                     <!-- Кнопки редактирования и удаления -->
                     <div
-                        class="d-flex flex-row align-items-center justify-content-between"
                         th:replace="~{fragments/edit-delete-buttons :: edit-delete (
                                         editFormUrl = '/sections/inner/edit/__${section.id}__',
                                         deleteFormUrl = '/sections/inner/delete/__${section.id}__'
                                     )
                         }"
+                        class="d-flex flex-row align-items-center justify-content-between"
                     >
                         <!-- Статический просмотр -->
                         <div>
@@ -76,9 +70,9 @@
                         <!-- Заголовок -->
                         <h5 class="mb-1">
                             <a
-                                class="text-white link-offset-2"
                                 href="#"
                                 th:href="@{/sections/__${section.id}__/topics}"
+                                class="text-white link-offset-2"
                                 th:text="${section.name}"
                                 >Главный</a
                             >
@@ -110,9 +104,9 @@
                                 </div>
                                 <div class="my-auto">
                                     <a
-                                        class="text-white"
                                         href="#"
                                         th:href="@{/users/__${section.userWhoCreated.id}__}"
+                                        class="text-white"
                                         th:text="${section.userWhoCreated.nickname}"
                                         >Имя пользователя</a
                                     >
@@ -135,14 +129,14 @@
                         </div>
                         <!-- Недавнее сообщение -->
                         <div
-                            class="text-center mx-5 my-1"
                             th:if="${section.recentMessage}"
+                            class="text-center mx-5 my-1"
                         >
                             <p class="mb-1">
                                 <a
-                                    class="text-white"
                                     href="#"
                                     th:href="@{/sections/__${section.id}__/topics/__${section.recentMessage.topic.id}__/messages}"
+                                    class="text-white"
                                     >Недавнее сообщение</a
                                 >
                             </p>
@@ -163,13 +157,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- ---------------------------------------- Статический футер ---------------------------------------- -->
-        <div
-            class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5"
-        >
-            <h3>Статический футер для просмотра в браузере</h3>
         </div>
     </body>
 </html>

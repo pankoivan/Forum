@@ -22,4 +22,8 @@ public interface TopicService extends GeneralService<Topic, Integer>, Validation
 
     List<Topic> findAllBySectionIdSorted(Integer sectionId);
 
+    List<Topic> findAllByUserIdSorted(Integer userId, TopicSortingOption sortingOption);
+
+    List<Topic> findAllByUserIdSorted(Integer userId);
+
 }

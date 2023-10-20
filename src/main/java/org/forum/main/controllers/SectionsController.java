@@ -56,6 +56,7 @@ public class SectionsController extends ConvenientController {
         addForHeader(model, authentication, service);
         add(model, "page", "sections");
         add(model, "sections", service.onPage(sections, pageNumber));
+        add(model, "isEditDeleteButtonsEnabled", true);
         currentPage(model, request.getRequestURI());
         pagination(model, service.pagesCount(sections), pageNumber);
         sorting(model, sortingOption);
@@ -128,6 +129,7 @@ public class SectionsController extends ConvenientController {
             addForHeader(model, authentication, service);
             add(model, "page", "sections");
             add(model, "sections", service.onPage(sections, 1));
+            add(model, "isEditDeleteButtonsEnabled", true);
             currentPage(model, request.getRequestURI());
             pagination(model, service.pagesCount(sections), 1);
             sorting(model, sortingOption);
@@ -167,7 +169,7 @@ public class SectionsController extends ConvenientController {
                 SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION);
 
         add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
-                ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + addStartSlash(UrlPartConstants.SECTIONS));
+                concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER, UrlPartConstants.SECTIONS));
     }
 
     private List<Section> sorted(SectionSortingOption sortingOption) {

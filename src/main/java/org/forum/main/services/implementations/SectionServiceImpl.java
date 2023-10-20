@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SectionImpl extends DefaultPaginationImpl<Section> implements SectionService {
+public class SectionServiceImpl extends DefaultPaginationImpl<Section> implements SectionService {
 
     private final SectionRepository repository;
 
     @Autowired
-    public SectionImpl(SectionRepository repository) {
+    public SectionServiceImpl(SectionRepository repository) {
         this.repository = repository;
     }
 

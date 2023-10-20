@@ -19,12 +19,12 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Service
-public class UserImpl extends DefaultPaginationImpl<User> implements UserService {
+public class UserServiceImpl extends DefaultPaginationImpl<User> implements UserService {
 
     private final UserRepository repository;
 
     @Autowired
-    public UserImpl(UserRepository repository) {
+    public UserServiceImpl(UserRepository repository) {
         this.repository = repository;
     }
 

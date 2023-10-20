@@ -1,5 +1,6 @@
 package org.forum.main.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.pagination.PaginationAttributeNameConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
@@ -71,7 +72,8 @@ public class UsersController extends ConvenientController {
             "/{userUrlRole}/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN,
             "/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN
     })
-    public String returnUsersPage(Model model,
+    public String returnUsersPage(HttpServletRequest request,
+                                  Model model,
                                   Authentication authentication,
                                   @SessionAttribute(value = SortingOptionNameConstants.FOR_USERS_SORTING_OPTION,
                                           required = false)
@@ -86,6 +88,7 @@ public class UsersController extends ConvenientController {
         addForHeader(model, authentication, sectionService);
         add(model, "page", userUrlRole.orElse("users"));
         add(model, "users", service.onPage(users, pageNumber));
+        currentPage(model, request.getRequestURI());
         pagination(model, service.pagesCount(users), pageNumber);
         sorting(model, sortingOption);
 
@@ -100,6 +103,8 @@ public class UsersController extends ConvenientController {
         Integer userId = toNonNegativeInteger(id);
         addForHeader(model, authentication, sectionService);
         add(model, "userForProfile", service.findById(userId));
+        add(model, "isEditDeleteButtonsEnabled", false);
+        add(model, "isLikeDislikeButtonsEnabled", true);
 
         return "profile";
     }
@@ -129,7 +134,7 @@ public class UsersController extends ConvenientController {
                 SortingOptionNameConstants.FOR_USERS_SORTING_OPTION);
 
         add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
-                ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER + addStartSlash(UrlPartConstants.USERS));
+                concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER, UrlPartConstants.USERS));
     }
 
     private String mySwitch(String userUrlRoleName) {
