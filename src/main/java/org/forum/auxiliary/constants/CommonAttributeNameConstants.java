@@ -13,4 +13,6 @@ public final class CommonAttributeNameConstants {
 
     public static final String IS_LIKE_DISLIKE_BUTTONS_ENABLED = "isLikeDislikeButtonsEnabled";
 
+    public static final String SEARCHED_TEXT = "searchedText";
+
 }

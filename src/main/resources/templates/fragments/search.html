@@ -34,15 +34,15 @@
                     >
                         <input
                             type="hidden"
-                            name="searchingSourcePageUrl"
-                            th:value="${sourcePageUrlWithoutPagination}"
+                            name="sourcePageUrlWithoutPage"
+                            th:value="${sourcePageUrlWithoutPage}"
                         />
                         <!-- Искомый текст -->
                         <div class="mx-2">
                             <input
                                 type="search"
-                                class="form-control"
                                 name="searchedText"
+                                class="form-control"
                                 placeholder="Поиск..."
                             />
                         </div>

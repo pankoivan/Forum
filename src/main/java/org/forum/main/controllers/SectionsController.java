@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -35,7 +36,9 @@ public class SectionsController extends ConvenientController {
     }
 
     @GetMapping
-    public String redirectSectionsPageWithPagination(HttpServletRequest request) {
+    public String redirectSectionsPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addAllAttributes(request.getParameterMap());
         return "redirect:%s/%s1"
                 .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
@@ -47,20 +50,25 @@ public class SectionsController extends ConvenientController {
                                      @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION,
                                              required = false)
                                          SectionSortingOption sortingOption,
+                                     @RequestParam(value = CommonAttributeNameConstants.SEARCHED_TEXT, required = false)
+                                         String searchedText,
                                      @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Section> sections = sorted(sortingOption);
+        List<Section> sections = sorted(sortingOption, searchedText);
 
         addForHeader(model, authentication, service);
         add(model, "isForUserContributions", false);
         add(model, "page", "sections");
         add(model, "sections", service.onPage(sections, pageNumber));
+        add(model, "searchingSubmitUrl", ControllerBaseUrlConstants.FOR_SEARCHING_CONTROLLER);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
         currentPage(model, request.getRequestURI());
         pagination(model, service.pagesCount(sections), pageNumber);
         sorting(model, sortingOption);
+
+        System.out.println("From controller:" + searchedText);
 
         return "sections";
     }
@@ -118,6 +126,8 @@ public class SectionsController extends ConvenientController {
                                                     @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION,
                                                             required = false)
                                                         SectionSortingOption sortingOption,
+                                                    @RequestParam(value = CommonAttributeNameConstants.SEARCHED_TEXT, required = false)
+                                                        String searchedText,
                                                     @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
@@ -125,12 +135,13 @@ public class SectionsController extends ConvenientController {
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
 
-            List<Section> sections = sorted(sortingOption);
+            List<Section> sections = sorted(sortingOption, searchedText);
 
             addForHeader(model, authentication, service);
             add(model, "isForUserContributions", false);
             add(model, "page", "sections");
             add(model, "sections", service.onPage(sections, 1));
+            add(model, "searchingSubmitUrl", ControllerBaseUrlConstants.FOR_SEARCHING_CONTROLLER);
             add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
             currentPage(model, request.getRequestURI());
             pagination(model, service.pagesCount(sections), 1);
@@ -174,10 +185,12 @@ public class SectionsController extends ConvenientController {
                 concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER, UrlPartConstants.SECTIONS));
     }
 
-    private List<Section> sorted(SectionSortingOption sortingOption) {
+    private List<Section> sorted(SectionSortingOption sortingOption, String searchedText) {
+        searchedText = searchedText == null ? "" : searchedText;
+        System.out.println("From sorted: " + searchedText);
         return sortingOption != null
-                ? service.findAllSorted(sortingOption)
-                : service.findAllSorted();
+                ? service.search(service.findAllSorted(sortingOption), searchedText)
+                : service.search(service.findAllSorted(), searchedText);
     }
 
 }

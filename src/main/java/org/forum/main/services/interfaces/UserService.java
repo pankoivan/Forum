@@ -3,16 +3,13 @@ package org.forum.main.services.interfaces;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.main.entities.Role;
 import org.forum.main.entities.User;
-import org.forum.main.services.interfaces.common.GeneralService;
-import org.forum.main.services.interfaces.common.PaginationService;
-import org.forum.main.services.interfaces.common.SortingService;
-import org.forum.main.services.interfaces.common.ValidationService;
+import org.forum.main.services.interfaces.common.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface UserService extends GeneralService<User, Integer>, ValidationService<User>,
-        PaginationService<User>, SortingService<User, UserSortingOption> {
+        PaginationService<User>, SortingService<User, UserSortingOption>, SearchingService<User> {
 
     void save(User user, MultipartFile file);
 

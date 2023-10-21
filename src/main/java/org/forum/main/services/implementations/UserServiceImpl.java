@@ -3,6 +3,8 @@ package org.forum.main.services.implementations;
 import org.forum.auxiliary.constants.sorting.DefaultSortingOptionConstants;
 import org.forum.auxiliary.constants.pagination.PaginationConstants;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
+import org.forum.auxiliary.utils.SearchingUtils;
+import org.forum.main.entities.Message;
 import org.forum.main.entities.Role;
 import org.forum.main.entities.User;
 import org.forum.auxiliary.exceptions.ServiceException;
@@ -60,11 +62,6 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
     }
 
     @Override
-    public UserSortingOption emptySortingOption() {
-        return new UserSortingOption();
-    }
-
-    @Override
     public boolean savingValidation(User user, BindingResult bindingResult) {
         return false;
     }
@@ -82,6 +79,11 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
     @Override
     public int pagesCount(List<User> users) {
         return pagesCountImpl(users, PaginationConstants.FOR_USERS);
+    }
+
+    @Override
+    public UserSortingOption emptySortingOption() {
+        return new UserSortingOption();
     }
 
     @Override
@@ -121,6 +123,13 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
     public void changeRole(User user, Role role) {
         user.setRole(role);
         repository.save(user);
+    }
+
+    @Override
+    public List<User> search(List<User> users, String searchedString) {
+        return users.stream()
+                .filter(user -> SearchingUtils.search(user.getNickname(), searchedString))
+                .toList();
     }
 
     @SafeVarargs

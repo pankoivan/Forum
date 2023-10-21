@@ -3,16 +3,13 @@ package org.forum.main.services.interfaces;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
 import org.forum.main.entities.Section;
 import org.forum.main.entities.Topic;
-import org.forum.main.services.interfaces.common.GeneralService;
-import org.forum.main.services.interfaces.common.PaginationService;
-import org.forum.main.services.interfaces.common.SortingService;
-import org.forum.main.services.interfaces.common.ValidationService;
+import org.forum.main.services.interfaces.common.*;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
 public interface SectionService extends GeneralService<Section, Integer>, ValidationService<Section>,
-        PaginationService<Section>, SortingService<Section, SectionSortingOption> {
+        PaginationService<Section>, SortingService<Section, SectionSortingOption>, SearchingService<Section> {
 
     void save(Section section, Authentication authentication);
 

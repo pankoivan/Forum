@@ -5,6 +5,7 @@ import org.forum.auxiliary.constants.pagination.PaginationConstants;
 import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
+import org.forum.auxiliary.utils.SearchingUtils;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.Section;
 import org.forum.auxiliary.exceptions.ServiceException;
@@ -144,6 +145,13 @@ public class SectionServiceImpl extends DefaultPaginationImpl<Section> implement
     @Override
     public List<Section> findAllByUserIdSorted(Integer userId) {
         return findAllByUserIdSorted(userId, DefaultSortingOptionConstants.FOR_SECTIONS);
+    }
+
+    @Override
+    public List<Section> search(List<Section> sections, String searchedString) {
+        return sections.stream()
+                .filter(section -> SearchingUtils.search(section.getName(), searchedString))
+                .toList();
     }
 
     @SafeVarargs
