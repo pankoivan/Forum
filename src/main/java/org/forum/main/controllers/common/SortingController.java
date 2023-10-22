@@ -1,5 +1,6 @@
 package org.forum.main.controllers.common;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
@@ -11,6 +12,7 @@ import org.forum.auxiliary.sorting.options.TopicSortingOption;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER)
@@ -18,12 +20,15 @@ public class SortingController {
 
     @PostMapping("/" + UrlPartConstants.USERS)
     public String redirectSourcePageAfterSortingUsers(HttpSession session,
+                                                      HttpServletRequest request,
+                                                      RedirectAttributes redirectAttributes,
                                                       UserSortingOption sortingOption,
                                                       @RequestParam(SortingAttributeNameConstants.SORTING_OPTION_NAME)
                                                           String sortingOptionName,
                                                       @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE)
                                                           String sortingSourcePageUrl) {
 
+        redirectAttributes.addAllAttributes(request.getParameterMap());
         session.setAttribute(sortingOptionName, sortingOption);
         return "redirect:%s"
                 .formatted(sortingSourcePageUrl);
@@ -31,12 +36,15 @@ public class SortingController {
 
     @PostMapping("/" + UrlPartConstants.SECTIONS)
     public String redirectSourcePageAfterSortingSections(HttpSession session,
+                                                         HttpServletRequest request,
+                                                         RedirectAttributes redirectAttributes,
                                                          SectionSortingOption sortingOption,
                                                          @RequestParam(SortingAttributeNameConstants.SORTING_OPTION_NAME)
                                                              String sortingOptionName,
                                                          @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE)
                                                              String sortingSourcePageUrl) {
 
+        redirectAttributes.addAllAttributes(request.getParameterMap());
         session.setAttribute(sortingOptionName, sortingOption);
         return "redirect:%s"
                 .formatted(sortingSourcePageUrl);
@@ -45,11 +53,14 @@ public class SortingController {
     @PostMapping("/" + UrlPartConstants.TOPICS)
     public String redirectSourcePageAfterSortingTopics(HttpSession session,
                                                        TopicSortingOption sortingOption,
+                                                       HttpServletRequest request,
+                                                       RedirectAttributes redirectAttributes,
                                                        @RequestParam(SortingAttributeNameConstants.SORTING_OPTION_NAME)
                                                            String sortingOptionName,
                                                        @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE)
                                                            String sortingSourcePageUrl) {
 
+        redirectAttributes.addAllAttributes(request.getParameterMap());
         session.setAttribute(sortingOptionName, sortingOption);
         return "redirect:%s"
                 .formatted(sortingSourcePageUrl);
@@ -58,11 +69,14 @@ public class SortingController {
     @PostMapping("/" + UrlPartConstants.MESSAGES)
     public String redirectSourcePageAfterSortingMessages(HttpSession session,
                                                          MessageSortingOption sortingOption,
+                                                         HttpServletRequest request,
+                                                         RedirectAttributes redirectAttributes,
                                                          @RequestParam(SortingAttributeNameConstants.SORTING_OPTION_NAME)
                                                              String sortingOptionName,
                                                          @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE)
                                                              String sortingSourcePageUrl) {
 
+        redirectAttributes.addAllAttributes(request.getParameterMap());
         session.setAttribute(sortingOptionName, sortingOption);
         return "redirect:%s"
                 .formatted(sortingSourcePageUrl);

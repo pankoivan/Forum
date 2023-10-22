@@ -10,6 +10,7 @@ import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
+import org.forum.auxiliary.utils.UrlUtils;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Section;
 import org.forum.main.services.interfaces.SectionService;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER)
@@ -50,7 +52,7 @@ public class SectionsController extends ConvenientController {
                                      @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION,
                                              required = false)
                                          SectionSortingOption sortingOption,
-                                     @RequestParam(value = CommonAttributeNameConstants.SEARCHED_TEXT, required = false)
+                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
                                          String searchedText,
                                      @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
@@ -59,12 +61,11 @@ public class SectionsController extends ConvenientController {
         List<Section> sections = sorted(sortingOption, searchedText);
 
         addForHeader(model, authentication, service);
-        add(model, "isForUserContributions", false);
         add(model, "page", "sections");
         add(model, "sections", service.onPage(sections, pageNumber));
-        add(model, "searchingSubmitUrl", ControllerBaseUrlConstants.FOR_SEARCHING_CONTROLLER);
+        add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, false);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
-        currentPage(model, request.getRequestURI());
+        currentPage(model, request.getRequestURI(), request.getParameterMap());
         pagination(model, service.pagesCount(sections), pageNumber);
         sorting(model, sortingOption);
 
@@ -126,7 +127,7 @@ public class SectionsController extends ConvenientController {
                                                     @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION,
                                                             required = false)
                                                         SectionSortingOption sortingOption,
-                                                    @RequestParam(value = CommonAttributeNameConstants.SEARCHED_TEXT, required = false)
+                                                    @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
                                                         String searchedText,
                                                     @PathVariable("id") String pathId) {
 
@@ -138,12 +139,11 @@ public class SectionsController extends ConvenientController {
             List<Section> sections = sorted(sortingOption, searchedText);
 
             addForHeader(model, authentication, service);
-            add(model, "isForUserContributions", false);
             add(model, "page", "sections");
             add(model, "sections", service.onPage(sections, 1));
-            add(model, "searchingSubmitUrl", ControllerBaseUrlConstants.FOR_SEARCHING_CONTROLLER);
+            add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, false);
             add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
-            currentPage(model, request.getRequestURI());
+            currentPage(model, request.getRequestURI(), request.getParameterMap());
             pagination(model, service.pagesCount(sections), 1);
             sorting(model, sortingOption);
             add(model, "error", msg);
@@ -157,9 +157,10 @@ public class SectionsController extends ConvenientController {
                 .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
     }
 
-    private void currentPage(Model model, String currentUrl) {
+    private void currentPage(Model model, String currentUrl, Map<String, String[]> parameterMap) {
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(currentUrl));
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, UrlUtils.makeParametersString(parameterMap));
     }
 
     private void pagination(Model model, Integer pagesCount, Integer currentPage) {
@@ -187,7 +188,6 @@ public class SectionsController extends ConvenientController {
 
     private List<Section> sorted(SectionSortingOption sortingOption, String searchedText) {
         searchedText = searchedText == null ? "" : searchedText;
-        System.out.println("From sorted: " + searchedText);
         return sortingOption != null
                 ? service.search(service.findAllSorted(sortingOption), searchedText)
                 : service.search(service.findAllSorted(), searchedText);

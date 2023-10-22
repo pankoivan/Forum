@@ -27,7 +27,7 @@
                 <li class="page-item">
                     <a
                         href="#"
-                        th:href="${sourcePageUrlWithoutPage} + '/page' + ${currentPage != 1 ? currentPage - 1 : currentPage}"
+                        th:href="${sourcePageUrlWithoutPage} + '/page' + ${currentPage != 1 ? currentPage - 1 : currentPage} + ${requestParameters}"
                         class="page-link"
                         >Назад</a
                     >
@@ -40,7 +40,7 @@
                 >
                     <a
                         href="#"
-                        th:href="${sourcePageUrlWithoutPage} + '/page' + ${i}"
+                        th:href="${sourcePageUrlWithoutPage} + '/page' + ${i} + ${requestParameters}"
                         class="page-link"
                         th:text="${i}"
                         >1</a
@@ -57,7 +57,7 @@
                 <li class="page-item">
                     <a
                         href="#"
-                        th:href="${sourcePageUrlWithoutPage} + '/page' + ${currentPage != pagesCount ? currentPage + 1 : currentPage}"
+                        th:href="${sourcePageUrlWithoutPage} + '/page' + ${currentPage != pagesCount ? currentPage + 1 : currentPage}  + ${requestParameters}"
                         class="page-link"
                         >Вперёд</a
                     >
