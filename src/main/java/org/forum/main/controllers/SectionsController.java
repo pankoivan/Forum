@@ -1,6 +1,7 @@
 package org.forum.main.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.pagination.PaginationAttributeNameConstants;
@@ -39,133 +40,124 @@ public class SectionsController extends ConvenientController {
 
     @GetMapping
     public String redirectSectionsPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
-
         redirectAttributes.addAllAttributes(request.getParameterMap());
-        return "redirect:%s/%s1"
-                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
-    public String returnSectionsPage(HttpServletRequest request,
+    public String returnSectionsPage(HttpSession session,
+                                     HttpServletRequest request,
                                      Model model,
                                      Authentication authentication,
                                      @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION,
                                              required = false)
                                          SectionSortingOption sortingOption,
+                                     @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
                                      @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
                                          String searchedText,
                                      @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Section> sections = sorted(sortingOption, searchedText);
+        List<Section> sections = searchedAndSorted(sortingOption, searchedText);
 
         addForHeader(model, authentication, service);
         add(model, "page", "sections");
         add(model, "sections", service.onPage(sections, pageNumber));
         add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, false);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
-        currentPage(model, request.getRequestURI(), request.getParameterMap());
-        pagination(model, service.pagesCount(sections), pageNumber);
+        currentPage(model, request.getRequestURI());
+        pagination(model, service.pagesCount(sections), pageNumber, request.getParameterMap());
         sorting(model, sortingOption);
 
-        System.out.println("From controller:" + searchedText);
+        if (errorMessage != null) {
+            add(model, "error", errorMessage);
+            session.removeAttribute("errorMessage");
+        }
 
         return "sections";
     }
 
     @GetMapping("/create")
-    public String returnSectionFormPageForCreating(Model model, Authentication authentication) {
+    public String returnSectionFormPageForCreating(HttpSession session,
+                                                   Model model,
+                                                   Authentication authentication,
+                                                   @SessionAttribute(value = "object", required = false) Section object,
+                                                   @SessionAttribute(value = "formSubmitButtonText", required = false)
+                                                       String formSubmitButtonText,
+                                                   @SessionAttribute(value = "errorMessage", required = false)
+                                                       String errorMessage) {
 
         addForHeader(model, authentication, service);
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать раздел");
 
+        if (object != null) {
+            add(model, "object", object);
+            add(model, "formSubmitButtonText", formSubmitButtonText);
+            if (errorMessage != null) {
+                add(model, "error", errorMessage);
+            }
+            session.removeAttribute("object");
+            session.removeAttribute("formSubmitButtonText");
+            session.removeAttribute("errorMessage");
+        }
+
         return "section-form";
     }
 
     @PostMapping("/save")
-    public String redirectSectionsPageAfterSaving(Model model,
+    public String redirectSectionsPageAfterSaving(HttpSession session,
                                                   Authentication authentication,
                                                   @Valid Section section,
                                                   BindingResult bindingResult) {
 
         if (service.savingValidation(section, bindingResult)) {
-
-            addForHeader(model, authentication, service);
-            add(model, "object", section);
-            add(model, "formSubmitButtonText", service.isNew(section) ? "Создать раздел" : "Сохранить");
-            add(model, "error", service.anyError(bindingResult));
-
-            return "section-form";
+            session.setAttribute("object", section);
+            session.setAttribute("formSubmitButtonText", service.isNew(section) ? "Создать раздел" : "Сохранить");
+            session.setAttribute("errorMessage", service.anyError(bindingResult));
+            return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER, "create");
         }
 
         service.save(section, authentication);
-
-        return "redirect:%s"
-                .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
+        return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
     }
 
     @PostMapping("/edit/{id}")
-    public String returnSectionFormPageForEditing(Model model,
-                                                  Authentication authentication,
-                                                  @PathVariable("id") String pathId) {
+    public String returnSectionFormPageForEditing(HttpSession session, @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
 
-        addForHeader(model, authentication, service);
-        add(model, "object", service.findById(id));
-        add(model, "formSubmitButtonText", "Сохранить");
+        session.setAttribute("object", service.findById(id));
+        session.setAttribute("formSubmitButtonText", "Сохранить");
 
-        return "section-form";
+        return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER, "create");
     }
 
     @PostMapping("/delete/{id}")
-    public String redirectSectionsPageAfterDeleting(HttpServletRequest request,
-                                                    Model model,
-                                                    Authentication authentication,
-                                                    @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION,
-                                                            required = false)
-                                                        SectionSortingOption sortingOption,
-                                                    @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
-                                                        String searchedText,
-                                                    @PathVariable("id") String pathId) {
+    public String redirectSectionsPageAfterDeleting(HttpSession session, @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
-
-            List<Section> sections = sorted(sortingOption, searchedText);
-
-            addForHeader(model, authentication, service);
-            add(model, "page", "sections");
-            add(model, "sections", service.onPage(sections, 1));
-            add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, false);
-            add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
-            currentPage(model, request.getRequestURI(), request.getParameterMap());
-            pagination(model, service.pagesCount(sections), 1);
-            sorting(model, sortingOption);
-            add(model, "error", msg);
-
-            return "sections";
+            session.setAttribute("errorMessage", msg);
+            return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
         }
 
         service.deleteById(id);
-
-        return "redirect:%s"
-                .formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
+        return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
     }
 
-    private void currentPage(Model model, String currentUrl, Map<String, String[]> parameterMap) {
+    private void currentPage(Model model, String currentUrl) {
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(currentUrl));
-        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, UrlUtils.makeParametersString(parameterMap));
     }
 
-    private void pagination(Model model, Integer pagesCount, Integer currentPage) {
+    private void pagination(Model model, Integer pagesCount, Integer currentPage, Map<String, String[]> parameterMap) {
         add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
         add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, UrlUtils.makeParametersString(parameterMap));
     }
 
     private void sorting(Model model, SectionSortingOption sortingOption) {
@@ -186,11 +178,16 @@ public class SectionsController extends ConvenientController {
                 concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER, UrlPartConstants.SECTIONS));
     }
 
-    private List<Section> sorted(SectionSortingOption sortingOption, String searchedText) {
-        searchedText = searchedText == null ? "" : searchedText;
+    private List<Section> sorted(SectionSortingOption sortingOption) {
         return sortingOption != null
-                ? service.search(service.findAllSorted(sortingOption), searchedText)
-                : service.search(service.findAllSorted(), searchedText);
+                ? service.findAllSorted(sortingOption)
+                : service.findAllSorted();
+    }
+
+    private List<Section> searchedAndSorted(SectionSortingOption sortingOption, String searchedText) {
+        return searchedText != null && !searchedText.isEmpty()
+                ? service.search(sorted(sortingOption), searchedText)
+                : sorted(sortingOption);
     }
 
 }

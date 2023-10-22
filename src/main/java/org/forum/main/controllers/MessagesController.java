@@ -1,6 +1,7 @@
 package org.forum.main.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.pagination.PaginationAttributeNameConstants;
@@ -10,6 +11,7 @@ import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
+import org.forum.auxiliary.utils.UrlUtils;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Message;
 import org.forum.main.services.interfaces.MessageService;
@@ -22,8 +24,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER)
@@ -43,18 +47,27 @@ public class MessagesController extends ConvenientController {
     }
 
     @GetMapping
-    public String redirectMessagesPageWithPagination(HttpServletRequest request) {
-        return "redirect:%s/%s1"
-                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
+    public String redirectMessagesPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAllAttributes(request.getParameterMap());
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
-    public String returnMessagesPage(HttpServletRequest request,
+    public String returnMessagesPage(HttpSession session,
+                                     HttpServletRequest request,
                                      Model model,
                                      Authentication authentication,
-                                     @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION,
-                                             required = false)
+                                     @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION, required = false)
                                          MessageSortingOption sortingOption,
+                                     @SessionAttribute(value = "message", required = false) Message message,
+                                     @SessionAttribute(value = "formSubmitButtonText", required = false)
+                                         String formSubmitButtonText,
+                                     @SessionAttribute(value = "formErrorMessage", required = false)
+                                         String formErrorMessage,
+                                     @SessionAttribute(value = "errorMessage", required = false)
+                                         String errorMessage,
+                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                         String searchedText,
                                      @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
                                      @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId,
                                      @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
@@ -63,68 +76,63 @@ public class MessagesController extends ConvenientController {
         Integer topicId = toNonNegativeInteger(pathTopicId);
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Message> messages = sorted(sortingOption, topicId);
+        List<Message> messages = searchedAndSorted(sortingOption, searchedText, topicId);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "isForUserContributions", false);
         add(model, "messages", service.onPage(messages, pageNumber));
         add(model, "sectionId", sectionId);
         add(model, "topicId", topicId);
         add(model, "topicName", topicService.findById(topicId).getName());
         add(model, "message", service.empty());
         add(model, "formSubmitButtonText", "Отправить сообщение");
+        add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, false);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
         add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
         currentPage(model, request.getRequestURI());
-        pagination(model, service.pagesCount(messages), pageNumber);
+        pagination(model, service.pagesCount(messages), pageNumber, request.getParameterMap());
         sorting(model, sortingOption);
+
+        if (message != null) {
+            add(model, "message", message);
+            session.removeAttribute("message");
+        }
+
+        if (formErrorMessage != null) {
+            add(model, "message", message);
+            add(model, "formSubmitButtonText", formSubmitButtonText);
+            add(model, "formError", formErrorMessage);
+            session.removeAttribute("message");
+            session.removeAttribute("formSubmitButtonText");
+            session.removeAttribute("formErrorMessage");
+        }
+
+        if (errorMessage != null) {
+            add(model, "error", errorMessage);
+            session.removeAttribute("errorMessage");
+        }
 
         return "messages";
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/save")
-    public String redirectMessagesPageAfterSaving(HttpServletRequest request,
-                                                  Model model,
+    public String redirectMessagesPageAfterSaving(HttpSession session,
                                                   Authentication authentication,
                                                   @Valid Message message,
                                                   BindingResult bindingResult,
-                                                  @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION,
-                                                          required = false)
-                                                      MessageSortingOption sortingOption,
-                                                  @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
-                                                  @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId,
-                                                  @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
+                                                  @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId) {
 
-        Integer sectionId = toNonNegativeInteger(pathSectionId);
         Integer topicId = toNonNegativeInteger(pathTopicId);
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         boolean isNew = service.isNew(message);
 
         if (service.savingValidation(message, bindingResult)) {
-
-            List<Message> messages = sorted(sortingOption, topicId);
-
-            addForHeader(model, authentication, sectionService);
-            add(model, "isForUserContributions", false);
-            add(model, "messages", service.onPage(messages, pageNumber));
-            add(model, "sectionId", sectionId);
-            add(model, "topicId", topicId);
-            add(model, "topicName", topicService.findById(topicId).getName());
-            add(model, "message", message);
-            add(model, "formSubmitButtonText", isNew ? "Отправить сообщение" : "Сохранить изменения");
-            add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
-            add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
-            currentPage(model, request.getRequestURI());
-            pagination(model, service.pagesCount(messages), pageNumber);
-            sorting(model, sortingOption);
-            add(model, "formError", service.anyError(bindingResult));
-
-            return "messages";
+            session.setAttribute("message", message);
+            session.setAttribute("formSubmitButtonText", isNew ? "Отправить сообщение" : "Сохранить изменения");
+            session.setAttribute("formErrorMessage", service.anyError(bindingResult));
+            return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
         }
 
         service.save(message, authentication, topicService.findById(topicId));
-
         return isNew
                 ? "redirect:%s/%s%s"
                     .formatted(
@@ -138,86 +146,38 @@ public class MessagesController extends ConvenientController {
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/edit/{id}")
-    public String returnMessagesPageForEditing(HttpServletRequest request,
-                                               Model model,
-                                               Authentication authentication,
-                                               @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION,
-                                                       required = false)
-                                                   MessageSortingOption sortingOption,
-                                               @PathVariable("id") String pathId,
-                                               @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
-                                               @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId,
-                                               @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
+    public String returnMessagesPageForEditing(HttpSession session, @PathVariable("id") String pathId) {
 
         Long id = toNonNegativeLong(pathId);
-        Integer sectionId = toNonNegativeInteger(pathSectionId);
-        Integer topicId = toNonNegativeInteger(pathTopicId);
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Message> messages = sorted(sortingOption, topicId);
+        session.setAttribute("message", service.findById(id));
+        session.setAttribute("formSubmitButtonText", "Сохранить изменения");
 
-        addForHeader(model, authentication, sectionService);
-        add(model, "isForUserContributions", false);
-        add(model, "messages", service.onPage(messages, pageNumber));
-        add(model, "sectionId", sectionId);
-        add(model, "topicId", topicId);
-        add(model, "topicName", topicService.findById(topicId).getName());
-        add(model, "message", service.findById(id));
-        add(model, "formSubmitButtonText", "Сохранить изменения");
-        add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
-        add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
-        currentPage(model, request.getRequestURI());
-        pagination(model, service.pagesCount(messages), pageNumber);
-        sorting(model, sortingOption);
-
-        return "messages";
+        return "redirect:%s/%s"
+                .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/delete/{id}")
-    public String redirectMessagesPageAfterDeleting(HttpServletRequest request,
-                                                    Model model,
-                                                    Authentication authentication,
-                                                    @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION,
-                                                            required = false)
-                                                        MessageSortingOption sortingOption,
+    public String redirectMessagesPageAfterDeleting(HttpSession session,
                                                     @PathVariable("id") String pathId,
-                                                    @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
                                                     @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId,
                                                     @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
         Long id = toNonNegativeLong(pathId);
-        Integer sectionId = toNonNegativeInteger(pathSectionId);
-        Integer topicId = toNonNegativeInteger(pathTopicId);
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
-
-        List<Message> messages = sorted(sortingOption, topicId);
-        int pagesCount = service.pagesCount(messages);
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
-
-            addForHeader(model, authentication, sectionService);
-            add(model, "isForUserContributions", false);
-            add(model, "sectionId", sectionId);
-            add(model, "topicId", topicId);
-            add(model, "topicName", topicService.findById(topicId).getName());
-            add(model, "messages", service.onPage(messages, pageNumber));
-            add(model, "message", service.empty());
-            add(model, "formSubmitButtonText", "Отправить сообщение");
-            add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
-            add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
-            currentPage(model, request.getRequestURI());
-            pagination(model, service.pagesCount(messages), pageNumber);
-            sorting(model, sortingOption);
-            add(model, "error", msg);
-
-            return "messages";
+            session.setAttribute("errorMessage", msg);
+            return "redirect:%s/%s"
+                    .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
         }
 
+        Integer topicId = toNonNegativeInteger(pathTopicId);
+        Integer pagesCount = service.pagesCount(service.findAllByTopicId(topicId));
+        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
+
         service.deleteById(id);
-
         int newPagesCount = service.pagesCount(service.findAllByTopicId(topicId));
-
         return pageNumber.equals(pagesCount) && newPagesCount < pagesCount
                 ? "redirect:%s/%s%s"
                     .formatted(
@@ -234,9 +194,10 @@ public class MessagesController extends ConvenientController {
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(currentUrl));
     }
 
-    private void pagination(Model model, Integer pagesCount, Integer currentPage) {
+    private void pagination(Model model, Integer pagesCount, Integer currentPage, Map<String, String[]> parameterMap) {
         add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
         add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, UrlUtils.makeParametersString(parameterMap));
     }
 
     private void sorting(Model model, MessageSortingOption sortingOption) {
@@ -261,6 +222,12 @@ public class MessagesController extends ConvenientController {
         return sortingOption != null
                 ? service.findAllByTopicIdSorted(topicId, sortingOption)
                 : service.findAllByTopicIdSorted(topicId);
+    }
+
+    private List<Message> searchedAndSorted(MessageSortingOption sortingOption, String searchedText, Integer topicId) {
+        return searchedText != null && !searchedText.isEmpty()
+                ? service.search(sorted(sortingOption, topicId), searchedText)
+                : sorted(sortingOption, topicId);
     }
 
 }
