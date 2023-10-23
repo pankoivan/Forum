@@ -10,6 +10,7 @@ import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.exceptions.ControllerException;
 import org.forum.auxiliary.sorting.enums.UserSortingProperties;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
+import org.forum.auxiliary.utils.UrlUtils;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.User;
 import org.forum.main.services.interfaces.SectionService;
@@ -20,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,27 +47,27 @@ public class UsersController extends ConvenientController {
     }
 
     @GetMapping
-    public String redirectUsersPageWithPagination() {
-        return "redirect:%s/%s1"
-                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER, UrlPartConstants.PAGE);
+    public String redirectUsersPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAllAttributes(request.getParameterMap());
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + USUAL)
-    public String redirectUsualUsersPageWithPagination() {
-        return "redirect:%s/%s/%s1"
-                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER, USUAL, UrlPartConstants.PAGE);
+    public String redirectUsualUsersPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAllAttributes(request.getParameterMap());
+        return "redirect:%s/%s/%s1".formatted(request.getRequestURI(), USUAL, UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + MODERS)
-    public String redirectModersPageWithPagination() {
-        return "redirect:%s/%s/%s1"
-                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER, MODERS, UrlPartConstants.PAGE);
+    public String redirectModersPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAllAttributes(request.getParameterMap());
+        return "redirect:%s/%s/%s1".formatted(request.getRequestURI(), MODERS, UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + ADMINS)
-    public String redirectAdminsPageWithPagination() {
-        return "redirect:%s/%s/%s1"
-                .formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER, ADMINS, UrlPartConstants.PAGE);
+    public String redirectAdminsPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAllAttributes(request.getParameterMap());
+        return "redirect:%s/%s/%s1".formatted(request.getRequestURI(), ADMINS, UrlPartConstants.PAGE);
     }
 
     @GetMapping({
@@ -75,22 +77,30 @@ public class UsersController extends ConvenientController {
     public String returnUsersPage(HttpServletRequest request,
                                   Model model,
                                   Authentication authentication,
-                                  @SessionAttribute(value = SortingOptionNameConstants.FOR_USERS_SORTING_OPTION,
-                                          required = false)
+                                  @SessionAttribute(value = SortingOptionNameConstants.FOR_USERS_SORTING_OPTION, required = false)
                                       UserSortingOption sortingOption,
+                                  @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                   @PathVariable("userUrlRole") Optional<String> userUrlRole,
                                   @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<User> users = sorted(sortingOption, userUrlRole);
+        List<User> users = searchedAndSorted(sortingOption, searchedText, userUrlRole);
 
         addForHeader(model, authentication, sectionService);
         add(model, "page", userUrlRole.orElse("users"));
         add(model, "users", service.onPage(users, pageNumber));
-        currentPage(model, request.getRequestURI());
-        pagination(model, service.pagesCount(users), pageNumber);
-        sorting(model, sortingOption);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, request.getRequestURI());
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(request.getRequestURI()));
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, UrlUtils.makeParametersString(request.getParameterMap()));
+        add(model, PaginationAttributeNameConstants.PAGES_COUNT, service.pagesCount(users));
+        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, pageNumber);
+        add(model, SortingAttributeNameConstants.SORTING_OBJECT, sortingOption == null ? service.emptySortingOption() : sortingOption);
+        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES, UserSortingProperties.values());
+        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS, Sort.Direction.values());
+        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME, SortingOptionNameConstants.FOR_USERS_SORTING_OPTION);
+        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL, concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER,
+                UrlPartConstants.USERS));
 
         return "users";
     }
@@ -101,40 +111,13 @@ public class UsersController extends ConvenientController {
                                     @PathVariable("id") String id) {
 
         Integer userId = toNonNegativeInteger(id);
+
         addForHeader(model, authentication, sectionService);
         add(model, "userForProfile", service.findById(userId));
-        add(model, "isEditDeleteButtonsEnabled", false);
-        add(model, "isLikeDislikeButtonsEnabled", true);
+        add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
+        add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
 
         return "profile";
-    }
-
-    private void currentPage(Model model, String currentUrl) {
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(currentUrl));
-    }
-
-    private void pagination(Model model, Integer pagesCount, Integer currentPage) {
-        add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
-        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
-    }
-
-    private void sorting(Model model, UserSortingOption sortingOption) {
-
-        add(model, SortingAttributeNameConstants.SORTING_OBJECT,
-                sortingOption == null ? service.emptySortingOption() : sortingOption);
-
-        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES,
-                UserSortingProperties.values());
-
-        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS,
-                Sort.Direction.values());
-
-        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME,
-                SortingOptionNameConstants.FOR_USERS_SORTING_OPTION);
-
-        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
-                concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER, UrlPartConstants.USERS));
     }
 
     private String mySwitch(String userUrlRoleName) {
@@ -162,6 +145,12 @@ public class UsersController extends ConvenientController {
         return userUrlRole.isPresent()
                 ? service.findAllByRoleNameSorted(mySwitch(userUrlRole.get()))
                 : service.findAllSorted();
+    }
+
+    private List<User> searchedAndSorted(UserSortingOption sortingOption, String searchedText, Optional<String> userUrlRole) {
+        return searchedText != null && !searchedText.isEmpty()
+                ? service.search(sorted(sortingOption, userUrlRole), searchedText)
+                : sorted(sortingOption, userUrlRole);
     }
 
 }

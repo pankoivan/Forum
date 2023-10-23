@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER)
@@ -49,8 +48,7 @@ public class SectionsController extends ConvenientController {
                                      HttpServletRequest request,
                                      Model model,
                                      Authentication authentication,
-                                     @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION,
-                                             required = false)
+                                     @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION, required = false)
                                          SectionSortingOption sortingOption,
                                      @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
                                      @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
@@ -66,9 +64,17 @@ public class SectionsController extends ConvenientController {
         add(model, "sections", service.onPage(sections, pageNumber));
         add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, false);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
-        currentPage(model, request.getRequestURI());
-        pagination(model, service.pagesCount(sections), pageNumber, request.getParameterMap());
-        sorting(model, sortingOption);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, request.getRequestURI());
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(request.getRequestURI()));
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, UrlUtils.makeParametersString(request.getParameterMap()));
+        add(model, PaginationAttributeNameConstants.PAGES_COUNT, service.pagesCount(sections));
+        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, pageNumber);
+        add(model, SortingAttributeNameConstants.SORTING_OBJECT, sortingOption == null ? service.emptySortingOption() : sortingOption);
+        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES, SectionSortingProperties.values());
+        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS, Sort.Direction.values());
+        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME, SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION);
+        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL, concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER,
+                UrlPartConstants.SECTIONS));
 
         if (errorMessage != null) {
             add(model, "error", errorMessage);
@@ -147,35 +153,6 @@ public class SectionsController extends ConvenientController {
 
         service.deleteById(id);
         return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
-    }
-
-    private void currentPage(Model model, String currentUrl) {
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(currentUrl));
-    }
-
-    private void pagination(Model model, Integer pagesCount, Integer currentPage, Map<String, String[]> parameterMap) {
-        add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
-        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
-        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, UrlUtils.makeParametersString(parameterMap));
-    }
-
-    private void sorting(Model model, SectionSortingOption sortingOption) {
-
-        add(model, SortingAttributeNameConstants.SORTING_OBJECT,
-                sortingOption == null ? service.emptySortingOption() : sortingOption);
-
-        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES,
-                SectionSortingProperties.values());
-
-        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS,
-                Sort.Direction.values());
-
-        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME,
-                SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION);
-
-        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
-                concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER, UrlPartConstants.SECTIONS));
     }
 
     private List<Section> sorted(SectionSortingOption sortingOption) {
