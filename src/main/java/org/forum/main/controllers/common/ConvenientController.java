@@ -2,13 +2,15 @@ package org.forum.main.controllers.common;
 
 import org.forum.auxiliary.exceptions.ControllerException;
 import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
-import org.forum.auxiliary.utils.PathVariableUtils;
+import org.forum.auxiliary.utils.UrlPathVariableUtils;
 import org.forum.auxiliary.utils.UrlUtils;
 import org.forum.main.entities.User;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
+
+import java.util.Map;
 
 public abstract class ConvenientController {
 
@@ -17,12 +19,8 @@ public abstract class ConvenientController {
     }
 
     protected void addForHeader(Model model, Authentication authentication, SectionService service) {
-        try {
-            add(model, "currentUser", AuthenticationUtils.extractCurrentUserOrNull(authentication));
-            add(model, "headerSections", service.findAllSorted());
-        } catch (AuxiliaryInstrumentsException e) {
-            throw new ControllerException("Current user cannot be extracted", e);
-        }
+        add(model, "currentUser", extractCurrentUserOrNull(authentication));
+        add(model, "headerSections", service.findAllSorted());
     }
 
     protected User extractCurrentUser(Authentication authentication) {
@@ -33,9 +31,17 @@ public abstract class ConvenientController {
         }
     }
 
+    protected User extractCurrentUserOrNull(Authentication authentication) {
+        try {
+            return AuthenticationUtils.extractCurrentUserOrNull(authentication);
+        } catch (AuxiliaryInstrumentsException e) {
+            throw new ControllerException(e.getMessage(), e);
+        }
+    }
+
     protected Integer toNonNegativeInteger(String pathVariable) {
         try {
-            return PathVariableUtils.toNonNegativeInteger(pathVariable);
+            return UrlPathVariableUtils.toNonNegativeInteger(pathVariable);
         } catch (AuxiliaryInstrumentsException e) {
             throw new ControllerException(e.getMessage(), e);
         }
@@ -43,7 +49,7 @@ public abstract class ConvenientController {
 
     protected Long toNonNegativeLong(String pathVariable) {
         try {
-            return PathVariableUtils.toNonNegativeLong(pathVariable);
+            return UrlPathVariableUtils.toNonNegativeLong(pathVariable);
         } catch (AuxiliaryInstrumentsException e) {
             throw new ControllerException(e.getMessage(), e);
         }
@@ -53,12 +59,12 @@ public abstract class ConvenientController {
         return UrlUtils.concat(urlParts);
     }
 
-    protected String addStartSlash(String urlPart) {
-        return UrlUtils.addStartSlash(urlPart);
+    protected String removePagination(String url) {
+        return UrlUtils.removePagination(url);
     }
 
-    protected String removePage(String url) {
-        return UrlUtils.removePage(url);
+    protected String makeParametersString(Map<String, String[]> parameterMap) {
+        return UrlUtils.makeParametersString(parameterMap);
     }
 
 }

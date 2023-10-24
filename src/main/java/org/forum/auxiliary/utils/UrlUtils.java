@@ -1,13 +1,14 @@
 package org.forum.auxiliary.utils;
 
 import lombok.experimental.UtilityClass;
+import org.forum.auxiliary.constants.url.UrlPartConstants;
 
-import java.util.Collection;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @UtilityClass
 public final class UrlUtils {
+
+    private static final String PAGINATION_PATTERN = "/" + UrlPartConstants.PAGE;
 
     public static String concat(String ... urlParts) {
         return String.join("/", urlParts);
@@ -25,9 +26,9 @@ public final class UrlUtils {
         return url.replaceFirst("/", "");
     }
 
-    public static String removePage(String url) {
-        return url.contains("/page")
-                ? url.substring(0, url.lastIndexOf("/"))
+    public static String removePagination(String url) {
+        return url.contains(PAGINATION_PATTERN)
+                ? url.replace(PAGINATION_PATTERN, "")
                 : url;
     }
 
@@ -36,11 +37,18 @@ public final class UrlUtils {
             return "";
         }
         StringBuilder sb = new StringBuilder("?");
-        for (Map.Entry<String, String[]> kv : parameterMap.entrySet()) {
-            sb.append("%s=%s".formatted(kv.getKey(), kv.getValue()[0])).append("&");
+        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+            sb.append(makeParameter(entry)).append("&");
         }
-        sb.deleteCharAt(sb.length() - 1);
-        return sb.toString();
+        return sb.deleteCharAt(sb.length() - 1).toString();
+    }
+
+    private static String makeParameter(Map.Entry<String, String[]> parameter) {
+        StringBuilder sb = new StringBuilder();
+        for (String value : parameter.getValue()) {
+            sb.append("%s=%s".formatted(parameter.getKey(), value)).append("&");
+        }
+        return sb.deleteCharAt(sb.length() - 1).toString();
     }
 
 }

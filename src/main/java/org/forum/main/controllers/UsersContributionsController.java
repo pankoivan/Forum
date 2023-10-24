@@ -172,7 +172,7 @@ public class UsersContributionsController extends ConvenientController {
 
     private void currentPage(Model model, String currentUrl) {
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePage(currentUrl));
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePagination(currentUrl));
     }
 
     private void pagination(Model model, Integer pagesCount, Integer currentPage) {
