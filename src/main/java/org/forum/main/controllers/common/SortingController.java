@@ -9,11 +9,13 @@ import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER)
+@PreAuthorize("permitAll()")
 public class SortingController {
 
     @PostMapping("/" + UrlPartConstants.USERS)

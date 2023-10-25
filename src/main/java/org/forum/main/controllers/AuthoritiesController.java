@@ -1,16 +1,14 @@
 package org.forum.main.controllers;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Authority;
 import org.forum.main.services.interfaces.AuthorityService;
-import org.forum.main.services.interfaces.RoleService;
-import org.forum.main.services.interfaces.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,92 +16,55 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_AUTHORITIES_CONTROLLER)
+@PreAuthorize("hasRole('OWNER')")
 public class AuthoritiesController extends ConvenientController {
 
-    private final SectionService sectionService;
-
-    private final RoleService roleService;
-
-    private final AuthorityService authorityService;
+    private final AuthorityService service;
 
     @Autowired
-    public AuthoritiesController(SectionService sectionService, RoleService roleService, AuthorityService authorityService) {
-        this.sectionService = sectionService;
-        this.roleService = roleService;
-        this.authorityService = authorityService;
+    public AuthoritiesController(AuthorityService service) {
+        this.service = service;
     }
 
-    @PostMapping("/inner/save")
-    public String redirectRolesAuthoritiesPageAfterSavingAuthority(Model model,
-                                                                   Authentication authentication,
+    @PostMapping("/save")
+    public String redirectRolesAuthoritiesPageAfterSavingAuthority(HttpSession session,
                                                                    @Valid Authority authority,
                                                                    BindingResult bindingResult) {
 
-        if (authorityService.savingValidation(authority, bindingResult)) {
-
-            addForHeader(model, authentication, sectionService);
-            add(model, "roles", roleService.findAll());
-            add(model, "authorities", authorityService.findAll());
-            add(model, "role", roleService.empty());
-            add(model, "authority", authority);
-            add(model, "roleFormSubmitButtonText", "Создать роль");
-            add(model, "authorityFormSubmitButtonText", authorityService.isNew(authority)
-                    ? "Создать право" : "Сохранить");
-            add(model, "authorityError", authorityService.anyError(bindingResult));
-
-            return "roles-authorities-panel";
+        if (service.savingValidation(authority, bindingResult)) {
+            session.setAttribute("authority", authority);
+            session.setAttribute("authorityFormSubmitButtonText", service.isNew(authority) ? "Создать право" : "Сохранить");
+            session.setAttribute("authorityErrorMessage", service.anyError(bindingResult));
+            return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_ROLES_AUTHORITIES_CONTROLLER);
         }
 
-        authorityService.save(authority);
-
-        return "redirect:%s"
-                .formatted(ControllerBaseUrlConstants.FOR_ROLES_AUTHORITIES_CONTROLLER);
+        service.save(authority);
+        return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_ROLES_AUTHORITIES_CONTROLLER);
     }
 
-    @PostMapping("/inner/edit/{id}")
-    public String returnRolesAuthoritiesPageForEditingAuthority(Model model,
-                                                                Authentication authentication,
-                                                                @PathVariable("id") String pathId) {
+    @PostMapping("/edit/{id}")
+    public String returnRolesAuthoritiesPageForEditingAuthority(HttpSession session, @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
 
-        addForHeader(model, authentication, sectionService);
-        add(model, "roles", roleService.findAll());
-        add(model, "authorities", authorityService.findAll());
-        add(model, "role", roleService.empty());
-        add(model, "authority", authorityService.findById(id));
-        add(model, "roleFormSubmitButtonText", "Создать роль");
-        add(model, "authorityFormSubmitButtonText", "Сохранить");
-
-        return "roles-authorities-panel";
+        session.setAttribute("authority", service.findById(id));
+        session.setAttribute("authorityFormSubmitButtonText", "Сохранить");
+        return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_ROLES_AUTHORITIES_CONTROLLER);
     }
 
-    @PostMapping("/inner/delete/{id}")
-    public String redirectRolesAuthoritiesPageAfterDeletingAuthority(Model model,
-                                                                     Authentication authentication,
-                                                                     @PathVariable("id") String pathId) {
+    @PostMapping("/delete/{id}")
+    public String redirectRolesAuthoritiesPageAfterDeletingAuthority(HttpSession session, @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
 
-        String msg = authorityService.deletingValidation(authorityService.findById(id));
+        String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
-
-            addForHeader(model, authentication, sectionService);
-            add(model, "roles", roleService.findAll());
-            add(model, "authorities", authorityService.findAll());
-            add(model, "role", roleService.empty());
-            add(model, "authority", authorityService.empty());
-            add(model, "roleFormSubmitButtonText", "Создать роль");
-            add(model, "authorityFormSubmitButtonText", "Создать право");
-            add(model, "authorityError", msg);
-
-            return "roles-authorities-panel";
+            session.setAttribute("authorityErrorMessage", msg);
+            return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_ROLES_AUTHORITIES_CONTROLLER);
         }
 
-        authorityService.deleteById(id);
-
-        return "redirect:%s"
-                .formatted(ControllerBaseUrlConstants.FOR_ROLES_AUTHORITIES_CONTROLLER);
+        service.deleteById(id);
+        return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_ROLES_AUTHORITIES_CONTROLLER);
     }
 
 }

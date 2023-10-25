@@ -17,6 +17,7 @@ import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER)
+@PreAuthorize("permitAll()")
 public class UsersController extends ConvenientController {
 
     private static final String USUAL = "usual";
@@ -55,19 +57,19 @@ public class UsersController extends ConvenientController {
     @GetMapping("/" + USUAL)
     public String redirectUsualUsersPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         redirectAttributes.addAllAttributes(request.getParameterMap());
-        return "redirect:%s/%s/%s1".formatted(request.getRequestURI(), USUAL, UrlPartConstants.PAGE);
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + MODERS)
     public String redirectModersPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         redirectAttributes.addAllAttributes(request.getParameterMap());
-        return "redirect:%s/%s/%s1".formatted(request.getRequestURI(), MODERS, UrlPartConstants.PAGE);
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + ADMINS)
     public String redirectAdminsPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         redirectAttributes.addAllAttributes(request.getParameterMap());
-        return "redirect:%s/%s/%s1".formatted(request.getRequestURI(), ADMINS, UrlPartConstants.PAGE);
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping({
@@ -106,6 +108,7 @@ public class UsersController extends ConvenientController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String returnProfilePage(Model model,
                                     Authentication authentication,
                                     @PathVariable("id") String id) {

@@ -24,6 +24,7 @@ import org.forum.main.services.interfaces.TopicService;
 import org.forum.main.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_USERS_CONTRIBUTIONS_CONTROLLER)
+@PreAuthorize("isAuthenticated()")
 public class UsersContributionsController extends ConvenientController {
 
     private static final String CREATED = "created";

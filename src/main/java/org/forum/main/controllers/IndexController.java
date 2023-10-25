@@ -7,6 +7,7 @@ import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.services.interfaces.StatisticsService;
 import org.forum.main.services.interfaces.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_INDEX_CONTROLLER)
+@PreAuthorize("permitAll()")
 public class IndexController extends ConvenientController {
 
     private final SectionService sectionService;
@@ -38,15 +40,11 @@ public class IndexController extends ConvenientController {
         add(model, "recentMessages", service.recentMessages());
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
         add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
-        currentPage(model, request.getRequestURI());
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, request.getRequestURI());
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePagination(request.getRequestURI()));
         statistics(model);
 
         return "index";
-    }
-
-    private void currentPage(Model model, String currentUrl) {
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePagination(currentUrl));
     }
 
     private void statistics(Model model) {

@@ -6,6 +6,7 @@ import org.forum.main.entities.enums.Gender;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER)
+@PreAuthorize("permitAll()")
 public class AuthController extends ConvenientController {
 
     private final SectionService sectionService;
@@ -43,8 +45,7 @@ public class AuthController extends ConvenientController {
 
     @PostMapping("/registration/processing")
     public String redirectLoginPageAfterRegistration() {
-        return "redirect:%s/login"
-                .formatted(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER);
+        return "redirect:%s/login".formatted(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER);
     }
 
 }

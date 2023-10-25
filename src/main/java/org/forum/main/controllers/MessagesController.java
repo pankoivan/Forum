@@ -19,6 +19,7 @@ import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER)
+@PreAuthorize("permitAll()")
 public class MessagesController extends ConvenientController {
 
     private final SectionService sectionService;
@@ -118,6 +120,7 @@ public class MessagesController extends ConvenientController {
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/save")
+    @PreAuthorize("isAuthenticated()")
     public String redirectMessagesPageAfterSaving(HttpSession session,
                                                   Authentication authentication,
                                                   @Valid Message message,
@@ -149,6 +152,7 @@ public class MessagesController extends ConvenientController {
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/edit/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String redirectMessagesPageForEditing(HttpSession session, @PathVariable("id") String pathId) {
 
         Long id = toNonNegativeLong(pathId);
@@ -161,6 +165,7 @@ public class MessagesController extends ConvenientController {
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String redirectMessagesPageAfterDeleting(HttpSession session,
                                                     @PathVariable("id") String pathId,
                                                     @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId,

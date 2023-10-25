@@ -17,6 +17,7 @@ import org.forum.main.entities.Section;
 import org.forum.main.services.interfaces.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER)
+@PreAuthorize("permitAll()")
 public class SectionsController extends ConvenientController {
 
     private final SectionService service;
@@ -85,6 +87,7 @@ public class SectionsController extends ConvenientController {
     }
 
     @GetMapping("/create")
+    @PreAuthorize("isAuthenticated()")
     public String returnSectionFormPageForCreating(HttpSession session,
                                                    Model model,
                                                    Authentication authentication,
@@ -113,6 +116,7 @@ public class SectionsController extends ConvenientController {
     }
 
     @PostMapping("/save")
+    @PreAuthorize("isAuthenticated()")
     public String redirectSectionsPageAfterSaving(HttpSession session,
                                                   Authentication authentication,
                                                   @Valid Section section,
@@ -130,6 +134,7 @@ public class SectionsController extends ConvenientController {
     }
 
     @PostMapping("/edit/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String returnSectionFormPageForEditing(HttpSession session, @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
@@ -141,6 +146,7 @@ public class SectionsController extends ConvenientController {
     }
 
     @PostMapping("/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String redirectSectionsPageAfterDeleting(HttpSession session, @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);

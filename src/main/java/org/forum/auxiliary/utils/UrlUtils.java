@@ -8,7 +8,7 @@ import java.util.Map;
 @UtilityClass
 public final class UrlUtils {
 
-    private static final String PAGINATION_PATTERN = "/" + UrlPartConstants.PAGE;
+    private static final String PAGINATION_PATTERN = "/" + UrlPartConstants.PAGE + "\\d*";
 
     public static String concat(String ... urlParts) {
         return String.join("/", urlParts);

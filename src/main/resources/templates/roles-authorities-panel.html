@@ -60,7 +60,7 @@
                         <!-- Форма создания роли -->
                         <form
                             action="#"
-                            th:action="@{/roles-authorities/roles/inner/save}"
+                            th:action="@{/roles-authorities/roles/save}"
                             method="post"
                             class="border-bottom border-white pb-3 mb-3"
                             th:object="${role}"
@@ -166,9 +166,9 @@
                                     </div>
                                     <!-- Кнопки редактирования и удаления -->
                                     <div
-                                        th:replace="~{fragments/edit-delete-buttons :: edit-delete
-                                            (editUrl = '/roles-authorities/roles/inner/edit/__${each.id}__',
-                                            deleteUrl = '/roles-authorities/roles/inner/delete/__${each.id}__')}"
+                                        th:replace="~{fragments/edit-delete-buttons :: edit-delete-buttons
+                                            (editUrl = '/roles-authorities/roles/edit/__${each.id}__',
+                                            deleteUrl = '/roles-authorities/roles/delete/__${each.id}__')}"
                                         class="d-flex flex-row align-items-center justify-content-between"
                                     >
                                         <!-- Статический просмотр -->
@@ -209,7 +209,7 @@
                         <!-- Форма создания права -->
                         <form
                             action="#"
-                            th:action="@{/roles-authorities/authorities/inner/save}"
+                            th:action="@{/roles-authorities/authorities/save}"
                             method="post"
                             class="border-bottom border-white pb-3 mb-3"
                             th:object="${authority}"
@@ -272,9 +272,9 @@
                                     </div>
                                     <!-- Кнопки редактирования и удаления -->
                                     <div
-                                        th:replace="~{fragments/edit-delete-buttons :: edit-delete
-                                            (editFormUrl = '/roles-authorities/authorities/inner/edit/__${each.id}__',
-                                            deleteFormUrl = '/roles-authorities/authorities/inner/delete/__${each.id}__')}"
+                                        th:replace="~{fragments/edit-delete-buttons :: edit-delete-buttons
+                                            (editUrl = '/roles-authorities/authorities/edit/__${each.id}__',
+                                            deleteUrl = '/roles-authorities/authorities/delete/__${each.id}__')}"
                                         class="d-flex flex-row align-items-center justify-content-between"
                                     >
                                         <!-- Статический просмотр -->

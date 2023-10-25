@@ -7,6 +7,7 @@ import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Ban;
 import org.forum.main.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_USERS_ACTIONS_CONTROLLER)
+@PreAuthorize("isAuthenticated()")
 public class UsersActionsController extends ConvenientController {
 
     private final UserService service;
@@ -45,6 +47,7 @@ public class UsersActionsController extends ConvenientController {
     }
 
     @PostMapping("/assign-user/{id}")
+    @PreAuthorize("hasAnyAuthority('ASSIGN_REMOVE_MODERS', 'ASSIGN_REMOVE_ADMINS')")
     public String redirectSourcePageAfterAssigningUser(@PathVariable("id") String pathId,
                                                        @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE)
                                                            String sourcePage) {
@@ -56,6 +59,7 @@ public class UsersActionsController extends ConvenientController {
     }
 
     @PostMapping("/assign-moder/{id}")
+    @PreAuthorize("hasAuthority('ASSIGN_REMOVE_MODERS')")
     public String redirectSourcePageAfterAssigningModer(@PathVariable("id") String pathId,
                                                         @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE)
                                                             String sourcePage) {
@@ -67,6 +71,7 @@ public class UsersActionsController extends ConvenientController {
     }
 
     @PostMapping("/assign-admin/{id}")
+    @PreAuthorize("hasAuthority('ASSIGN_REMOVE_ADMINS')")
     public String redirectSourcePageAfterAssigningAdmin(@PathVariable("id") String pathId,
                                                         @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE)
                                                             String sourcePage) {
@@ -78,6 +83,7 @@ public class UsersActionsController extends ConvenientController {
     }
 
     @PostMapping("/like/to{messageId}")
+    @PreAuthorize("hasAuthority('LIKE')")
     public String redirectSourcePageAfterLike(Authentication authentication,
                                               @PathVariable("messageId") Long messageId,
                                               @RequestParam("isCancellation") boolean isCancellation,
@@ -90,6 +96,7 @@ public class UsersActionsController extends ConvenientController {
     }
 
     @PostMapping("/dislike/to{messageId}")
+    @PreAuthorize("hasAuthority('DISLIKE')")
     public String redirectSourcePageAfterDislike(Authentication authentication,
                                                  @PathVariable("messageId") Long messageId,
                                                  @RequestParam("isCancellation") boolean isCancellation,
@@ -102,6 +109,7 @@ public class UsersActionsController extends ConvenientController {
     }
 
     @PostMapping("/ban/{id}")
+    @PreAuthorize("hasAuthority('BAN_AND_UNBAN')")
     public String returnBanFormPage(Model model,
                                     Authentication authentication,
                                     @PathVariable("id") String pathUserId,
@@ -119,6 +127,7 @@ public class UsersActionsController extends ConvenientController {
     }
 
     @PostMapping("/ban/process")
+    @PreAuthorize("hasAuthority('BAN_AND_UNBAN')")
     public String redirectUserProfilePageAfterBan(Model model,
                                                   Authentication authentication,
                                                   @RequestParam("userId") String pathUserId,
@@ -146,6 +155,7 @@ public class UsersActionsController extends ConvenientController {
     }
 
     @PostMapping("/unban/{id}")
+    @PreAuthorize("hasAuthority('BAN_AND_UNBAN')")
     public String redirectUserProfilePageAfterUnban(@PathVariable("id") String pathUserId,
                                                     @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE)
                                                         String sourcePage) {
