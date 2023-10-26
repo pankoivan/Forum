@@ -20,7 +20,7 @@ public class SearchingController {
     public String redirectSourcePageAfterSearching(RedirectAttributes redirectAttributes,
                                                    @RequestParam(CommonAttributeNameConstants.SEARCH)
                                                        String searchedText,
-                                                   @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE)
+                                                   @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION)
                                                        String searchingSourcePageUrl) {
 
         redirectAttributes.addAllAttributes(Map.of(CommonAttributeNameConstants.SEARCH, searchedText));

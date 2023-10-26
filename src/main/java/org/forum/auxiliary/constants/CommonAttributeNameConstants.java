@@ -5,9 +5,9 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class CommonAttributeNameConstants {
 
-    public static final String SOURCE_PAGE_URL_WITH_PAGE = "sourcePageUrlWithPage";
+    public static final String SOURCE_PAGE_URL_WITH_PAGINATION = "sourcePageUrlWithPagination";
 
-    public static final String SOURCE_PAGE_URL_WITHOUT_PAGE = "sourcePageUrlWithoutPage";
+    public static final String SOURCE_PAGE_URL_WITHOUT_PAGINATION = "sourcePageUrlWithoutPagination";
 
     public static final String REQUEST_PARAMETERS = "requestParameters";
 

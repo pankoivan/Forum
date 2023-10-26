@@ -98,8 +98,8 @@
                                         th:value="${currentUser != null AND message.containsLikedUserById(currentUser.id)} ? true : false"
                                     />
                                     <input
-                                        name="sourcePageUrlWithPage"
-                                        th:value="${sourcePageUrlWithPage}"
+                                        name="sourcePageUrlWithPagination"
+                                        th:value="${sourcePageUrlWithPagination}"
                                         type="hidden"
                                     />
                                     <button
@@ -177,8 +177,8 @@
                                     />
                                     <input
                                         type="hidden"
-                                        name="sourcePageUrlWithPage"
-                                        th:value="${sourcePageUrlWithPage}"
+                                        name="sourcePageUrlWithPagination"
+                                        th:value="${sourcePageUrlWithPagination}"
                                     />
                                     <button
                                         type="submit"

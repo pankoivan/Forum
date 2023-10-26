@@ -10,7 +10,6 @@ import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.exceptions.ControllerException;
 import org.forum.auxiliary.sorting.enums.UserSortingProperties;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
-import org.forum.auxiliary.utils.UrlUtils;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.User;
 import org.forum.main.services.interfaces.SectionService;
@@ -92,8 +91,8 @@ public class UsersController extends ConvenientController {
         addForHeader(model, authentication, sectionService);
         add(model, "page", userUrlRole.orElse("users"));
         add(model, "users", service.onPage(users, pageNumber));
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, request.getRequestURI());
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePagination(request.getRequestURI()));
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
         add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
         add(model, PaginationAttributeNameConstants.PAGES_COUNT, service.pagesCount(users));
         add(model, PaginationAttributeNameConstants.CURRENT_PAGE, pageNumber);

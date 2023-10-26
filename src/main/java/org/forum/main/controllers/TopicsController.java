@@ -73,8 +73,8 @@ public class TopicsController extends ConvenientController {
         add(model, "sectionName", sectionService.findById(sectionId).getName());
         add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, false);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, request.getRequestURI());
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePagination(request.getRequestURI()));
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
         add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
         add(model, PaginationAttributeNameConstants.PAGES_COUNT, service.pagesCount(topics));
         add(model, PaginationAttributeNameConstants.CURRENT_PAGE, pageNumber);

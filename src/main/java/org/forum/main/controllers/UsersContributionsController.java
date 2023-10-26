@@ -21,7 +21,6 @@ import org.forum.main.entities.Topic;
 import org.forum.main.services.interfaces.MessageService;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.TopicService;
-import org.forum.main.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +28,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -45,8 +45,6 @@ public class UsersContributionsController extends ConvenientController {
 
     private static final String DISLIKED = "disliked";
 
-    private final UserService userService;
-
     private final SectionService sectionService;
 
     private final TopicService topicService;
@@ -54,18 +52,16 @@ public class UsersContributionsController extends ConvenientController {
     private final MessageService messageService;
 
     @Autowired
-    public UsersContributionsController(UserService userService, SectionService sectionService, TopicService topicService,
-                                        MessageService messageService) {
-        this.userService = userService;
+    public UsersContributionsController(SectionService sectionService, TopicService topicService, MessageService messageService) {
         this.sectionService = sectionService;
         this.topicService = topicService;
         this.messageService = messageService;
     }
 
     @GetMapping("/" + UrlPartConstants.SECTIONS + "/" + CREATED)
-    public String redirectCreatedSectionsPageWithPagination(HttpServletRequest request) {
-        return "redirect:%s/%s1"
-                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
+    public String redirectCreatedSectionsPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAllAttributes(request.getParameterMap());
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.SECTIONS + "/" + CREATED + "/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
@@ -95,9 +91,9 @@ public class UsersContributionsController extends ConvenientController {
     }
 
     @GetMapping("/" + UrlPartConstants.TOPICS + "/" + CREATED)
-    public String redirectCreatedTopicsPageWithPagination(HttpServletRequest request) {
-        return "redirect:%s/%s1"
-                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
+    public String redirectCreatedTopicsPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAllAttributes(request.getParameterMap());
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.TOPICS + "/" + CREATED + "/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
@@ -127,21 +123,21 @@ public class UsersContributionsController extends ConvenientController {
     }
 
     @GetMapping("/" + UrlPartConstants.MESSAGES + "/" + POSTED)
-    public String redirectPostedMessagesPageWithPagination(HttpServletRequest request) {
-        return "redirect:%s/%s1"
-                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
+    public String redirectPostedMessagesPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAllAttributes(request.getParameterMap());
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.MESSAGES + "/" + LIKED)
-    public String redirectLikedMessagesPageWithPagination(HttpServletRequest request) {
-        return "redirect:%s/%s1"
-                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
+    public String redirectLikedMessagesPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAllAttributes(request.getParameterMap());
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.MESSAGES + "/" + DISLIKED)
-    public String redirectDislikedMessagesPageWithPagination(HttpServletRequest request) {
-        return "redirect:%s/%s1"
-                .formatted(request.getRequestURI(), UrlPartConstants.PAGE);
+    public String redirectDislikedMessagesPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAllAttributes(request.getParameterMap());
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
     @GetMapping("/" + UrlPartConstants.MESSAGES + "/{whichMessages}/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
@@ -173,8 +169,8 @@ public class UsersContributionsController extends ConvenientController {
     }
 
     private void currentPage(Model model, String currentUrl) {
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGE, currentUrl);
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGE, removePagination(currentUrl));
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, currentUrl);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(currentUrl));
     }
 
     private void pagination(Model model, Integer pagesCount, Integer currentPage) {
