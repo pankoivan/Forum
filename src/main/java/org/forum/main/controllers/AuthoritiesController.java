@@ -49,6 +49,7 @@ public class AuthoritiesController extends ConvenientController {
 
         session.setAttribute("authority", service.findById(id));
         session.setAttribute("authorityFormSubmitButtonText", "Сохранить");
+
         return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_ROLES_AUTHORITIES_CONTROLLER);
     }
 

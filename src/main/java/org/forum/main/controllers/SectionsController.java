@@ -11,7 +11,6 @@ import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
-import org.forum.auxiliary.utils.UrlUtils;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Section;
 import org.forum.main.services.interfaces.SectionService;
@@ -87,7 +86,7 @@ public class SectionsController extends ConvenientController {
     }
 
     @GetMapping("/create")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('WORK_WITH_SECTIONS')")
     public String returnSectionFormPageForCreating(HttpSession session,
                                                    Model model,
                                                    Authentication authentication,
@@ -116,7 +115,7 @@ public class SectionsController extends ConvenientController {
     }
 
     @PostMapping("/save")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('WORK_WITH_SECTIONS')")
     public String redirectSectionsPageAfterSaving(HttpSession session,
                                                   Authentication authentication,
                                                   @Valid Section section,
@@ -134,7 +133,7 @@ public class SectionsController extends ConvenientController {
     }
 
     @PostMapping("/edit/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('WORK_WITH_SECTIONS')")
     public String returnSectionFormPageForEditing(HttpSession session, @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
@@ -146,7 +145,7 @@ public class SectionsController extends ConvenientController {
     }
 
     @PostMapping("/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('WORK_WITH_SECTIONS')")
     public String redirectSectionsPageAfterDeleting(HttpSession session, @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);

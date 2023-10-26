@@ -11,7 +11,6 @@ import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
-import org.forum.auxiliary.utils.UrlUtils;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Message;
 import org.forum.main.services.interfaces.MessageService;
@@ -120,7 +119,7 @@ public class MessagesController extends ConvenientController {
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/save")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_MESSAGES', 'WORK_WITH_OTHER_MESSAGES')")
     public String redirectMessagesPageAfterSaving(HttpSession session,
                                                   Authentication authentication,
                                                   @Valid Message message,
@@ -152,7 +151,7 @@ public class MessagesController extends ConvenientController {
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/edit/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_MESSAGES', 'WORK_WITH_OTHER_MESSAGES')")
     public String redirectMessagesPageForEditing(HttpSession session, @PathVariable("id") String pathId) {
 
         Long id = toNonNegativeLong(pathId);
@@ -160,12 +159,11 @@ public class MessagesController extends ConvenientController {
         session.setAttribute("message", service.findById(id));
         session.setAttribute("formSubmitButtonText", "Сохранить изменения");
 
-        return "redirect:%s/%s"
-                .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
+        return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_MESSAGES', 'WORK_WITH_OTHER_MESSAGES')")
     public String redirectMessagesPageAfterDeleting(HttpSession session,
                                                     @PathVariable("id") String pathId,
                                                     @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId,
@@ -176,8 +174,7 @@ public class MessagesController extends ConvenientController {
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
             session.setAttribute("errorMessage", msg);
-            return "redirect:%s/%s"
-                    .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
+            return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
         }
 
         Integer topicId = toNonNegativeInteger(pathTopicId);

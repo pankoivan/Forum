@@ -11,7 +11,6 @@ import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
-import org.forum.auxiliary.utils.UrlUtils;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Topic;
 import org.forum.main.services.interfaces.SectionService;
@@ -95,7 +94,7 @@ public class TopicsController extends ConvenientController {
     }
 
     @GetMapping("/create")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('WORK_WITH_OWN_TOPICS')")
     public String returnTopicFormPageForCreating(HttpSession session,
                                                  Model model,
                                                  Authentication authentication,
@@ -128,7 +127,7 @@ public class TopicsController extends ConvenientController {
     }
 
     @PostMapping("/save")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_TOPICS', 'WORK_WITH_OTHER_TOPICS')")
     public String redirectTopicsPageAfterSaving(HttpSession session,
                                                 Authentication authentication,
                                                 @Valid Topic topic,
@@ -149,7 +148,7 @@ public class TopicsController extends ConvenientController {
     }
 
     @PostMapping("/edit/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_TOPICS', 'WORK_WITH_OTHER_TOPICS')")
     public String returnTopicFormPageForEditing(HttpSession session, @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
@@ -161,7 +160,7 @@ public class TopicsController extends ConvenientController {
     }
 
     @PostMapping("/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_TOPICS', 'WORK_WITH_OTHER_TOPICS')")
     public String redirectTopicsPageAfterDeleting(HttpSession session, @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
