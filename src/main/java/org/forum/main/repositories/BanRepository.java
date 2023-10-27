@@ -12,4 +12,8 @@ public interface BanRepository extends JpaRepository<Ban, Integer> {
 
     List<Ban> findAllByEndDateAfter(LocalDate date);
 
+    List<Ban> findAllByUserId(Integer id);
+
+    List<Ban> findAllByUserWhoAssignedId(Integer id);
+
 }

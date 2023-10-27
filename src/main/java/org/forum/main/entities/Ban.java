@@ -45,6 +45,10 @@ public class Ban {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    public String getFormattedStartDate() {
+        return startDate.format(DateTimeFormatConstants.DAY_MONTH_YEAR);
+    }
+
     public String getFormattedEndDate() {
         return endDate.format(DateTimeFormatConstants.DAY_MONTH_YEAR);
     }

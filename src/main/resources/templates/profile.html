@@ -191,6 +191,27 @@
                                 >Все созданные разделы</a
                             >
                         </div>
+                        <!-- История банов -->
+                        <div class="mb-2">
+                            <a
+                                class="btn btn-primary"
+                                href="#"
+                                th:href="@{/users/__${userForProfile.id}__/contributions/bans/obtained}"
+                                >История банов</a
+                            >
+                        </div>
+                        <!-- История выданных банов -->
+                        <div
+                            class="mb-2"
+                            th:if="${userForProfile.hasAuthority('BAN_AND_UNBAN')}"
+                        >
+                            <a
+                                class="btn btn-primary"
+                                href="#"
+                                th:href="@{/users/__${userForProfile.id}__/contributions/bans/assigned}"
+                                >История выданных банов</a
+                            >
+                        </div>
                     </div>
                 </div>
                 <!-- Недавние отправленные сообщения -->

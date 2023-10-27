@@ -13,4 +13,6 @@ public final class PaginationConstants {
 
     public static final int FOR_MESSAGES = 5;
 
+    public static final int FOR_BANS = 5;
+
 }

@@ -3,6 +3,7 @@ package org.forum.main.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.pagination.PaginationAttributeNameConstants;
+import org.forum.auxiliary.constants.pagination.PaginationConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
@@ -15,9 +16,11 @@ import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
 import org.forum.main.controllers.common.ConvenientController;
+import org.forum.main.entities.Ban;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.Section;
 import org.forum.main.entities.Topic;
+import org.forum.main.services.interfaces.BanService;
 import org.forum.main.services.interfaces.MessageService;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.TopicService;
@@ -45,17 +48,27 @@ public class UsersContributionsController extends ConvenientController {
 
     private static final String DISLIKED = "disliked";
 
+    private static final String BANS = "bans";
+
+    private static final String OBTAINED = "obtained";
+
+    private static final String ASSIGNED = "assigned";
+
     private final SectionService sectionService;
 
     private final TopicService topicService;
 
     private final MessageService messageService;
 
+    private final BanService banService;
+
     @Autowired
-    public UsersContributionsController(SectionService sectionService, TopicService topicService, MessageService messageService) {
+    public UsersContributionsController(SectionService sectionService, TopicService topicService, MessageService messageService,
+                                        BanService banService) {
         this.sectionService = sectionService;
         this.topicService = topicService;
         this.messageService = messageService;
+        this.banService = banService;
     }
 
     @GetMapping("/" + UrlPartConstants.SECTIONS + "/" + CREATED)
@@ -194,6 +207,40 @@ public class UsersContributionsController extends ConvenientController {
                 UrlPartConstants.MESSAGES));
 
         return "messages";
+    }
+
+    @GetMapping("/" + BANS + "/" + OBTAINED)
+    public String redirectObtainedBansPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAllAttributes(request.getParameterMap());
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
+    }
+
+    @GetMapping("/" + BANS + "/" + ASSIGNED)
+    public String redirectAssignedBansPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAllAttributes(request.getParameterMap());
+        return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
+    }
+
+    @GetMapping("/" + BANS + "/{whichBans}/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
+    public String returnBansPage(Model model,
+                                 Authentication authentication,
+                                 @PathVariable(UrlPartConstants.ID) String pathUserId,
+                                 @PathVariable("whichBans") String whichBans,
+                                 @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
+
+        Integer userId = toNonNegativeInteger(pathUserId);
+        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
+
+        List<Ban> bans = whichBans.equals(OBTAINED)
+                ? banService.onPage(banService.findAllByUserId(userId), pageNumber)
+                : banService.findAllByUserWhoAssignedId(userId);
+
+        addForHeader(model, authentication, sectionService);
+        add(model, "bans", bans);
+        add(model, PaginationAttributeNameConstants.PAGES_COUNT, banService.pagesCount(bans));
+        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, pageNumber);
+
+        return "bans";
     }
 
     private List<Message> mySwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId) {

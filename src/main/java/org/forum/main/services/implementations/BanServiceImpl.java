@@ -1,8 +1,10 @@
 package org.forum.main.services.implementations;
 
+import org.forum.auxiliary.constants.pagination.PaginationConstants;
 import org.forum.main.entities.Ban;
 import org.forum.main.entities.User;
 import org.forum.main.repositories.BanRepository;
+import org.forum.main.services.implementations.common.DefaultPaginationImpl;
 import org.forum.main.services.interfaces.BanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,9 +12,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
-public class BanServiceImpl implements BanService {
+public class BanServiceImpl extends DefaultPaginationImpl<Ban> implements BanService {
 
     private final BanRepository repository;
 
@@ -35,6 +38,16 @@ public class BanServiceImpl implements BanService {
     @Override
     public Ban empty() {
         return new Ban();
+    }
+
+    @Override
+    public List<Ban> findAllByUserId(Integer id) {
+        return repository.findAllByUserId(id);
+    }
+
+    @Override
+    public List<Ban> findAllByUserWhoAssignedId(Integer id) {
+        return repository.findAllByUserWhoAssignedId(id);
     }
 
     @Override
@@ -62,6 +75,16 @@ public class BanServiceImpl implements BanService {
     @Override
     public String deletingValidation(Ban validatedObject) {
         return null;
+    }
+
+    @Override
+    public List<Ban> onPage(List<Ban> items, int pageNumber) {
+        return onPageImpl(items, pageNumber, PaginationConstants.FOR_BANS);
+    }
+
+    @Override
+    public int pagesCount(List<Ban> items) {
+        return pagesCountImpl(items, PaginationConstants.FOR_BANS);
     }
 
 }
