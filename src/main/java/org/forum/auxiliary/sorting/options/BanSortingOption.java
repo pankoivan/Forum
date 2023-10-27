@@ -4,17 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.forum.auxiliary.sorting.properties.SectionSortingProperties;
+import org.forum.auxiliary.sorting.properties.BanSortingProperties;
 import org.springframework.data.domain.Sort;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class SectionSortingOption {
+public class BanSortingOption {
 
     private Sort.Direction direction;
 
-    private SectionSortingProperties property;
+    private BanSortingProperties property;
 
 }

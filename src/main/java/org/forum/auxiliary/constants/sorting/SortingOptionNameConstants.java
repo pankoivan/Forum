@@ -13,4 +13,6 @@ public final class SortingOptionNameConstants {
 
     public static final String FOR_MESSAGES_SORTING_OPTION = "messageSortingOption";
 
+    public static final String FOR_BANS_SORTING_OPTION = "banSortingOption";
+
 }

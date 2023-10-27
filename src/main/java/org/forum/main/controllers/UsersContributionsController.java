@@ -3,15 +3,16 @@ package org.forum.main.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.pagination.PaginationAttributeNameConstants;
-import org.forum.auxiliary.constants.pagination.PaginationConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.exceptions.ControllerException;
-import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
-import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
-import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
+import org.forum.auxiliary.sorting.options.BanSortingOption;
+import org.forum.auxiliary.sorting.properties.BanSortingProperties;
+import org.forum.auxiliary.sorting.properties.MessageSortingProperties;
+import org.forum.auxiliary.sorting.properties.SectionSortingProperties;
+import org.forum.auxiliary.sorting.properties.TopicSortingProperties;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
@@ -47,8 +48,6 @@ public class UsersContributionsController extends ConvenientController {
     private static final String LIKED = "liked";
 
     private static final String DISLIKED = "disliked";
-
-    private static final String BANS = "bans";
 
     private static final String OBTAINED = "obtained";
 
@@ -187,7 +186,7 @@ public class UsersContributionsController extends ConvenientController {
         Integer userId = toNonNegativeInteger(pathUserId);
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Message> messages = mySwitch(whichMessages, sortingOption, userId);
+        List<Message> messages = messagesSwitch(whichMessages, sortingOption, userId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "messages", messageService.onPage(messages, pageNumber));
@@ -209,21 +208,26 @@ public class UsersContributionsController extends ConvenientController {
         return "messages";
     }
 
-    @GetMapping("/" + BANS + "/" + OBTAINED)
+    @GetMapping("/" + UrlPartConstants.BANS + "/" + OBTAINED)
     public String redirectObtainedBansPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         redirectAttributes.addAllAttributes(request.getParameterMap());
         return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
-    @GetMapping("/" + BANS + "/" + ASSIGNED)
+    @GetMapping("/" + UrlPartConstants.BANS + "/" + ASSIGNED)
     public String redirectAssignedBansPageWithPagination(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         redirectAttributes.addAllAttributes(request.getParameterMap());
         return "redirect:%s/%s1".formatted(request.getRequestURI(), UrlPartConstants.PAGE);
     }
 
-    @GetMapping("/" + BANS + "/{whichBans}/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
-    public String returnBansPage(Model model,
+    @GetMapping("/" + UrlPartConstants.BANS + "/{whichBans}/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN)
+    public String returnBansPage(HttpServletRequest request,
+                                 Model model,
                                  Authentication authentication,
+                                 @SessionAttribute(value = SortingOptionNameConstants.FOR_BANS_SORTING_OPTION, required = false)
+                                     BanSortingOption sortingOption,
+                                 @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                     String searchedText,
                                  @PathVariable(UrlPartConstants.ID) String pathUserId,
                                  @PathVariable("whichBans") String whichBans,
                                  @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
@@ -231,25 +235,23 @@ public class UsersContributionsController extends ConvenientController {
         Integer userId = toNonNegativeInteger(pathUserId);
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Ban> bans = whichBans.equals(OBTAINED)
-                ? banService.onPage(banService.findAllByUserId(userId), pageNumber)
-                : banService.findAllByUserWhoAssignedId(userId);
+        List<Ban> bans = bansSwitch(whichBans, sortingOption, userId);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "bans", bans);
+        add(model, "bans", banService.onPage(bans, pageNumber));
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
         add(model, PaginationAttributeNameConstants.PAGES_COUNT, banService.pagesCount(bans));
         add(model, PaginationAttributeNameConstants.CURRENT_PAGE, pageNumber);
+        add(model, SortingAttributeNameConstants.SORTING_OBJECT, sortingOption == null ? banService.emptySortingOption() : sortingOption);
+        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES, BanSortingProperties.values());
+        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS, Sort.Direction.values());
+        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME, SortingOptionNameConstants.FOR_BANS_SORTING_OPTION);
+        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL, concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER,
+                UrlPartConstants.BANS));
 
         return "bans";
-    }
-
-    private List<Message> mySwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId) {
-        return switch (whichMessages) {
-            case POSTED -> sortedPostedMessages(sortingOption, userId);
-            case LIKED -> sortedLikedMessages(sortingOption, userId);
-            case DISLIKED -> sortedDislikedMessages(sortingOption, userId);
-            default -> throw new ControllerException("Unknown URL part: \"%s\"".formatted(whichMessages));
-        };
     }
 
     private List<Section> sortedCreatedSections(SectionSortingOption sortingOption, Integer userId) {
@@ -262,6 +264,15 @@ public class UsersContributionsController extends ConvenientController {
         return sortingOption != null
                 ? topicService.findAllByUserIdSorted(userId, sortingOption)
                 : topicService.findAllByUserIdSorted(userId);
+    }
+
+    private List<Message> messagesSwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId) {
+        return switch (whichMessages) {
+            case POSTED -> sortedPostedMessages(sortingOption, userId);
+            case LIKED -> sortedLikedMessages(sortingOption, userId);
+            case DISLIKED -> sortedDislikedMessages(sortingOption, userId);
+            default -> throw new ControllerException("Unknown URL part: \"%s\"".formatted(whichMessages));
+        };
     }
 
     private List<Message> sortedPostedMessages(MessageSortingOption sortingOption, Integer userId) {
@@ -280,6 +291,26 @@ public class UsersContributionsController extends ConvenientController {
         return sortingOption != null
                 ? messageService.findAllDislikedByUserIdSorted(userId, sortingOption)
                 : messageService.findAllDislikedByUserIdSorted(userId);
+    }
+
+    private List<Ban> bansSwitch(String whichBans, BanSortingOption sortingOption, Integer userId) {
+        return switch (whichBans) {
+            case OBTAINED -> sortedObtainedBans(sortingOption, userId);
+            case ASSIGNED -> sortedAssignedBans(sortingOption, userId);
+            default -> throw new ControllerException("Unknown URL part: \"%s\"".formatted(whichBans));
+        };
+    }
+
+    private List<Ban> sortedObtainedBans(BanSortingOption sortingOption, Integer userId) {
+        return sortingOption != null
+                ? banService.findAllByUserIdSorted(userId, sortingOption)
+                : banService.findAllByUserIdSorted(userId);
+    }
+
+    private List<Ban> sortedAssignedBans(BanSortingOption sortingOption, Integer userId) {
+        return sortingOption != null
+                ? banService.findAllByUserWhoAssignedIdSorted(userId, sortingOption)
+                : banService.findAllByUserWhoAssignedIdSorted(userId);
     }
 
 }

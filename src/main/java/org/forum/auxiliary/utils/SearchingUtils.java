@@ -6,8 +6,16 @@ import lombok.experimental.UtilityClass;
 public final class SearchingUtils {
 
     public static boolean search(String sourceString, String searchedString) {
-        String str1 = sourceString.toLowerCase(), str2 = searchedString.toLowerCase();
-        return str1.contains(str2) || str2.contains(str1);
+        String source = sourceString.toLowerCase(), searched = searchedString.toLowerCase();
+        return source.contains(searched) || searched.contains(source);
+    }
+
+    public static boolean search(String searchedString, String ... sourceStrings) {
+        String searched = searchedString.toLowerCase();
+        for (String source : sourceStrings) {
+            return searched.contains(source) || source.contains(searched);
+        }
+        return false;
     }
 
 }

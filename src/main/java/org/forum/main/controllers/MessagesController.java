@@ -10,7 +10,7 @@ import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
-import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
+import org.forum.auxiliary.sorting.properties.MessageSortingProperties;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Message;
 import org.forum.main.services.interfaces.MessageService;

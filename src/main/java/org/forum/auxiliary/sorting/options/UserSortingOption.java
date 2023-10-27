@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.forum.auxiliary.sorting.enums.UserSortingProperties;
+import org.forum.auxiliary.sorting.properties.UserSortingProperties;
 import org.springframework.data.domain.Sort;
 
 @NoArgsConstructor

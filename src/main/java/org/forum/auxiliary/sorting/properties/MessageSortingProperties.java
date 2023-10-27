@@ -1,4 +1,4 @@
-package org.forum.auxiliary.sorting.enums;
+package org.forum.auxiliary.sorting.properties;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

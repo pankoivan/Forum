@@ -9,7 +9,7 @@ import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
-import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
+import org.forum.auxiliary.sorting.properties.TopicSortingProperties;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Topic;

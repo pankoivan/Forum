@@ -13,6 +13,8 @@ public final class UrlPartConstants {
 
     public static final String MESSAGES = "messages";
 
+    public static final String BANS = "bans";
+
     public static final String ID = "id";
 
     public static final String ID_PATTERN = "{" + ID + "}";

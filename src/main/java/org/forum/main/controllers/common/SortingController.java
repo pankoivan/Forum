@@ -5,10 +5,7 @@ import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
-import org.forum.auxiliary.sorting.options.MessageSortingOption;
-import org.forum.auxiliary.sorting.options.SectionSortingOption;
-import org.forum.auxiliary.sorting.options.TopicSortingOption;
-import org.forum.auxiliary.sorting.options.UserSortingOption;
+import org.forum.auxiliary.sorting.options.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +58,18 @@ public class SortingController {
                                                              String sortingOptionName,
                                                          @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION)
                                                              String sortingSourcePageUrl) {
+
+        session.setAttribute(sortingOptionName, sortingOption);
+        return "redirect:%s".formatted(sortingSourcePageUrl);
+    }
+
+    @PostMapping("/" + UrlPartConstants.BANS)
+    public String redirectSourcePageAfterSortingBans(HttpSession session,
+                                                     BanSortingOption sortingOption,
+                                                        @RequestParam(SortingAttributeNameConstants.SORTING_OPTION_NAME)
+                                                     String sortingOptionName,
+                                                        @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION)
+                                                     String sortingSourcePageUrl) {
 
         session.setAttribute(sortingOptionName, sortingOption);
         return "redirect:%s".formatted(sortingSourcePageUrl);

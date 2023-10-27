@@ -8,7 +8,7 @@ import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.exceptions.ControllerException;
-import org.forum.auxiliary.sorting.enums.UserSortingProperties;
+import org.forum.auxiliary.sorting.properties.UserSortingProperties;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.User;

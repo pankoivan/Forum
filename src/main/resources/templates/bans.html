@@ -7,32 +7,32 @@
         <title>Баны</title>
         <link
             href="../static/css/bootstrap.min.css"
-            rel="stylesheet"
             th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
         />
         <link
             href="../static/css/style.css"
-            rel="stylesheet"
             th:href="@{/css/style.css}"
+            rel="stylesheet"
         />
         <link
             href="../static/favicon/apple-touch-icon.png"
+            th:href="@{/favicon/apple-touch-icon.png}"
             rel="apple-touch-icon"
             sizes="180x180"
-            th:href="@{/favicon/apple-touch-icon.png}"
         />
         <link
             href="../static/favicon/favicon-32x32.png"
+            th:href="@{/favicon/favicon-32x32.png}"
             rel="icon"
             sizes="32x32"
-            th:href="@{/favicon/favicon-32x32.png}"
             type="image/png"
         />
         <link
             href="../static/favicon/favicon-16x16.png"
+            th:href="@{/favicon/favicon-16x16.png}"
             rel="icon"
             sizes="16x16"
-            th:href="@{/favicon/favicon-16x16.png}"
             type="image/png"
         />
     </head>
@@ -53,45 +53,81 @@
 
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div class="container">
-            <div class="row">
-                <div class="col-12 col-md-10 col-lg-8 mx-auto">
+            <!-- Сортировка и поиск -->
+            <div
+                class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-lg-between mb-5"
+            >
+                <!-- Сортировка -->
+                <div class="m-2" th:insert="~{fragments/sort :: sort}">
                     <div
-                        class="bg-dark text-white rounded d-flex flex-row flex-wrap justify-content-center justify-content-lg-between break-all px-3 py-2"
-                        th:classappend="${!status.last} ? mb-2"
-                        th:each="each, status : ${bans}"
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
                     >
-                        <div class="m-2">
-                            <p
-                                class="mb-0"
-                                th:text="${each.formattedStartDate}"
-                            >
-                                21.11.2023
-                            </p>
-                        </div>
-                        <div class="m-2">
-                            <p class="mb-0" th:text="${each.formattedEndDate}">
-                                22.12.2024
-                            </p>
-                        </div>
-                        <div class="m-2">
-                            <p class="mb-0" th:text="${each.reason}">
-                                Плохо себя вёл
-                            </p>
-                        </div>
-                        <div class="m-2">
-                            <p
-                                class="mb-0"
-                                th:text="${each.userWhoAssigned.nickname}"
-                            >
-                                <a
-                                    href="#"
-                                    th:href="@{/users/__${each.userWhoAssigned.id}__}"
-                                    >Ник модера</a
-                                >
-                            </p>
-                        </div>
+                        <h3>Статический блок для просмотра в браузере</h3>
                     </div>
                 </div>
+                <!-- Поиск -->
+                <div class="m-2" th:insert="~{fragments/search :: search}">
+                    <div
+                        class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
+                    >
+                        <h3>Статический блок для просмотра в браузере</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-5">
+                <!-- Список банов -->
+                <div
+                    class="bg-dark text-white rounded d-flex flex-row flex-wrap justify-content-center justify-content-lg-between break-all px-3 py-2"
+                    th:classappend="${!status.last} ? mb-2"
+                    th:each="each, status : ${bans}"
+                >
+                    <!-- Ник забаненного -->
+                    <div class="m-2">
+                        <p class="mb-0" th:text="${each.user.nickname}">
+                            <a href="#" th:href="@{/users/__${each.user.id}__}"
+                                >Ник забаненного</a
+                            >
+                        </p>
+                    </div>
+                    <!-- Дата начала -->
+                    <div class="m-2">
+                        <p class="mb-0" th:text="${each.formattedStartDate}">
+                            21.11.2023
+                        </p>
+                    </div>
+                    <!-- Дата окончания -->
+                    <div class="m-2">
+                        <p class="mb-0" th:text="${each.formattedEndDate}">
+                            22.12.2024
+                        </p>
+                    </div>
+                    <!-- Причина -->
+                    <div class="m-2">
+                        <p class="mb-0" th:text="${each.reason}">
+                            Какая-то причина
+                        </p>
+                    </div>
+                    <!-- Ник забанившего -->
+                    <div class="m-2">
+                        <p
+                            class="mb-0"
+                            th:text="${each.userWhoAssigned.nickname}"
+                        >
+                            <a
+                                href="#"
+                                th:href="@{/users/__${each.userWhoAssigned.id}__}"
+                                >Ник забанившего</a
+                            >
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Пагинация -->
+            <div
+                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-block-micro"
+                th:replace="~{fragments/pagination :: pagination}"
+            >
+                <h3>Статический блок для просмотра в браузере</h3>
             </div>
         </div>
 

@@ -1,14 +1,8 @@
 package org.forum.auxiliary.constants.sorting;
 
 import lombok.experimental.UtilityClass;
-import org.forum.auxiliary.sorting.enums.MessageSortingProperties;
-import org.forum.auxiliary.sorting.enums.SectionSortingProperties;
-import org.forum.auxiliary.sorting.enums.TopicSortingProperties;
-import org.forum.auxiliary.sorting.enums.UserSortingProperties;
-import org.forum.auxiliary.sorting.options.MessageSortingOption;
-import org.forum.auxiliary.sorting.options.SectionSortingOption;
-import org.forum.auxiliary.sorting.options.TopicSortingOption;
-import org.forum.auxiliary.sorting.options.UserSortingOption;
+import org.forum.auxiliary.sorting.options.*;
+import org.forum.auxiliary.sorting.properties.*;
 import org.springframework.data.domain.Sort;
 
 @UtilityClass
@@ -25,5 +19,8 @@ public final class DefaultSortingOptionConstants {
 
     public static final MessageSortingOption FOR_MESSAGES =
             new MessageSortingOption(Sort.Direction.ASC, MessageSortingProperties.BY_CREATION_DATE);
+
+    public static final BanSortingOption FOR_BANS =
+            new BanSortingOption(Sort.Direction.ASC, BanSortingProperties.BY_START_DATE);
 
 }
