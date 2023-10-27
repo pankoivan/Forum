@@ -143,7 +143,7 @@ public class TopicsController extends ConvenientController {
             return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER, "create");
         }
 
-        service.save(topic, authentication, sectionService.findById(sectionId));
+        service.save(topic, extractCurrentUser(authentication), sectionService.findById(sectionId));
         return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
     }
 

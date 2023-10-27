@@ -54,7 +54,7 @@
         <!-- ---------------------------------------- Основная часть страницы ---------------------------------------- -->
         <div class="container text-white">
             <div class="row">
-                <div class="col-12 col-md-8 col-lg-6 mx-auto">
+                <div class="col-12 col-md-8 col-lg-5 mx-auto">
                     <!-- Непосредственно форма бана -->
                     <form
                         action="#"
@@ -74,11 +74,6 @@
                             name="userId"
                             th:value="${userId}"
                         />
-                        <input
-                            type="hidden"
-                            name="userWhoAssignedId"
-                            th:value="${currentUser.id}"
-                        />
                         <!-- Блок с возможными ошибками -->
                         <div class="text-center text-red my-3" th:if="${error}">
                             <span th:text="${error}">Текст ошибки</span>
@@ -90,9 +85,8 @@
                             >
                             <input
                                 id="endDate"
-                                class="form-control"
                                 type="date"
-                                placeholder="Общение"
+                                class="form-control"
                                 th:field="*{endDate}"
                             />
                         </div>

@@ -1,10 +1,12 @@
 package org.forum.main.controllers;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Ban;
+import org.forum.main.entities.User;
 import org.forum.main.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -106,12 +108,13 @@ public class UsersActionsController extends ConvenientController {
         return "redirect:%s".formatted(sourcePage);
     }
 
-    @PostMapping("/ban/{id}")
+    @GetMapping("/ban/{id}")
     @PreAuthorize("hasAuthority('BAN_AND_UNBAN')")
-    public String returnBanFormPage(Model model,
+    public String returnBanFormPage(HttpSession session,
+                                    Model model,
                                     Authentication authentication,
-                                    @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION)
-                                        String sourcePage,
+                                    @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
+                                    @SessionAttribute(value = "ban", required = false) Ban ban,
                                     @PathVariable("id") String pathUserId) {
 
         Integer userId = toNonNegativeInteger(pathUserId);
@@ -119,45 +122,46 @@ public class UsersActionsController extends ConvenientController {
         addForHeader(model, authentication, sectionService);
         add(model, "ban", banService.empty());
         add(model, "userId", userId);
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, sourcePage);
+
+        if (errorMessage != null) {
+            add(model, "error", errorMessage);
+            add(model, "ban", ban);
+            session.removeAttribute("errorMessage");
+            session.removeAttribute("ban");
+        }
 
         return "ban-form";
     }
 
     @PostMapping("/ban/process")
     @PreAuthorize("hasAuthority('BAN_AND_UNBAN')")
-    public String redirectUserProfilePageAfterBan(Model model,
+    public String redirectUserProfilePageAfterBan(HttpSession session,
                                                   Authentication authentication,
                                                   @RequestParam("userId") String pathUserId,
-                                                  @RequestParam("userWhoAssignedId") String pathUserWhoAssignedId,
-                                                  @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION)
-                                                      String sourcePage,
                                                   @Valid Ban ban,
                                                   BindingResult bindingResult) {
 
         Integer userId = toNonNegativeInteger(pathUserId);
-        Integer userWhoAssignedId = toNonNegativeInteger(pathUserWhoAssignedId);
+        User userWhoAssigned = extractCurrentUser(authentication);
 
         if (banService.savingValidation(ban, bindingResult)) {
-            addForHeader(model, authentication, sectionService);
-            add(model, "ban", ban);
-            return "ban-form";
+            session.setAttribute("errorMessage", banService.anyError(bindingResult));
+            session.setAttribute("ban", ban);
+            return "redirect:%s/ban/%s".formatted(ControllerBaseUrlConstants.FOR_USERS_ACTIONS_CONTROLLER, userId);
         }
 
-        banService.save(ban, service.findById(userId), service.findById(userWhoAssignedId));
-        return "redirect:%s".formatted(sourcePage);
+        banService.save(ban, service.findById(userId), userWhoAssigned);
+        return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER, userId);
     }
 
-    @PostMapping("/unban/{id}")
+    @GetMapping("/unban/{id}")
     @PreAuthorize("hasAuthority('BAN_AND_UNBAN')")
-    public String redirectUserProfilePageAfterUnban(@RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION)
-                                                        String sourcePage,
-                                                    @PathVariable("id") String pathUserId) {
+    public String redirectUserProfilePageAfterUnban(@PathVariable("id") String pathUserId) {
 
         Integer userId = toNonNegativeInteger(pathUserId);
 
         banService.unban(service.findById(userId));
-        return "redirect:%s".formatted(sourcePage);
+        return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER, userId);
     }
 
 }

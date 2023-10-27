@@ -27,9 +27,7 @@ public final class UrlUtils {
     }
 
     public static String removePagination(String url) {
-        return url.contains(PAGINATION_PATTERN)
-                ? url.replace(PAGINATION_PATTERN, "")
-                : url;
+        return url.replaceFirst(PAGINATION_PATTERN, "");
     }
 
     public static String makeParametersString(Map<String, String[]> parameterMap) {

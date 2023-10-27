@@ -155,13 +155,8 @@
                         th:action="${user.isActive()} ? '/users/actions/ban/__${user.id}__'
                                                       : '/users/actions/unban/__${user.id}__'"
                         class="mx-1"
-                        method="post"
+                        method="get"
                     >
-                        <input
-                            name="sourcePageUrlWithPagination"
-                            th:value="${sourcePageUrlWithPagination}"
-                            type="hidden"
-                        />
                         <button
                             type="submit"
                             class="btn btn-sm"

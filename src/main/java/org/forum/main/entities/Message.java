@@ -15,10 +15,12 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode(exclude = {
-        "likedUsers"
+        "likedUsers",
+        "dislikedUsers"
 })
 @ToString(exclude = {
-        "likedUsers"
+        "likedUsers",
+        "dislikedUsers"
 })
 @Entity
 @Table(name = "forum_message")
@@ -75,18 +77,6 @@ public class Message {
         return dislikedUsers.size();
     }
 
-    public boolean containsLikedUserById(Integer likedUserId) {
-        return likedUsers.stream()
-                .map(Like::getUser)
-                .anyMatch(user -> user.getId().equals(likedUserId));
-    }
-
-    public boolean containsDislikedUserById(Integer dislikedUserid) {
-        return dislikedUsers.stream()
-                .map(Dislike::getUser)
-                .anyMatch(user -> user.getId().equals(dislikedUserid));
-    }
-
     public List<User> getLikedUsers() {
         return likedUsers.stream()
                 .map(Like::getUser)
@@ -97,6 +87,18 @@ public class Message {
         return dislikedUsers.stream()
                 .map(Dislike::getUser)
                 .toList();
+    }
+
+    public boolean containsLikedUserById(Integer likedUserId) {
+        return likedUsers.stream()
+                .map(Like::getUser)
+                .anyMatch(user -> user.getId().equals(likedUserId));
+    }
+
+    public boolean containsDislikedUserById(Integer dislikedUserid) {
+        return dislikedUsers.stream()
+                .map(Dislike::getUser)
+                .anyMatch(user -> user.getId().equals(dislikedUserid));
     }
 
 }

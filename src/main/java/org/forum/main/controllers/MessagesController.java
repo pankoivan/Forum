@@ -137,7 +137,7 @@ public class MessagesController extends ConvenientController {
             return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
         }
 
-        service.save(message, authentication, topicService.findById(topicId));
+        service.save(message, extractCurrentUser(authentication), topicService.findById(topicId));
         return isNew
                 ? "redirect:%s/%s%s"
                     .formatted(

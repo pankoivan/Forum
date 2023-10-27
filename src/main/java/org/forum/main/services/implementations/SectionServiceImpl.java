@@ -2,21 +2,16 @@ package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.sorting.DefaultSortingOptionConstants;
 import org.forum.auxiliary.constants.pagination.PaginationConstants;
-import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
 import org.forum.auxiliary.sorting.options.SectionSortingOption;
-import org.forum.auxiliary.sorting.options.TopicSortingOption;
 import org.forum.auxiliary.utils.SearchingUtils;
-import org.forum.main.entities.Message;
 import org.forum.main.entities.Section;
 import org.forum.auxiliary.exceptions.ServiceException;
-import org.forum.main.entities.Topic;
+import org.forum.main.entities.User;
 import org.forum.main.repositories.SectionRepository;
 import org.forum.main.services.implementations.common.DefaultPaginationImpl;
 import org.forum.main.services.interfaces.SectionService;
-import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -37,20 +32,16 @@ public class SectionServiceImpl extends DefaultPaginationImpl<Section> implement
     }
 
     @Override
-    public void save(Section section, Authentication authentication) throws ServiceException {
-        try {
-            if (isNew(section)) {
-                section.setCreationDate(LocalDateTime.now());
-                section.setUserWhoCreated(AuthenticationUtils.extractCurrentUser(authentication));
-                repository.save(section);
-            } else {
-                Section oldSection = findById(section.getId());
-                oldSection.setName(section.getName());
-                oldSection.setDescription(section.getDescription());
-                repository.save(oldSection);
-            }
-        } catch (AuxiliaryInstrumentsException e) {
-            throw new ServiceException("Author cannot be set to section", e);
+    public void save(Section section, User author) throws ServiceException {
+        if (isNew(section)) {
+            section.setCreationDate(LocalDateTime.now());
+            section.setUserWhoCreated(author);
+            repository.save(section);
+        } else {
+            Section oldSection = findById(section.getId());
+            oldSection.setName(section.getName());
+            oldSection.setDescription(section.getDescription());
+            repository.save(oldSection);
         }
     }
 

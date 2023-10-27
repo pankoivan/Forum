@@ -22,6 +22,7 @@ import java.util.List;
         "createdTopics",
         "postedMessages",
         "likedMessages",
+        "dislikedMessages",
         "bans",
         "assignedBans"
 })
@@ -30,6 +31,7 @@ import java.util.List;
         "createdTopics",
         "postedMessages",
         "likedMessages",
+        "dislikedMessages",
         "bans",
         "assignedBans"
 })
@@ -123,20 +125,43 @@ public class User implements UserDetails {
         return isActive();
     }
 
+    public Ban getCurrentBan() {
+        return bans.stream()
+                .filter(ban -> ban.getEndDate().isAfter(LocalDate.now()))
+                .findAny()
+                .orElse(null);
+    }
+
+    public boolean isBanned() {
+        return getCurrentBan() != null;
+    }
+
+    public boolean isActive() {
+        return !isBanned();
+    }
+
+    public int getBansCount() {
+        return bans.size();
+    }
+
+    public int getAssignedBansCount() {
+        return assignedBans.size();
+    }
+
     public String getFormattedRegistrationDate() {
         return registrationDate.format(DateTimeFormatConstants.DAY_MONTH_YEAR_IN_HOUR_MINUTE_SECOND);
     }
 
-    public int getMessagesCount() {
-        return postedMessages.size();
+    public int getSectionsCount() {
+        return createdSections.size();
     }
 
     public int getTopicsCount() {
         return createdTopics.size();
     }
 
-    public int getSectionsCount() {
-        return createdSections.size();
+    public int getMessagesCount() {
+        return postedMessages.size();
     }
 
     public int getLikesCount() {
@@ -161,14 +186,6 @@ public class User implements UserDetails {
 
     public int getAssignedDislikesCount() {
         return dislikedMessages.size();
-    }
-
-    public int getBansCount() {
-        return bans.size();
-    }
-
-    public int getAssignedBansCount() {
-        return assignedBans.size();
     }
 
     public List<Message> getRecentMessages(int limit) {
@@ -206,28 +223,13 @@ public class User implements UserDetails {
         return getRecentDislikedMessages(3);
     }
 
-    public Ban getCurrentBan() {
-        return bans.stream()
-                .filter(ban -> ban.getEndDate().isAfter(LocalDate.now()))
-                .findAny()
-                .orElse(null);
-    }
-
     public boolean hasRole(String roleName) {
         return role.getName().equals(roleName);
     }
 
     public boolean hasAuthority(String authorityName) {
-        return getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals(authorityName));
-    }
-
-    public boolean isBanned() {
-        return getCurrentBan() != null;
-    }
-
-    public boolean isActive() {
-        return !isBanned();
+        return role.getAuthorities().stream()
+                .anyMatch(authority -> authority.getName().equals(authorityName));
     }
 
     private Collection<? extends GrantedAuthority> getRoleAndAuthorities() {
@@ -235,6 +237,5 @@ public class User implements UserDetails {
         authorities.add(role);
         return authorities;
     }
-
 
 }

@@ -1,20 +1,18 @@
 package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.sorting.DefaultSortingOptionConstants;
-import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.utils.SearchingUtils;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.Topic;
 import org.forum.auxiliary.exceptions.ServiceException;
+import org.forum.main.entities.User;
 import org.forum.main.services.implementations.common.DefaultPaginationImpl;
 import org.forum.main.services.interfaces.MessageService;
 import org.forum.main.repositories.MessageRepository;
-import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.forum.auxiliary.constants.pagination.PaginationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -33,21 +31,17 @@ public class MessageServiceImpl extends DefaultPaginationImpl<Message> implement
     }
 
     @Override
-    public void save(Message message, Authentication authentication, Topic topic) throws ServiceException {
-        try {
-            if (isNew(message)) {
-                message.setCreationDate(LocalDateTime.now());
-                message.setUserWhoPosted(AuthenticationUtils.extractCurrentUser(authentication));
-                message.setTopic(topic);
-                repository.save(message);
-            } else {
-                Message oldMessage = findById(message.getId());
-                oldMessage.setEditingDate(LocalDateTime.now());
-                oldMessage.setText(message.getText());
-                repository.save(oldMessage);
-            }
-        } catch (AuxiliaryInstrumentsException e) {
-            throw new ServiceException("Author cannot be set to message", e);
+    public void save(Message message, User author, Topic topic) throws ServiceException {
+        if (isNew(message)) {
+            message.setCreationDate(LocalDateTime.now());
+            message.setUserWhoPosted(author);
+            message.setTopic(topic);
+            repository.save(message);
+        } else {
+            Message oldMessage = findById(message.getId());
+            oldMessage.setEditingDate(LocalDateTime.now());
+            oldMessage.setText(message.getText());
+            repository.save(oldMessage);
         }
     }
 

@@ -2,6 +2,7 @@ package org.forum.main.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.forum.auxiliary.constants.DateTimeFormatConstants;
 import org.forum.main.entities.enums.Gender;
 
 import java.time.LocalDate;
@@ -47,5 +48,9 @@ public class UserInformation {
     @OneToOne
     @JoinColumn(name = "forum_user_id")
     private User user;
+
+    public String getFormattedDateOfBirth() {
+        return dateOfBirth.format(DateTimeFormatConstants.DAY_MONTH_YEAR);
+    }
 
 }

@@ -128,7 +128,7 @@ public class SectionsController extends ConvenientController {
             return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER, "create");
         }
 
-        service.save(section, authentication);
+        service.save(section, extractCurrentUser(authentication));
         return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
     }
 

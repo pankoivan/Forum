@@ -79,6 +79,15 @@
                                 </a>
                             </div>
                         </div>
+                        <!-- Блок с ошибкой входа или с информацией о том, что пользователь вышел -->
+                        <div class="text-center mt-4" th:if="${param.error}">
+                            <p class="text-red">
+                                Неверное имя пользователя или пароль
+                            </p>
+                        </div>
+                        <div class="text-center mt-4" th:if="${param.logout}">
+                            <p class="text-blue">Вы вышли из аккаунта</p>
+                        </div>
                         <!-- Форма -->
                         <form
                             action="#"

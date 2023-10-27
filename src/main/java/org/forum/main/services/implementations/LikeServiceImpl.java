@@ -36,6 +36,9 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public void save(Message likedMessage, User userWhoLiked) {
+        if (likedMessage.getUserWhoPosted().getId().equals(userWhoLiked.getId())) {
+            return;
+        }
         if (likedMessage.containsDislikedUserById(userWhoLiked.getId())) {
             dislikeRepository.delete(dislikeRepository.findByMessageIdAndUserId(likedMessage.getId(), userWhoLiked.getId())
                     .orElseThrow(

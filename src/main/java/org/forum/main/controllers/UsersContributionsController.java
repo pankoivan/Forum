@@ -71,6 +71,8 @@ public class UsersContributionsController extends ConvenientController {
                                             @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION,
                                                     required = false)
                                                 SectionSortingOption sortingOption,
+                                            @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                                String searchedText,
                                             @PathVariable(UrlPartConstants.ID) String pathUserId,
                                             @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
@@ -80,12 +82,20 @@ public class UsersContributionsController extends ConvenientController {
         List<Section> sections = sortedCreatedSections(sortingOption, userId);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "isForUserContributions", true);
         add(model, "sections", sectionService.onPage(sections, pageNumber));
+        add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, true);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
-        currentPage(model, request.getRequestURI());
-        pagination(model, sectionService.pagesCount(sections), pageNumber);
-        sectionsSorting(model, sortingOption);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
+        add(model, PaginationAttributeNameConstants.PAGES_COUNT, sectionService.pagesCount(sections));
+        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, pageNumber);
+        add(model, SortingAttributeNameConstants.SORTING_OBJECT, sortingOption == null ? sectionService.emptySortingOption() : sortingOption);
+        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES, SectionSortingProperties.values());
+        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS, Sort.Direction.values());
+        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME, SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION);
+        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL, concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER,
+                UrlPartConstants.SECTIONS));
 
         return "sections";
     }
@@ -100,9 +110,10 @@ public class UsersContributionsController extends ConvenientController {
     public String returnCreatedTopicsPage(HttpServletRequest request,
                                           Model model,
                                           Authentication authentication,
-                                          @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION,
-                                                  required = false)
-                                          TopicSortingOption sortingOption,
+                                          @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION, required = false)
+                                              TopicSortingOption sortingOption,
+                                          @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                              String searchedText,
                                           @PathVariable(UrlPartConstants.ID) String pathUserId,
                                           @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
@@ -112,12 +123,20 @@ public class UsersContributionsController extends ConvenientController {
         List<Topic> topics = sortedCreatedTopics(sortingOption, userId);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "isForUserContributions", true);
         add(model, "topics", topicService.onPage(topics, pageNumber));
+        add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, true);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
-        currentPage(model, request.getRequestURI());
-        pagination(model, topicService.pagesCount(topics), pageNumber);
-        topicsSorting(model, sortingOption);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
+        add(model, PaginationAttributeNameConstants.PAGES_COUNT, topicService.pagesCount(topics));
+        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, pageNumber);
+        add(model, SortingAttributeNameConstants.SORTING_OBJECT, sortingOption == null ? topicService.emptySortingOption() : sortingOption);
+        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES, TopicSortingProperties.values());
+        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS, Sort.Direction.values());
+        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME, SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION);
+        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL, concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER,
+                UrlPartConstants.TOPICS));
 
         return "topics";
     }
@@ -144,9 +163,10 @@ public class UsersContributionsController extends ConvenientController {
     public String returnMessagesPage(HttpServletRequest request,
                                      Model model,
                                      Authentication authentication,
-                                     @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION,
-                                             required = false)
+                                     @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION, required = false)
                                          MessageSortingOption sortingOption,
+                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                         String searchedText,
                                      @PathVariable(UrlPartConstants.ID) String pathUserId,
                                      @PathVariable("whichMessages") String whichMessages,
                                      @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
@@ -157,79 +177,32 @@ public class UsersContributionsController extends ConvenientController {
         List<Message> messages = mySwitch(whichMessages, sortingOption, userId);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "isForUserContributions", true);
         add(model, "messages", messageService.onPage(messages, pageNumber));
-        add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, false);
+        add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, true);
+        add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
-        currentPage(model, request.getRequestURI());
-        pagination(model, messageService.pagesCount(messages), pageNumber);
-        messagesSorting(model, sortingOption);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
+        add(model, PaginationAttributeNameConstants.PAGES_COUNT, messageService.pagesCount(messages));
+        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, pageNumber);
+        add(model, SortingAttributeNameConstants.SORTING_OBJECT, sortingOption == null ? messageService.emptySortingOption() : sortingOption);
+        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES, MessageSortingProperties.values());
+        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS, Sort.Direction.values());
+        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME, SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION);
+        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL, concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER,
+                UrlPartConstants.MESSAGES));
 
         return "messages";
     }
 
-    private void currentPage(Model model, String currentUrl) {
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, currentUrl);
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(currentUrl));
-    }
-
-    private void pagination(Model model, Integer pagesCount, Integer currentPage) {
-        add(model, PaginationAttributeNameConstants.PAGES_COUNT, pagesCount);
-        add(model, PaginationAttributeNameConstants.CURRENT_PAGE, currentPage);
-    }
-
-    private void sectionsSorting(Model model, SectionSortingOption sortingOption) {
-
-        add(model, SortingAttributeNameConstants.SORTING_OBJECT,
-                sortingOption == null ? sectionService.emptySortingOption() : sortingOption);
-
-        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES,
-                SectionSortingProperties.values());
-
-        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS,
-                Sort.Direction.values());
-
-        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME,
-                SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION);
-
-        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
-                concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER, UrlPartConstants.SECTIONS));
-    }
-
-    private void topicsSorting(Model model, TopicSortingOption sortingOption) {
-
-        add(model, SortingAttributeNameConstants.SORTING_OBJECT,
-                sortingOption == null ? topicService.emptySortingOption() : sortingOption);
-
-        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES,
-                TopicSortingProperties.values());
-
-        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS,
-                Sort.Direction.values());
-
-        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME,
-                SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION);
-
-        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
-                concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER, UrlPartConstants.TOPICS));
-    }
-
-    private void messagesSorting(Model model, MessageSortingOption sortingOption) {
-
-        add(model, SortingAttributeNameConstants.SORTING_OBJECT,
-                sortingOption == null ? messageService.emptySortingOption() : sortingOption);
-
-        add(model, SortingAttributeNameConstants.SORTING_PROPERTIES,
-                MessageSortingProperties.values());
-
-        add(model, SortingAttributeNameConstants.SORTING_DIRECTIONS,
-                Sort.Direction.values());
-
-        add(model, SortingAttributeNameConstants.SORTING_OPTION_NAME,
-                SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION);
-
-        add(model, SortingAttributeNameConstants.SORTING_SUBMIT_URL,
-                concat(ControllerBaseUrlConstants.FOR_SORTING_CONTROLLER, UrlPartConstants.MESSAGES));
+    private List<Message> mySwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId) {
+        return switch (whichMessages) {
+            case POSTED -> sortedPostedMessages(sortingOption, userId);
+            case LIKED -> sortedLikedMessages(sortingOption, userId);
+            case DISLIKED -> sortedDislikedMessages(sortingOption, userId);
+            default -> throw new ControllerException("Unknown URL part: \"%s\"".formatted(whichMessages));
+        };
     }
 
     private List<Section> sortedCreatedSections(SectionSortingOption sortingOption, Integer userId) {
@@ -242,15 +215,6 @@ public class UsersContributionsController extends ConvenientController {
         return sortingOption != null
                 ? topicService.findAllByUserIdSorted(userId, sortingOption)
                 : topicService.findAllByUserIdSorted(userId);
-    }
-
-    private List<Message> mySwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId) {
-        return switch (whichMessages) {
-            case POSTED -> sortedPostedMessages(sortingOption, userId);
-            case LIKED -> sortedLikedMessages(sortingOption, userId);
-            case DISLIKED -> sortedDislikedMessages(sortingOption, userId);
-            default -> throw new ControllerException("Unknown URL part: \"%s\"".formatted(whichMessages));
-        };
     }
 
     private List<Message> sortedPostedMessages(MessageSortingOption sortingOption, Integer userId) {

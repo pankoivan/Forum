@@ -2,20 +2,17 @@ package org.forum.main.services.implementations;
 
 import org.forum.auxiliary.constants.sorting.DefaultSortingOptionConstants;
 import org.forum.auxiliary.constants.pagination.PaginationConstants;
-import org.forum.auxiliary.exceptions.common.AuxiliaryInstrumentsException;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
 import org.forum.auxiliary.utils.SearchingUtils;
-import org.forum.main.entities.Message;
 import org.forum.main.entities.Section;
 import org.forum.main.entities.Topic;
 import org.forum.auxiliary.exceptions.ServiceException;
+import org.forum.main.entities.User;
 import org.forum.main.services.implementations.common.DefaultPaginationImpl;
 import org.forum.main.services.interfaces.TopicService;
 import org.forum.main.repositories.TopicRepository;
-import org.forum.auxiliary.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -36,21 +33,17 @@ public class TopicServiceImpl extends DefaultPaginationImpl<Topic> implements To
     }
 
     @Override
-    public void save(Topic topic, Authentication authentication, Section section) throws ServiceException {
-        try {
-            if (isNew(topic)) {
-                topic.setCreationDate(LocalDateTime.now());
-                topic.setUserWhoCreated(AuthenticationUtils.extractCurrentUser(authentication));
-                topic.setSection(section);
-                repository.save(topic);
-            } else {
-                Topic oldTopic = findById(topic.getId());
-                oldTopic.setName(topic.getName());
-                oldTopic.setDescription(topic.getDescription());
-                repository.save(oldTopic);
-            }
-        } catch (AuxiliaryInstrumentsException e) {
-            throw new ServiceException("Author cannot be set to topic", e);
+    public void save(Topic topic, User author, Section section) throws ServiceException {
+        if (isNew(topic)) {
+            topic.setCreationDate(LocalDateTime.now());
+            topic.setUserWhoCreated(author);
+            topic.setSection(section);
+            repository.save(topic);
+        } else {
+            Topic oldTopic = findById(topic.getId());
+            oldTopic.setName(topic.getName());
+            oldTopic.setDescription(topic.getDescription());
+            repository.save(oldTopic);
         }
     }
 

@@ -3,15 +3,15 @@ package org.forum.main.services.interfaces;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.Topic;
+import org.forum.main.entities.User;
 import org.forum.main.services.interfaces.common.*;
-import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
 public interface MessageService extends GeneralService<Message, Long>, ValidationService<Message>,
         PaginationService<Message>, SortingService<Message, MessageSortingOption>, SearchingService<Message> {
 
-    void save(Message message, Authentication authentication, Topic topic);
+    void save(Message message, User author, Topic topic);
 
     List<Message> findAllByTopicId(Integer topicId);
 

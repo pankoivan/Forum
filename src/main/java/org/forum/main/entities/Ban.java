@@ -1,6 +1,9 @@
 package org.forum.main.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +33,9 @@ public class Ban {
     @JoinColumn(name = "creator_id")
     private User userWhoAssigned;
 
+    @NotEmpty(message = "Описание причины бана не должно быть пустым")
+    @NotBlank(message = "Описание причины бана не должно содержать только пробелы")
+    @Size(min = 15, max = 1024, message = "Минимальная длина описания причины бана - 15 символов, максимальная - 1024 символа")
     @Column(name = "reason")
     private String reason;
 

@@ -22,16 +22,19 @@ public class BanServiceImpl implements BanService {
     }
 
     @Override
-    public Ban empty() {
-        return new Ban();
-    }
-
-    @Override
     public void save(Ban ban, User user, User userWhoAssigned) {
+        if (user.hasRole("ROLE_OWNER")) {
+            return;
+        }
         ban.setUser(user);
         ban.setUserWhoAssigned(userWhoAssigned);
         ban.setStartDate(LocalDate.now());
         repository.save(ban);
+    }
+
+    @Override
+    public Ban empty() {
+        return new Ban();
     }
 
     @Override
@@ -43,6 +46,11 @@ public class BanServiceImpl implements BanService {
 
     @Override
     public boolean savingValidation(Ban validatedObject, BindingResult bindingResult) {
+        if (validatedObject.getEndDate() == null) {
+            bindingResult.addError(new ObjectError("endDateIsNull",
+                    "Дата окончания бана должна быть установлена"));
+            return true;
+        }
         if (!validatedObject.getEndDate().isAfter(LocalDate.now())) {
             bindingResult.addError(new ObjectError("endDateIsNotAfterNow",
                     "Бан должен длиться хотя бы 1 день"));

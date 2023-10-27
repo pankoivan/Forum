@@ -114,7 +114,7 @@
                             </div>
                             <div>
                                 <span
-                                    th:text="${userForProfile.userInformation.dateOfBirth}"
+                                    th:text="${userForProfile.userInformation.formattedDateOfBirth}"
                                     >25.11.2001</span
                                 >
                             </div>
@@ -370,6 +370,17 @@
                                 >34</span
                             >
                         </div>
+                    </div>
+                    <!-- Информация о бане -->
+                    <div
+                        class="text-red fw-bold fs-16"
+                        th:if="${userForProfile.currentBan}"
+                    >
+                        <p class="mb-1">Забанен до</p>
+                        <span
+                            th:text="${userForProfile.currentBan.formattedEndDate}"
+                            >09.11.2025</span
+                        >
                     </div>
                 </div>
             </div>
