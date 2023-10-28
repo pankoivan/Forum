@@ -91,7 +91,7 @@ public class UsersContributionsController extends ConvenientController {
         Integer userId = toNonNegativeInteger(pathUserId);
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Section> sections = sortedCreatedSections(sortingOption, userId);
+        List<Section> sections = searchedAndSortedCreatedSections(sortingOption, searchedText, userId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "sections", sectionService.onPage(sections, pageNumber));
@@ -132,7 +132,7 @@ public class UsersContributionsController extends ConvenientController {
         Integer userId = toNonNegativeInteger(pathUserId);
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Topic> topics = sortedCreatedTopics(sortingOption, userId);
+        List<Topic> topics = searchedAndSortedCreatedTopics(sortingOption, searchedText, userId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "topics", topicService.onPage(topics, pageNumber));
@@ -186,7 +186,7 @@ public class UsersContributionsController extends ConvenientController {
         Integer userId = toNonNegativeInteger(pathUserId);
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Message> messages = messagesSwitch(whichMessages, sortingOption, userId);
+        List<Message> messages = searchedAndSortedMessages(sortingOption, searchedText, whichMessages, userId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "messages", messageService.onPage(messages, pageNumber));
@@ -235,7 +235,7 @@ public class UsersContributionsController extends ConvenientController {
         Integer userId = toNonNegativeInteger(pathUserId);
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Ban> bans = bansSwitch(whichBans, sortingOption, userId);
+        List<Ban> bans = searchedAndSortedBans(sortingOption, searchedText, whichBans, userId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "bans", banService.onPage(bans, pageNumber));
@@ -260,13 +260,25 @@ public class UsersContributionsController extends ConvenientController {
                 : sectionService.findAllByUserIdSorted(userId);
     }
 
+    private List<Section> searchedAndSortedCreatedSections(SectionSortingOption sortingOption, String searchedText, Integer userId) {
+        return searchedText != null && !searchedText.isEmpty()
+                ? sectionService.search(sortedCreatedSections(sortingOption, userId), searchedText)
+                : sortedCreatedSections(sortingOption, userId);
+    }
+
     private List<Topic> sortedCreatedTopics(TopicSortingOption sortingOption, Integer userId) {
         return sortingOption != null
                 ? topicService.findAllByUserIdSorted(userId, sortingOption)
                 : topicService.findAllByUserIdSorted(userId);
     }
 
-    private List<Message> messagesSwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId) {
+    private List<Topic> searchedAndSortedCreatedTopics(TopicSortingOption sortingOption, String searchedText, Integer userId) {
+        return searchedText != null && !searchedText.isEmpty()
+                ? topicService.search(sortedCreatedTopics(sortingOption, userId), searchedText)
+                : sortedCreatedTopics(sortingOption, userId);
+    }
+
+    private List<Message> sortedMessagesSwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId) {
         return switch (whichMessages) {
             case POSTED -> sortedPostedMessages(sortingOption, userId);
             case LIKED -> sortedLikedMessages(sortingOption, userId);
@@ -293,7 +305,14 @@ public class UsersContributionsController extends ConvenientController {
                 : messageService.findAllDislikedByUserIdSorted(userId);
     }
 
-    private List<Ban> bansSwitch(String whichBans, BanSortingOption sortingOption, Integer userId) {
+    private List<Message> searchedAndSortedMessages(MessageSortingOption sortingOption, String searchedText, String whichMessages,
+                                                    Integer userId) {
+        return searchedText != null && !searchedText.isEmpty()
+                ? messageService.search(sortedMessagesSwitch(whichMessages, sortingOption, userId), searchedText)
+                : sortedMessagesSwitch(whichMessages, sortingOption, userId);
+    }
+
+    private List<Ban> sortedBansSwitch(String whichBans, BanSortingOption sortingOption, Integer userId) {
         return switch (whichBans) {
             case OBTAINED -> sortedObtainedBans(sortingOption, userId);
             case ASSIGNED -> sortedAssignedBans(sortingOption, userId);
@@ -311,6 +330,13 @@ public class UsersContributionsController extends ConvenientController {
         return sortingOption != null
                 ? banService.findAllByUserWhoAssignedIdSorted(userId, sortingOption)
                 : banService.findAllByUserWhoAssignedIdSorted(userId);
+    }
+
+    private List<Ban> searchedAndSortedBans(BanSortingOption sortingOption, String searchedText, String whichBans,
+                                            Integer userId) {
+        return searchedText != null && !searchedText.isEmpty()
+                ? banService.search(sortedBansSwitch(whichBans, sortingOption, userId), searchedText)
+                : sortedBansSwitch(whichBans, sortingOption, userId);
     }
 
 }
