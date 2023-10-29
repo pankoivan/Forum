@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <title>Баны</title>
+        <title th:text="${title}">Баны</title>
         <link
             href="../static/css/bootstrap.min.css"
             th:href="@{/css/bootstrap.min.css}"
@@ -83,8 +83,12 @@
                 >
                     <!-- Ник забаненного -->
                     <div class="m-2">
-                        <p class="mb-0" th:text="${each.user.nickname}">
-                            <a href="#" th:href="@{/users/__${each.user.id}__}"
+                        <p class="mb-0">
+                            <a
+                                class="text-white"
+                                href="#"
+                                th:href="@{/users/__${each.user.id}__}"
+                                th:text="${each.user.nickname}"
                                 >Ник забаненного</a
                             >
                         </p>
@@ -109,13 +113,12 @@
                     </div>
                     <!-- Ник забанившего -->
                     <div class="m-2">
-                        <p
-                            class="mb-0"
-                            th:text="${each.userWhoAssigned.nickname}"
-                        >
+                        <p class="mb-0">
                             <a
                                 href="#"
                                 th:href="@{/users/__${each.userWhoAssigned.id}__}"
+                                class="text-white"
+                                th:text="${each.userWhoAssigned.nickname}"
                                 >Ник забанившего</a
                             >
                         </p>

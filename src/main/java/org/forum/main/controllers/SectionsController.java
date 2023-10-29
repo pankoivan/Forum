@@ -61,8 +61,9 @@ public class SectionsController extends ConvenientController {
         List<Section> sections = searchedAndSorted(sortingOption, searchedText);
 
         addForHeader(model, authentication, service);
-        add(model, "page", "sections");
         add(model, "sections", service.onPage(sections, pageNumber));
+        add(model, CommonAttributeNameConstants.PAGE, "sections");
+        add(model, CommonAttributeNameConstants.TITLE, "Разделы (стр. %s)".formatted(pageNumber));
         add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, false);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());

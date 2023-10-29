@@ -13,7 +13,10 @@ public final class SearchingUtils {
     public static boolean search(String searchedString, String ... sourceStrings) {
         String searched = searchedString.toLowerCase();
         for (String source : sourceStrings) {
-            return searched.contains(source) || source.contains(searched);
+            String lowerSource = source.toLowerCase();
+            if (searched.contains(lowerSource) || lowerSource.contains(searched)) {
+                return true;
+            }
         }
         return false;
     }

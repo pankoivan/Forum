@@ -66,10 +66,10 @@ public class SortingController {
     @PostMapping("/" + UrlPartConstants.BANS)
     public String redirectSourcePageAfterSortingBans(HttpSession session,
                                                      BanSortingOption sortingOption,
-                                                        @RequestParam(SortingAttributeNameConstants.SORTING_OPTION_NAME)
-                                                     String sortingOptionName,
-                                                        @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION)
-                                                     String sortingSourcePageUrl) {
+                                                     @RequestParam(SortingAttributeNameConstants.SORTING_OPTION_NAME)
+                                                         String sortingOptionName,
+                                                     @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION)
+                                                         String sortingSourcePageUrl) {
 
         session.setAttribute(sortingOptionName, sortingOption);
         return "redirect:%s".formatted(sortingSourcePageUrl);

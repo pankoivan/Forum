@@ -13,6 +13,7 @@ import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.sorting.properties.MessageSortingProperties;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Message;
+import org.forum.main.entities.Topic;
 import org.forum.main.services.interfaces.MessageService;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.TopicService;
@@ -77,14 +78,19 @@ public class MessagesController extends ConvenientController {
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         List<Message> messages = searchedAndSorted(sortingOption, searchedText, topicId);
+        Topic topic = topicService.findById(topicId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "messages", service.onPage(messages, pageNumber));
         add(model, "sectionId", sectionId);
         add(model, "topicId", topicId);
-        add(model, "topicName", topicService.findById(topicId).getName());
+        add(model, "topicName", topic.getName());
         add(model, "message", service.empty());
         add(model, "formSubmitButtonText", "Отправить сообщение");
+        add(model, CommonAttributeNameConstants.TITLE, "Сообщения темы \"%s\" (стр. %s)".formatted(
+                topic.getName(),
+                pageNumber
+        ));
         add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, false);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
         add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);

@@ -151,8 +151,8 @@ public class BanServiceImpl extends DefaultPaginationImpl<Ban> implements BanSer
     }
 
     @Override
-    public List<Ban> search(List<Ban> sourceList, String searchedString) {
-        return sourceList.stream()
+    public List<Ban> search(List<Ban> bans, String searchedString) {
+        return bans.stream()
                 .filter(ban -> SearchingUtils.search(
                         searchedString,
                         ban.getUser().getNickname(),

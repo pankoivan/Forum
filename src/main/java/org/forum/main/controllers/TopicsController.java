@@ -12,6 +12,7 @@ import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.properties.TopicSortingProperties;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
 import org.forum.main.controllers.common.ConvenientController;
+import org.forum.main.entities.Section;
 import org.forum.main.entities.Topic;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.TopicService;
@@ -65,12 +66,14 @@ public class TopicsController extends ConvenientController {
         Integer pageNumber = toNonNegativeInteger(pathPageNumber);
 
         List<Topic> topics = searchedAndSorted(sortingOption, searchedText, sectionId);
+        Section section = sectionService.findById(sectionId);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "page", "topics");
         add(model, "topics", service.onPage(topics, pageNumber));
         add(model, "sectionId", sectionId);
-        add(model, "sectionName", sectionService.findById(sectionId).getName());
+        add(model, "sectionName", section.getName());
+        add(model, CommonAttributeNameConstants.PAGE, "topics");
+        add(model, CommonAttributeNameConstants.TITLE, "Темы раздела \"%s\" (стр. %s)".formatted(section.getName(), pageNumber));
         add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, false);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());

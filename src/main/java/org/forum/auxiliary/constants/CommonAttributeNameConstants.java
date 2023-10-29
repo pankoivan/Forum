@@ -5,6 +5,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class CommonAttributeNameConstants {
 
+    public static final String PAGE = "page";
+
     public static final String SOURCE_PAGE_URL_WITH_PAGINATION = "sourcePageUrlWithPagination";
 
     public static final String SOURCE_PAGE_URL_WITHOUT_PAGINATION = "sourcePageUrlWithoutPagination";
@@ -18,5 +20,7 @@ public final class CommonAttributeNameConstants {
     public static final String IS_LIKE_DISLIKE_BUTTONS_ENABLED = "isLikeDislikeButtonsEnabled";
 
     public static final String SEARCH = "search";
+
+    public static final String TITLE = "title";
 
 }

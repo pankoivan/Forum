@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -36,6 +37,13 @@ public class UsersController extends ConvenientController {
     private static final String MODERS = "moders";
 
     private static final String ADMINS = "admins";
+
+    private static final Map<String, String> ROLES_MAP = Map.of(
+            "", "Пользователи",
+            USUAL, "Обычные пользователи",
+            MODERS, "Модераторы",
+            ADMINS, "Администраторы"
+    );
 
     private final SectionService sectionService;
 
@@ -89,8 +97,12 @@ public class UsersController extends ConvenientController {
         List<User> users = searchedAndSorted(sortingOption, searchedText, userUrlRole);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "page", userUrlRole.orElse("users"));
         add(model, "users", service.onPage(users, pageNumber));
+        add(model, CommonAttributeNameConstants.TITLE, "%s (стр. %s)".formatted(
+                ROLES_MAP.get(userUrlRole.orElse("")),
+                pageNumber
+        ));
+        add(model, CommonAttributeNameConstants.PAGE, userUrlRole.orElse("users"));
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
         add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
@@ -122,7 +134,7 @@ public class UsersController extends ConvenientController {
         return "profile";
     }
 
-    private String mySwitch(String userUrlRoleName) {
+    private String switchRole(String userUrlRoleName) {
         return switch (userUrlRoleName) {
             case USUAL -> "ROLE_USER";
             case MODERS -> "ROLE_MODER";
@@ -139,13 +151,13 @@ public class UsersController extends ConvenientController {
 
     private List<User> bySortingOption(UserSortingOption sortingOption, Optional<String> userUrlRole) {
         return userUrlRole.isPresent()
-                ? service.findAllByRoleNameSorted(mySwitch(userUrlRole.get()), sortingOption)
+                ? service.findAllByRoleNameSorted(switchRole(userUrlRole.get()), sortingOption)
                 : service.findAllSorted(sortingOption);
     }
 
     private List<User> byDefault(Optional<String> userUrlRole) {
         return userUrlRole.isPresent()
-                ? service.findAllByRoleNameSorted(mySwitch(userUrlRole.get()))
+                ? service.findAllByRoleNameSorted(switchRole(userUrlRole.get()))
                 : service.findAllSorted();
     }
 

@@ -21,10 +21,7 @@ import org.forum.main.entities.Ban;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.Section;
 import org.forum.main.entities.Topic;
-import org.forum.main.services.interfaces.BanService;
-import org.forum.main.services.interfaces.MessageService;
-import org.forum.main.services.interfaces.SectionService;
-import org.forum.main.services.interfaces.TopicService;
+import org.forum.main.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -53,6 +50,8 @@ public class UsersContributionsController extends ConvenientController {
 
     private static final String ASSIGNED = "assigned";
 
+    private final UserService userService;
+
     private final SectionService sectionService;
 
     private final TopicService topicService;
@@ -62,8 +61,9 @@ public class UsersContributionsController extends ConvenientController {
     private final BanService banService;
 
     @Autowired
-    public UsersContributionsController(SectionService sectionService, TopicService topicService, MessageService messageService,
-                                        BanService banService) {
+    public UsersContributionsController(UserService userService, SectionService sectionService, TopicService topicService,
+                                        MessageService messageService, BanService banService) {
+        this.userService = userService;
         this.sectionService = sectionService;
         this.topicService = topicService;
         this.messageService = messageService;
@@ -95,6 +95,10 @@ public class UsersContributionsController extends ConvenientController {
 
         addForHeader(model, authentication, sectionService);
         add(model, "sections", sectionService.onPage(sections, pageNumber));
+        add(model, CommonAttributeNameConstants.TITLE, "%s: созданные разделы (стр. %s)".formatted(
+                userService.findById(userId).getNickname(),
+                pageNumber
+        ));
         add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, true);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
@@ -136,6 +140,10 @@ public class UsersContributionsController extends ConvenientController {
 
         addForHeader(model, authentication, sectionService);
         add(model, "topics", topicService.onPage(topics, pageNumber));
+        add(model, CommonAttributeNameConstants.TITLE, "%s: созданные темы (стр. %s)".formatted(
+                userService.findById(userId).getNickname(),
+                pageNumber
+        ));
         add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, true);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
@@ -190,6 +198,11 @@ public class UsersContributionsController extends ConvenientController {
 
         addForHeader(model, authentication, sectionService);
         add(model, "messages", messageService.onPage(messages, pageNumber));
+        add(model, CommonAttributeNameConstants.TITLE, "%s: %s сообщения (стр. %s)".formatted(
+                userService.findById(userId).getNickname(),
+                whichMessages.equals(POSTED) ? "отправленные" : whichMessages.equals(LIKED) ? "понравившиеся" : "не понравившиеся",
+                pageNumber
+        ));
         add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, true);
         add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
@@ -239,6 +252,11 @@ public class UsersContributionsController extends ConvenientController {
 
         addForHeader(model, authentication, sectionService);
         add(model, "bans", banService.onPage(bans, pageNumber));
+        add(model, CommonAttributeNameConstants.TITLE, "%s: история %s банов (стр. %s)".formatted(
+                userService.findById(userId).getNickname(),
+                whichBans.equals(OBTAINED) ? "полученных" : "выданных",
+                pageNumber
+        ));
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
         add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
@@ -307,6 +325,7 @@ public class UsersContributionsController extends ConvenientController {
 
     private List<Message> searchedAndSortedMessages(MessageSortingOption sortingOption, String searchedText, String whichMessages,
                                                     Integer userId) {
+
         return searchedText != null && !searchedText.isEmpty()
                 ? messageService.search(sortedMessagesSwitch(whichMessages, sortingOption, userId), searchedText)
                 : sortedMessagesSwitch(whichMessages, sortingOption, userId);
@@ -334,6 +353,7 @@ public class UsersContributionsController extends ConvenientController {
 
     private List<Ban> searchedAndSortedBans(BanSortingOption sortingOption, String searchedText, String whichBans,
                                             Integer userId) {
+
         return searchedText != null && !searchedText.isEmpty()
                 ? banService.search(sortedBansSwitch(whichBans, sortingOption, userId), searchedText)
                 : sortedBansSwitch(whichBans, sortingOption, userId);
