@@ -12,11 +12,11 @@ public final class UrlPathVariableUtils {
 
     private static final String PATH_VARIABLE_PATTERN = "\\{.*?}";
 
-    public static Integer toNonNegativeInteger(String pathVariable) throws UrlPathVariableUtilsException {
+    public static int toNonNegativeInteger(String pathVariable) throws UrlPathVariableUtilsException {
         return forNonNegativeIntegerAndLong(() -> Integer.parseInt(pathVariable), pathVariable, "integer");
     }
 
-    public static Long toNonNegativeLong(String pathVariable) throws UrlPathVariableUtilsException {
+    public static long toNonNegativeLong(String pathVariable) throws UrlPathVariableUtilsException {
         return forNonNegativeIntegerAndLong(() -> Long.parseLong(pathVariable), pathVariable, "long");
     }
 
@@ -38,11 +38,11 @@ public final class UrlPathVariableUtils {
         return result;
     }
 
-    public static String replacePatternPart(String sourceUrl, Object replacementPart) {
-        return sourceUrl.replaceFirst(PATH_VARIABLE_PATTERN, replacementPart.toString());
+    public static String replacePatternPart(String sourceUrl, String replacementPart) {
+        return sourceUrl.replaceFirst(PATH_VARIABLE_PATTERN, replacementPart);
     }
 
-    public static String replacePatternParts(String sourceUrl, Object ... replacementParts) throws UrlPathVariableUtilsException {
+    public static String replacePatternParts(String sourceUrl, String ... replacementParts) throws UrlPathVariableUtilsException {
 
         Matcher matcher = Pattern.compile(PATH_VARIABLE_PATTERN).matcher(sourceUrl);
         for (int i = 0; matcher.find(); ++i) {

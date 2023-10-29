@@ -39,7 +39,7 @@ public abstract class ConvenientController {
         }
     }
 
-    protected Integer toNonNegativeInteger(String pathVariable) {
+    protected int toNonNegativeInteger(String pathVariable) {
         try {
             return UrlPathVariableUtils.toNonNegativeInteger(pathVariable);
         } catch (AuxiliaryInstrumentsException e) {
@@ -47,7 +47,7 @@ public abstract class ConvenientController {
         }
     }
 
-    protected Long toNonNegativeLong(String pathVariable) {
+    protected long toNonNegativeLong(String pathVariable) {
         try {
             return UrlPathVariableUtils.toNonNegativeLong(pathVariable);
         } catch (AuxiliaryInstrumentsException e) {

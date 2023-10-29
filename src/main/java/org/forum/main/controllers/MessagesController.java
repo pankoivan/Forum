@@ -61,24 +61,20 @@ public class MessagesController extends ConvenientController {
                                      @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION, required = false)
                                          MessageSortingOption sortingOption,
                                      @SessionAttribute(value = "message", required = false) Message message,
-                                     @SessionAttribute(value = "formSubmitButtonText", required = false)
-                                         String formSubmitButtonText,
-                                     @SessionAttribute(value = "formErrorMessage", required = false)
-                                         String formErrorMessage,
-                                     @SessionAttribute(value = "errorMessage", required = false)
-                                         String errorMessage,
-                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
-                                         String searchedText,
+                                     @SessionAttribute(value = "formSubmitButtonText", required = false) String formSubmitButtonText,
+                                     @SessionAttribute(value = "formErrorMessage", required = false) String formErrorMessage,
+                                     @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
+                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                      @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
                                      @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId,
                                      @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
-        Integer sectionId = toNonNegativeInteger(pathSectionId);
-        Integer topicId = toNonNegativeInteger(pathTopicId);
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
+        int sectionId = toNonNegativeInteger(pathSectionId);
+        int topicId = toNonNegativeInteger(pathTopicId);
+        int pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Message> messages = searchedAndSorted(sortingOption, searchedText, topicId);
         Topic topic = topicService.findById(topicId);
+        List<Message> messages = searchedAndSorted(sortingOption, searchedText, topicId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "messages", service.onPage(messages, pageNumber));
@@ -87,10 +83,7 @@ public class MessagesController extends ConvenientController {
         add(model, "topicName", topic.getName());
         add(model, "message", service.empty());
         add(model, "formSubmitButtonText", "Отправить сообщение");
-        add(model, CommonAttributeNameConstants.TITLE, "Сообщения темы \"%s\" (стр. %s)".formatted(
-                topic.getName(),
-                pageNumber
-        ));
+        add(model, CommonAttributeNameConstants.TITLE, "Сообщения темы \"%s\" (стр. %s)".formatted(topic.getName(), pageNumber));
         add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, false);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
         add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
@@ -132,7 +125,7 @@ public class MessagesController extends ConvenientController {
                                                   BindingResult bindingResult,
                                                   @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId) {
 
-        Integer topicId = toNonNegativeInteger(pathTopicId);
+        int topicId = toNonNegativeInteger(pathTopicId);
 
         boolean isNew = service.isNew(message);
 
@@ -144,15 +137,11 @@ public class MessagesController extends ConvenientController {
         }
 
         service.save(message, extractCurrentUser(authentication), topicService.findById(topicId));
-        return isNew
-                ? "redirect:%s/%s%s"
-                    .formatted(
-                            ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
-                            UrlPartConstants.PAGE,
-                            service.pagesCount(service.findAllByTopicId(topicId))
-                    )
-                : "redirect:%s/%s"
-                    .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
+        return "redirect:%s/%s%s".formatted(
+                ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
+                UrlPartConstants.PAGE,
+                isNew ? service.pagesCount(service.findAllByTopicId(topicId)) : UrlPartConstants.PAGE_NUMBER_PATTERN
+        );
 
     }
 
@@ -160,7 +149,7 @@ public class MessagesController extends ConvenientController {
     @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_MESSAGES', 'WORK_WITH_OTHER_MESSAGES')")
     public String redirectMessagesPageForEditing(HttpSession session, @PathVariable("id") String pathId) {
 
-        Long id = toNonNegativeLong(pathId);
+        long id = toNonNegativeLong(pathId);
 
         session.setAttribute("message", service.findById(id));
         session.setAttribute("formSubmitButtonText", "Сохранить изменения");
@@ -171,11 +160,14 @@ public class MessagesController extends ConvenientController {
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/delete/{id}")
     @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_MESSAGES', 'WORK_WITH_OTHER_MESSAGES')")
     public String redirectMessagesPageAfterDeleting(HttpSession session,
-                                                    @PathVariable("id") String pathId,
                                                     @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId,
+                                                    @PathVariable("id") String pathId,
                                                     @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
-        Long id = toNonNegativeLong(pathId);
+        long id = toNonNegativeLong(pathId);
+        int topicId = toNonNegativeInteger(pathTopicId);
+        int pageNumber = toNonNegativeInteger(pathPageNumber);
+        int oldPagesCount = service.pagesCount(service.findAllByTopicId(topicId));
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
@@ -183,30 +175,22 @@ public class MessagesController extends ConvenientController {
             return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
         }
 
-        Integer topicId = toNonNegativeInteger(pathTopicId);
-        Integer pagesCount = service.pagesCount(service.findAllByTopicId(topicId));
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
-
         service.deleteById(id);
         int newPagesCount = service.pagesCount(service.findAllByTopicId(topicId));
-        return pageNumber.equals(pagesCount) && newPagesCount < pagesCount
-                ? "redirect:%s/%s%s"
-                    .formatted(
-                            ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
-                            UrlPartConstants.PAGE,
-                            newPagesCount
-                    )
-                : "redirect:%s/%s"
-                    .formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
+        return "redirect:%s/%s%s".formatted(
+                ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
+                UrlPartConstants.PAGE,
+                pageNumber == oldPagesCount && newPagesCount < oldPagesCount ? newPagesCount : pageNumber
+        );
     }
 
-    private List<Message> sorted(MessageSortingOption sortingOption, Integer topicId) {
+    private List<Message> sorted(MessageSortingOption sortingOption, int topicId) {
         return sortingOption != null
                 ? service.findAllByTopicIdSorted(topicId, sortingOption)
                 : service.findAllByTopicIdSorted(topicId);
     }
 
-    private List<Message> searchedAndSorted(MessageSortingOption sortingOption, String searchedText, Integer topicId) {
+    private List<Message> searchedAndSorted(MessageSortingOption sortingOption, String searchedText, int topicId) {
         return searchedText != null && !searchedText.isEmpty()
                 ? service.search(sorted(sortingOption, topicId), searchedText)
                 : sorted(sortingOption, topicId);

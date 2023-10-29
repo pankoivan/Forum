@@ -57,16 +57,15 @@ public class TopicsController extends ConvenientController {
                                    @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION, required = false)
                                        TopicSortingOption sortingOption,
                                    @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
-                                   @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
-                                       String searchedText,
+                                   @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                    @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
                                    @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
-        Integer sectionId = toNonNegativeInteger(pathSectionId);
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
+        int sectionId = toNonNegativeInteger(pathSectionId);
+        int pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Topic> topics = searchedAndSorted(sortingOption, searchedText, sectionId);
         Section section = sectionService.findById(sectionId);
+        List<Topic> topics = searchedAndSorted(sortingOption, searchedText, sectionId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "topics", service.onPage(topics, pageNumber));
@@ -104,25 +103,20 @@ public class TopicsController extends ConvenientController {
                                                  @SessionAttribute(value = "object", required = false) Topic object,
                                                  @SessionAttribute(value = "formSubmitButtonText", required = false)
                                                      String formSubmitButtonText,
-                                                 @SessionAttribute(value = "errorMessage", required = false)
-                                                     String errorMessage,
-                                                 @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId) {
-
-        Integer sectionId = toNonNegativeInteger(pathSectionId);
+                                                 @SessionAttribute(value = "errorMessage", required = false) String errorMessage) {
 
         addForHeader(model, authentication, sectionService);
-        //add(model, "sectionId", sectionId);
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать тему");
 
         if (object != null) {
             add(model, "object", object);
             add(model, "formSubmitButtonText", formSubmitButtonText);
-            if (errorMessage != null) {
-                add(model, "error", errorMessage);
-            }
             session.removeAttribute("object");
             session.removeAttribute("formSubmitButtonText");
+        }
+        if (errorMessage != null) {
+            add(model, "error", errorMessage);
             session.removeAttribute("errorMessage");
         }
 
@@ -139,7 +133,7 @@ public class TopicsController extends ConvenientController {
                                                 @RequestParam(value = "pageNumber", required = false) String pageNumber,
                                                 @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId) {
 
-        Integer sectionId = toNonNegativeInteger(pathSectionId);
+        int sectionId = toNonNegativeInteger(pathSectionId);
 
         boolean isNew = service.isNew(topic);
 
@@ -166,7 +160,7 @@ public class TopicsController extends ConvenientController {
                                                 @RequestParam(value = "pageNumber", required = false) String pageNumber,
                                                 @PathVariable("id") String pathId) {
 
-        Integer id = toNonNegativeInteger(pathId);
+        int id = toNonNegativeInteger(pathId);
 
         session.setAttribute("object", service.findById(id));
         session.setAttribute("formSubmitButtonText", "Сохранить");
@@ -181,9 +175,10 @@ public class TopicsController extends ConvenientController {
                                                   @RequestParam(value = "pageNumber", required = false) String pathPageNumber,
                                                   @PathVariable("id") String pathId) {
 
-        Integer id = toNonNegativeInteger(pathId);
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
-        Integer pagesCount = service.pagesCount(service.findAllBySectionId(service.findById(id).getSection().getId()));
+        int id = toNonNegativeInteger(pathId);
+        int sectionId = service.findById(id).getSection().getId();
+        int pageNumber = toNonNegativeInteger(pathPageNumber);
+        int oldPagesCount = service.pagesCount(service.findAllBySectionId(sectionId));
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
@@ -196,21 +191,21 @@ public class TopicsController extends ConvenientController {
         }
 
         service.deleteById(id);
-        int newPagesCount = service.pagesCount(service.findAllBySectionId(service.findById(id).getSection().getId()));
+        int newPagesCount = service.pagesCount(service.findAllBySectionId(sectionId));
         return "redirect:%s/%s%s".formatted(
                 ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
                 UrlPartConstants.PAGE,
-                pageNumber.equals(pagesCount) && newPagesCount < pagesCount ? newPagesCount : pageNumber
+                pageNumber == oldPagesCount && newPagesCount < oldPagesCount ? newPagesCount : pageNumber
         );
     }
 
-    private List<Topic> sorted(TopicSortingOption sortingOption, Integer sectionId) {
+    private List<Topic> sorted(TopicSortingOption sortingOption, int sectionId) {
         return sortingOption != null
                 ? service.findAllBySectionIdSorted(sectionId, sortingOption)
                 : service.findAllBySectionIdSorted(sectionId);
     }
 
-    private List<Topic> searchedAndSorted(TopicSortingOption sortingOption, String searchedText, Integer sectionId) {
+    private List<Topic> searchedAndSorted(TopicSortingOption sortingOption, String searchedText, int sectionId) {
         return searchedText != null && !searchedText.isEmpty()
                 ? service.search(sorted(sortingOption, sectionId), searchedText)
                 : sorted(sortingOption, sectionId);

@@ -52,11 +52,10 @@ public class SectionsController extends ConvenientController {
                                      @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION, required = false)
                                          SectionSortingOption sortingOption,
                                      @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
-                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
-                                         String searchedText,
+                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                      @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
+        int pageNumber = toNonNegativeInteger(pathPageNumber);
 
         List<Section> sections = searchedAndSorted(sortingOption, searchedText);
 
@@ -94,8 +93,7 @@ public class SectionsController extends ConvenientController {
                                                    @SessionAttribute(value = "object", required = false) Section object,
                                                    @SessionAttribute(value = "formSubmitButtonText", required = false)
                                                        String formSubmitButtonText,
-                                                   @SessionAttribute(value = "errorMessage", required = false)
-                                                       String errorMessage) {
+                                                   @SessionAttribute(value = "errorMessage", required = false) String errorMessage) {
 
         addForHeader(model, authentication, service);
         add(model, "object", service.empty());
@@ -104,11 +102,11 @@ public class SectionsController extends ConvenientController {
         if (object != null) {
             add(model, "object", object);
             add(model, "formSubmitButtonText", formSubmitButtonText);
-            if (errorMessage != null) {
-                add(model, "error", errorMessage);
-            }
             session.removeAttribute("object");
             session.removeAttribute("formSubmitButtonText");
+        }
+        if (errorMessage != null) {
+            add(model, "error", errorMessage);
             session.removeAttribute("errorMessage");
         }
 
@@ -149,7 +147,7 @@ public class SectionsController extends ConvenientController {
                                                   @RequestParam(value = "pageNumber", required = false) String pageNumber,
                                                   @PathVariable("id") String pathId) {
 
-        Integer id = toNonNegativeInteger(pathId);
+        int id = toNonNegativeInteger(pathId);
 
         session.setAttribute("object", service.findById(id));
         session.setAttribute("formSubmitButtonText", "Сохранить");
@@ -164,9 +162,9 @@ public class SectionsController extends ConvenientController {
                                                     @RequestParam(value = "pageNumber", required = false) String pathPageNumber,
                                                     @PathVariable("id") String pathId) {
 
-        Integer id = toNonNegativeInteger(pathId);
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
-        Integer pagesCount = service.pagesCount(service.findAll());
+        int id = toNonNegativeInteger(pathId);
+        int pageNumber = toNonNegativeInteger(pathPageNumber);
+        int oldPagesCount = service.pagesCount(service.findAll());
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
@@ -183,7 +181,7 @@ public class SectionsController extends ConvenientController {
         return "redirect:%s/%s%s".formatted(
                 ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER,
                 UrlPartConstants.PAGE,
-                pageNumber.equals(pagesCount) && newPagesCount < pagesCount ? newPagesCount : pageNumber
+                pageNumber == oldPagesCount && newPagesCount < oldPagesCount ? newPagesCount : pageNumber
         );
     }
 

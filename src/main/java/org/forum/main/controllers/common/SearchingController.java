@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Map;
-
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_SEARCHING_CONTROLLER)
 @PreAuthorize("permitAll()")
@@ -23,7 +21,7 @@ public class SearchingController {
                                                    @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION)
                                                        String searchingSourcePageUrl) {
 
-        redirectAttributes.addAllAttributes(Map.of(CommonAttributeNameConstants.SEARCH, searchedText));
+        redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
         return "redirect:%s".formatted(searchingSourcePageUrl);
     }
 
