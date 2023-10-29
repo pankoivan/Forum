@@ -60,11 +60,11 @@ public class MessagesController extends ConvenientController {
                                      Authentication authentication,
                                      @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION, required = false)
                                          MessageSortingOption sortingOption,
+                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                      @SessionAttribute(value = "message", required = false) Message message,
                                      @SessionAttribute(value = "formSubmitButtonText", required = false) String formSubmitButtonText,
                                      @SessionAttribute(value = "formErrorMessage", required = false) String formErrorMessage,
                                      @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
-                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                      @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
                                      @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId,
                                      @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {

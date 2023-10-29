@@ -50,23 +50,23 @@ public class UsersContributionsController extends ConvenientController {
 
     private static final String ASSIGNED = "assigned";
 
-    private final UserService userService;
-
     private final SectionService sectionService;
 
     private final TopicService topicService;
 
     private final MessageService messageService;
 
+    private final UserService userService;
+
     private final BanService banService;
 
     @Autowired
-    public UsersContributionsController(UserService userService, SectionService sectionService, TopicService topicService,
-                                        MessageService messageService, BanService banService) {
-        this.userService = userService;
+    public UsersContributionsController(SectionService sectionService, TopicService topicService, MessageService messageService,
+                                        UserService userService, BanService banService) {
         this.sectionService = sectionService;
         this.topicService = topicService;
         this.messageService = messageService;
+        this.userService = userService;
         this.banService = banService;
     }
 
@@ -80,16 +80,14 @@ public class UsersContributionsController extends ConvenientController {
     public String returnCreatedSectionsPage(HttpServletRequest request,
                                             Model model,
                                             Authentication authentication,
-                                            @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION,
-                                                    required = false)
+                                            @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION, required = false)
                                                 SectionSortingOption sortingOption,
-                                            @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
-                                                String searchedText,
+                                            @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                             @PathVariable(UrlPartConstants.ID) String pathUserId,
                                             @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
-        Integer userId = toNonNegativeInteger(pathUserId);
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
+        int userId = toNonNegativeInteger(pathUserId);
+        int pageNumber = toNonNegativeInteger(pathPageNumber);
 
         List<Section> sections = searchedAndSortedCreatedSections(sortingOption, searchedText, userId);
 
@@ -128,13 +126,12 @@ public class UsersContributionsController extends ConvenientController {
                                           Authentication authentication,
                                           @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION, required = false)
                                               TopicSortingOption sortingOption,
-                                          @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
-                                              String searchedText,
+                                          @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                           @PathVariable(UrlPartConstants.ID) String pathUserId,
                                           @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
-        Integer userId = toNonNegativeInteger(pathUserId);
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
+        int userId = toNonNegativeInteger(pathUserId);
+        int pageNumber = toNonNegativeInteger(pathPageNumber);
 
         List<Topic> topics = searchedAndSortedCreatedTopics(sortingOption, searchedText, userId);
 
@@ -185,16 +182,15 @@ public class UsersContributionsController extends ConvenientController {
                                      Authentication authentication,
                                      @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION, required = false)
                                          MessageSortingOption sortingOption,
-                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
-                                         String searchedText,
+                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                      @PathVariable(UrlPartConstants.ID) String pathUserId,
                                      @PathVariable("whichMessages") String whichMessages,
                                      @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
-        Integer userId = toNonNegativeInteger(pathUserId);
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
+        int userId = toNonNegativeInteger(pathUserId);
+        int pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Message> messages = searchedAndSortedMessages(sortingOption, searchedText, whichMessages, userId);
+        List<Message> messages = searchedAndSortedMessages(sortingOption, searchedText, userId, whichMessages);
 
         addForHeader(model, authentication, sectionService);
         add(model, "messages", messageService.onPage(messages, pageNumber));
@@ -204,8 +200,8 @@ public class UsersContributionsController extends ConvenientController {
                 pageNumber
         ));
         add(model, CommonAttributeNameConstants.IS_FOR_USER_CONTRIBUTIONS, true);
-        add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
+        add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
         add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
@@ -239,16 +235,15 @@ public class UsersContributionsController extends ConvenientController {
                                  Authentication authentication,
                                  @SessionAttribute(value = SortingOptionNameConstants.FOR_BANS_SORTING_OPTION, required = false)
                                      BanSortingOption sortingOption,
-                                 @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
-                                     String searchedText,
+                                 @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                  @PathVariable(UrlPartConstants.ID) String pathUserId,
                                  @PathVariable("whichBans") String whichBans,
                                  @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
-        Integer userId = toNonNegativeInteger(pathUserId);
-        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
+        int userId = toNonNegativeInteger(pathUserId);
+        int pageNumber = toNonNegativeInteger(pathPageNumber);
 
-        List<Ban> bans = searchedAndSortedBans(sortingOption, searchedText, whichBans, userId);
+        List<Ban> bans = searchedAndSortedBans(sortingOption, searchedText, userId,  whichBans);
 
         addForHeader(model, authentication, sectionService);
         add(model, "bans", banService.onPage(bans, pageNumber));
@@ -272,31 +267,31 @@ public class UsersContributionsController extends ConvenientController {
         return "bans";
     }
 
-    private List<Section> sortedCreatedSections(SectionSortingOption sortingOption, Integer userId) {
+    private List<Section> sortedCreatedSections(SectionSortingOption sortingOption, int userId) {
         return sortingOption != null
                 ? sectionService.findAllByUserIdSorted(userId, sortingOption)
                 : sectionService.findAllByUserIdSorted(userId);
     }
 
-    private List<Section> searchedAndSortedCreatedSections(SectionSortingOption sortingOption, String searchedText, Integer userId) {
+    private List<Section> searchedAndSortedCreatedSections(SectionSortingOption sortingOption, String searchedText, int userId) {
         return searchedText != null && !searchedText.isEmpty()
                 ? sectionService.search(sortedCreatedSections(sortingOption, userId), searchedText)
                 : sortedCreatedSections(sortingOption, userId);
     }
 
-    private List<Topic> sortedCreatedTopics(TopicSortingOption sortingOption, Integer userId) {
+    private List<Topic> sortedCreatedTopics(TopicSortingOption sortingOption, int userId) {
         return sortingOption != null
                 ? topicService.findAllByUserIdSorted(userId, sortingOption)
                 : topicService.findAllByUserIdSorted(userId);
     }
 
-    private List<Topic> searchedAndSortedCreatedTopics(TopicSortingOption sortingOption, String searchedText, Integer userId) {
+    private List<Topic> searchedAndSortedCreatedTopics(TopicSortingOption sortingOption, String searchedText, int userId) {
         return searchedText != null && !searchedText.isEmpty()
                 ? topicService.search(sortedCreatedTopics(sortingOption, userId), searchedText)
                 : sortedCreatedTopics(sortingOption, userId);
     }
 
-    private List<Message> sortedMessagesSwitch(String whichMessages, MessageSortingOption sortingOption, Integer userId) {
+    private List<Message> sortedMessagesSwitch(String whichMessages, MessageSortingOption sortingOption, int userId) {
         return switch (whichMessages) {
             case POSTED -> sortedPostedMessages(sortingOption, userId);
             case LIKED -> sortedLikedMessages(sortingOption, userId);
@@ -305,33 +300,31 @@ public class UsersContributionsController extends ConvenientController {
         };
     }
 
-    private List<Message> sortedPostedMessages(MessageSortingOption sortingOption, Integer userId) {
+    private List<Message> sortedPostedMessages(MessageSortingOption sortingOption, int userId) {
         return sortingOption != null
                 ? messageService.findAllByUserIdSorted(userId, sortingOption)
                 : messageService.findAllByUserIdSorted(userId);
     }
 
-    private List<Message> sortedLikedMessages(MessageSortingOption sortingOption, Integer userId) {
+    private List<Message> sortedLikedMessages(MessageSortingOption sortingOption, int userId) {
         return sortingOption != null
                 ? messageService.findAllLikedByUserIdSorted(userId, sortingOption)
                 : messageService.findAllLikedByUserIdSorted(userId);
     }
 
-    private List<Message> sortedDislikedMessages(MessageSortingOption sortingOption, Integer userId) {
+    private List<Message> sortedDislikedMessages(MessageSortingOption sortingOption, int userId) {
         return sortingOption != null
                 ? messageService.findAllDislikedByUserIdSorted(userId, sortingOption)
                 : messageService.findAllDislikedByUserIdSorted(userId);
     }
 
-    private List<Message> searchedAndSortedMessages(MessageSortingOption sortingOption, String searchedText, String whichMessages,
-                                                    Integer userId) {
-
+    private List<Message> searchedAndSortedMessages(MessageSortingOption sortingOption, String searchedText, int userId, String whichMessages) {
         return searchedText != null && !searchedText.isEmpty()
                 ? messageService.search(sortedMessagesSwitch(whichMessages, sortingOption, userId), searchedText)
                 : sortedMessagesSwitch(whichMessages, sortingOption, userId);
     }
 
-    private List<Ban> sortedBansSwitch(String whichBans, BanSortingOption sortingOption, Integer userId) {
+    private List<Ban> sortedBansSwitch(String whichBans, BanSortingOption sortingOption, int userId) {
         return switch (whichBans) {
             case OBTAINED -> sortedObtainedBans(sortingOption, userId);
             case ASSIGNED -> sortedAssignedBans(sortingOption, userId);
@@ -339,21 +332,19 @@ public class UsersContributionsController extends ConvenientController {
         };
     }
 
-    private List<Ban> sortedObtainedBans(BanSortingOption sortingOption, Integer userId) {
+    private List<Ban> sortedObtainedBans(BanSortingOption sortingOption, int userId) {
         return sortingOption != null
                 ? banService.findAllByUserIdSorted(userId, sortingOption)
                 : banService.findAllByUserIdSorted(userId);
     }
 
-    private List<Ban> sortedAssignedBans(BanSortingOption sortingOption, Integer userId) {
+    private List<Ban> sortedAssignedBans(BanSortingOption sortingOption, int userId) {
         return sortingOption != null
                 ? banService.findAllByUserWhoAssignedIdSorted(userId, sortingOption)
                 : banService.findAllByUserWhoAssignedIdSorted(userId);
     }
 
-    private List<Ban> searchedAndSortedBans(BanSortingOption sortingOption, String searchedText, String whichBans,
-                                            Integer userId) {
-
+    private List<Ban> searchedAndSortedBans(BanSortingOption sortingOption, String searchedText, int userId, String whichBans) {
         return searchedText != null && !searchedText.isEmpty()
                 ? banService.search(sortedBansSwitch(whichBans, sortingOption, userId), searchedText)
                 : sortedBansSwitch(whichBans, sortingOption, userId);

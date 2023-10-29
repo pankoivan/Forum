@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_USERS_ACTIONS_CONTROLLER)
@@ -50,61 +51,89 @@ public class UsersActionsController extends ConvenientController {
 
     @PostMapping("/assign-user/{id}")
     @PreAuthorize("hasAnyAuthority('ASSIGN_AND_REMOVE_MODERS', 'ASSIGN_AND_REMOVE_ADMINS')")
-    public String redirectSourcePageAfterAssigningUser(@RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION)
+    public String redirectSourcePageAfterAssigningUser(RedirectAttributes redirectAttributes,
+                                                       @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION)
                                                            String sourcePage,
+                                                       @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                                           String searchedText,
                                                        @PathVariable("id") String pathId) {
 
-        Integer id = toNonNegativeInteger(pathId);
+        int id = toNonNegativeInteger(pathId);
 
         service.changeRole(service.findById(id), roleService.findByName("ROLE_USER"));
+        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+            redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
+        }
         return "redirect:%s".formatted(sourcePage);
     }
 
     @PostMapping("/assign-moder/{id}")
     @PreAuthorize("hasAuthority('ASSIGN_AND_REMOVE_MODERS')")
-    public String redirectSourcePageAfterAssigningModer(@RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION)
+    public String redirectSourcePageAfterAssigningModer(RedirectAttributes redirectAttributes,
+                                                        @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION)
                                                             String sourcePage,
+                                                        @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                                            String searchedText,
                                                         @PathVariable("id") String pathId) {
 
-        Integer id = toNonNegativeInteger(pathId);
+        int id = toNonNegativeInteger(pathId);
 
         service.changeRole(service.findById(id), roleService.findByName("ROLE_MODER"));
+        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+            redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
+        }
         return "redirect:%s".formatted(sourcePage);
     }
 
     @PostMapping("/assign-admin/{id}")
     @PreAuthorize("hasAuthority('ASSIGN_AND_REMOVE_ADMINS')")
-    public String redirectSourcePageAfterAssigningAdmin(@RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION)
+    public String redirectSourcePageAfterAssigningAdmin(RedirectAttributes redirectAttributes,
+                                                        @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION)
                                                             String sourcePage,
+                                                        @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                                            String searchedText,
                                                         @PathVariable("id") String pathId) {
 
-        Integer id = toNonNegativeInteger(pathId);
+        int id = toNonNegativeInteger(pathId);
 
         service.changeRole(service.findById(id), roleService.findByName("ROLE_ADMIN"));
+        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+            redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
+        }
         return "redirect:%s".formatted(sourcePage);
     }
 
     @PostMapping("/like/to{messageId}")
     @PreAuthorize("hasAuthority('LIKE')")
     public String redirectSourcePageAfterLike(Authentication authentication,
-                                              @RequestParam("isCancellation") boolean isCancellation,
+                                              RedirectAttributes redirectAttributes,
                                               @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION)
                                                   String sourcePage,
-                                              @PathVariable("messageId") Long messageId) {
+                                              @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
+                                              @RequestParam("isCancellation") boolean isCancellation,
+                                              @PathVariable("messageId") long messageId) {
 
         likeService.saveOrDelete(messageService.findById(messageId), extractCurrentUser(authentication), isCancellation);
+        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+            redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
+        }
         return "redirect:%s".formatted(sourcePage);
     }
 
     @PostMapping("/dislike/to{messageId}")
     @PreAuthorize("hasAuthority('DISLIKE')")
     public String redirectSourcePageAfterDislike(Authentication authentication,
-                                                 @RequestParam("isCancellation") boolean isCancellation,
+                                                 RedirectAttributes redirectAttributes,
                                                  @RequestParam(CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION)
                                                      String sourcePage,
-                                                 @PathVariable("messageId") Long messageId) {
+                                                 @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
+                                                 @RequestParam("isCancellation") boolean isCancellation,
+                                                 @PathVariable("messageId") long messageId) {
 
         dislikeService.saveOrDelete(messageService.findById(messageId), extractCurrentUser(authentication), isCancellation);
+        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+            redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
+        }
         return "redirect:%s".formatted(sourcePage);
     }
 
@@ -117,7 +146,7 @@ public class UsersActionsController extends ConvenientController {
                                     @SessionAttribute(value = "ban", required = false) Ban ban,
                                     @PathVariable("id") String pathUserId) {
 
-        Integer userId = toNonNegativeInteger(pathUserId);
+        int userId = toNonNegativeInteger(pathUserId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "ban", banService.empty());
@@ -141,7 +170,7 @@ public class UsersActionsController extends ConvenientController {
                                                   @Valid Ban ban,
                                                   BindingResult bindingResult) {
 
-        Integer userId = toNonNegativeInteger(pathUserId);
+        int userId = toNonNegativeInteger(pathUserId);
         User userWhoAssigned = extractCurrentUser(authentication);
 
         if (banService.savingValidation(ban, bindingResult)) {
@@ -158,7 +187,7 @@ public class UsersActionsController extends ConvenientController {
     @PreAuthorize("hasAuthority('BAN_AND_UNBAN')")
     public String redirectUserProfilePageAfterUnban(@PathVariable("id") String pathUserId) {
 
-        Integer userId = toNonNegativeInteger(pathUserId);
+        int userId = toNonNegativeInteger(pathUserId);
 
         banService.unban(service.findById(userId));
         return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER, userId);

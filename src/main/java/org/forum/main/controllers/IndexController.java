@@ -35,19 +35,8 @@ public class IndexController extends ConvenientController {
                                   Authentication authentication) {
 
         addForHeader(model, authentication, sectionService);
-        add(model, "page", "index");
         add(model, "topUsers", service.topUsers());
         add(model, "recentMessages", service.recentMessages());
-        add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
-        add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
-        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
-        statistics(model);
-
-        return "index";
-    }
-
-    private void statistics(Model model) {
         add(model, "usersCount", service.usersCount());
         add(model, "usualUsersCount", service.usualUsersCount());
         add(model, "modersCount", service.modersCount());
@@ -59,6 +48,13 @@ public class IndexController extends ConvenientController {
         add(model, "dislikesCount", service.dislikesCount());
         add(model, "bansCount", service.bansCount());
         add(model, "currentBansCount", service.currentBansCount());
+        add(model, CommonAttributeNameConstants.PAGE, "index");
+        add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
+        add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
+
+        return "index";
     }
 
 }

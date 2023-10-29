@@ -56,8 +56,8 @@ public class TopicsController extends ConvenientController {
                                    Authentication authentication,
                                    @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION, required = false)
                                        TopicSortingOption sortingOption,
-                                   @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
                                    @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
+                                   @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
                                    @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
                                    @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 

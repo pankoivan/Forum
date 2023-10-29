@@ -51,8 +51,8 @@ public class SectionsController extends ConvenientController {
                                      Authentication authentication,
                                      @SessionAttribute(value = SortingOptionNameConstants.FOR_SECTIONS_SORTING_OPTION, required = false)
                                          SectionSortingOption sortingOption,
-                                     @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
                                      @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
+                                     @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
                                      @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
         int pageNumber = toNonNegativeInteger(pathPageNumber);
