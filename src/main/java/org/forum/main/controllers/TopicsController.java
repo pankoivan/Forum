@@ -111,7 +111,7 @@ public class TopicsController extends ConvenientController {
         Integer sectionId = toNonNegativeInteger(pathSectionId);
 
         addForHeader(model, authentication, sectionService);
-        add(model, "sectionId", sectionId);
+        //add(model, "sectionId", sectionId);
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать тему");
 
@@ -132,50 +132,76 @@ public class TopicsController extends ConvenientController {
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_TOPICS', 'WORK_WITH_OTHER_TOPICS')")
     public String redirectTopicsPageAfterSaving(HttpSession session,
+                                                RedirectAttributes redirectAttributes,
                                                 Authentication authentication,
                                                 @Valid Topic topic,
                                                 BindingResult bindingResult,
+                                                @RequestParam(value = "pageNumber", required = false) String pageNumber,
                                                 @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId) {
 
         Integer sectionId = toNonNegativeInteger(pathSectionId);
+
+        boolean isNew = service.isNew(topic);
 
         if (service.savingValidation(topic, bindingResult)) {
             session.setAttribute("object", topic);
             session.setAttribute("formSubmitButtonText", service.isNew(topic) ? "Создать тему" : "Сохранить");
             session.setAttribute("errorMessage", service.anyError(bindingResult));
+            redirectAttributes.addAttribute("pageNumber", pageNumber);
             return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER, "create");
         }
 
         service.save(topic, extractCurrentUser(authentication), sectionService.findById(sectionId));
-        return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
+        return "redirect:%s/%s%s".formatted(
+                ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
+                UrlPartConstants.PAGE,
+                isNew ? service.pagesCount(service.findAllBySectionId(sectionId)) : pageNumber
+        );
     }
 
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_TOPICS', 'WORK_WITH_OTHER_TOPICS')")
-    public String returnTopicFormPageForEditing(HttpSession session, @PathVariable("id") String pathId) {
+    public String returnTopicFormPageForEditing(HttpSession session,
+                                                RedirectAttributes redirectAttributes,
+                                                @RequestParam(value = "pageNumber", required = false) String pageNumber,
+                                                @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
 
         session.setAttribute("object", service.findById(id));
         session.setAttribute("formSubmitButtonText", "Сохранить");
 
+        redirectAttributes.addAttribute("pageNumber", pageNumber);
         return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER, "create");
     }
 
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_TOPICS', 'WORK_WITH_OTHER_TOPICS')")
-    public String redirectTopicsPageAfterDeleting(HttpSession session, @PathVariable("id") String pathId) {
+    public String redirectTopicsPageAfterDeleting(HttpSession session,
+                                                  @RequestParam(value = "pageNumber", required = false) String pathPageNumber,
+                                                  @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
+        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
+        Integer pagesCount = service.pagesCount(service.findAllBySectionId(service.findById(id).getSection().getId()));
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
             session.setAttribute("errorMessage", msg);
-            return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
+            return "redirect:%s/%s%s".formatted(
+                    ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
+                    UrlPartConstants.PAGE,
+                    pageNumber
+            );
         }
 
         service.deleteById(id);
-        return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER);
+        int newPagesCount = service.pagesCount(service.findAllBySectionId(service.findById(id).getSection().getId()));
+        return "redirect:%s/%s%s".formatted(
+                ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
+                UrlPartConstants.PAGE,
+                pageNumber.equals(pagesCount) && newPagesCount < pagesCount ? newPagesCount : pageNumber
+        );
     }
 
     private List<Topic> sorted(TopicSortingOption sortingOption, Integer sectionId) {

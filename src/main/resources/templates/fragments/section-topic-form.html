@@ -64,7 +64,7 @@
                         <!-- Сама форма -->
                         <form
                             action="#"
-                            th:action="${submitUrl}"
+                            th:action="${submitUrl} + '?pageNumber=' + ${param.pageNumber}"
                             method="post"
                             class="my-3"
                             th:object="${object}"

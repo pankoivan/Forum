@@ -118,47 +118,73 @@ public class SectionsController extends ConvenientController {
     @PostMapping("/save")
     @PreAuthorize("hasAuthority('WORK_WITH_SECTIONS')")
     public String redirectSectionsPageAfterSaving(HttpSession session,
+                                                  RedirectAttributes redirectAttributes,
                                                   Authentication authentication,
                                                   @Valid Section section,
-                                                  BindingResult bindingResult) {
+                                                  BindingResult bindingResult,
+                                                  @RequestParam(value = "pageNumber", required = false) String pageNumber) {
+
+        boolean isNew = service.isNew(section);
 
         if (service.savingValidation(section, bindingResult)) {
             session.setAttribute("object", section);
             session.setAttribute("formSubmitButtonText", service.isNew(section) ? "Создать раздел" : "Сохранить");
             session.setAttribute("errorMessage", service.anyError(bindingResult));
+            redirectAttributes.addAttribute("pageNumber", pageNumber);
             return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER, "create");
         }
 
         service.save(section, extractCurrentUser(authentication));
-        return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
+        return "redirect:%s/%s%s".formatted(
+                ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER,
+                UrlPartConstants.PAGE,
+                isNew ? service.pagesCount(service.findAll()) : pageNumber
+        );
     }
 
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('WORK_WITH_SECTIONS')")
-    public String returnSectionFormPageForEditing(HttpSession session, @PathVariable("id") String pathId) {
+    public String returnSectionFormPageForEditing(HttpSession session,
+                                                  RedirectAttributes redirectAttributes,
+                                                  @RequestParam(value = "pageNumber", required = false) String pageNumber,
+                                                  @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
 
         session.setAttribute("object", service.findById(id));
         session.setAttribute("formSubmitButtonText", "Сохранить");
 
+        redirectAttributes.addAttribute("pageNumber", pageNumber);
         return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER, "create");
     }
 
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('WORK_WITH_SECTIONS')")
-    public String redirectSectionsPageAfterDeleting(HttpSession session, @PathVariable("id") String pathId) {
+    public String redirectSectionsPageAfterDeleting(HttpSession session,
+                                                    @RequestParam(value = "pageNumber", required = false) String pathPageNumber,
+                                                    @PathVariable("id") String pathId) {
 
         Integer id = toNonNegativeInteger(pathId);
+        Integer pageNumber = toNonNegativeInteger(pathPageNumber);
+        Integer pagesCount = service.pagesCount(service.findAll());
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
             session.setAttribute("errorMessage", msg);
-            return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
+            return "redirect:%s/%s%s".formatted(
+                    ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER,
+                    UrlPartConstants.PAGE,
+                    pageNumber
+            );
         }
 
         service.deleteById(id);
-        return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER);
+        int newPagesCount = service.pagesCount(service.findAll());
+        return "redirect:%s/%s%s".formatted(
+                ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER,
+                UrlPartConstants.PAGE,
+                pageNumber.equals(pagesCount) && newPagesCount < pagesCount ? newPagesCount : pageNumber
+        );
     }
 
     private List<Section> sorted(SectionSortingOption sortingOption) {
