@@ -130,7 +130,7 @@
                 <!-- Сама форма -->
                 <form
                     action="#"
-                    th:action="@{/sections/__${sectionId}__/topics/__${topicId}__/messages/page__${currentPage}__/save}"
+                    th:action="@{/sections/__${sectionId}__/topics/__${topicId}__/messages/page__${currentPage}__/save} + '?search=' + ${param.search ?: ''}"
                     method="post"
                     class="text-center flex-fill px-2 mt-1"
                     th:object="${message}"

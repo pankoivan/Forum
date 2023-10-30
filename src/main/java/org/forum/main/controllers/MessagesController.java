@@ -11,6 +11,7 @@ import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.options.MessageSortingOption;
 import org.forum.auxiliary.sorting.properties.MessageSortingProperties;
+import org.forum.auxiliary.utils.SearchingUtils;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Message;
 import org.forum.main.entities.Topic;
@@ -60,11 +61,11 @@ public class MessagesController extends ConvenientController {
                                      Authentication authentication,
                                      @SessionAttribute(value = SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION, required = false)
                                          MessageSortingOption sortingOption,
-                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                      @SessionAttribute(value = "message", required = false) Message message,
                                      @SessionAttribute(value = "formSubmitButtonText", required = false) String formSubmitButtonText,
                                      @SessionAttribute(value = "formErrorMessage", required = false) String formErrorMessage,
                                      @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
+                                     @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                      @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
                                      @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId,
                                      @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
@@ -120,14 +121,21 @@ public class MessagesController extends ConvenientController {
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/save")
     @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_MESSAGES', 'WORK_WITH_OTHER_MESSAGES')")
     public String redirectMessagesPageAfterSaving(HttpSession session,
+                                                  RedirectAttributes redirectAttributes,
                                                   Authentication authentication,
                                                   @Valid Message message,
                                                   BindingResult bindingResult,
+                                                  @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                                      String searchedText,
                                                   @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId) {
 
         int topicId = toNonNegativeInteger(pathTopicId);
 
         boolean isNew = service.isNew(message);
+
+        if (!isNew && SearchingUtils.isValid(searchedText)) {
+            redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
+        }
 
         if (service.savingValidation(message, bindingResult)) {
             session.setAttribute("message", message);
@@ -147,27 +155,48 @@ public class MessagesController extends ConvenientController {
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/edit/{id}")
     @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_MESSAGES', 'WORK_WITH_OTHER_MESSAGES')")
-    public String redirectMessagesPageForEditing(HttpSession session, @PathVariable("id") String pathId) {
+    public String redirectMessagesPageForEditing(HttpSession session,
+                                                 RedirectAttributes redirectAttributes,
+                                                 @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                                     String searchedText,
+                                                 @PathVariable("id") String pathId) {
 
         long id = toNonNegativeLong(pathId);
 
         session.setAttribute("message", service.findById(id));
         session.setAttribute("formSubmitButtonText", "Сохранить изменения");
 
+        if (SearchingUtils.isValid(searchedText)) {
+            redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
+        }
         return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER, UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN);
     }
 
     @PostMapping("/" + UrlPartConstants.PAGE_PAGE_NUMBER_PATTERN + "/delete/{id}")
     @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_MESSAGES', 'WORK_WITH_OTHER_MESSAGES')")
     public String redirectMessagesPageAfterDeleting(HttpSession session,
+                                                    RedirectAttributes redirectAttributes,
+                                                    @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                                        String searchedText,
                                                     @PathVariable(UrlPartConstants.TOPIC_ID) String pathTopicId,
                                                     @PathVariable("id") String pathId,
                                                     @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
         long id = toNonNegativeLong(pathId);
         int topicId = toNonNegativeInteger(pathTopicId);
+
+        boolean isValid = SearchingUtils.isValid(searchedText);
+
+        List<Message> messages = isValid
+                ? service.search(service.findAllByTopicId(topicId), searchedText)
+                : service.findAllByTopicId(topicId);
+
         int pageNumber = toNonNegativeInteger(pathPageNumber);
-        int oldPagesCount = service.pagesCount(service.findAllByTopicId(topicId));
+        int oldPagesCount = service.pagesCount(messages);
+
+        if (isValid) {
+            redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
+        }
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
@@ -176,7 +205,11 @@ public class MessagesController extends ConvenientController {
         }
 
         service.deleteById(id);
-        int newPagesCount = service.pagesCount(service.findAllByTopicId(topicId));
+        int newPagesCount = service.pagesCount(
+                isValid
+                        ? service.search(service.findAllByTopicId(topicId), searchedText)
+                        : service.findAllByTopicId(topicId)
+        );
         return "redirect:%s/%s%s".formatted(
                 ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
                 UrlPartConstants.PAGE,

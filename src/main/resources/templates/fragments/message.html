@@ -89,7 +89,7 @@
                             <div class="m-1">
                                 <form
                                     action="#"
-                                    th:action="@{/users/actions/like/to__${message.id}__} + '?search=' + ${param.search}"
+                                    th:action="@{/users/actions/like/to__${message.id}__} + '?search=' + ${param.search ?: ''}"
                                     method="post"
                                 >
                                     <input
@@ -167,7 +167,7 @@
                             <div class="m-1">
                                 <form
                                     action="#"
-                                    th:action="@{/users/actions/dislike/to__${message.id}__} + '?search=' + ${param.search}"
+                                    th:action="@{/users/actions/dislike/to__${message.id}__} + '?search=' + ${param.search ?: ''}"
                                     method="post"
                                 >
                                     <input

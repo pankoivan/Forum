@@ -127,7 +127,7 @@ public class SectionsController extends ConvenientController {
 
         boolean isNew = service.isNew(section);
 
-        if (!isNew && searchedText != null && !searchedText.isEmpty()) {
+        if (!isNew && SearchingUtils.isValid(searchedText)) {
             redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
         }
 

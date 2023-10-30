@@ -11,6 +11,7 @@ import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.properties.TopicSortingProperties;
 import org.forum.auxiliary.sorting.options.TopicSortingOption;
+import org.forum.auxiliary.utils.SearchingUtils;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Section;
 import org.forum.main.entities.Topic;
@@ -56,8 +57,8 @@ public class TopicsController extends ConvenientController {
                                    Authentication authentication,
                                    @SessionAttribute(value = SortingOptionNameConstants.FOR_TOPICS_SORTING_OPTION, required = false)
                                        TopicSortingOption sortingOption,
-                                   @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                    @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
+                                   @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                    @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
                                    @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
@@ -103,11 +104,15 @@ public class TopicsController extends ConvenientController {
                                                  @SessionAttribute(value = "object", required = false) Topic object,
                                                  @SessionAttribute(value = "formSubmitButtonText", required = false)
                                                      String formSubmitButtonText,
-                                                 @SessionAttribute(value = "errorMessage", required = false) String errorMessage) {
+                                                 @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
+                                                 @PathVariable("sectionId") String pathSectionId) {
+
+        int sectionId = toNonNegativeInteger(pathSectionId);
 
         addForHeader(model, authentication, sectionService);
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать тему");
+        add(model, "sectionId", sectionId);
 
         if (object != null) {
             add(model, "object", object);
@@ -131,11 +136,17 @@ public class TopicsController extends ConvenientController {
                                                 @Valid Topic topic,
                                                 BindingResult bindingResult,
                                                 @RequestParam(value = "pageNumber", required = false) String pageNumber,
+                                                @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                                    String searchedText,
                                                 @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId) {
 
         int sectionId = toNonNegativeInteger(pathSectionId);
 
         boolean isNew = service.isNew(topic);
+
+        if (!isNew && SearchingUtils.isValid(searchedText)) {
+            redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
+        }
 
         if (service.savingValidation(topic, bindingResult)) {
             session.setAttribute("object", topic);
@@ -158,6 +169,8 @@ public class TopicsController extends ConvenientController {
     public String returnTopicFormPageForEditing(HttpSession session,
                                                 RedirectAttributes redirectAttributes,
                                                 @RequestParam(value = "pageNumber", required = false) String pageNumber,
+                                                @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                                    String searchedText,
                                                 @PathVariable("id") String pathId) {
 
         int id = toNonNegativeInteger(pathId);
@@ -166,19 +179,36 @@ public class TopicsController extends ConvenientController {
         session.setAttribute("formSubmitButtonText", "Сохранить");
 
         redirectAttributes.addAttribute("pageNumber", pageNumber);
+        if (SearchingUtils.isValid(searchedText)) {
+            redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
+        }
         return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER, "create");
     }
 
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('WORK_WITH_OWN_TOPICS', 'WORK_WITH_OTHER_TOPICS')")
     public String redirectTopicsPageAfterDeleting(HttpSession session,
+                                                  RedirectAttributes redirectAttributes,
                                                   @RequestParam(value = "pageNumber", required = false) String pathPageNumber,
+                                                  @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false)
+                                                      String searchedText,
                                                   @PathVariable("id") String pathId) {
 
         int id = toNonNegativeInteger(pathId);
         int sectionId = service.findById(id).getSection().getId();
+
+        boolean isValid = SearchingUtils.isValid(searchedText);
+
+        List<Topic> topics = isValid
+                ? service.search(service.findAllBySectionId(sectionId), searchedText)
+                : service.findAllBySectionId(sectionId);
+
         int pageNumber = toNonNegativeInteger(pathPageNumber);
-        int oldPagesCount = service.pagesCount(service.findAllBySectionId(sectionId));
+        int oldPagesCount = service.pagesCount(topics);
+
+        if (isValid) {
+            redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
+        }
 
         String msg = service.deletingValidation(service.findById(id));
         if (msg != null) {
@@ -191,7 +221,11 @@ public class TopicsController extends ConvenientController {
         }
 
         service.deleteById(id);
-        int newPagesCount = service.pagesCount(service.findAllBySectionId(sectionId));
+        int newPagesCount = service.pagesCount(
+                isValid
+                        ? service.search(service.findAllBySectionId(sectionId), searchedText)
+                        : service.findAllBySectionId(sectionId)
+        );
         return "redirect:%s/%s%s".formatted(
                 ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER,
                 UrlPartConstants.PAGE,
@@ -206,7 +240,7 @@ public class TopicsController extends ConvenientController {
     }
 
     private List<Topic> searchedAndSorted(TopicSortingOption sortingOption, String searchedText, int sectionId) {
-        return searchedText != null && !searchedText.isEmpty()
+        return SearchingUtils.isValid(searchedText)
                 ? service.search(sorted(sortingOption, sectionId), searchedText)
                 : sorted(sortingOption, sectionId);
     }
