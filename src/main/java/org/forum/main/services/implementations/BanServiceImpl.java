@@ -53,6 +53,11 @@ public class BanServiceImpl extends DefaultPaginationImpl<Ban> implements BanSer
     }
 
     @Override
+    public BanSortingOption emptySortingOption() {
+        return new BanSortingOption();
+    }
+
+    @Override
     public boolean savingValidation(Ban validatedObject, BindingResult bindingResult) {
         if (validatedObject.getEndDate() == null) {
             bindingResult.addError(new ObjectError("endDateIsNull",
@@ -86,6 +91,11 @@ public class BanServiceImpl extends DefaultPaginationImpl<Ban> implements BanSer
                 () -> repository.findAll(Sort.by(option.getDirection(), "reason")),
                 () -> repository.findAll(Sort.by(option.getDirection(), "userWhoAssigned.nickname"))
         );
+    }
+
+    @Override
+    public List<Ban> findAllSorted() {
+        return findAllSorted(DefaultSortingOptionConstants.FOR_BANS);
     }
 
     @Override
@@ -138,16 +148,6 @@ public class BanServiceImpl extends DefaultPaginationImpl<Ban> implements BanSer
     @Override
     public int pagesCount(List<Ban> items) {
         return pagesCountImpl(items, PaginationConstants.FOR_BANS);
-    }
-
-    @Override
-    public BanSortingOption emptySortingOption() {
-        return new BanSortingOption();
-    }
-
-    @Override
-    public List<Ban> findAllSorted() {
-        return findAllSorted(DefaultSortingOptionConstants.FOR_BANS);
     }
 
     @Override

@@ -12,7 +12,7 @@ public interface ValidationService<T> {
     default String anyError(BindingResult bindingResult) {
         return bindingResult.getAllErrors().stream()
                 .findAny()
-                .orElseThrow(() -> new ServiceException("There was no errors in BindingResult"))
+                .orElseThrow(() -> new ServiceException("There were no errors in BindingResult"))
                 .getDefaultMessage();
     }
 

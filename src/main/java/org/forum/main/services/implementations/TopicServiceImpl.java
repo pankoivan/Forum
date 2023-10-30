@@ -159,7 +159,13 @@ public class TopicServiceImpl extends DefaultPaginationImpl<Topic> implements To
     @Override
     public List<Topic> search(List<Topic> topics, String searchedString) {
         return topics.stream()
-                .filter(topic -> SearchingUtils.search(topic.getName(), searchedString))
+                .filter(topic -> SearchingUtils.search(
+                        searchedString,
+                        topic.getName(),
+                        topic.getDescription(),
+                        topic.getUserWhoCreated().getNickname(),
+                        topic.getFormattedCreationDate()
+                ))
                 .toList();
     }
 

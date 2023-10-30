@@ -86,18 +86,18 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public long messagesCount() {
-        return messageRepository.count();
+    public int messagesCount() {
+        return (int) messageRepository.count();
     }
 
     @Override
-    public long likesCount() {
-        return likeRepository.count();
+    public int likesCount() {
+        return (int) likeRepository.count();
     }
 
     @Override
-    public long dislikesCount() {
-        return dislikeRepository.count();
+    public int dislikesCount() {
+        return (int) dislikeRepository.count();
     }
 
     @Override

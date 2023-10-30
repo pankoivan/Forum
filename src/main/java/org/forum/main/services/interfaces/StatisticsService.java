@@ -23,11 +23,11 @@ public interface StatisticsService {
 
     int topicsCount();
 
-    long messagesCount();
+    int messagesCount();
 
-    long likesCount();
+    int likesCount();
 
-    long dislikesCount();
+    int dislikesCount();
 
     int bansCount();
 

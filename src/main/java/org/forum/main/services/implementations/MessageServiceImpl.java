@@ -8,6 +8,7 @@ import org.forum.main.entities.Topic;
 import org.forum.auxiliary.exceptions.ServiceException;
 import org.forum.main.entities.User;
 import org.forum.main.services.implementations.common.DefaultPaginationImpl;
+import org.forum.main.services.interfaces.DislikeService;
 import org.forum.main.services.interfaces.MessageService;
 import org.forum.main.repositories.MessageRepository;
 import org.forum.auxiliary.constants.pagination.PaginationConstants;
@@ -25,9 +26,12 @@ public class MessageServiceImpl extends DefaultPaginationImpl<Message> implement
 
     private final MessageRepository repository;
 
+    private final DislikeService dislikeService;
+
     @Autowired
-    public MessageServiceImpl(MessageRepository repository) {
+    public MessageServiceImpl(MessageRepository repository, DislikeService dislikeService) {
         this.repository = repository;
+        this.dislikeService = dislikeService;
     }
 
     @Override
@@ -68,6 +72,8 @@ public class MessageServiceImpl extends DefaultPaginationImpl<Message> implement
 
     @Override
     public void deleteById(Long id) {
+        Message message = findById(id);
+        message.getDislikedUsers().forEach(dislikedUser -> dislikeService.delete(message, dislikedUser));
         repository.deleteById(id);
     }
 
@@ -208,7 +214,12 @@ public class MessageServiceImpl extends DefaultPaginationImpl<Message> implement
     @Override
     public List<Message> search(List<Message> messages, String searchedString) {
         return messages.stream()
-                .filter(message -> SearchingUtils.search(message.getText(), searchedString))
+                .filter(message -> SearchingUtils.search(
+                        searchedString,
+                        message.getText(),
+                        message.getUserWhoPosted().getNickname(),
+                        message.getFormattedCreationDate()
+                ))
                 .toList();
     }
 

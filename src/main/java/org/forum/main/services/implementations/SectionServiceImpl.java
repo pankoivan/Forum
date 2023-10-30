@@ -141,7 +141,13 @@ public class SectionServiceImpl extends DefaultPaginationImpl<Section> implement
     @Override
     public List<Section> search(List<Section> sections, String searchedString) {
         return sections.stream()
-                .filter(section -> SearchingUtils.search(section.getName(), searchedString))
+                .filter(section -> SearchingUtils.search(
+                        searchedString,
+                        section.getName(),
+                        section.getDescription(),
+                        section.getUserWhoCreated().getNickname(),
+                        section.getFormattedCreationDate()
+                ))
                 .toList();
     }
 

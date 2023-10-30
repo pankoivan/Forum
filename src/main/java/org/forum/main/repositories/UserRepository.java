@@ -32,8 +32,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = """
             SELECT u FROM User u
             LEFT JOIN u.postedMessages pm
-            LEFT JOIN pm.likedUsers lu
-            LEFT JOIN pm.dislikedUsers du
+            LEFT JOIN pm.likes lu
+            LEFT JOIN pm.dislikes du
             GROUP BY u.id
             ORDER BY
                 CASE WHEN :direction = 'ASC' THEN COUNT(lu.id) - COUNT(du.id) END ASC,

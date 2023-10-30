@@ -18,7 +18,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query(value = """
             SELECT m FROM Message m
-            LEFT JOIN m.likedUsers lu
+            LEFT JOIN m.likes lu
             GROUP BY m.id
             ORDER BY
                 CASE WHEN :direction = 'ASC' THEN COUNT(lu.id) END ASC,
@@ -28,7 +28,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query(value = """
             SELECT m FROM Message m
-            LEFT JOIN m.likedUsers lu
+            LEFT JOIN m.likes lu
             WHERE m.topic.id = :topicId
             GROUP BY m.id
             ORDER BY
@@ -40,7 +40,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query(value = """
             SELECT m FROM Message m
-            LEFT JOIN m.dislikedUsers du
+            LEFT JOIN m.dislikes du
             GROUP BY m.id
             ORDER BY
                 CASE WHEN :direction = 'ASC' THEN COUNT(du.id) END ASC,
@@ -50,7 +50,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query(value = """
             SELECT m FROM Message m
-            LEFT JOIN m.dislikedUsers du
+            LEFT JOIN m.dislikes du
             WHERE m.topic.id = :topicId
             GROUP BY m.id
             ORDER BY

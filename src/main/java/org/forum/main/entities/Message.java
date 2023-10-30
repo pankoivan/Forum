@@ -15,12 +15,12 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode(exclude = {
-        "likedUsers",
-        "dislikedUsers"
+        "likes",
+        "dislikes"
 })
 @ToString(exclude = {
-        "likedUsers",
-        "dislikedUsers"
+        "likes",
+        "dislikes"
 })
 @Entity
 @Table(name = "forum_message")
@@ -48,10 +48,10 @@ public class Message {
     private User userWhoPosted;
 
     @OneToMany(mappedBy = "message")
-    private List<Like> likedUsers;
+    private List<Like> likes;
 
     @OneToMany(mappedBy = "message")
-    private List<Dislike> dislikedUsers;
+    private List<Dislike> dislikes;
 
     @ManyToOne
     @JoinColumn(name = "topic_id")
@@ -66,39 +66,39 @@ public class Message {
     }
 
     public boolean hasLikes() {
-        return !likedUsers.isEmpty();
+        return !likes.isEmpty();
     }
 
     public int likesCount() {
-        return likedUsers.size();
+        return likes.size();
     }
 
     public int dislikesCount() {
-        return dislikedUsers.size();
+        return dislikes.size();
     }
 
     public List<User> getLikedUsers() {
-        return likedUsers.stream()
+        return likes.stream()
                 .map(Like::getUser)
                 .toList();
     }
 
     public List<User> getDislikedUsers() {
-        return dislikedUsers.stream()
+        return dislikes.stream()
                 .map(Dislike::getUser)
                 .toList();
     }
 
     public boolean containsLikedUserById(Integer likedUserId) {
-        return likedUsers.stream()
+        return likes.stream()
                 .map(Like::getUser)
                 .anyMatch(user -> user.getId().equals(likedUserId));
     }
 
-    public boolean containsDislikedUserById(Integer dislikedUserid) {
-        return dislikedUsers.stream()
+    public boolean containsDislikedUserById(Integer dislikedUserId) {
+        return dislikes.stream()
                 .map(Dislike::getUser)
-                .anyMatch(user -> user.getId().equals(dislikedUserid));
+                .anyMatch(user -> user.getId().equals(dislikedUserId));
     }
 
 }
