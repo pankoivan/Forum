@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
+import org.forum.auxiliary.utils.SearchingUtils;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.Ban;
 import org.forum.main.entities.User;
@@ -61,7 +62,7 @@ public class UsersActionsController extends ConvenientController {
         int id = toNonNegativeInteger(pathId);
 
         service.changeRole(service.findById(id), roleService.findByName("ROLE_USER"));
-        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+        if (SearchingUtils.isValid(searchedText)) {
             redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
         }
         return "redirect:%s".formatted(sourcePage);
@@ -79,7 +80,7 @@ public class UsersActionsController extends ConvenientController {
         int id = toNonNegativeInteger(pathId);
 
         service.changeRole(service.findById(id), roleService.findByName("ROLE_MODER"));
-        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+        if (SearchingUtils.isValid(searchedText)) {
             redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
         }
         return "redirect:%s".formatted(sourcePage);
@@ -97,7 +98,7 @@ public class UsersActionsController extends ConvenientController {
         int id = toNonNegativeInteger(pathId);
 
         service.changeRole(service.findById(id), roleService.findByName("ROLE_ADMIN"));
-        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+        if (SearchingUtils.isValid(searchedText)) {
             redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
         }
         return "redirect:%s".formatted(sourcePage);
@@ -114,7 +115,7 @@ public class UsersActionsController extends ConvenientController {
                                               @PathVariable("messageId") long messageId) {
 
         likeService.saveOrDelete(messageService.findById(messageId), extractCurrentUser(authentication), isCancellation);
-        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+        if (SearchingUtils.isValid(searchedText)) {
             redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
         }
         return "redirect:%s".formatted(sourcePage);
@@ -131,7 +132,7 @@ public class UsersActionsController extends ConvenientController {
                                                  @PathVariable("messageId") long messageId) {
 
         dislikeService.saveOrDelete(messageService.findById(messageId), extractCurrentUser(authentication), isCancellation);
-        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+        if (SearchingUtils.isValid(searchedText)) {
             redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
         }
         return "redirect:%s".formatted(sourcePage);
@@ -142,8 +143,8 @@ public class UsersActionsController extends ConvenientController {
     public String returnBanFormPage(HttpSession session,
                                     Model model,
                                     Authentication authentication,
-                                    @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
                                     @SessionAttribute(value = "ban", required = false) Ban ban,
+                                    @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
                                     @PathVariable("id") String pathUserId) {
 
         int userId = toNonNegativeInteger(pathUserId);
@@ -171,7 +172,6 @@ public class UsersActionsController extends ConvenientController {
                                                   BindingResult bindingResult) {
 
         int userId = toNonNegativeInteger(pathUserId);
-        User userWhoAssigned = extractCurrentUser(authentication);
 
         if (banService.savingValidation(ban, bindingResult)) {
             session.setAttribute("errorMessage", banService.anyError(bindingResult));
@@ -179,7 +179,7 @@ public class UsersActionsController extends ConvenientController {
             return "redirect:%s/ban/%s".formatted(ControllerBaseUrlConstants.FOR_USERS_ACTIONS_CONTROLLER, userId);
         }
 
-        banService.save(ban, service.findById(userId), userWhoAssigned);
+        banService.save(ban, service.findById(userId), extractCurrentUser(authentication));
         return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_USERS_CONTROLLER, userId);
     }
 

@@ -98,8 +98,8 @@ public class UsersController extends ConvenientController {
 
         addForHeader(model, authentication, sectionService);
         add(model, "users", service.onPage(users, pageNumber));
-        add(model, CommonAttributeNameConstants.TITLE, "%s (стр. %s)".formatted(ROLES_MAP.get(userUrlRole.orElse("")), pageNumber));
         add(model, CommonAttributeNameConstants.PAGE, userUrlRole.orElse("users"));
+        add(model, CommonAttributeNameConstants.TITLE, "%s (стр. %s)".formatted(ROLES_MAP.get(userUrlRole.orElse("")), pageNumber));
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
         add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
