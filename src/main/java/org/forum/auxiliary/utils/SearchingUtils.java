@@ -5,6 +5,10 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class SearchingUtils {
 
+    public static boolean isValid(String searchedString) {
+        return searchedString != null && !searchedString.isEmpty();
+    }
+
     public static boolean search(String sourceString, String searchedString) {
         String source = sourceString.toLowerCase(), searched = searchedString.toLowerCase();
         return source.contains(searched) || searched.contains(source);

@@ -28,7 +28,11 @@
                 class="d-flex flex-row align-items-center justify-content-between"
             >
                 <!-- Кнопка редактирования -->
-                <form action="#" method="post" th:action="${editUrl}">
+                <form
+                    action="#"
+                    method="post"
+                    th:action="${editUrl} + ${editUrl.contains('?') ? '&' : '?'} + 'search=' + ${param.search ?: ''}"
+                >
                     <button class="btn btn-sm btn-success rounded-circle m-1">
                         <img
                             alt="Редактировать"
@@ -40,7 +44,11 @@
                     </button>
                 </form>
                 <!-- Кнопка удаления -->
-                <form action="#" method="post" th:action="${deleteUrl}">
+                <form
+                    action="#"
+                    method="post"
+                    th:action="${deleteUrl} + ${deleteUrl.contains('?') ? '&' : '?'} + 'search=' + ${param.search ?: ''}"
+                >
                     <button class="btn btn-sm btn-danger rounded-circle m-1">
                         <img
                             alt="Удалить"
