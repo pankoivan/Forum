@@ -6,6 +6,7 @@ import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
 import org.forum.auxiliary.sorting.options.*;
+import org.forum.auxiliary.utils.SearchingUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class SortingController {
                                                           String searchedText) {
 
         session.setAttribute(sortingOptionName, sortingOption);
-        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+        if (SearchingUtils.isValid(searchedText)) {
             redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
         }
         return "redirect:%s".formatted(sortingSourcePageUrl);
@@ -46,7 +47,7 @@ public class SortingController {
                                                              String searchedText) {
 
         session.setAttribute(sortingOptionName, sortingOption);
-        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+        if (SearchingUtils.isValid(searchedText)) {
             redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
         }
         return "redirect:%s".formatted(sortingSourcePageUrl);
@@ -64,7 +65,7 @@ public class SortingController {
                                                            String searchedText) {
 
         session.setAttribute(sortingOptionName, sortingOption);
-        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+        if (SearchingUtils.isValid(searchedText)) {
             redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
         }
         return "redirect:%s".formatted(sortingSourcePageUrl);
@@ -82,7 +83,7 @@ public class SortingController {
                                                              String searchedText) {
 
         session.setAttribute(sortingOptionName, sortingOption);
-        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+        if (SearchingUtils.isValid(searchedText)) {
             redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
         }
         return "redirect:%s".formatted(sortingSourcePageUrl);
@@ -100,7 +101,7 @@ public class SortingController {
                                                          String searchedText) {
 
         session.setAttribute(sortingOptionName, sortingOption);
-        if (searchedText != null && !searchedText.isEmpty() && !searchedText.equals("null")) {
+        if (SearchingUtils.isValid(searchedText)) {
             redirectAttributes.addAttribute(CommonAttributeNameConstants.SEARCH, searchedText);
         }
         return "redirect:%s".formatted(sortingSourcePageUrl);

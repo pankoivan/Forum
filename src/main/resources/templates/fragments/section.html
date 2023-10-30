@@ -40,8 +40,8 @@
                     <!-- Кнопки редактирования и удаления -->
                     <div
                         th:replace="~{fragments/edit-delete-buttons :: edit-delete-buttons (
-                                editUrl = '/sections/edit/__${section.id}__?pageNumber=__${currentPage}__',
-                                deleteUrl = '/sections/delete/__${section.id}__?pageNumber=__${currentPage}__'
+                                editUrl = '/sections/edit/__${section.id}__',
+                                deleteUrl = '/sections/delete/__${section.id}__'
                             )
                         }"
                         class="d-flex flex-row align-items-center justify-content-between"

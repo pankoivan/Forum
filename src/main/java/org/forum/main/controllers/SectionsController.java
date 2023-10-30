@@ -25,7 +25,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER)
@@ -56,6 +58,9 @@ public class SectionsController extends ConvenientController {
                                      @RequestParam(value = CommonAttributeNameConstants.SEARCH, required = false) String searchedText,
                                      @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
+        Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
+        parameterMap.put("pageNumber", new String[] {pathPageNumber});
+
         int pageNumber = toNonNegativeInteger(pathPageNumber);
 
         List<Section> sections = searchedAndSorted(sortingOption, searchedText);
@@ -68,7 +73,7 @@ public class SectionsController extends ConvenientController {
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
-        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(parameterMap));
         add(model, PaginationAttributeNameConstants.PAGES_COUNT, service.pagesCount(sections));
         add(model, PaginationAttributeNameConstants.CURRENT_PAGE, pageNumber);
         add(model, SortingAttributeNameConstants.SORTING_OBJECT, sortingOption == null ? service.emptySortingOption() : sortingOption);
@@ -89,6 +94,7 @@ public class SectionsController extends ConvenientController {
     @GetMapping("/create")
     @PreAuthorize("hasAuthority('WORK_WITH_SECTIONS')")
     public String returnSectionFormPageForCreating(HttpSession session,
+                                                   HttpServletRequest request,
                                                    Model model,
                                                    Authentication authentication,
                                                    @SessionAttribute(value = "object", required = false) Section object,
@@ -99,6 +105,7 @@ public class SectionsController extends ConvenientController {
         addForHeader(model, authentication, service);
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать раздел");
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
 
         if (object != null) {
             add(model, "object", object);

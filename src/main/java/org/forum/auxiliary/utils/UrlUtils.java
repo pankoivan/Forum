@@ -30,6 +30,14 @@ public final class UrlUtils {
         return url.replaceFirst(PAGINATION_PATTERN, "");
     }
 
+    private static String makeParameter(Map.Entry<String, String[]> parameter) {
+        StringBuilder sb = new StringBuilder();
+        for (String value : parameter.getValue()) {
+            sb.append("%s=%s".formatted(parameter.getKey(), value)).append("&");
+        }
+        return sb.deleteCharAt(sb.length() - 1).toString();
+    }
+
     public static String makeParametersString(Map<String, String[]> parameterMap) {
         if (parameterMap.isEmpty()) {
             return "";
@@ -37,14 +45,6 @@ public final class UrlUtils {
         StringBuilder sb = new StringBuilder("?");
         for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
             sb.append(makeParameter(entry)).append("&");
-        }
-        return sb.deleteCharAt(sb.length() - 1).toString();
-    }
-
-    private static String makeParameter(Map.Entry<String, String[]> parameter) {
-        StringBuilder sb = new StringBuilder();
-        for (String value : parameter.getValue()) {
-            sb.append("%s=%s".formatted(parameter.getKey(), value)).append("&");
         }
         return sb.deleteCharAt(sb.length() - 1).toString();
     }

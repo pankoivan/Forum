@@ -28,7 +28,7 @@
                     <form
                         th:fragment="sort"
                         action="#"
-                        th:action="${sortingSubmitUrl} + '?search=' + ${param.search}"
+                        th:action="${sortingSubmitUrl} + ${requestParameters ?: ''}"
                         method="post"
                         class="d-flex flex-row align-items-center justify-content-between bg-dark rounded text-white px-1 py-3"
                         th:object="${sortingObject}"

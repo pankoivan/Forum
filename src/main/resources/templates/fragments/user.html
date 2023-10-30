@@ -84,8 +84,8 @@
                     <form
                         class="mx-1"
                         action="#"
-                        th:action="${user.hasRole('ROLE_MODER')} ? '/users/actions/assign-user/__${user.id}__?search=' + ${param.search ?: ''}
-                                                                 : '/users/actions/assign-moder/__${user.id}__?search=' + ${param.search ?: ''}"
+                        th:action="${user.hasRole('ROLE_MODER')} ? '/users/actions/assign-user/__${user.id}__' + ${requestParameters ?: ''}
+                                                                 : '/users/actions/assign-moder/__${user.id}__' + ${requestParameters ?: ''}"
                         method="post"
                         th:if="${!user.hasRole('ROLE_ADMIN') AND #authorization.expression('hasAuthority(''ASSIGN_AND_REMOVE_MODERS'')')}"
                     >
@@ -117,8 +117,8 @@
                     <!-- Кнопка присвоения/снятия администраторства -->
                     <form
                         sec:authorize="hasAuthority('ASSIGN_AND_REMOVE_ADMINS')"
-                        th:action="${user.hasRole('ROLE_ADMIN')} ? '/users/actions/assign-user/__${user.id}__?search=' + ${param.search ?: ''}
-                                                                 : '/users/actions/assign-admin/__${user.id}__?search=' + ${param.search ?: ''}"
+                        th:action="${user.hasRole('ROLE_ADMIN')} ? '/users/actions/assign-user/__${user.id}__' + ${requestParameters ?: ''}
+                                                                 : '/users/actions/assign-admin/__${user.id}__' + ${requestParameters ?: ''}"
                         action="#"
                         class="mx-1"
                         method="post"

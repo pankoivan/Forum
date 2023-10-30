@@ -224,7 +224,7 @@ public class MessagesController extends ConvenientController {
     }
 
     private List<Message> searchedAndSorted(MessageSortingOption sortingOption, String searchedText, int topicId) {
-        return searchedText != null && !searchedText.isEmpty()
+        return SearchingUtils.isValid(searchedText)
                 ? service.search(sorted(sortingOption, topicId), searchedText)
                 : sorted(sortingOption, topicId);
     }

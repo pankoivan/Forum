@@ -27,7 +27,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER)
@@ -62,6 +64,9 @@ public class TopicsController extends ConvenientController {
                                    @PathVariable(UrlPartConstants.SECTION_ID) String pathSectionId,
                                    @PathVariable(UrlPartConstants.PAGE_NUMBER) String pathPageNumber) {
 
+        Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
+        parameterMap.put("pageNumber", new String[] {pathPageNumber});
+
         int sectionId = toNonNegativeInteger(pathSectionId);
         int pageNumber = toNonNegativeInteger(pathPageNumber);
 
@@ -78,7 +83,7 @@ public class TopicsController extends ConvenientController {
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, true);
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
         add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
-        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(parameterMap));
         add(model, PaginationAttributeNameConstants.PAGES_COUNT, service.pagesCount(topics));
         add(model, PaginationAttributeNameConstants.CURRENT_PAGE, pageNumber);
         add(model, SortingAttributeNameConstants.SORTING_OBJECT, sortingOption == null ? service.emptySortingOption() : sortingOption);
@@ -99,6 +104,7 @@ public class TopicsController extends ConvenientController {
     @GetMapping("/create")
     @PreAuthorize("hasAuthority('WORK_WITH_OWN_TOPICS')")
     public String returnTopicFormPageForCreating(HttpSession session,
+                                                 HttpServletRequest request,
                                                  Model model,
                                                  Authentication authentication,
                                                  @SessionAttribute(value = "object", required = false) Topic object,
@@ -113,6 +119,7 @@ public class TopicsController extends ConvenientController {
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать тему");
         add(model, "sectionId", sectionId);
+        add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
 
         if (object != null) {
             add(model, "object", object);
