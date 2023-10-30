@@ -21,8 +21,8 @@ import java.util.List;
         "createdSections",
         "createdTopics",
         "postedMessages",
-        "likedMessages",
-        "dislikedMessages",
+        "likes",
+        "dislikes",
         "bans",
         "assignedBans"
 })
@@ -30,8 +30,8 @@ import java.util.List;
         "createdSections",
         "createdTopics",
         "postedMessages",
-        "likedMessages",
-        "dislikedMessages",
+        "likes",
+        "dislikes",
         "bans",
         "assignedBans"
 })
@@ -72,10 +72,10 @@ public class User implements UserDetails {
     private List<Message> postedMessages;
 
     @OneToMany(mappedBy = "user")
-    private List<Like> likedMessages;
+    private List<Like> likes;
 
     @OneToMany(mappedBy = "user")
-    private List<Dislike> dislikedMessages;
+    private List<Dislike> dislikes;
 
     @OneToMany(
             mappedBy = "user",
@@ -181,11 +181,11 @@ public class User implements UserDetails {
     }
 
     public int getAssignedLikesCount() {
-        return likedMessages.size();
+        return likes.size();
     }
 
     public int getAssignedDislikesCount() {
-        return dislikedMessages.size();
+        return dislikes.size();
     }
 
     public List<Message> getRecentMessages(int limit) {
@@ -200,7 +200,7 @@ public class User implements UserDetails {
     }
 
     public List<Message> getRecentLikedMessages(int limit) {
-        return likedMessages.stream()
+        return likes.stream()
                 .map(Like::getMessage)
                 .sorted(Comparator.comparing(Message::getCreationDate))
                 .limit(limit)
@@ -212,7 +212,7 @@ public class User implements UserDetails {
     }
 
     public List<Message> getRecentDislikedMessages(int limit) {
-        return dislikedMessages.stream()
+        return dislikes.stream()
                 .map(Dislike::getMessage)
                 .sorted(Comparator.comparing(Message::getCreationDate))
                 .limit(limit)

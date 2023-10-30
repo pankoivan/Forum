@@ -110,8 +110,9 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
         return mySwitch(option,
                 () -> repository.findAllByRoleName(roleName, Sort.by(option.getDirection(), "nickname")),
                 () -> repository.findAllByRoleName(roleName, Sort.by(option.getDirection(), "registrationDate")),
-                () -> repository.findAllByRoleNameOrderByMessagesCountWithDirection(roleName, option.getDirection().name()),
-                () -> repository.findAllByRoleNameOrderByReputationWithDirection(roleName, option.getDirection().name()));
+                () -> filterByRoleName(repository.findAllByOrderByMessagesCountWithDirection(option.getDirection().name()), roleName),
+                () -> filterByRoleName(repository.findAllByOrderByReputationWithDirection(option.getDirection().name()), roleName)
+        );
     }
 
     @Override
@@ -128,7 +129,12 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
     @Override
     public List<User> search(List<User> users, String searchedString) {
         return users.stream()
-                .filter(user -> SearchingUtils.search(user.getNickname(), searchedString))
+                .filter(user -> SearchingUtils.search(
+                        searchedString,
+                        user.getNickname(),
+                        user.getFormattedRegistrationDate(),
+                        user.getRole().getAlias()
+                ))
                 .toList();
     }
 
@@ -140,6 +146,12 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
             case BY_MESSAGES_COUNT -> suppliers[2].get();
             case BY_REPUTATION -> suppliers[3].get();
         };
+    }
+
+    private List<User> filterByRoleName(List<User> users, String roleName) {
+        return users.stream()
+                .filter(user -> user.hasRole(roleName))
+                .toList();
     }
 
 }

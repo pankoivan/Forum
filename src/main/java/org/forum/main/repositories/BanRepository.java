@@ -15,14 +15,10 @@ public interface BanRepository extends JpaRepository<Ban, Integer> {
 
     List<Ban> findAllByUserId(Integer id);
 
-    List<Ban> findAllByUserWhoAssignedId(Integer id);
-
     List<Ban> findAllByUserId(Integer id, Sort sort);
 
+    List<Ban> findAllByUserWhoAssignedId(Integer id);
+
     List<Ban> findAllByUserWhoAssignedId(Integer id, Sort sort);
-
-    /*List<Ban> findAllByOrderByUserNickname(Sort sort);
-
-    List<Ban> findAllByOrderByUserWhoAssignedNickname(Sort sort);*/
 
 }

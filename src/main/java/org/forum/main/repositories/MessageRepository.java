@@ -18,44 +18,44 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query(value = """
             SELECT m FROM Message m
-            LEFT JOIN m.likes lu
+            LEFT JOIN m.likes l
             GROUP BY m.id
             ORDER BY
-                CASE WHEN :direction = 'ASC' THEN COUNT(lu.id) END ASC,
-                CASE WHEN :direction = 'DESC' THEN COUNT(lu.id) END DESC
+                CASE WHEN :direction = 'ASC' THEN COUNT(l.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(l.id) END DESC
             """)
     List<Message> findAllByOrderByLikesCountWithDirection(@Param("direction") String direction);
 
     @Query(value = """
             SELECT m FROM Message m
-            LEFT JOIN m.likes lu
+            LEFT JOIN m.likes l
             WHERE m.topic.id = :topicId
             GROUP BY m.id
             ORDER BY
-                CASE WHEN :direction = 'ASC' THEN COUNT(lu.id) END ASC,
-                CASE WHEN :direction = 'DESC' THEN COUNT(lu.id) END DESC
+                CASE WHEN :direction = 'ASC' THEN COUNT(l.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(l.id) END DESC
             """)
     List<Message> findAllByTopicIdOrderByLikesCountWithDirection(@Param("topicId") Integer topicId,
                                                                  @Param("direction") String direction);
 
     @Query(value = """
             SELECT m FROM Message m
-            LEFT JOIN m.dislikes du
+            LEFT JOIN m.dislikes d
             GROUP BY m.id
             ORDER BY
-                CASE WHEN :direction = 'ASC' THEN COUNT(du.id) END ASC,
-                CASE WHEN :direction = 'DESC' THEN COUNT(du.id) END DESC
+                CASE WHEN :direction = 'ASC' THEN COUNT(d.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(d.id) END DESC
             """)
     List<Message> findAllByOrderByDislikesCountWithDirection(@Param("direction") String direction);
 
     @Query(value = """
             SELECT m FROM Message m
-            LEFT JOIN m.dislikes du
+            LEFT JOIN m.dislikes d
             WHERE m.topic.id = :topicId
             GROUP BY m.id
             ORDER BY
-                CASE WHEN :direction = 'ASC' THEN COUNT(du.id) END ASC,
-                CASE WHEN :direction = 'DESC' THEN COUNT(du.id) END DESC
+                CASE WHEN :direction = 'ASC' THEN COUNT(d.id) END ASC,
+                CASE WHEN :direction = 'DESC' THEN COUNT(d.id) END DESC
             """)
     List<Message> findAllByTopicIdOrderByDislikesCountWithDirection(@Param("topicId") Integer topicId,
                                                                     @Param("direction") String direction);
