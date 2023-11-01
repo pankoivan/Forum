@@ -31,6 +31,9 @@ public class AuthController extends ConvenientController {
 
     @GetMapping("/login")
     public String returnLoginPage(Model model, Authentication authentication) {
+        if (extractCurrentUserOrNull(authentication) != null) {
+            return "redirect:%s".formatted(ControllerBaseUrlConstants.FOR_INDEX_CONTROLLER);
+        }
         addForHeader(model, authentication, sectionService);
         return "login";
     }

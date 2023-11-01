@@ -5,7 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class ControllerBaseUrlConstants {
 
-    public static final String FOR_INDEX_CONTROLLER = "";
+    public static final String FOR_INDEX_CONTROLLER = "/";
 
     public static final String FOR_AUTH_CONTROLLER = "/auth";
 
