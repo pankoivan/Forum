@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.forum.auxiliary.constants.DateTimeFormatConstants;
 
 import java.time.LocalDateTime;
 
@@ -31,5 +32,9 @@ public class Dislike {
     @ManyToOne
     @JoinColumn(name = "forum_message_id")
     private Message message;
+
+    public String getFormattedCreationDate() {
+        return creationDate.format(DateTimeFormatConstants.DAY_MONTH_YEAR_IN_HOUR_MINUTE_SECOND);
+    }
 
 }

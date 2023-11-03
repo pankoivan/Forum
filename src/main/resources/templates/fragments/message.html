@@ -135,13 +135,13 @@
                                 >
                                     <!-- Статический и динамический просмотр -->
                                     <li
-                                        th:each="each, status : ${message.likedUsers}"
+                                        th:each="each, status : ${message.likes}"
                                     >
                                         <a
                                             href="#"
                                             th:href="@{/users/__${each.id}__}"
                                             class="dropdown-item"
-                                            th:text="${each.nickname}"
+                                            th:text="${each.user.nickname} + ' | ' + ${each.formattedCreationDate}"
                                             >SomeNICkn4me1</a
                                         >
                                         <hr
@@ -213,13 +213,13 @@
                                 >
                                     <!-- Статический и динамический просмотр -->
                                     <li
-                                        th:each="each, status : ${message.dislikedUsers}"
+                                        th:each="each, status : ${message.dislikes}"
                                     >
                                         <a
                                             href="#"
                                             th:href="@{/users/__${each.id}__}"
                                             class="dropdown-item"
-                                            th:text="${each.nickname}"
+                                            th:text="${each.user.nickname} + ' | ' + ${each.formattedCreationDate}"
                                             >SomeNICkn4me1</a
                                         >
                                         <hr
