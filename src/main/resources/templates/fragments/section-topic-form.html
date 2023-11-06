@@ -21,7 +21,7 @@
         class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
     >
         <!-- ---------------------------------------- Фрагмент: форма создания раздела/темы ---------------------------------------- -->
-        <div class="container" th:fragment="form (titlePart, submitUrl)">
+        <div class="container" th:fragment="form (submitUrl)">
             <div class="row">
                 <div class="col-12 col-md-8 col-lg-6 mx-auto">
                     <!-- Непосредственно блок создания раздела/темы -->
@@ -34,7 +34,7 @@
                             <div>
                                 <h5
                                     class="mb-1"
-                                    th:text="'Создание ' + ${titlePart}"
+                                    th:text="${actionText} + ' ' + ${titlePart}"
                                 >
                                     Создание раздела/темы
                                 </h5>

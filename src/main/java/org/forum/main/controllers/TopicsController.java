@@ -110,6 +110,7 @@ public class TopicsController extends ConvenientController {
                                                  @SessionAttribute(value = "object", required = false) Topic object,
                                                  @SessionAttribute(value = "formSubmitButtonText", required = false)
                                                      String formSubmitButtonText,
+                                                 @SessionAttribute(value = "actionText", required = false) String actionText,
                                                  @SessionAttribute(value = "errorMessage", required = false) String errorMessage,
                                                  @PathVariable("sectionId") String pathSectionId) {
 
@@ -118,14 +119,17 @@ public class TopicsController extends ConvenientController {
         addForHeader(model, authentication, sectionService);
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать тему");
+        add(model, "actionText", "Создание");
         add(model, "sectionId", sectionId);
         add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
 
         if (object != null) {
             add(model, "object", object);
             add(model, "formSubmitButtonText", formSubmitButtonText);
+            add(model, "actionText", actionText);
             session.removeAttribute("object");
             session.removeAttribute("formSubmitButtonText");
+            session.removeAttribute("actionText");
         }
         if (errorMessage != null) {
             add(model, "error", errorMessage);
@@ -157,7 +161,8 @@ public class TopicsController extends ConvenientController {
 
         if (service.savingValidation(topic, bindingResult)) {
             session.setAttribute("object", topic);
-            session.setAttribute("formSubmitButtonText", service.isNew(topic) ? "Создать тему" : "Сохранить");
+            session.setAttribute("formSubmitButtonText", isNew ? "Создать тему" : "Сохранить");
+            session.setAttribute("actionText", isNew ? "Создание" : "Редактирование");
             session.setAttribute("errorMessage", service.anyError(bindingResult));
             redirectAttributes.addAttribute("pageNumber", pageNumber);
             return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_TOPICS_CONTROLLER, "create");
@@ -184,6 +189,7 @@ public class TopicsController extends ConvenientController {
 
         session.setAttribute("object", service.findById(id));
         session.setAttribute("formSubmitButtonText", "Сохранить");
+        session.setAttribute("actionText", "Редактирование");
 
         redirectAttributes.addAttribute("pageNumber", pageNumber);
         if (SearchingUtils.isValid(searchedText)) {

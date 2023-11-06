@@ -100,18 +100,22 @@ public class SectionsController extends ConvenientController {
                                                    @SessionAttribute(value = "object", required = false) Section object,
                                                    @SessionAttribute(value = "formSubmitButtonText", required = false)
                                                        String formSubmitButtonText,
+                                                   @SessionAttribute(value = "actionText", required = false) String actionText,
                                                    @SessionAttribute(value = "errorMessage", required = false) String errorMessage) {
 
         addForHeader(model, authentication, service);
         add(model, "object", service.empty());
         add(model, "formSubmitButtonText", "Создать раздел");
+        add(model, "actionText", "Создание");
         add(model, CommonAttributeNameConstants.REQUEST_PARAMETERS, makeParametersString(request.getParameterMap()));
 
         if (object != null) {
             add(model, "object", object);
             add(model, "formSubmitButtonText", formSubmitButtonText);
+            add(model, "actionText", actionText);
             session.removeAttribute("object");
             session.removeAttribute("formSubmitButtonText");
+            session.removeAttribute("actionText");
         }
         if (errorMessage != null) {
             add(model, "error", errorMessage);
@@ -140,7 +144,8 @@ public class SectionsController extends ConvenientController {
 
         if (service.savingValidation(section, bindingResult)) {
             session.setAttribute("object", section);
-            session.setAttribute("formSubmitButtonText", service.isNew(section) ? "Создать раздел" : "Сохранить");
+            session.setAttribute("formSubmitButtonText", isNew ? "Создать раздел" : "Сохранить");
+            session.setAttribute("actionText", isNew ? "Создание" : "Редактирование");
             session.setAttribute("errorMessage", service.anyError(bindingResult));
             redirectAttributes.addAttribute("pageNumber", pageNumber);
             return "redirect:%s/%s".formatted(ControllerBaseUrlConstants.FOR_SECTIONS_CONTROLLER, "create");
@@ -167,6 +172,7 @@ public class SectionsController extends ConvenientController {
 
         session.setAttribute("object", service.findById(id));
         session.setAttribute("formSubmitButtonText", "Сохранить");
+        session.setAttribute("actionText", "Редактирование");
 
         redirectAttributes.addAttribute("pageNumber", pageNumber);
         if (SearchingUtils.isValid(searchedText)) {
