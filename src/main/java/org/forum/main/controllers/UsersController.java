@@ -117,7 +117,8 @@ public class UsersController extends ConvenientController {
 
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String returnProfilePage(Model model,
+    public String returnProfilePage(HttpServletRequest request,
+                                    Model model,
                                     Authentication authentication,
                                     @PathVariable("id") String id) {
 
@@ -127,6 +128,8 @@ public class UsersController extends ConvenientController {
         add(model, "userForProfile", service.findById(userId));
         add(model, CommonAttributeNameConstants.IS_EDIT_DELETE_BUTTONS_ENABLED, false);
         add(model, CommonAttributeNameConstants.IS_LIKE_DISLIKE_BUTTONS_ENABLED, true);
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITH_PAGINATION, request.getRequestURI());
+        add(model, CommonAttributeNameConstants.SOURCE_PAGE_URL_WITHOUT_PAGINATION, removePagination(request.getRequestURI()));
 
         return "profile";
     }
