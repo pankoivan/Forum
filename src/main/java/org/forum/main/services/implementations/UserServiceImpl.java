@@ -14,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @Service
@@ -62,12 +64,24 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
 
     @Override
     public boolean savingValidation(User user, BindingResult bindingResult) {
-        return false;
+        if (savingValidationByEmail(user)) {
+            bindingResult.addError(new ObjectError("existsByEmail",
+                    "Пользователь с такой почтой уже существует"));
+            return true;
+        }
+        if (savingValidationByEmail(user)) {
+            bindingResult.addError(new ObjectError("existsByUsername",
+                    "Пользователь с таким именем уже существует"));
+            return true;
+        }
+        return bindingResult.hasErrors();
     }
 
     @Override
     public String deletingValidation(User user) {
-        return null;
+        return user.getReputation() >= 0
+                ? "Пользователя \"%s\" нельзя удалять, так как его репутация неотрицательна".formatted(user.getUsername())
+                : null;
     }
 
     @Override
@@ -151,6 +165,16 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
         return users.stream()
                 .filter(user -> user.hasRole(roleName))
                 .toList();
+    }
+
+    private boolean savingValidationByUsername(User user) {
+        Optional<User> foundUser = repository.findByUsername(user.getNickname());
+        return foundUser.isPresent() && !foundUser.get().getId().equals(user.getId());
+    }
+
+    private boolean savingValidationByEmail(User user) {
+        Optional<User> foundUser = repository.findByEmail(user.getEmail());
+        return foundUser.isPresent() && !foundUser.get().getId().equals(user.getId());
     }
 
 }

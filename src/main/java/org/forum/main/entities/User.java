@@ -1,6 +1,9 @@
 package org.forum.main.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.forum.auxiliary.constants.DateTimeFormatConstants;
 import org.springframework.security.core.GrantedAuthority;
@@ -44,12 +47,21 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Integer id;
 
+    @NotEmpty(message = "Ник не должен быть пустым")
+    @NotBlank(message = "Ник не должен содержать только пробелы")
+    @Size(min = 3, max = 24, message = "Минимальная длина ника - 3 символа, максимальная - 24 символа")
     @Column(name = "username")
     private String nickname;
 
+    @NotEmpty(message = "Почта не должна быть пустой")
+    @NotBlank(message = "Почта не должна содержать только пробелы")
+    @Size(min = 12, max = 64, message = "Минимальная длина почты - 12 символов, максимальная - 64 символа")
     @Column(name = "email")
     private String email;
 
+    @NotEmpty(message = "Пароль не должен быть пустым")
+    @NotBlank(message = "Пароль не должен содержать только пробелы")
+    @Size(min = 3, max = 128, message = "Минимальная длина пароля - 3 символа, максимальная - 128 символов")
     @Column(name = "password")
     private String password;
 
