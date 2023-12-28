@@ -49,6 +49,13 @@ public class UserInformation {
     @JoinColumn(name = "forum_user_id")
     private User user;
 
+    public void setUser(User user) {
+        this.user = user;
+        if (user.getUserInformation() == null) {
+            user.setUserInformation(this);
+        }
+    }
+
     public String getFormattedDateOfBirth() {
         return dateOfBirth.format(DateTimeFormatConstants.DAY_MONTH_YEAR);
     }

@@ -7,6 +7,7 @@ import org.forum.auxiliary.utils.SearchingUtils;
 import org.forum.main.entities.Role;
 import org.forum.main.entities.User;
 import org.forum.auxiliary.exceptions.ServiceException;
+import org.forum.main.entities.UserInformation;
 import org.forum.main.repositories.UserInformationRepository;
 import org.forum.main.repositories.UserRepository;
 import org.forum.main.services.implementations.common.DefaultPaginationImpl;
@@ -54,20 +55,31 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
     }
 
     @Override
-    public void save(User user, MultipartFile file) {
+    public void save(User user, UserInformation userInformation, MultipartFile file) {
+
         String linkToImage = saveAvatar(user, file);
-        user.getUserInformation().setLinkToImage(linkToImage);
+
         user.setRegistrationDate(LocalDateTime.now());
         user.setRole(roleService.findByName("ROLE_USER"));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        userInformation.setLinkToImage(linkToImage);
+
         repository.save(user);
-        user.getUserInformation().setUser(user);
-        userInformationRepository.save(user.getUserInformation());
+
+        userInformation.setUser(user);
+
+        userInformationRepository.save(userInformation);
     }
 
     @Override
     public User empty() {
         return new User();
+    }
+
+    @Override
+    public UserInformation emptyUserInformation() {
+        return new UserInformation();
     }
 
     @Override

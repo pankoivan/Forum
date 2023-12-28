@@ -139,10 +139,10 @@
                                                     <input
                                                         id="name"
                                                         type="text"
-                                                        name="name"
                                                         class="form-control"
                                                         placeholder="Иванов Иван"
-                                                        th:field="*{userInformation.name}"
+                                                        name="name"
+                                                        th:value="${userInformation.name}"
                                                     />
                                                 </div>
                                                 <!-- Пол -->
@@ -156,9 +156,9 @@
                                                                     id="radio1"
                                                                     type="radio"
                                                                     class="form-check-input"
-                                                                    th:field="*{userInformation.gender}"
                                                                     th:text="${each.alias}"
                                                                     th:value="${each}"
+                                                                    name="gender"
                                                                 />
                                                                 <label class="form-check-label" for="radio1" th:if="${false}">
                                                                     Мужской
@@ -183,7 +183,8 @@
                                                         type="text"
                                                         class="form-control"
                                                         placeholder="Россия"
-                                                        th:field="*{userInformation.country}"
+                                                        name="country"
+                                                        th:value="${userInformation.country}"
                                                     />
                                                 </div>
                                                 <!-- Город -->
@@ -194,7 +195,8 @@
                                                         type="text"
                                                         class="form-control"
                                                         placeholder="Санкт-петербург"
-                                                        th:field="*{userInformation.city}"
+                                                        name="city"
+                                                        th:value="${userInformation.city}"
                                                     />
                                                 </div>
                                             </div>
@@ -205,7 +207,8 @@
                                                     id="dateOfBirth"
                                                     type="date"
                                                     class="form-control"
-                                                    th:field="*{userInformation.dateOfBirth}"
+                                                    name="dateOfBirth"
+                                                    th:value="${userInformation.dateOfBirth}"
                                                 />
                                             </div>
                                             <!-- Аватарка -->

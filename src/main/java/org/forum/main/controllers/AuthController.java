@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.User;
+import org.forum.main.entities.UserInformation;
 import org.forum.main.entities.enums.Gender;
 import org.forum.main.services.interfaces.SectionService;
 import org.forum.main.services.interfaces.UserService;
@@ -47,19 +48,22 @@ public class AuthController extends ConvenientController {
                                          Model model,
                                          Authentication authentication,
                                          @SessionAttribute(value = "user", required = false) User user,
+                                         @SessionAttribute(value = "userInformation", required = false) UserInformation userInformation,
                                          @SessionAttribute(value = "avatar", required = false) MultipartFile avatar,
                                          @SessionAttribute(value = "error", required = false) String error) {
 
         addForHeader(model, authentication, sectionService);
         model.addAttribute("user", service.empty());
+        model.addAttribute("userInformation", service.emptyUserInformation());
         model.addAttribute("genders", Gender.values());
-        model.addAttribute("user", service.empty());
 
         if (error != null) {
             model.addAttribute("user", user);
+            model.addAttribute("userInformation", userInformation);
             model.addAttribute("avatar", avatar);
             model.addAttribute("error", error);
             session.removeAttribute("user");
+            session.removeAttribute("userInformation");
             session.removeAttribute("avatar");
             session.removeAttribute("error");
         }
@@ -72,16 +76,18 @@ public class AuthController extends ConvenientController {
                                                      RedirectAttributes redirectAttributes,
                                                      @Valid User user,
                                                      BindingResult bindingResult,
+                                                     UserInformation userInformation,
                                                      MultipartFile avatar) {
 
         if (service.savingValidation(user, bindingResult)) {
             session.setAttribute("user", user);
+            session.setAttribute("userInformation", userInformation);
             session.setAttribute("avatar", avatar);
             session.setAttribute("error", service.anyError(bindingResult));
             return "redirect:%s/registration".formatted(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER);
         }
 
-        service.save(user, avatar);
+        service.save(user, userInformation, avatar);
         redirectAttributes.addAttribute("registered", true);
         return "redirect:%s/login".formatted(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER);
     }

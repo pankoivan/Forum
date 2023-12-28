@@ -70,10 +70,9 @@ public class User implements UserDetails {
 
     @OneToOne(
             mappedBy = "user",
-            cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE}
+            cascade = CascadeType.REMOVE
     )
-    //@Transient
-    private UserInformation userInformation = new UserInformation();
+    private UserInformation userInformation;
 
     @OneToMany(mappedBy = "userWhoCreated")
     private List<Section> createdSections;
@@ -136,6 +135,13 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isActive();
+    }
+
+    public void setUserInformation(UserInformation userInformation) {
+        this.userInformation = userInformation;
+        if (userInformation.getUser() == null) {
+            userInformation.setUser(this);
+        }
     }
 
     public Ban getCurrentBan() {
