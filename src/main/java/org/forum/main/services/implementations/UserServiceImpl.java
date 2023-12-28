@@ -4,7 +4,6 @@ import org.forum.auxiliary.constants.sorting.DefaultSortingOptionConstants;
 import org.forum.auxiliary.constants.pagination.PaginationConstants;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.auxiliary.utils.SearchingUtils;
-import org.forum.main.entities.Message;
 import org.forum.main.entities.Role;
 import org.forum.main.entities.User;
 import org.forum.auxiliary.exceptions.ServiceException;
