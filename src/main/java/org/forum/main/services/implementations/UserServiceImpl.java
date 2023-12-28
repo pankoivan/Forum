@@ -11,12 +11,16 @@ import org.forum.main.repositories.UserRepository;
 import org.forum.main.services.implementations.common.DefaultPaginationImpl;
 import org.forum.main.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -26,14 +30,24 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
 
     private final UserRepository repository;
 
+    private final String uploadPath;
+
     @Autowired
-    public UserServiceImpl(UserRepository repository) {
+    public UserServiceImpl(UserRepository repository, @Value("{my.upload}") String uploadPath) {
         this.repository = repository;
+        this.uploadPath = uploadPath;
     }
 
     @Override
     public void save(User user, MultipartFile file) {
-        System.out.println("SUCCESS!!!");
+        String filename = user.getEmail() + " " + LocalDateTime.now();
+        try {
+            file.transferTo(Paths.get(uploadPath, filename));
+        } catch (IOException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+        user.getUserInformation().setLinkToImage(filename);
+        repository.save(user);
     }
 
     @Override
@@ -80,7 +94,7 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
     @Override
     public String deletingValidation(User user) {
         return user.getReputation() >= 0
-                ? "Пользователя \"%s\" нельзя удалять, так как его репутация неотрицательна".formatted(user.getUsername())
+                ? "Пользователя \"%s\" нельзя удалять, так как его репутация неотрицательна".formatted(user.getNickname())
                 : null;
     }
 

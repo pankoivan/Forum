@@ -84,8 +84,6 @@ public class AuthController extends ConvenientController {
             return "redirect:%s/registration".formatted(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER);
         }
 
-        // на логин-странице сделать надпись о том, что пользователь был зарегистрирован
-
         service.save(user, avatar);
         redirectAttributes.addAttribute("registered", true);
         return "redirect:%s/login".formatted(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER);
