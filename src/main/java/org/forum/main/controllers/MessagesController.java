@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.forum.auxiliary.constants.CommonAttributeNameConstants;
 import org.forum.auxiliary.constants.pagination.PaginationAttributeNameConstants;
 import org.forum.auxiliary.constants.sorting.SortingAttributeNameConstants;
+import org.forum.auxiliary.constants.sorting.SortingOptionConstants;
 import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.auxiliary.constants.sorting.SortingOptionNameConstants;
 import org.forum.auxiliary.constants.url.UrlPartConstants;
@@ -145,6 +146,11 @@ public class MessagesController extends ConvenientController {
         }
 
         service.save(message, extractCurrentUser(authentication), topicService.findById(topicId));
+
+        if (isNew) {
+            session.setAttribute(SortingOptionNameConstants.FOR_MESSAGES_SORTING_OPTION, SortingOptionConstants.MESSAGES_BY_CREATION_DATE_ASC);
+        }
+
         return "redirect:%s/%s%s".formatted(
                 ControllerBaseUrlConstants.FOR_MESSAGES_CONTROLLER,
                 UrlPartConstants.PAGE,
