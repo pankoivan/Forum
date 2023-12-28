@@ -2,8 +2,7 @@ package org.forum.main.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import
-        org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
+import org.forum.auxiliary.constants.url.ControllerBaseUrlConstants;
 import org.forum.main.controllers.common.ConvenientController;
 import org.forum.main.entities.User;
 import org.forum.main.entities.enums.Gender;
@@ -18,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -45,11 +45,27 @@ public class AuthController extends ConvenientController {
     }
 
     @GetMapping("/registration")
-    public String returnRegistrationPage(Model model, Authentication authentication) {
+    public String returnRegistrationPage(HttpSession session,
+                                         Model model,
+                                         Authentication authentication,
+                                         @SessionAttribute(value = "user", required = false) User user,
+                                         @SessionAttribute(value = "avatar", required = false) MultipartFile avatar,
+                                         @SessionAttribute(value = "error", required = false) String error) {
+
         addForHeader(model, authentication, sectionService);
         model.addAttribute("user", service.empty());
         model.addAttribute("genders", Gender.values());
         model.addAttribute("user", service.empty());
+
+        if (error != null) {
+            model.addAttribute("user", user);
+            model.addAttribute("avatar", avatar);
+            model.addAttribute("error", error);
+            session.removeAttribute("user");
+            session.removeAttribute("avatar");
+            session.removeAttribute("error");
+        }
+
         return "registration";
     }
 
@@ -57,18 +73,18 @@ public class AuthController extends ConvenientController {
     public String redirectLoginPageAfterRegistration(HttpSession session,
                                                      @Valid User user,
                                                      BindingResult bindingResult,
-                                                     MultipartFile img) {
+                                                     MultipartFile avatar) {
 
         if (service.savingValidation(user, bindingResult)) {
             session.setAttribute("user", user);
-            session.setAttribute("img", img);
+            session.setAttribute("avatar", avatar);
             session.setAttribute("error", service.anyError(bindingResult));
             return "redirect:%s/registration".formatted(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER);
         }
 
         // на логин-странице сделать надпись о том, что пользователь был зарегистрирован
 
-        service.save(user, img);
+        service.save(user, avatar);
         return "redirect:%s/login".formatted(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER);
     }
 

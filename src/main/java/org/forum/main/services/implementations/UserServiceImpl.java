@@ -33,7 +33,7 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
 
     @Override
     public void save(User user, MultipartFile file) {
-
+        System.out.println("SUCCESS!!!");
     }
 
     @Override
@@ -69,7 +69,7 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
                     "Пользователь с такой почтой уже существует"));
             return true;
         }
-        if (savingValidationByEmail(user)) {
+        if (savingValidationByUsername(user)) {
             bindingResult.addError(new ObjectError("existsByUsername",
                     "Пользователь с таким именем уже существует"));
             return true;
@@ -168,7 +168,7 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
     }
 
     private boolean savingValidationByUsername(User user) {
-        Optional<User> foundUser = repository.findByUsername(user.getNickname());
+        Optional<User> foundUser = repository.findByNickname(user.getNickname());
         return foundUser.isPresent() && !foundUser.get().getId().equals(user.getId());
     }
 
