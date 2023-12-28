@@ -7,18 +7,22 @@ import org.forum.auxiliary.utils.SearchingUtils;
 import org.forum.main.entities.Role;
 import org.forum.main.entities.User;
 import org.forum.auxiliary.exceptions.ServiceException;
+import org.forum.main.repositories.UserInformationRepository;
 import org.forum.main.repositories.UserRepository;
 import org.forum.main.services.implementations.common.DefaultPaginationImpl;
+import org.forum.main.services.interfaces.RoleService;
 import org.forum.main.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,24 +34,35 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
 
     private final UserRepository repository;
 
+    private final UserInformationRepository userInformationRepository;
+
+    private final RoleService roleService;
+
+    private final PasswordEncoder passwordEncoder;
+
     private final String uploadPath;
 
     @Autowired
-    public UserServiceImpl(UserRepository repository, @Value("{my.upload}") String uploadPath) {
+    public UserServiceImpl(UserRepository repository, UserInformationRepository userInformationRepository,
+                           RoleService roleService, PasswordEncoder passwordEncoder, @Value("${my.upload}") String uploadPath) {
+
         this.repository = repository;
+        this.userInformationRepository = userInformationRepository;
+        this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
         this.uploadPath = uploadPath;
     }
 
     @Override
     public void save(User user, MultipartFile file) {
-        String filename = user.getEmail() + " " + LocalDateTime.now();
-        try {
-            file.transferTo(Paths.get(uploadPath, filename));
-        } catch (IOException e) {
-            throw new ServiceException(e.getMessage(), e);
-        }
-        user.getUserInformation().setLinkToImage(filename);
+        String linkToImage = saveAvatar(user, file);
+        user.getUserInformation().setLinkToImage(linkToImage);
+        user.setRegistrationDate(LocalDateTime.now());
+        user.setRole(roleService.findByName("ROLE_USER"));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         repository.save(user);
+        user.getUserInformation().setUser(user);
+        userInformationRepository.save(user.getUserInformation());
     }
 
     @Override
@@ -189,6 +204,21 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
     private boolean savingValidationByEmail(User user) {
         Optional<User> foundUser = repository.findByEmail(user.getEmail());
         return foundUser.isPresent() && !foundUser.get().getId().equals(user.getId());
+    }
+
+    private String saveAvatar(User user, MultipartFile avatar) {
+        String filename = "%s %s %s".formatted(
+                user.getEmail(),
+                LocalDateTime.now().toString().replaceAll(":", "."),
+                avatar.getOriginalFilename()
+        );
+        Path path = Paths.get(uploadPath, filename);
+        try {
+            avatar.transferTo(path);
+        } catch (IOException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+        return path.toString();
     }
 
 }

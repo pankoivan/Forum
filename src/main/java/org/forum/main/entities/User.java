@@ -70,8 +70,9 @@ public class User implements UserDetails {
 
     @OneToOne(
             mappedBy = "user",
-            cascade = CascadeType.ALL
+            cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE}
     )
+    //@Transient
     private UserInformation userInformation = new UserInformation();
 
     @OneToMany(mappedBy = "userWhoCreated")
