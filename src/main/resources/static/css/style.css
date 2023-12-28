@@ -40,6 +40,10 @@
     color: blue;
 }
 
+.text-green {
+    color: green;
+}
+
 .break-word {
     word-wrap: break-word;
 }

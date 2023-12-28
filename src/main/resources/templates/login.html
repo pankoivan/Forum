@@ -5,16 +5,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Вход</title>
-        <link
-            href="../static/css/bootstrap.min.css"
-            th:href="@{/css/bootstrap.min.css}"
-            rel="stylesheet"
-        />
-        <link
-            href="../static/css/style.css"
-            th:href="@{/css/style.css}"
-            rel="stylesheet"
-        />
+        <link href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+        <link href="../static/css/style.css" rel="stylesheet" th:href="@{/css/style.css}" />
         <link
             rel="apple-touch-icon"
             sizes="180x180"
@@ -37,16 +29,10 @@
         />
     </head>
 
-    <body
-        class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between"
-    >
+    <body class="min-vh-100 bg-lightgray d-flex flex-column justify-content-between">
         <!-- ---------------------------------------- Заголовок ---------------------------------------- -->
-        <div
-            th:replace="${currentUser} ? ~{fragments/auth-header :: auth-header} : ~{fragments/anon-header :: anon-header}"
-        >
-            <div
-                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5"
-            >
+        <div th:replace="${currentUser} ? ~{fragments/auth-header :: auth-header} : ~{fragments/anon-header :: anon-header}">
+            <div class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-header mb-5">
                 <h3>Статический заголовок для просмотра в браузере</h3>
             </div>
         </div>
@@ -58,9 +44,7 @@
                     <!-- Непосредственно блок входа -->
                     <div class="bg-dark text-white rounded px-3 py-2">
                         <!-- Заголовок и картинка "на главную" -->
-                        <div
-                            class="d-flex flex-row justify-content-between border-bottom border-white"
-                        >
+                        <div class="d-flex flex-row justify-content-between border-bottom border-white">
                             <!-- Заголовок -->
                             <div>
                                 <h5 class="mb-1">Вход</h5>
@@ -69,50 +53,30 @@
                             <!-- Картинка "на главную" -->
                             <div>
                                 <a href="/index.html" th:href="@{/}">
-                                    <img
-                                        src="../static/img/волк.png"
-                                        th:src="@{/img/волк.png}"
-                                        alt="На главную"
-                                        width="48"
-                                        class="mb-2"
-                                    />
+                                    <img alt="На главную" class="mb-2" src="../static/img/волк.png" th:src="@{/img/волк.png}" width="48" />
                                 </a>
                             </div>
                         </div>
-                        <!-- Блок с ошибкой входа или с информацией о том, что пользователь вышел -->
+                        <!-- Блок с ошибкой входа или с информацией о том, что пользователь вышел или зарегистрировался -->
                         <div class="text-center mt-4" th:if="${param.error}">
-                            <p class="text-red">
-                                Неверное имя пользователя или пароль
-                            </p>
+                            <p class="text-red">Неверное имя пользователя или пароль</p>
                         </div>
                         <div class="text-center mt-4" th:if="${param.logout}">
                             <p class="text-blue">Вы вышли из аккаунта</p>
                         </div>
+                        <div class="text-center mt-4" th:if="${param.registered}">
+                            <p class="text-green">Вы успешно зарегистрировались</p>
+                        </div>
                         <!-- Форма -->
-                        <form
-                            action="#"
-                            th:action="@{/auth/login/processing}"
-                            method="post"
-                            class="my-3"
-                        >
+                        <form action="#" class="my-3" method="post" th:action="@{/auth/login/processing}">
                             <!-- Логин -->
                             <div class="text-center mb-3">
-                                <label for="username" class="form-label"
-                                    >Логин</label
-                                >
-                                <input
-                                    id="username"
-                                    type="text"
-                                    name="username"
-                                    class="form-control"
-                                    placeholder="example@yandex.ru"
-                                />
+                                <label class="form-label" for="username">Логин</label>
+                                <input class="form-control" id="username" name="username" placeholder="example@yandex.ru" type="text" />
                             </div>
                             <!-- Пароль -->
                             <div class="text-center mb-4">
-                                <label for="password" class="form-label"
-                                    >Пароль</label
-                                >
+                                <label class="form-label" for="password">Пароль</label>
                                 <input
                                     id="password"
                                     type="password"
@@ -122,19 +86,13 @@
                                 />
                             </div>
                             <!-- Кнопка отправки и предложение запомнить пользователя -->
-                            <div
-                                class="d-flex flex-row justify-content-between mb-4"
-                            >
+                            <div class="d-flex flex-row justify-content-between mb-4">
                                 <!-- Кнопка отправки -->
-                                <button type="submit" class="btn btn-primary">
-                                    Отправить
-                                </button>
+                                <button class="btn btn-primary" type="submit">Отправить</button>
                                 <!-- Предложение запомнить пользователя -->
                                 <div>
                                     <input type="checkbox" id="rememberMe" />
-                                    <label for="rememberMe"
-                                        >Запомнить меня</label
-                                    >
+                                    <label for="rememberMe">Запомнить меня</label>
                                 </div>
                             </div>
                         </form>
@@ -142,15 +100,11 @@
                         <div class="text-center border-top border-white pt-2">
                             <div>
                                 <span>Забыли пароль?</span>
-                                <a href="#" th:href="@{/auth/password-recovery}"
-                                    >Восстановление пароля</a
-                                >
+                                <a href="#" th:href="@{/auth/password-recovery}">Восстановление пароля</a>
                             </div>
                             <div>
                                 <span>Нет аккаунта?</span>
-                                <a href="#" th:href="@{/auth/registration}"
-                                    >Регистрация</a
-                                >
+                                <a href="#" th:href="@{/auth/registration}">Регистрация</a>
                             </div>
                         </div>
                     </div>
@@ -160,16 +114,11 @@
 
         <!-- ---------------------------------------- Футер ---------------------------------------- -->
         <div th:replace="~{fragments/footer :: footer}">
-            <div
-                class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5"
-            >
+            <div class="bg-dark d-flex align-items-center justify-content-center text-center text-white static-footer mt-5">
                 <h3>Статический футер для просмотра в браузере</h3>
             </div>
         </div>
 
-        <script
-            src="../static/js/bootstrap.bundle.min.js"
-            th:src="@{/js/bootstrap.bundle.min.js}"
-        ></script>
+        <script src="../static/js/bootstrap.bundle.min.js" th:src="@{/js/bootstrap.bundle.min.js}"></script>
     </body>
 </html>

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER)
@@ -71,6 +72,7 @@ public class AuthController extends ConvenientController {
 
     @PostMapping("/registration/processing")
     public String redirectLoginPageAfterRegistration(HttpSession session,
+                                                     RedirectAttributes redirectAttributes,
                                                      @Valid User user,
                                                      BindingResult bindingResult,
                                                      MultipartFile avatar) {
@@ -85,6 +87,7 @@ public class AuthController extends ConvenientController {
         // на логин-странице сделать надпись о том, что пользователь был зарегистрирован
 
         service.save(user, avatar);
+        redirectAttributes.addAttribute("registered", true);
         return "redirect:%s/login".formatted(ControllerBaseUrlConstants.FOR_AUTH_CONTROLLER);
     }
 
