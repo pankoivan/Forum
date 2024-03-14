@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" xmlns:th="https://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -52,8 +52,8 @@
                                 <img
                                     alt="Пользователь"
                                     src="../../static/img/природа.png"
-                                    th:src="@{/img/природа.png}"
-                                    width="32"
+                                    th:src="@{/uploads/__${currentUser.userInformation.linkToImage}__}"
+                                    width="48"
                                     class="rounded-circle"
                                 />
                             </a>

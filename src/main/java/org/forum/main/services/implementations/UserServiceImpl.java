@@ -1,12 +1,12 @@
 package org.forum.main.services.implementations;
 
-import org.forum.auxiliary.constants.sorting.DefaultSortingOptionConstants;
 import org.forum.auxiliary.constants.pagination.PaginationConstants;
+import org.forum.auxiliary.constants.sorting.DefaultSortingOptionConstants;
+import org.forum.auxiliary.exceptions.ServiceException;
 import org.forum.auxiliary.sorting.options.UserSortingOption;
 import org.forum.auxiliary.utils.SearchingUtils;
 import org.forum.main.entities.Role;
 import org.forum.main.entities.User;
-import org.forum.auxiliary.exceptions.ServiceException;
 import org.forum.main.entities.UserInformation;
 import org.forum.main.repositories.UserInformationRepository;
 import org.forum.main.repositories.UserRepository;
@@ -219,10 +219,9 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
     }
 
     private String saveAvatar(User user, MultipartFile avatar) {
-        String filename = "%s %s %s".formatted(
+        String filename = "%s.%s".formatted(
                 user.getEmail(),
-                LocalDateTime.now().toString().replaceAll(":", "."),
-                avatar.getOriginalFilename()
+                getExtension(avatar)
         );
         Path path = Paths.get(uploadPath, filename);
         try {
@@ -230,7 +229,14 @@ public class UserServiceImpl extends DefaultPaginationImpl<User> implements User
         } catch (IOException e) {
             throw new ServiceException(e.getMessage(), e);
         }
-        return path.toString();
+        return filename;
+    }
+
+    private String getExtension(MultipartFile file) {
+        String filename = file.getOriginalFilename();
+        return filename.contains(".")
+                ? filename.substring(filename.lastIndexOf(".") + 1)
+                : "";
     }
 
 }
